@@ -30,26 +30,32 @@
 		</ExperimentalAcrylicBorder>
 
 		<Panel Margin="20 30 20 20">
-			<TabControl Margin="5" TabStripPlacement="Left">
-				<TabItem Header="{x:Static lang:Resources.Settings_Tab_Design}">
-					<TextBlock Margin="5">Sample 1</TextBlock>
-				</TabItem>
-				<TabItem Header="{x:Static lang:Resources.Settings_Tab_Search}">
-					<TextBlock Margin="5">Sample 2</TextBlock>
-				</TabItem>
-				<TabItem Header="{x:Static lang:Resources.Settings_Tab_ShortcutKey}">
-					<TextBlock Margin="5">Sample 3</TextBlock>
-				</TabItem>
-				<TabItem Header="{x:Static lang:Resources.Settings_Tab_InAppBrowser}">
-					<TextBlock Margin="5">Sample 4</TextBlock>
-				</TabItem>
-				<TabItem Header="{x:Static lang:Resources.Settings_Tab_Update}">
-					<TextBlock Margin="5">Sample 5</TextBlock>
-				</TabItem>
-				<TabItem Header="{x:Static lang:Resources.Settings_Tab_System}">
-					<TextBlock Margin="5">Sample 6</TextBlock>
-				</TabItem>
-			</TabControl>
+			<StackPanel>
+				<TabControl Margin="5" TabStripPlacement="Left">
+					<TabItem Header="{x:Static lang:Resources.Settings_Tab_Design}">
+						<TextBlock Margin="5">Sample 1</TextBlock>
+					</TabItem>
+					<TabItem Header="{x:Static lang:Resources.Settings_Tab_Search}">
+						<TextBlock Margin="5">Sample 2</TextBlock>
+					</TabItem>
+					<TabItem Header="{x:Static lang:Resources.Settings_Tab_ShortcutKey}">
+						<TextBlock Margin="5">Sample 3</TextBlock>
+					</TabItem>
+					<TabItem Header="{x:Static lang:Resources.Settings_Tab_InAppBrowser}">
+						<TextBlock Margin="5">Sample 4</TextBlock>
+					</TabItem>
+					<TabItem Header="{x:Static lang:Resources.Settings_Tab_Update}">
+						<TextBlock Margin="5">Sample 5</TextBlock>
+					</TabItem>
+					<TabItem Header="{x:Static lang:Resources.Settings_Tab_System}">
+						<TextBlock Margin="5">Sample 6</TextBlock>
+					</TabItem>
+				</TabControl>
+
+				<Panel Margin="10">
+					<Button Command="{Binding ExitCommand}">Exit</Button>
+				</Panel>
+			</StackPanel>
 		</Panel>
 	</Panel>
 </Window>

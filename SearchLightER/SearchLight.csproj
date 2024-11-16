@@ -7,6 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>SearchLight</AssemblyName>
+    <ApplicationIcon>Assets\SearchLight.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,10 @@
   <ItemGroup>
     <AvaloniaResource Remove="Assets\Locales\Resources.ja-JP.resx" />
     <AvaloniaResource Remove="Assets\Locales\Resources.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\SearchLight.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -30,7 +30,7 @@
 			</ExperimentalAcrylicBorder.Material>
 		</ExperimentalAcrylicBorder>
 
-		<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		<TextBlock Text="{Binding Text}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 		<Button Click="OpenSettingsWindow">Open Settings</Button>
 	</Panel>
 </Window>
