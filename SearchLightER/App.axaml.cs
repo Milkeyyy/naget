@@ -8,15 +8,24 @@ using SearchLight.Views;
 using System;
 using System.Globalization;
 using System.Reactive.Linq;
+using System.Reflection;
 
 namespace SearchLight
 {
 	public partial class App : Application
 	{
+		private static string _name = "";
+		public static string ProductName => _name;
+		private static string _version = "";
+		public static string ProductVersion => _version;
+
 		public static Window SettingsWindow;
 
 		public override void Initialize()
 		{
+			var a = Assembly.GetExecutingAssembly().GetName();
+			_name = a.Name;
+			_version = a.Version.ToString();
 			AvaloniaXamlLoader.Load(this);
 		}
 
@@ -55,9 +64,10 @@ namespace SearchLight
 					DataContext = SettingsWindowModel
 				};
 
+				// ホットキー押下時イベント
 				hotKeyManager.HotKeyPressed
 					.ObserveOn(Avalonia.ReactiveUI.AvaloniaScheduler.Instance)
-					.Subscribe(_ => SettingsWindow.Show());
+					.Subscribe(_ => SettingsWindow.Show()); // 設定画面を開く
 					//.Subscribe(hotKey => MainWindowViewModel.Text += $"HotKey: Id={hotKey.Id}, Key={hotKey.Key}, Modifiers={hotKey.Modifiers}{Environment.NewLine}");
 			}
 

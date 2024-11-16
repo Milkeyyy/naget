@@ -6,15 +6,8 @@ using System.Windows.Input;
 
 namespace SearchLight.ViewModels
 {
-	public class SettingsWindowViewModel : ViewModelBase
+	public class SettingsWindowViewModel(Action Command) : ViewModelBase
 	{
-		public string Greeting { get; } = "Welcome to Avalonia!";
-
-		public ICommand ExitCommand { get; }
-
-		public SettingsWindowViewModel(Action Command)
-		{
-			ExitCommand = ReactiveCommand.Create(Command);
-		}
+		public ICommand ExitCommand { get; } = ReactiveCommand.Create(Command);
 	}
 }

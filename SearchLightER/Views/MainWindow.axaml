@@ -30,7 +30,10 @@
 			</ExperimentalAcrylicBorder.Material>
 		</ExperimentalAcrylicBorder>
 
-		<TextBlock Text="{Binding Text}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-		<Button Click="OpenSettingsWindow">Open Settings</Button>
+		<TextBlock Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top">
+			<Run Text="{Binding ProductNameText}"></Run>
+			<Run Text="{Binding ProductVersionText}"></Run>
+		</TextBlock>
+		<Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="OpenSettingsWindow">Open Settings</Button>
 	</Panel>
 </Window>
