@@ -1,0 +1,55 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:SearchLight.ViewModels"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:lang="clr-namespace:SearchLight.Assets.Locales"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="SearchLight.Views.SettingsWindow"
+		x:DataType="vm:SettingsWindowViewModel"
+		Title="SettingsWindow"
+		TransparencyLevelHint="AcrylicBlur"
+		Background="Transparent"
+		ExtendClientAreaToDecorationsHint="True">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+			 to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:SettingsWindowViewModel/>
+	</Design.DataContext>
+
+	<Panel>
+		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
+					BackgroundSource="Digger"
+					TintColor="Black"
+					TintOpacity="1"
+					MaterialOpacity="0.65" />
+			</ExperimentalAcrylicBorder.Material>
+		</ExperimentalAcrylicBorder>
+
+		<Panel Margin="20 30 20 20">
+			<TabControl Margin="5" TabStripPlacement="Left">
+				<TabItem Header="{x:Static lang:Resources.Settings_Tab_Design}">
+					<TextBlock Margin="5">Sample 1</TextBlock>
+				</TabItem>
+				<TabItem Header="{x:Static lang:Resources.Settings_Tab_Search}">
+					<TextBlock Margin="5">Sample 2</TextBlock>
+				</TabItem>
+				<TabItem Header="{x:Static lang:Resources.Settings_Tab_ShortcutKey}">
+					<TextBlock Margin="5">Sample 3</TextBlock>
+				</TabItem>
+				<TabItem Header="{x:Static lang:Resources.Settings_Tab_InAppBrowser}">
+					<TextBlock Margin="5">Sample 4</TextBlock>
+				</TabItem>
+				<TabItem Header="{x:Static lang:Resources.Settings_Tab_Update}">
+					<TextBlock Margin="5">Sample 5</TextBlock>
+				</TabItem>
+				<TabItem Header="{x:Static lang:Resources.Settings_Tab_System}">
+					<TextBlock Margin="5">Sample 6</TextBlock>
+				</TabItem>
+			</TabControl>
+		</Panel>
+	</Panel>
+</Window>
