@@ -1,4 +1,4 @@
-using Avalonia;
+ï»¿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -14,12 +14,14 @@ namespace SearchLight
 {
 	public partial class App : Application
 	{
-		private static string _name = "";
+		private static string _name = string.Empty;
 		public static string ProductName => _name;
-		private static string _version = "";
+		private static string _version = string.Empty	;
 		public static string ProductVersion => _version;
 
+		public static Window MainWindow;
 		public static Window SettingsWindow;
+		public static Window BrowserWindow;
 
 		public override void Initialize()
 		{
@@ -35,8 +37,8 @@ namespace SearchLight
 			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 			{
 				desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-				
-				// ƒzƒbƒgƒL[
+
+				// ãƒ›ãƒƒãƒˆã‚­ãƒ¼
 				var hotKeyManager = new GlobalHotKeys.HotKeyManager();
 				var hotKeySubscription = hotKeyManager.Register(
 					VirtualKeyCode.KEY_D,
@@ -49,25 +51,17 @@ namespace SearchLight
 					hotKeyManager.Dispose();
 				};
 
-				var MainWindowViewModel = new MainWindowViewModel();
-				var SettingsWindowModel = new SettingsWindowViewModel(
-					() => desktop.Shutdown() // Ý’è‰æ–Ê‚ÌI—¹ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg‚É Shutdown() ‚ðƒoƒCƒ“ƒh‚·‚é
-				);
+				MainWindow = new MainWindow();
+				SettingsWindow = new SettingsWindow();
+				BrowserWindow = new BrowserWindow();
 
-				desktop.MainWindow = new MainWindow
-				{
-					DataContext = MainWindowViewModel
-				};
+				desktop.MainWindow = SettingsWindow;
 
-				SettingsWindow = new SettingsWindow
-				{
-					DataContext = SettingsWindowModel
-				};
-
-				// ƒzƒbƒgƒL[‰Ÿ‰ºŽžƒCƒxƒ“ƒg
+				// ãƒ›ãƒƒãƒˆã‚­ãƒ¼æŠ¼ä¸‹æ™‚ã‚¤ãƒ™ãƒ³ãƒˆ
 				hotKeyManager.HotKeyPressed
 					.ObserveOn(Avalonia.ReactiveUI.AvaloniaScheduler.Instance)
-					.Subscribe(_ => SettingsWindow.Show()); // Ý’è‰æ–Ê‚ðŠJ‚­
+					.Subscribe(_ => MainWindow.Show()); // æ¤œç´¢ç”»é¢ã‚’é–‹ã
+					//.Subscribe(_ => SettingsWindow.Show()); // è¨­å®šç”»é¢ã‚’é–‹ã
 					//.Subscribe(hotKey => MainWindowViewModel.Text += $"HotKey: Id={hotKey.Id}, Key={hotKey.Key}, Modifiers={hotKey.Modifiers}{Environment.NewLine}");
 			}
 

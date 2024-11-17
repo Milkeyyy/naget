@@ -1,5 +1,8 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
+using SearchLight.ViewModels;
+using System;
 
 namespace SearchLight.Views
 {
@@ -8,11 +11,28 @@ namespace SearchLight.Views
 		public MainWindow()
 		{
 			InitializeComponent();
-		}
 
-		public void OpenSettingsWindow(object sender, RoutedEventArgs args)
-		{
-			App.SettingsWindow.Show();
+			DataContext = new MainWindowViewModel();
+
+			// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
+			Closing += (s, e) =>
+			{
+				((Window)s).Hide();
+				e.Cancel = true;
+			};
+
+			// ウィンドウが開かれた時
+			Opened += (s, e) =>
+			{
+				// 検索テキストにフォーカスする
+				this.FindControl<TextBox>("searchtextbox").Focus();
+			};
+
+			// ウィンドウのフォーカスが失われたらウィンドウを隠す
+			LostFocus += (s, e) =>
+			{
+				Hide();
+			};
 		}
 	}
 }

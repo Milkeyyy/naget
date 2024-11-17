@@ -6,8 +6,12 @@ using System.Windows.Input;
 
 namespace SearchLight.ViewModels
 {
-	public class SettingsWindowViewModel(Action Command) : ViewModelBase
+	public class SettingsWindowViewModel : ViewModelBase
 	{
-		public ICommand ExitCommand { get; } = ReactiveCommand.Create(Command);
+		public ReactiveCommand<Unit, Unit> ExitCommand { get; }
+		public SettingsWindowViewModel()
+		{
+			ExitCommand = ReactiveCommand.Create(() => Environment.Exit(0));
+		}
 	}
 }

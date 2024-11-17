@@ -4,14 +4,20 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:lang="clr-namespace:SearchLight.Assets.Locales"
-		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="60"
 		x:Class="SearchLight.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
 		Icon="/Assets/avalonia-logo.ico"
 		Title="SearchLight"
 		TransparencyLevelHint="AcrylicBlur"
 		Background="Transparent"
-		ExtendClientAreaToDecorationsHint="True">
+		ExtendClientAreaToDecorationsHint="True"
+		ExtendClientAreaChromeHints="NoChrome"
+		WindowStartupLocation="CenterOwner"
+		ShowInTaskbar="False"
+		CanResize="False"
+		Width="800"
+		Height="60">
 
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -24,16 +30,42 @@
 			<ExperimentalAcrylicBorder.Material>
 				<ExperimentalAcrylicMaterial
 					BackgroundSource="Digger"
-					TintColor="Black"
+					TintColor="{DynamicResource SystemAltHighColor}"
 					TintOpacity="1"
-					MaterialOpacity="0.65" />
+					FallbackColor="Black"
+					MaterialOpacity="0.25"
+				/>
 			</ExperimentalAcrylicBorder.Material>
 		</ExperimentalAcrylicBorder>
 
-		<TextBlock Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top">
-			<Run Text="{Binding ProductNameText}"></Run>
-			<Run Text="{Binding ProductVersionText}"></Run>
-		</TextBlock>
-		<Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="OpenSettingsWindow">Open Settings</Button>
+		<Grid
+			Margin="10, 0, 10	, 0"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Center"
+			ColumnDefinitions="Auto, *, Auto"
+			RowDefinitions="*"
+		>
+			<TextBlock
+				Grid.Column="0"
+				Grid.Row="0"
+				Margin="0, 0, 10, 0"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				Text="Search"
+			/>
+			<TextBox
+				x:Name="searchtextbox"
+				Grid.Column="1"
+				Grid.Row="0"
+				Text="{Binding SearchWord}"
+				FontSize="20"
+				Background="Transparent"
+				BorderThickness="1"
+			>
+				<TextBox.KeyBindings>
+					<KeyBinding Gesture="Enter" Command="{Binding SearchCommand}" />
+				</TextBox.KeyBindings>
+			</TextBox>
+		</Grid>
 	</Panel>
 </Window>
