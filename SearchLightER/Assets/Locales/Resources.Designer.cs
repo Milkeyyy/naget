@@ -70,6 +70,24 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
+        ///   Search に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Design に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Tab_Design {
@@ -120,6 +138,87 @@ namespace SearchLight.Assets.Locales {
         public static string Settings_Tab_Update {
             get {
                 return ResourceManager.GetString("Settings.Tab.Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Copy に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_ContextMenu_Copy {
+            get {
+                return ResourceManager.GetString("WebBrowser.ContextMenu.Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cut に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_ContextMenu_Cut {
+            get {
+                return ResourceManager.GetString("WebBrowser.ContextMenu.Cut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Delete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_ContextMenu_Delete {
+            get {
+                return ResourceManager.GetString("WebBrowser.ContextMenu.Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Paste に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_ContextMenu_Paste {
+            get {
+                return ResourceManager.GetString("WebBrowser.ContextMenu.Paste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Redo に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_ContextMenu_Redo {
+            get {
+                return ResourceManager.GetString("WebBrowser.ContextMenu.Redo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Select All に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_ContextMenu_SelectAll {
+            get {
+                return ResourceManager.GetString("WebBrowser.ContextMenu.SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Undo に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_ContextMenu_Undo {
+            get {
+                return ResourceManager.GetString("WebBrowser.ContextMenu.Undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Back に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_Navigation_Back {
+            get {
+                return ResourceManager.GetString("WebBrowser.Navigation.Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Forward に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_Navigation_Forward {
+            get {
+                return ResourceManager.GetString("WebBrowser.Navigation.Forward", resourceCulture);
             }
         }
     }

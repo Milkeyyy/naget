@@ -1,9 +1,9 @@
-<Window xmlns="https://github.com/avaloniaui"
+﻿<Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:vm="using:SearchLight.ViewModels"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:lang="clr-namespace:SearchLight.Assets.Locales"
+		xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="60"
 		x:Class="SearchLight.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
@@ -33,13 +33,13 @@
 					TintColor="{DynamicResource SystemAltHighColor}"
 					TintOpacity="1"
 					FallbackColor="Black"
-					MaterialOpacity="0.25"
+					MaterialOpacity="0.65"
 				/>
 			</ExperimentalAcrylicBorder.Material>
 		</ExperimentalAcrylicBorder>
 
 		<Grid
-			Margin="10, 0, 10	, 0"
+			Margin="10 0 10 0"
 			HorizontalAlignment="Stretch"
 			VerticalAlignment="Center"
 			ColumnDefinitions="Auto, *, Auto"
@@ -48,15 +48,17 @@
 			<TextBlock
 				Grid.Column="0"
 				Grid.Row="0"
-				Margin="0, 0, 10, 0"
+				Margin="0 0 0 0"
 				HorizontalAlignment="Center"
 				VerticalAlignment="Center"
-				Text="Search"
+				Text="{x:Static lang:Resources.Search}"
 			/>
+
 			<TextBox
 				x:Name="searchtextbox"
 				Grid.Column="1"
 				Grid.Row="0"
+				Margin="10 0 10 0"
 				Text="{Binding SearchWord}"
 				FontSize="20"
 				Background="Transparent"

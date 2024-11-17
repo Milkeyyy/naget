@@ -1,8 +1,9 @@
-<Window xmlns="https://github.com/avaloniaui"
+﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:SearchLight.ViewModels"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
         xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SearchLight.BrowserWindow"
@@ -10,29 +11,29 @@
 		Title="Browser"
 		TransparencyLevelHint="AcrylicBlur"
 		Background="Transparent">
-	
+
 	<NativeMenu.Menu>
 		<NativeMenu>
 			<NativeMenuItem Header="Edit">
 				<NativeMenuItem.Menu>
 					<NativeMenu>
-						<NativeMenuItem Header="Undo" Command="{Binding UndoCommand}" Gesture="CMD+Z" />
-						<NativeMenuItem Header="Redo" Command="{Binding RedoCommand}" Gesture="Shift+CMD+Z" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Undo}" Command="{Binding UndoCommand}" Gesture="CMD+Z" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Redo}" Command="{Binding RedoCommand}" Gesture="Shift+CMD+Z" />
 						<NativeMenuItemSeparator/>
-						<NativeMenuItem Header="Cut" Command="{Binding CutCommand}" Gesture="CMD+X" />
-						<NativeMenuItem Header="Copy" Command="{Binding CopyCommand}" Gesture="CMD+C" />
-						<NativeMenuItem Header="Paste" Command="{Binding PasteCommand}" Gesture="CMD+V" />
-						<NativeMenuItem Header="Delete" Command="{Binding DeleteCommand}" Gesture="CMD+Back" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Cut}" Command="{Binding CutCommand}" Gesture="CMD+X" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Copy}" Command="{Binding CopyCommand}" Gesture="CMD+C" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Paste}" Command="{Binding PasteCommand}" Gesture="CMD+V" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Delete}" Command="{Binding DeleteCommand}" Gesture="CMD+Back" />
 						<NativeMenuItemSeparator/>
-						<NativeMenuItem Header="Select All" Command="{Binding SelectAllCommand}" Gesture="CMD+A" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_SelectAll}" Command="{Binding SelectAllCommand}" Gesture="CMD+A" />
 					</NativeMenu>
 				</NativeMenuItem.Menu>
 			</NativeMenuItem>
 			<NativeMenuItem Header="Navigate">
 				<NativeMenuItem.Menu>
 					<NativeMenu>
-						<NativeMenuItem Header="Back" Command="{Binding BackCommand}" />
-						<NativeMenuItem Header="Forward" Command="{Binding ForwardCommand}" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}" />
 					</NativeMenu>
 				</NativeMenuItem.Menu>
 			</NativeMenuItem>
@@ -47,22 +48,26 @@
 						TintColor="{DynamicResource SystemAltHighColor}"
 						TintOpacity="1"
 						FallbackColor="Black"
-						MaterialOpacity="0.25" />
+						MaterialOpacity="0.65" />
 				</ExperimentalAcrylicBorder.Material>
 			</ExperimentalAcrylicBorder>
 
 		<DockPanel>
-
-			<DockPanel DockPanel.Dock="Top" Margin="0 0 400 0">
+			
+			<DockPanel DockPanel.Dock="Top" Margin="10 10 10 10">
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
 				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding ShowDevToolsCommand}">Show DevTools</Button>
-				<TextBox Background="Transparent" TabIndex="0" Text="{Binding Address}" Margin="80 0 0 0">
+				<TextBox Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
 					<TextBox.KeyBindings>
 						<KeyBinding Gesture="Enter" Command="{Binding NavigateCommand}" />
 					</TextBox.KeyBindings>
 				</TextBox>
 			</DockPanel>
 
-			<webview:WebView x:Name="webview" Focusable="True" Address="{Binding CurrentAddress}" />
+			<webview:WebView x:Name="webview" Focusable="True" Address="{Binding CurrentAddress}">
+				
+			</webview:WebView>
 		</DockPanel>
 	</Panel>
 </Window>

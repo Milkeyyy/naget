@@ -28,7 +28,7 @@ namespace SearchLight.Views
 				this.FindControl<TextBox>("searchtextbox").Focus();
 			};
 
-			// ウィンドウのフォーカスが失われたらウィンドウを隠す
+			// テキスト入力のフォーカスが失われたらウィンドウを隠す
 			LostFocus += (s, e) =>
 			{
 				Hide();

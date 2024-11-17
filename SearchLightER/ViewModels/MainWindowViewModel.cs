@@ -17,8 +17,10 @@ namespace SearchLight.ViewModels
 			get { return _searchWord; }
 			set { this.RaiseAndSetIfChanged(ref _searchWord, value); }
 		}
+
 		// 検索コマンド
 		public ReactiveCommand<Unit, Unit> SearchCommand { get; }
+
 		public MainWindowViewModel()
 		{
 			SearchCommand = ReactiveCommand.Create(() =>

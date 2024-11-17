@@ -138,4 +138,37 @@
   <data name="Settings.Tab.Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="WebBrowser.Navigation.Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="WebBrowser.Navigation.Forward" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="WebBrowser.ContextMenu.Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="WebBrowser.ContextMenu.Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="WebBrowser.ContextMenu.Cut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="WebBrowser.ContextMenu.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="WebBrowser.ContextMenu.Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="WebBrowser.ContextMenu.Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="WebBrowser.ContextMenu.SelectAll" xml:space="preserve">
+    <value>Select All</value>
+  </data>
 </root>

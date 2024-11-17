@@ -16,7 +16,7 @@ namespace SearchLight
 	{
 		private static string _name = string.Empty;
 		public static string ProductName => _name;
-		private static string _version = string.Empty	;
+		private static string _version = string.Empty;
 		public static string ProductVersion => _version;
 
 		public static Window MainWindow;
@@ -26,8 +26,8 @@ namespace SearchLight
 		public override void Initialize()
 		{
 			var a = Assembly.GetExecutingAssembly().GetName();
-			_name = a.Name;
-			_version = a.Version.ToString();
+			if (a.Name != null) _name = a.Name;
+			if (a.Version != null) _version = a.Version.ToString();
 			AvaloniaXamlLoader.Load(this);
 		}
 

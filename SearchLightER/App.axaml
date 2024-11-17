@@ -1,6 +1,8 @@
-<Application xmlns="https://github.com/avaloniaui"
+﻿<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="SearchLight.App"
+             xmlns:sty="using:FluentAvalonia.Styling"
+			 xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
+			 x:Class="SearchLight.App"
              xmlns:local="using:SearchLight"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -10,6 +12,26 @@
     </Application.DataTemplates>
   
     <Application.Styles>
-        <FluentTheme />
+		<sty:FluentAvaloniaTheme />
     </Application.Styles>
+
+	<TrayIcon.Icons>
+		<TrayIcons>
+			<TrayIcon Icon="/Assets/SearchLight.ico"
+					  ToolTipText="{x:Static lang:Resources.App_Name}">
+				<TrayIcon.Menu>
+					<NativeMenu>
+						<NativeMenuItem Header="Settings">
+							<NativeMenu>
+								<NativeMenuItem Header="Option 1"   />
+								<NativeMenuItem Header="Option 2"   />
+								<NativeMenuItemSeparator />
+								<NativeMenuItem Header="Option 3"  />
+							</NativeMenu>
+						</NativeMenuItem>
+					</NativeMenu>
+				</TrayIcon.Menu>
+			</TrayIcon>
+		</TrayIcons>
+	</TrayIcon.Icons>
 </Application>

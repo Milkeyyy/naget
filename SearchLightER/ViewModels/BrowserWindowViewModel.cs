@@ -11,11 +11,14 @@ namespace SearchLight.ViewModels
 {
 	public class BrowserWindowViewModel : ViewModelBase
 	{
-		private string address;		
-		private string currentAddress;
+		private WebView webview;
 
-		public BrowserWindowViewModel(WebView webview)
+		private string address = string.Empty;		
+		private string currentAddress = string.Empty;
+
+		public BrowserWindowViewModel(WebView wb)
 		{
+			webview = wb;
 			//Address = CurrentAddress = "http://www.google.com/";
 
 			NavigateCommand = ReactiveCommand.Create(() => {
@@ -54,13 +57,14 @@ namespace SearchLight.ViewModels
 				webview.EditCommands.Delete();
 			});
 
-			BackCommand = ReactiveCommand.Create(() => {
+			BackCommand = ReactiveCommand.Create(() =>
+			{
 				webview.GoBack();
-			});
+			}, this.WhenAnyValue(x => x.webview.CanGoBack)); // 動かない
 
 			ForwardCommand = ReactiveCommand.Create(() => {
 				webview.GoForward();
-			});
+			}, this.WhenAnyValue(x => x.webview.CanGoForward));
 
 			PropertyChanged += OnPropertyChanged;
 		}
