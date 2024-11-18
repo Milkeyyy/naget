@@ -4,7 +4,7 @@ using Avalonia.Markup.Xaml;
 using SearchLight.ViewModels;
 using WebViewControl;
 
-namespace SearchLight;
+namespace SearchLight.Views;
 
 public partial class BrowserWindow : Window
 {

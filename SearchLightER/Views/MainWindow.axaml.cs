@@ -4,35 +4,34 @@ using Avalonia.Interactivity;
 using SearchLight.ViewModels;
 using System;
 
-namespace SearchLight.Views
+namespace SearchLight.Views;
+
+public partial class MainWindow : Window
 {
-	public partial class MainWindow : Window
+	public MainWindow()
 	{
-		public MainWindow()
+		InitializeComponent();
+
+		DataContext = new MainWindowViewModel();
+
+		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
+		Closing += (s, e) =>
 		{
-			InitializeComponent();
+			((Window)s).Hide();
+			e.Cancel = true;
+		};
 
-			DataContext = new MainWindowViewModel();
+		// ウィンドウが開かれた時
+		Opened += (s, e) =>
+		{
+			// 検索テキストにフォーカスする
+			this.FindControl<TextBox>("searchtextbox").Focus();
+		};
 
-			// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
-			Closing += (s, e) =>
-			{
-				((Window)s).Hide();
-				e.Cancel = true;
-			};
-
-			// ウィンドウが開かれた時
-			Opened += (s, e) =>
-			{
-				// 検索テキストにフォーカスする
-				this.FindControl<TextBox>("searchtextbox").Focus();
-			};
-
-			// テキスト入力のフォーカスが失われたらウィンドウを隠す
-			LostFocus += (s, e) =>
-			{
-				Hide();
-			};
-		}
+		// テキスト入力のフォーカスが失われたらウィンドウを隠す
+		LostFocus += (s, e) =>
+		{
+			Hide();
+		};
 	}
 }

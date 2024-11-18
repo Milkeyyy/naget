@@ -8,36 +8,35 @@ using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using SearchLight.ViewModels;
 
-namespace SearchLight.Views
+namespace SearchLight.Views;
+
+public partial class SettingsWindow : Window
 {
-	public partial class SettingsWindow : Window
+	public SettingsWindow()
 	{
-		public SettingsWindow()
+		InitializeComponent();
+
+		DataContext = new SettingsWindowViewModel();
+
+		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
+		Closing += (s, e) =>
 		{
-			InitializeComponent();
+			((Window)s).Hide();
+			e.Cancel = true;
+		};
 
-			DataContext = new SettingsWindowViewModel();
+		var nv = this.FindControl<NavigationView>("navigationMenu");
+		nv.SelectionChanged += OnNavigationMenuSelectionChanged;
+		nv.SelectedItem = nv.MenuItems.ElementAt(0);
+	}
 
-			// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
-			Closing += (s, e) =>
-			{
-				((Window)s).Hide();
-				e.Cancel = true;
-			};
-
-			var nv = this.FindControl<NavigationView>("navigationMenu");
-			nv.SelectionChanged += OnNavigationMenuSelectionChanged;
-			nv.SelectedItem = nv.MenuItems.ElementAt(0);
-		}
-
-		private void OnNavigationMenuSelectionChanged(object sender, NavigationViewSelectionChangedEventArgs e)
+	private void OnNavigationMenuSelectionChanged(object sender, NavigationViewSelectionChangedEventArgs e)
+	{
+		if (e.SelectedItem is NavigationViewItem nvi)
 		{
-			if (e.SelectedItem is NavigationViewItem nvi)
-			{
-				var smpPage = $"SearchLight.Views.Settings.{nvi.Tag}";
-				var pg = Activator.CreateInstance(Type.GetType(smpPage));
-				(sender as NavigationView).Content = pg;
-			}
+			var smpPage = $"SearchLight.Views.Settings.{nvi.Tag}";
+			var pg = Activator.CreateInstance(Type.GetType(smpPage));
+			(sender as NavigationView).Content = pg;
 		}
 	}
 }

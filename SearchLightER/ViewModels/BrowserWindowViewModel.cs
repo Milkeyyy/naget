@@ -7,108 +7,107 @@ using System.Windows.Input;
 using Tmds.DBus.Protocol;
 using WebViewControl;
 
-namespace SearchLight.ViewModels
+namespace SearchLight.ViewModels;
+
+public class BrowserWindowViewModel : ViewModelBase
 {
-	public class BrowserWindowViewModel : ViewModelBase
+	private WebView webview;
+
+	private string address = string.Empty;
+	private string currentAddress = string.Empty;
+
+	public BrowserWindowViewModel(WebView wb)
 	{
-		private WebView webview;
+		webview = wb;
+		//Address = CurrentAddress = "http://www.google.com/";
 
-		private string address = string.Empty;
-		private string currentAddress = string.Empty;
+		NavigateCommand = ReactiveCommand.Create(() => {
+			CurrentAddress = Address;
+		});
 
-		public BrowserWindowViewModel(WebView wb)
+		ShowDevToolsCommand = ReactiveCommand.Create(() => {
+			webview.ShowDeveloperTools();
+		});
+
+		CutCommand = ReactiveCommand.Create(() => {
+			webview.EditCommands.Cut();
+		});
+
+		CopyCommand = ReactiveCommand.Create(() => {
+			webview.EditCommands.Copy();
+		});
+
+		PasteCommand = ReactiveCommand.Create(() => {
+			webview.EditCommands.Paste();
+		});
+
+		UndoCommand = ReactiveCommand.Create(() => {
+			webview.EditCommands.Undo();
+		});
+
+		RedoCommand = ReactiveCommand.Create(() => {
+			webview.EditCommands.Redo();
+		});
+
+		SelectAllCommand = ReactiveCommand.Create(() => {
+			webview.EditCommands.SelectAll();
+		});
+
+		DeleteCommand = ReactiveCommand.Create(() => {
+			webview.EditCommands.Delete();
+		});
+
+		BackCommand = ReactiveCommand.Create(() =>
 		{
-			webview = wb;
-			//Address = CurrentAddress = "http://www.google.com/";
+			webview.GoBack();
+		}, this.WhenAnyValue(x => x.webview.CanGoBack)); // 動かない
 
-			NavigateCommand = ReactiveCommand.Create(() => {
-				CurrentAddress = Address;
-			});
+		ForwardCommand = ReactiveCommand.Create(() => {
+			webview.GoForward();
+		}, this.WhenAnyValue(x => x.webview.CanGoForward));
 
-			ShowDevToolsCommand = ReactiveCommand.Create(() => {
-				webview.ShowDeveloperTools();
-			});
-
-			CutCommand = ReactiveCommand.Create(() => {
-				webview.EditCommands.Cut();
-			});
-
-			CopyCommand = ReactiveCommand.Create(() => {
-				webview.EditCommands.Copy();
-			});
-
-			PasteCommand = ReactiveCommand.Create(() => {
-				webview.EditCommands.Paste();
-			});
-
-			UndoCommand = ReactiveCommand.Create(() => {
-				webview.EditCommands.Undo();
-			});
-
-			RedoCommand = ReactiveCommand.Create(() => {
-				webview.EditCommands.Redo();
-			});
-
-			SelectAllCommand = ReactiveCommand.Create(() => {
-				webview.EditCommands.SelectAll();
-			});
-
-			DeleteCommand = ReactiveCommand.Create(() => {
-				webview.EditCommands.Delete();
-			});
-
-			BackCommand = ReactiveCommand.Create(() =>
-			{
-				webview.GoBack();
-			}, this.WhenAnyValue(x => x.webview.CanGoBack)); // 動かない
-
-			ForwardCommand = ReactiveCommand.Create(() => {
-				webview.GoForward();
-			}, this.WhenAnyValue(x => x.webview.CanGoForward));
-
-			PropertyChanged += OnPropertyChanged;
-		}
-
-		private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName == nameof(CurrentAddress))
-			{
-				Address = CurrentAddress;
-			}
-		}
-
-		public string Address
-		{
-			get => address;
-			set => this.RaiseAndSetIfChanged(ref address, value);
-		}
-
-		public string CurrentAddress
-		{
-			get => currentAddress;
-			set => this.RaiseAndSetIfChanged(ref currentAddress, value);
-		}
-
-		public ReactiveCommand<Unit, Unit> NavigateCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> ShowDevToolsCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> CutCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> CopyCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> PasteCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> UndoCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> RedoCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> SelectAllCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> BackCommand { get; }
-
-		public ReactiveCommand<Unit, Unit> ForwardCommand { get; }
+		PropertyChanged += OnPropertyChanged;
 	}
+
+	private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName == nameof(CurrentAddress))
+		{
+			Address = CurrentAddress;
+		}
+	}
+
+	public string Address
+	{
+		get => address;
+		set => this.RaiseAndSetIfChanged(ref address, value);
+	}
+
+	public string CurrentAddress
+	{
+		get => currentAddress;
+		set => this.RaiseAndSetIfChanged(ref currentAddress, value);
+	}
+
+	public ReactiveCommand<Unit, Unit> NavigateCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> ShowDevToolsCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> CutCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> CopyCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> PasteCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> UndoCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> RedoCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> SelectAllCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> BackCommand { get; }
+
+	public ReactiveCommand<Unit, Unit> ForwardCommand { get; }
 }

@@ -4,14 +4,13 @@ using System;
 using System.Reactive;
 using System.Windows.Input;
 
-namespace SearchLight.ViewModels
+namespace SearchLight.ViewModels;
+
+public class SettingsWindowViewModel : ViewModelBase
 {
-	public class SettingsWindowViewModel : ViewModelBase
+	public ReactiveCommand<Unit, Unit> ExitCommand { get; }
+	public SettingsWindowViewModel()
 	{
-		public ReactiveCommand<Unit, Unit> ExitCommand { get; }
-		public SettingsWindowViewModel()
-		{
-			ExitCommand = ReactiveCommand.Create(() => Environment.Exit(0));
-		}
+		ExitCommand = ReactiveCommand.Create(() => Environment.Exit(0));
 	}
 }

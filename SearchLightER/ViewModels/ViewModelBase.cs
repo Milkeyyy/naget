@@ -1,8 +1,7 @@
 ﻿using ReactiveUI;
 
-namespace SearchLight.ViewModels
+namespace SearchLight.ViewModels;
+
+public class ViewModelBase : ReactiveObject
 {
-	public class ViewModelBase : ReactiveObject
-	{
-	}
 }
