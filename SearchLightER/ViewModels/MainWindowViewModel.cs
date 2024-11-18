@@ -1,7 +1,6 @@
 ﻿using ReactiveUI;
-using System.ComponentModel;
+using SearchLight.Models;
 using System.Reactive;
-using System.Runtime.CompilerServices;
 
 namespace SearchLight.ViewModels;
 
@@ -18,11 +17,29 @@ public class MainWindowViewModel : ViewModelBase
 		set { this.RaiseAndSetIfChanged(ref _searchWord, value); }
 	}
 
-	// 検索コマンド
+	// 選択中の検索エンジン
+	private SearchEngineClass _currentSearchEngine;
+	private string _currentSearchEngineId;
+	public string CurrentSearchEngineId // ID
+	{
+		get { return _currentSearchEngine.ID; }
+		set { this.RaiseAndSetIfChanged(ref _currentSearchEngineId, value); }
+	}
+	private string _currentSearchEngineName;
+	public string CurrentSearchEngineName // 名前
+	{
+		get { return _currentSearchEngine.Name; }
+		set { this.RaiseAndSetIfChanged(ref _currentSearchEngineName, value); }
+	}
+
+	// 検索実行コマンド
 	public ReactiveCommand<Unit, Unit> SearchCommand { get; }
 
 	public MainWindowViewModel()
 	{
+		// 検索エンジンを読み込む
+		_currentSearchEngine = SearchEngineManager.EngineList[0];
+
 		SearchCommand = ReactiveCommand.Create(() =>
 		{
 			// ブラウザーを表示

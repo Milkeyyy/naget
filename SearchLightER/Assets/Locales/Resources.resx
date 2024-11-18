@@ -171,4 +171,13 @@
   <data name="WebBrowser.ContextMenu.SelectAll" xml:space="preserve">
     <value>Select All</value>
   </data>
+  <data name="TrayMenu.Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="TrayMenu.InAppBrowser" xml:space="preserve">
+    <value>In App Browser</value>
+  </data>
+  <data name="TrayMenu.Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
 </root>

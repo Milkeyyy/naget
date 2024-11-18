@@ -142,6 +142,33 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
+        ///   Exit に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string TrayMenu_Exit {
+            get {
+                return ResourceManager.GetString("TrayMenu.Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   In App Browser に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string TrayMenu_InAppBrowser {
+            get {
+                return ResourceManager.GetString("TrayMenu.InAppBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string TrayMenu_Settings {
+            get {
+                return ResourceManager.GetString("TrayMenu.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Copy に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string WebBrowser_ContextMenu_Copy {

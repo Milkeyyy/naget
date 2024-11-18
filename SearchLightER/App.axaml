@@ -1,19 +1,21 @@
 ﻿<Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:sty="using:FluentAvalonia.Styling"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="using:SearchLight.ViewModels"
+			 xmlns:sty="using:FluentAvalonia.Styling"
 			 xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
 			 x:Class="SearchLight.App"
-             xmlns:local="using:SearchLight"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+			 x:DataType="vm:AppViewModel"
+			 xmlns:local="using:SearchLight"
+			 RequestedThemeVariant="Default">
+			 <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
+	<Application.DataTemplates>
+		<local:ViewLocator/>
+	</Application.DataTemplates>
   
-    <Application.Styles>
+	<Application.Styles>
 		<sty:FluentAvaloniaTheme />
-    </Application.Styles>
+	</Application.Styles>
 
 	<TrayIcon.Icons>
 		<TrayIcons>
@@ -21,14 +23,13 @@
 					  ToolTipText="{x:Static lang:Resources.App_Name}">
 				<TrayIcon.Menu>
 					<NativeMenu>
-						<NativeMenuItem Header="Settings">
-							<NativeMenu>
-								<NativeMenuItem Header="Option 1"   />
-								<NativeMenuItem Header="Option 2"   />
-								<NativeMenuItemSeparator />
-								<NativeMenuItem Header="Option 3"  />
-							</NativeMenu>
-						</NativeMenuItem>
+						<NativeMenuItem Icon="/Assets/SearchLight.ico" Header="{x:Static lang:Resources.App_Name}" />
+						<NativeMenuItemSeparator />
+						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_InAppBrowser}" Command="{Binding OpenInAppBrowserWindowCommand}" />
+						<NativeMenuItemSeparator />
+						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Settings}" Command="{Binding OpenSettingsWindowCommand}" />
+						<NativeMenuItemSeparator />
+						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Exit}" Command="{Binding ExitAppCommand}" />
 					</NativeMenu>
 				</TrayIcon.Menu>
 			</TrayIcon>

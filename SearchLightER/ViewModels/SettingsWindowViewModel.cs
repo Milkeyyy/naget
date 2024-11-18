@@ -1,8 +1,6 @@
-﻿using Avalonia.Controls;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System;
 using System.Reactive;
-using System.Windows.Input;
 
 namespace SearchLight.ViewModels;
 
