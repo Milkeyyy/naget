@@ -4,10 +4,10 @@ using Avalonia.Markup.Xaml;
 
 namespace SearchLight.Views.Settings;
 
-public partial class DesignView : Window
+public partial class SearchView : UserControl
 {
-    public DesignView()
-    {
-        InitializeComponent();
-    }
+	public SearchView()
+	{
+		InitializeComponent();
+	}
 }

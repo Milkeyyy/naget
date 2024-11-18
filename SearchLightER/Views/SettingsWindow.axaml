@@ -50,7 +50,7 @@
 			<ui:NavigationView.MenuItems>
 				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_Design}" Tag="DesignView" IconSource="ColorFill" />
 				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_Search}" Tag="SearchView" IconSource="Zoom" />
-				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" Tag="ShortCutKeyView" IconSource="Keyboard" />
+				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" Tag="ShortcutKeyView" IconSource="Keyboard" />
 				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_InAppBrowser}" Tag="InAppBrowserView" IconSource="Globe" />
 				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_Update}" Tag="UpdateView" IconSource="Upload" />
 				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_System}" Tag="SystemView" IconSource="Repair" />
