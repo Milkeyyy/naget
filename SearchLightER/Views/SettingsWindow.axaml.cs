@@ -1,22 +1,21 @@
-﻿using System;
-using System.Globalization;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
+using FluentAvalonia.UI.Windowing;
 using SearchLight.ViewModels;
+using System;
 
 namespace SearchLight.Views;
 
-public partial class SettingsWindow : Window
+public partial class SettingsWindow : AppWindow
 {
 	public SettingsWindow()
 	{
 		InitializeComponent();
 
 		DataContext = new SettingsWindowViewModel();
+
+		TitleBar.ExtendsContentIntoTitleBar = true;
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
 		Closing += (s, e) =>

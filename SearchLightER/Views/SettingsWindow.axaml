@@ -10,10 +10,7 @@
 		x:Class="SearchLight.Views.SettingsWindow"
 		x:DataType="vm:SettingsWindowViewModel"
 		Title="SettingsWindow"
-		TransparencyLevelHint="AcrylicBlur"
-		Background="Transparent"
-		ExtendClientAreaTitleBarHeightHint="-1"
-		ExtendClientAreaToDecorationsHint="True">
+		>
 
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -34,18 +31,7 @@
 		</NativeMenu>
 	</NativeMenu.Menu>
 
-	<Panel>
-		<ExperimentalAcrylicBorder IsHitTestVisible="False">
-			<ExperimentalAcrylicBorder.Material>
-				<ExperimentalAcrylicMaterial
-					BackgroundSource="Digger"
-					TintColor="{DynamicResource SystemAltHighColor}"
-					TintOpacity="1"
-					FallbackColor="Black"
-					MaterialOpacity="0.65" />
-			</ExperimentalAcrylicBorder.Material>
-		</ExperimentalAcrylicBorder>
-
+	<Panel Margin="0 48 0 0">
 		<ui:NavigationView x:Name="navigationMenu" Height="NaN" PaneDisplayMode="Auto" IsSettingsVisible="False">
 			<ui:NavigationView.MenuItems>
 				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_Design}" Tag="DesignView" IconSource="ColorFill" />
