@@ -8,11 +8,11 @@ namespace SearchLight.Views;
 
 public partial class BrowserWindow : Window
 {
-    public BrowserWindow()
-    {
-        InitializeComponent();
+		public BrowserWindow()
+		{
+				InitializeComponent();
 
-        DataContext = new BrowserWindowViewModel(this.FindControl<WebView>("webview"));
+				DataContext = new BrowserWindowViewModel(this.FindControl<WebView>("webview"));
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
 		Closing += (s, e) =>
