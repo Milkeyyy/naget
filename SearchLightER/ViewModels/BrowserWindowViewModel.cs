@@ -13,7 +13,7 @@ namespace SearchLight.ViewModels
 	{
 		private WebView webview;
 
-		private string address = string.Empty;		
+		private string address = string.Empty;
 		private string currentAddress = string.Empty;
 
 		public BrowserWindowViewModel(WebView wb)

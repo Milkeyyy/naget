@@ -9,7 +9,7 @@ namespace SearchLight.ViewModels
 	{
 		public string ProductNameText { get; } = App.ProductName;
 		public string ProductVersionText { get; } = App.ProductVersion;
-		
+
 		// 検索ワード
 		private string _searchWord = string.Empty;
 		public string SearchWord
