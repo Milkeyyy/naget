@@ -2,10 +2,10 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using GlobalHotKeys.Native.Types;
 using SearchLight.Models;
 using SearchLight.ViewModels;
 using SearchLight.Views;
+using SharpHook.Native;
 using System;
 using System.Globalization;
 using System.IO;
@@ -39,7 +39,7 @@ public partial class App : Application
 		AvaloniaXamlLoader.Load(this);
 	}
 
-	public override void OnFrameworkInitializationCompleted()
+	public override async void OnFrameworkInitializationCompleted()
 	{
 		Assets.Locales.Resources.Culture = new CultureInfo("ja-JP");
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -53,31 +53,17 @@ public partial class App : Application
 			// 検索エンジンのリストを読み込む
 			SearchEngineManager.Load();
 
-			// ホットキー
-			var hotKeyManager = new GlobalHotKeys.HotKeyManager();
-			var hotKeySubscription = hotKeyManager.Register(
-				VirtualKeyCode.KEY_D,
-				Modifiers.Control | Modifiers.Alt // Ctrl + Alt
-			);
-
-			desktop.Exit += (sender, args) =>
-			{
-				hotKeySubscription.Dispose();
-				hotKeyManager.Dispose();
-			};
-
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();
 			BrowserWindow = new BrowserWindow();
 
 			desktop.MainWindow = SettingsWindow;
 
-			// ホットキー押下時イベント
-			hotKeyManager.HotKeyPressed
-				.ObserveOn(Avalonia.ReactiveUI.AvaloniaScheduler.Instance)
-				.Subscribe(_ => MainWindow.Show()); // 検索画面を開く
-				//.Subscribe(_ => SettingsWindow.Show()); // 設定画面を開く
-				//.Subscribe(hotKey => MainWindowViewModel.Text += $"HotKey: Id={hotKey.Id}, Key={hotKey.Key}, Modifiers={hotKey.Modifiers}{Environment.NewLine}");
+			// ホットキーの登録
+			var hotKeyManager = new SearchLight.Models.HotKeyManager();
+			hotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA], MainWindow.Show));
+			hotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ], SettingsWindow.Show));
+			hotKeyManager.Run();
 		}
 
 		base.OnFrameworkInitializationCompleted();
