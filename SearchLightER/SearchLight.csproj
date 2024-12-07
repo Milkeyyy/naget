@@ -45,7 +45,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="WebViewControl-Avalonia" Version="3.120.7" />
+    <PackageReference Include="WebViewControl-Avalonia" Version="3.120.8" />
   </ItemGroup>
 
   <ItemGroup>
