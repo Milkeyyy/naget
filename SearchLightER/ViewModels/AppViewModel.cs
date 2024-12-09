@@ -17,6 +17,6 @@ public class AppViewModel : ViewModelBase
 			App.BrowserWindow.Show();
 		});
 		OpenSettingsWindowCommand = ReactiveCommand.Create(() => { App.SettingsWindow.Show(); });
-		ExitAppCommand = ReactiveCommand.Create(() => { Environment.Exit(0); });
+		ExitAppCommand = ReactiveCommand.Create(() => { App.Exit(); });
 	}
 }

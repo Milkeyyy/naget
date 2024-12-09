@@ -30,6 +30,7 @@ public partial class App : Application
 	public static Window MainWindow;
 	public static Window SettingsWindow;
 	public static Window BrowserWindow;
+	public static Models.HotKeyManager HotKeyManager;
 
 	public override void Initialize()
 	{
@@ -39,7 +40,16 @@ public partial class App : Application
 		AvaloniaXamlLoader.Load(this);
 	}
 
-	public override async void OnFrameworkInitializationCompleted()
+	public static void Exit()
+	{
+		HotKeyManager.Dispose();
+		// 検索エンジンデータを保存
+		SearchEngineManager.Save();
+		// 終了
+		Environment.Exit(0);
+	}
+
+	public override void OnFrameworkInitializationCompleted()
 	{
 		Assets.Locales.Resources.Culture = new CultureInfo("ja-JP");
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -60,10 +70,10 @@ public partial class App : Application
 			desktop.MainWindow = SettingsWindow;
 
 			// ホットキーの登録
-			var hotKeyManager = new SearchLight.Models.HotKeyManager();
-			hotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA], MainWindow.Show));
-			hotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ], SettingsWindow.Show));
-			hotKeyManager.Run();
+			HotKeyManager = new Models.HotKeyManager();
+			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA], MainWindow.Show));
+			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ], SettingsWindow.Show));
+			HotKeyManager.Run();
 		}
 
 		base.OnFrameworkInitializationCompleted();

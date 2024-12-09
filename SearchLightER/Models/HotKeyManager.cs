@@ -4,6 +4,7 @@ using SharpHook.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SearchLight.Models;
 
@@ -47,7 +48,7 @@ public class HotKeyManager
 
 	public void Run()
 	{
-		hook.Run();
+		var t = hook.RunAsync();
 	}
 
 	private void Hook_KeyPressed(object? sender, KeyboardHookEventArgs e)
