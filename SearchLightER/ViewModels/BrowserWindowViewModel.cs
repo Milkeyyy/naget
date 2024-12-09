@@ -1,7 +1,10 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Logging;
 using ReactiveUI;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reactive;
 using System.Windows.Input;
 using Tmds.DBus.Protocol;
@@ -15,10 +18,14 @@ public class BrowserWindowViewModel : ViewModelBase
 
 	private string address = string.Empty;
 	private string currentAddress = string.Empty;
+	private string beforeAddress = string.Empty;
+	private bool canGoBack;
+	private bool canGoForward;
 
 	public BrowserWindowViewModel(WebView wb)
 	{
 		webview = wb;
+		//webview.Navigated += WebView_Navigated;
 		//Address = CurrentAddress = "http://www.google.com/";
 
 		NavigateCommand = ReactiveCommand.Create(() => {
@@ -57,16 +64,22 @@ public class BrowserWindowViewModel : ViewModelBase
 			webview.EditCommands.Delete();
 		});
 
-		BackCommand = ReactiveCommand.Create(() =>
-		{
-			webview.GoBack();
-		}, this.WhenAnyValue(x => x.webview.CanGoBack)); // 動かない
+		BackCommand = ReactiveCommand.Create(
+			WebView_GoBack/*,
+			this.WhenAnyValue(
+				x => x.WebViewCanGoBack
+			)*/
+		);
 
-		ForwardCommand = ReactiveCommand.Create(() => {
-			webview.GoForward();
-		}, this.WhenAnyValue(x => x.webview.CanGoForward));
+		ForwardCommand = ReactiveCommand.Create(
+			WebView_GoForward/*,
+            this.WhenAnyValue(
+				x => x.WebViewCanGoForward
+			)*/
+		);
 
 		PropertyChanged += OnPropertyChanged;
+		//webview.PropertyChanged += WebViewOnPropertyChanged;
 	}
 
 	private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -76,6 +89,54 @@ public class BrowserWindowViewModel : ViewModelBase
 			Address = CurrentAddress;
 		}
 	}
+
+	/*private void WebViewOnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+	{
+		Debug.WriteLine("Property Name: " + e.Property.Name);
+		if (e.Property.Name == nameof(webview.Address))
+		{
+			Debug.WriteLine("- Update Property");
+			Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
+			
+			WebViewCanGoBack = webview.CanGoBack;
+			WebViewCanGoForward = webview.CanGoForward;
+		}
+	}
+
+	private void WebView_Navigated(string url, string frameName)
+    {
+		Debug.WriteLine("WebView Navigated: " + url + " | " + frameName);
+		Debug.WriteLine("- Update Property");
+		Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
+		WebViewCanGoBack = webview.CanGoBack;
+		WebViewCanGoForward = webview.CanGoForward;
+    }*/
+
+    private void WebView_GoBack()
+	{
+		beforeAddress = webview.Address;
+		webview.GoBack();
+		//WebViewCanGoBack = webview.CanGoBack;
+	}
+
+	private void WebView_GoForward()
+	{
+		beforeAddress = Address;
+		webview.GoForward();
+		//WebViewCanGoForward = webview.CanGoForward;
+	}
+
+	/*public bool WebViewCanGoBack
+	{
+		get => canGoBack;
+		set => this.RaiseAndSetIfChanged(ref canGoBack, value);
+	}
+
+	public bool WebViewCanGoForward
+	{
+		get => canGoForward;
+		set => this.RaiseAndSetIfChanged(ref canGoForward, value);
+	}*/
 
 	public string Address
 	{
