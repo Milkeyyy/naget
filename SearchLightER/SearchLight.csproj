@@ -8,9 +8,9 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>SearchLight</AssemblyName>
     <ApplicationIcon>Assets\SearchLight.ico</ApplicationIcon>
-    <Platforms>AnyCPU;x64;ARM64</Platforms>
-    <RuntimeIdentifiers>osx-x64;win-x64;osx-arm64;win-arm64</RuntimeIdentifiers>
-    <Copyright>Copyright (C) 2024 Milkeyyy</Copyright>
+    <RuntimeIdentifiers>osx;win</RuntimeIdentifiers>
+	<Platforms>x64;ARM64</Platforms>
+	<Copyright>Copyright (C) 2024 Milkeyyy</Copyright>
     <Description>SearchLight</Description>
     <FileVersion></FileVersion>
   </PropertyGroup>
@@ -46,6 +46,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="SharpHook" Version="5.3.8" />
+    <PackageReference Include="System.Text.Json" Version="6.0.10" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Platform)' == 'x64'">
