@@ -8,11 +8,12 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>SearchLight</AssemblyName>
     <ApplicationIcon>Assets\SearchLight.ico</ApplicationIcon>
-    <RuntimeIdentifiers>osx;win</RuntimeIdentifiers>
-	<Platforms>x64;ARM64</Platforms>
-	<Copyright>Copyright (C) 2024 Milkeyyy</Copyright>
+    <Copyright>Copyright (C) 2024 Milkeyyy</Copyright>
     <Description>SearchLight</Description>
     <FileVersion></FileVersion>
+    <PublishTrimmed>False</PublishTrimmed>
+    <PublishAot>False</PublishAot>
+    <Platforms>x64;ARM64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

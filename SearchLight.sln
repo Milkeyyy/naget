@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchLight", "SearchLightER\SearchLight.csproj", "{A1F3038B-A838-444D-88CE-201DCDF23E28}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{CBCFE0BE-8781-4254-BA24-3D1CA95B7754}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB563C91-9D87-4F7D-95C6-23213B842139}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
