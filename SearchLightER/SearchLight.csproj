@@ -8,7 +8,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>SearchLight</AssemblyName>
     <ApplicationIcon>Assets\SearchLight.ico</ApplicationIcon>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>AnyCPU;x64;ARM64</Platforms>
     <RuntimeIdentifiers>osx-x64;win-x64;osx-arm64;win-arm64</RuntimeIdentifiers>
     <Copyright>Copyright (C) 2024 Milkeyyy</Copyright>
     <Description>SearchLight</Description>
@@ -46,7 +46,13 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="SharpHook" Version="5.3.8" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Platform)' == 'x64'">
     <PackageReference Include="WebViewControl-Avalonia" Version="3.120.8" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)' == 'arm64'">
+    <PackageReference Include="WebViewControl-Avalonia-ARM64" Version="3.120.8" />
   </ItemGroup>
 
   <ItemGroup>
