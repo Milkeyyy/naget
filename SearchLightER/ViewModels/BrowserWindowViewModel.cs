@@ -19,13 +19,13 @@ public class BrowserWindowViewModel : ViewModelBase
 	private string address = string.Empty;
 	private string currentAddress = string.Empty;
 	private string beforeAddress = string.Empty;
-	private bool canGoBack;
-	private bool canGoForward;
+	public bool webviewCanGoBack { get; private set; }
+	public bool webviewCanGoForward { get; private set; }
 
 	public BrowserWindowViewModel(WebView wb)
 	{
 		webview = wb;
-		//webview.Navigated += WebView_Navigated;
+		webview.Navigated += WebView_Navigated;
 		//Address = CurrentAddress = "http://www.google.com/";
 
 		NavigateCommand = ReactiveCommand.Create(() => {
@@ -79,7 +79,7 @@ public class BrowserWindowViewModel : ViewModelBase
 		);
 
 		PropertyChanged += OnPropertyChanged;
-		//webview.PropertyChanged += WebViewOnPropertyChanged;
+		webview.PropertyChanged += WebViewOnPropertyChanged;
 	}
 
 	private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -90,7 +90,7 @@ public class BrowserWindowViewModel : ViewModelBase
 		}
 	}
 
-	/*private void WebViewOnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+	private void WebViewOnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
 	{
 		Debug.WriteLine("Property Name: " + e.Property.Name);
 		if (e.Property.Name == nameof(webview.Address))
@@ -98,8 +98,8 @@ public class BrowserWindowViewModel : ViewModelBase
 			Debug.WriteLine("- Update Property");
 			Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
 			
-			WebViewCanGoBack = webview.CanGoBack;
-			WebViewCanGoForward = webview.CanGoForward;
+			webviewCanGoBack = webview.CanGoBack;
+			webviewCanGoForward = webview.CanGoForward;
 		}
 	}
 
@@ -108,9 +108,9 @@ public class BrowserWindowViewModel : ViewModelBase
 		Debug.WriteLine("WebView Navigated: " + url + " | " + frameName);
 		Debug.WriteLine("- Update Property");
 		Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
-		WebViewCanGoBack = webview.CanGoBack;
-		WebViewCanGoForward = webview.CanGoForward;
-    }*/
+		//WebViewCanGoBack = webview.CanGoBack;
+		//WebViewCanGoForward = webview.CanGoForward;
+    }
 
     private void WebView_GoBack()
 	{
@@ -128,14 +128,14 @@ public class BrowserWindowViewModel : ViewModelBase
 
 	/*public bool WebViewCanGoBack
 	{
-		get => canGoBack;
-		set => this.RaiseAndSetIfChanged(ref canGoBack, value);
+		get => webviewCanGoBack;
+		set => this.RaiseAndSetIfChanged(ref webviewCanGoBack, value);
 	}
 
 	public bool WebViewCanGoForward
 	{
-		get => canGoForward;
-		set => this.RaiseAndSetIfChanged(ref canGoForward, value);
+		get => webviewCanGoForward;
+		set => this.RaiseAndSetIfChanged(ref webviewCanGoForward, value);
 	}*/
 
 	public string Address

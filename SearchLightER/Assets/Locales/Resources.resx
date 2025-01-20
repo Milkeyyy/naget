@@ -180,4 +180,13 @@
   <data name="TrayMenu.Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="Settings.ShortcutKey.ModifierKeys" xml:space="preserve">
+    <value>Modifier Keys</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="Settings.ShortcutKey.Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
 </root>

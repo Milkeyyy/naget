@@ -2,7 +2,46 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="SearchLight.Views.Settings.ShortcutKeyView">
-	ShortcutKey
+	<Panel Margin="20">
+		<StackPanel>
+			<TextBlock Margin="0 0 0 20" FontSize="20" FontWeight="Bold">Test</TextBlock>
+			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="Keyboard">
+				
+				<ui:SettingsExpander.Footer>
+					<ComboBox SelectedIndex="0">
+						<ComboBoxItem>Preset 1</ComboBoxItem>
+						<ComboBoxItem>Preset 2</ComboBoxItem>
+						<ComboBoxItem>Preset 3</ComboBoxItem>
+						<ComboBoxItem>Preset 4</ComboBoxItem>
+						<ComboBoxItem>Preset 5</ComboBoxItem>
+					</ComboBox>
+				</ui:SettingsExpander.Footer>
+
+				<ui:SettingsExpanderItem Content="{x:Static lang:Resources.Settings_ShortcutKey_ModifierKeys}">
+					<ui:SettingsExpanderItem.Footer>
+						<StackPanel Orientation="Horizontal">
+							<CheckBox>Ctrl</CheckBox>
+							<CheckBox>Alt</CheckBox>
+							<CheckBox>Shift</CheckBox>
+							<CheckBox>Win</CheckBox>
+						</StackPanel>
+					</ui:SettingsExpanderItem.Footer>
+				</ui:SettingsExpanderItem>
+
+				<ui:SettingsExpanderItem Content="{x:Static lang:Resources.Settings_ShortcutKey_Key}">
+					<ui:SettingsExpanderItem.Footer>
+						<StackPanel Orientation="Horizontal">
+							<ComboBox SelectedIndex="0">
+							</ComboBox>
+						</StackPanel>
+					</ui:SettingsExpanderItem.Footer>
+				</ui:SettingsExpanderItem>
+
+			</ui:SettingsExpander>
+		</StackPanel>
+	</Panel>
 </UserControl>

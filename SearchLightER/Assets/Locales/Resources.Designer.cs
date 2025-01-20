@@ -119,7 +119,34 @@ namespace SearchLight.Assets.Locales {
         /// </summary>
         public static string Settings_Tab_ShortcutKey {
             get {
-                return ResourceManager.GetString("Settings.Tab.ShortcutKey", resourceCulture);
+                return ResourceManager.GetString("Settings.ShortcutKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Key に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Key {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Modifier Keys に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_ModifierKeys {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.ModifierKeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Preset に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset", resourceCulture);
             }
         }
         

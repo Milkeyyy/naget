@@ -32,8 +32,8 @@
 			<NativeMenuItem Header="Navigate">
 				<NativeMenuItem.Menu>
 					<NativeMenu>
-						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}" />
-						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}" IsEnabled="{Binding webviewCanGoBack}"/>
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}" IsEnabled="{Binding webviewCanGoForward}"/>
 					</NativeMenu>
 				</NativeMenuItem.Menu>
 			</NativeMenuItem>
