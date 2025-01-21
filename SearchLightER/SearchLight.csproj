@@ -8,12 +8,20 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>SearchLight</AssemblyName>
     <ApplicationIcon>Assets\SearchLight.ico</ApplicationIcon>
-    <Copyright>Copyright (C) 2024 Milkeyyy</Copyright>
+    <Copyright>Copyright (C) 2025 Milkeyyy</Copyright>
     <Description>SearchLight</Description>
     <FileVersion></FileVersion>
-    <PublishTrimmed>False</PublishTrimmed>
-    <PublishAot>False</PublishAot>
     <Platforms>x64;ARM64</Platforms>
+  </PropertyGroup>
+
+  <!-- 単一ファイル化 & ファイルサイズ削減 & 圧縮 -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <PublishSingleFile>true</PublishSingleFile>
+    <TrimMode>full</TrimMode>
+    <SelfContained>true</SelfContained>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
