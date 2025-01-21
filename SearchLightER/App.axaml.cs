@@ -9,7 +9,6 @@ using SharpHook.Native;
 using System;
 using System.Globalization;
 using System.IO;
-using System.Reactive.Linq;
 using System.Reflection;
 
 namespace SearchLight;
