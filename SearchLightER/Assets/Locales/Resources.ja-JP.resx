@@ -129,9 +129,6 @@
   <data name="Settings.Tab.Search" xml:space="preserve">
     <value>検索</value>
   </data>
-  <data name="Settings.Tab.ShortcutKey" xml:space="preserve">
-    <value>ショートカットキー</value>
-  </data>
   <data name="Settings.Tab.System" xml:space="preserve">
     <value>システム</value>
   </data>
@@ -188,5 +185,8 @@
   </data>
   <data name="Settings.ShortcutKey.Key" xml:space="preserve">
     <value>キー</value>
+  </data>
+  <data name="Settings.Tab.ShortcutKey" xml:space="preserve">
+    <value>ショートカットキー</value>
   </data>
 </root>
