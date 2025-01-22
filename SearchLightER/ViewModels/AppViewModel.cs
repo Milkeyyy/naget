@@ -1,22 +1,31 @@
-﻿using ReactiveUI;
-using System;
-using System.Reactive;
+﻿using Epoxy;
 
 namespace SearchLight.ViewModels;
 
-public class AppViewModel : ViewModelBase
+[ViewModel]
+public class AppViewModel
 {
-	public ReactiveCommand<Unit, Unit> OpenInAppBrowserWindowCommand { get; }
-	public ReactiveCommand<Unit, Unit> OpenSettingsWindowCommand { get; }
-	public ReactiveCommand<Unit, Unit> ExitAppCommand { get; }
+	public Command OpenInAppBrowserWindowCommand { get; }
+	public Command OpenSettingsWindowCommand { get; }
+	public Command ExitAppCommand { get; }
 
 	public AppViewModel()
 	{
-		OpenInAppBrowserWindowCommand = ReactiveCommand.Create(() => {
+		OpenInAppBrowserWindowCommand = Command.Factory.Create(() =>
+		{
 			(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = "https://www.google.com/";
 			App.BrowserWindow.Show();
+			return default;
 		});
-		OpenSettingsWindowCommand = ReactiveCommand.Create(() => { App.SettingsWindow.Show(); });
-		ExitAppCommand = ReactiveCommand.Create(() => { App.Exit(); });
+		OpenSettingsWindowCommand = Command.Factory.Create(() =>
+		{
+			App.SettingsWindow.Show();
+			return default;
+		});
+		ExitAppCommand = Command.Factory.Create(() =>
+		{
+			App.Exit();
+			return default;
+		});
 	}
 }

@@ -189,4 +189,10 @@
   <data name="Settings.Tab.ShortcutKey" xml:space="preserve">
     <value>ショートカットキー</value>
   </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.Register" xml:space="preserve">
+    <value>登録</value>
+  </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.Done" xml:space="preserve">
+    <value>完了</value>
+  </data>
 </root>

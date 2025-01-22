@@ -189,4 +189,10 @@
   <data name="Settings.Tab.ShortcutKey" xml:space="preserve">
     <value>Shortcut Key</value>
   </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
 </root>

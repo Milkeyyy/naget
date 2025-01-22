@@ -115,6 +115,24 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
+        ///   Done に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_RegisterKeys_Done {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.RegisterKeys.Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Register に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_RegisterKeys_Register {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.RegisterKeys.Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Design に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Tab_Design {

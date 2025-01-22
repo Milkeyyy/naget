@@ -50,6 +50,7 @@
       <IncludeAssets>none</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.3" />
+    <PackageReference Include="Epoxy.Avalonia11" Version="1.16.0" />
     <PackageReference Include="FluentAvaloniaUI" Version="2.2.0" />
     <PackageReference Include="roslynator.analyzers" Version="4.12.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

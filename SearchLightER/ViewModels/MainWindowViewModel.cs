@@ -1,21 +1,14 @@
-﻿using ReactiveUI;
+﻿using Epoxy;
 using SearchLight.Models;
-using System.Reactive;
 
 namespace SearchLight.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+[ViewModel]
+public class MainWindowViewModel
 {
 	public string ProductNameText { get; } = App.ProductName;
 	public string ProductVersionText { get; } = App.ProductVersion;
-
-	// 検索ワード
-	private string _searchWord = string.Empty;
-	public string SearchWord
-	{
-		get { return _searchWord; }
-		set { this.RaiseAndSetIfChanged(ref _searchWord, value); }
-	}
+	public string SearchWord { get; set; } = string.Empty;
 
 	// 選択中の検索エンジン
 	private SearchEngineClass _currentSearchEngine;
@@ -23,24 +16,24 @@ public class MainWindowViewModel : ViewModelBase
 	public string CurrentSearchEngineId // ID
 	{
 		get { return _currentSearchEngine.ID; }
-		set { this.RaiseAndSetIfChanged(ref _currentSearchEngineId, value); }
+		set { _currentSearchEngineId = value; }
 	}
 	private string _currentSearchEngineName;
 	public string CurrentSearchEngineName // 名前
 	{
 		get { return _currentSearchEngine.Name; }
-		set { this.RaiseAndSetIfChanged(ref _currentSearchEngineName, value); }
+		set { _currentSearchEngineName = value; }
 	}
 
 	// 検索実行コマンド
-	public ReactiveCommand<Unit, Unit> SearchCommand { get; }
+	public Command SearchCommand { get; }
 
 	public MainWindowViewModel()
 	{
 		// 検索エンジンを読み込む
 		_currentSearchEngine = SearchEngineManager.EngineList[0];
 
-		SearchCommand = ReactiveCommand.Create(() =>
+		SearchCommand = Command.Factory.Create(() =>
 		{
 			// ブラウザーを表示
 			App.BrowserWindow.Show();
@@ -50,6 +43,7 @@ public class MainWindowViewModel : ViewModelBase
 			SearchWord = string.Empty;
 			// 検索画面を閉じる
 			App.MainWindow.Hide();
+			return default;
 		});
 	}
 }

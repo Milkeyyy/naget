@@ -32,8 +32,8 @@
 			<NativeMenuItem Header="Navigate">
 				<NativeMenuItem.Menu>
 					<NativeMenu>
-						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}" IsEnabled="{Binding webviewCanGoBack}"/>
-						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}" IsEnabled="{Binding webviewCanGoForward}"/>
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}"/>
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}"/>
 					</NativeMenu>
 				</NativeMenuItem.Menu>
 			</NativeMenuItem>
@@ -55,9 +55,9 @@
 		<DockPanel>
 			
 			<DockPanel DockPanel.Dock="Top" Margin="10 10 10 10">
-				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
-				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
-				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding ShowDevToolsCommand}">Show DevTools</Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" IsEnabled="{Binding WebViewCanGoBack}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" IsEnabled="{Binding WebViewCanGoForward}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
+				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding ShowDevToolsCommand}">DevTools</Button>
 				<TextBox Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
 					<TextBox.KeyBindings>
 						<KeyBinding Gesture="Enter" Command="{Binding NavigateCommand}" />
