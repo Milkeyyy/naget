@@ -7,6 +7,7 @@ using SearchLight.ViewModels;
 using SearchLight.Views;
 using SharpHook.Native;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -57,6 +58,7 @@ public class App : Application
 			desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 			// フォルダーを作成する
+			Debug.WriteLine("Config Directory: " + ConfigFolder);
 			Directory.CreateDirectory(ConfigFolder);
 
 			// 検索エンジンのリストを読み込む
