@@ -15,14 +15,14 @@
   </PropertyGroup>
 
   <!-- 単一ファイル化 & ファイルサイズ削減 & 圧縮 -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  <!--<PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <PublishSingleFile>true</PublishSingleFile>
     <TrimMode>full</TrimMode>
     <SelfContained>true</SelfContained>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
