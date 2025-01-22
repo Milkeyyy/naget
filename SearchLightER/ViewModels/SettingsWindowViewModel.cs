@@ -27,7 +27,7 @@ public class SettingsWindowViewModel
 			if (KeyRegistrationMode)
 			{
 				// キー登録モードを終了する
-				var result = await App.HotKeyManager.EndKeyRegistrationAsync();
+				var result = App.HotKeyManager.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
 			}
 			else
@@ -38,7 +38,7 @@ public class SettingsWindowViewModel
 				var result = await App.HotKeyManager.StartKeyRegistrationAsync();
 				if (result != string.Empty && result != null)
 				{
-					var keys = await App.HotKeyManager.GetHotKeyGroupFromKey(result);
+					var keys = App.HotKeyManager.GetHotKeyGroupFromKey(result);
 					RegisteredKeysText = string.Join(", ", keys);
 				}
 				KeyRegistrationMode = false;

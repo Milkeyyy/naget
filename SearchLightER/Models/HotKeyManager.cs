@@ -66,7 +66,7 @@ public class HotKeyManager
 			if (e.Data.KeyCode == KeyCode.VcEscape)
 			{
 				registrationQueuedKeys = [];
-				var t = CancelKeyRegistrationAsync();
+				var t = CancelKeyRegistration();
 				return;
 			}
 			Debug.WriteLine("Key added: " + e.Data.KeyCode);
@@ -88,12 +88,12 @@ public class HotKeyManager
 		pressedKeys.Remove(e.Data.KeyCode);
 	}
 
-	private async Task<HotKeyGroup?> _GetHotKeyGroupFromKey(string id)
+	private HotKeyGroup? _GetHotKeyGroupFromKey(string id)
 	{
 		return groups.FirstOrDefault(x => x.Id == id);
 	}
 
-	private async Task<HotKeyGroup> _RegisterKeysAsync(HashSet<KeyCode> keys)
+	private HotKeyGroup _RegisterKeys(HashSet<KeyCode> keys)
 	{
 		var g = new HotKeyGroup(keys);
 		groups.Add(g);
@@ -119,25 +119,25 @@ public class HotKeyManager
 			// キー登録がキャンセルされた場合は空文字を返す
 			if (keyRegsitrationMode == -1)
 			{
-				await _CancelKeyRegistrationAsync();
+				_CancelKeyRegistration();
 				return string.Empty;
 			}
 			// キー登録が完了した場合は登録されたキーのIDを返す
-			var r = await _StopKeyRegistrationAsync();
+			var r = _StopKeyRegistration();
 			return r;
 		}
 	}
 
-	private async Task<string?> _StopKeyRegistrationAsync()
+	private string? _StopKeyRegistration()
 	{
 		Debug.WriteLine("Key registration stopped");
 		keyRegsitrationMode = 0;
 		if (registrationQueuedKeys.Count == 0) return null;
-		var g = await _RegisterKeysAsync(registrationQueuedKeys);
+		var g = _RegisterKeys(registrationQueuedKeys);
 		return g.Id;
 	}
 
-	private async Task<bool> _CancelKeyRegistrationAsync()
+	private bool _CancelKeyRegistration()
 	{
 		Debug.WriteLine("Key registration canceled");
 		keyRegsitrationMode = 0;
@@ -145,9 +145,9 @@ public class HotKeyManager
 		return true;
 	}
 
-	public async Task<HotKeyGroup?> GetHotKeyGroupFromKey(string id)
+	public HotKeyGroup? GetHotKeyGroupFromKey(string id)
 	{
-		return await _GetHotKeyGroupFromKey(id);
+		return _GetHotKeyGroupFromKey(id);
 	}
 
 	public async Task<string?> StartKeyRegistrationAsync()
@@ -155,14 +155,14 @@ public class HotKeyManager
 		return await _StartKeyRegistrationAsync();
 	}
 
-	public async Task<bool> EndKeyRegistrationAsync()
+	public bool EndKeyRegistration()
 	{
 		if (keyRegsitrationMode != 1) return false;
 		keyRegsitrationMode = 0;
 		return true;
 	}
 
-	public async Task<bool> CancelKeyRegistrationAsync()
+	public bool CancelKeyRegistration()
 	{
 		if (keyRegsitrationMode != 1) return false;
 		keyRegsitrationMode = -1;
