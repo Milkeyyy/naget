@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace SearchLight;
 
-public partial class App : Application
+public class App : Application
 {
 	private static string _name = string.Empty;
 	public static string ProductName => _name;
