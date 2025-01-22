@@ -12,9 +12,9 @@
 		Title="SettingsWindow"
 		>
 
-	<Window.DataContext>
+	<Design.DataContext>
 		<vm:SettingsWindowViewModel/>
-	</Window.DataContext>
+	</Design.DataContext>
 
 	<NativeMenu.Menu>
 		<NativeMenu>

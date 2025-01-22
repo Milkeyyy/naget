@@ -10,9 +10,9 @@
 			 x:DataType="vm:SettingsWindowViewModel"
 			 >
 
-	<UserControl.DataContext>
+	<Design.DataContext>
 		<vm:SettingsWindowViewModel/>
-	</UserControl.DataContext>
+	</Design.DataContext>
 
 	<Panel Margin="20">
 		<StackPanel>
