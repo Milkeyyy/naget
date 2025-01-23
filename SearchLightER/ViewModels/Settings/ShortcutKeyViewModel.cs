@@ -1,24 +1,31 @@
-﻿using Epoxy;
+﻿using Avalonia.Controls;
+using Epoxy;
 using SearchLight.Assets.Locales;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace SearchLight.ViewModels;
+namespace SearchLight.ViewModels.Settings;
 
 [ViewModel]
-public class SettingsWindowViewModel
+public class ShortcutKeyViewModel
 {
+	public Well<UserControl> ShortcutKeyWell { get; } = Well.Factory.Create<UserControl>();
 	public string RegisteredKeysText { get; private set; }
 	public string KeyRegisterButtonText { get; private set; }
 	public bool KeyRegistrationMode { get; private set; }
 	public Command KeyRegisterCommand { get; }
 	public Command ExitCommand { get; }
 
-	public SettingsWindowViewModel()
+	public ShortcutKeyViewModel()
 	{
-		RegisteredKeysText = string.Empty;
-		KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+		ShortcutKeyWell.Add(Control.LoadedEvent, () =>
+		{
+			Debug.WriteLine("ShortcutKeyView Loaded");
+			RegisteredKeysText = "Not Set";
+			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+			return default;
+		});
 
 		KeyRegisterCommand = Command.Factory.Create(async () =>
 		{

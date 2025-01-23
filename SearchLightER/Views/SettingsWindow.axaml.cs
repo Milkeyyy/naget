@@ -2,7 +2,6 @@
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
-using SearchLight.ViewModels;
 using System;
 
 namespace SearchLight.Views;
@@ -13,7 +12,7 @@ public partial class SettingsWindow : AppWindow
 	{
 		InitializeComponent();
 
-		DataContext = new SettingsWindowViewModel();
+		//DataContext = new SettingsShortcutKeyViewModel();
 
 		TitleBar.ExtendsContentIntoTitleBar = true;
 
