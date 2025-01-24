@@ -5,13 +5,13 @@ namespace SearchLight.Models.SearchEngine;
 
 public class SearchEngineList
 {
-    public SearchEngineList()
-    {
-        CreatedAt = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString();
-        List = [];
-    }
+	public SearchEngineList()
+	{
+		CreatedAt = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString();
+		List = [];
+	}
 
-    public string CreatedAt { get; set; }
+	public string CreatedAt { get; set; }
 
-    public List<SearchEngineClass> List { get; set; }
+	public List<SearchEngineClass> List { get; set; }
 }
