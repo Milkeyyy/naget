@@ -103,4 +103,19 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+  <!-- CEFのリソース(locales)がコピーされない問題の対策-->
+  <!--Windows-->
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <!--x64-->
+    <None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(Platform)' == 'x64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>runtimes\win-x64\native\locales\%(Filename)%(Extension)</Link>
+    </None>
+    <!--arm64-->
+    <None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(Platform)' == 'arm64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>runtimes\win-arm64\native\locales\%(Filename)%(Extension)</Link>
+    </None>
+  </ItemGroup>
 </Project>
