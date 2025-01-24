@@ -125,25 +125,31 @@ public class BrowserWindowViewModel
 		});
 	}
 
-	// [PropertyChanged(nameof(WebViewCtrl.CanGoBack))]
-	// private ValueTask WebViewCanGoBackChanged(bool value)
-	// {
-	// 	Debug.WriteLine("WebView CanGoBack Changed: " + value);
-	// 	return default;
-	// }
+	[PropertyChanged(nameof(WebViewCtrl.CanGoBack))]
+	private ValueTask WebViewCanGoBackChanged(bool value)
+	{
+		Debug.WriteLine("WebView CanGoBack Changed: " + value);
+		return default;
+	}
 
-	// [PropertyChanged(nameof(WebViewCtrl.CanGoForward))]
-	// private ValueTask WebViewCanGoForwardChanged(bool value)
-	// {
-	// 	Debug.WriteLine("WebView CanGoForward Changed: " + value);
-	// 	return default;
-	// }
+	[PropertyChanged(nameof(WebViewCtrl.CanGoForward))]
+	private ValueTask WebViewCanGoForwardChanged(bool value)
+	{
+		Debug.WriteLine("WebView CanGoForward Changed: " + value);
+		return default;
+	}
 
 	[PropertyChanged(nameof(CurrentAddress))]
 	private ValueTask OnCurrentAddressChangedAsync(string value)
 	{
 		Debug.WriteLine("CurrentAddress Changed: " + value);
+
 		Address = value;
+
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
+		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+
 		return default;
 	}
 
