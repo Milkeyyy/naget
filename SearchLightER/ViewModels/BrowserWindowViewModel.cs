@@ -48,7 +48,7 @@ public class BrowserWindowViewModel
 		WebViewCtrl = wb;
 		WebViewCtrl.Navigated += WebView_Navigated;
 		WebViewCtrl.PropertyChanged += WebViewOnPropertyChanged;
-		//Address = CurrentAddress = "http://www.google.com/";
+		Address = CurrentAddress;
 
 		NavigateCommand = Command.Factory.Create(() =>
 		{
@@ -138,6 +138,14 @@ public class BrowserWindowViewModel
 	// 	Debug.WriteLine("WebView CanGoForward Changed: " + value);
 	// 	return default;
 	// }
+
+	[PropertyChanged(nameof(CurrentAddress))]
+	private ValueTask OnCurrentAddressChangedAsync(string value)
+	{
+		Debug.WriteLine("CurrentAddress Changed: " + value);
+		Address = value;
+		return default;
+	}
 
 	private void WebViewOnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
 	{
