@@ -1,28 +1,19 @@
 ﻿using Avalonia.Threading;
 using SharpHook;
 using SharpHook.Native;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace SearchLight.Models.Config.HotKey;
 
-public class HotKeyGroup
-{
-	public string Id { get; private set; }
-	public readonly HashSet<KeyCode> Keys;
-	public readonly Action? Method;
-	public HotKeyGroup(HashSet<KeyCode> keys, Action? method = null)
-	{
-		Id = Guid.NewGuid().ToString();
-		Keys = keys;
-		Method = method;
-	}
-}
-
-public class HotKeyManager
+public class HotKeyManager : IDisposable
 {
 	private TaskPoolGlobalHook hook;
 	private HashSet<KeyCode> pressedKeys;
@@ -38,13 +29,24 @@ public class HotKeyManager
 		hook.KeyReleased += Hook_KeyReleased;
 
 		pressedKeys = [];
-
 		groups = [];
+		registrationQueuedKeys = [];
 	}
 
 	public void Dispose()
 	{
-		hook.Dispose();
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	private bool _disposed;
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!_disposed)
+		{
+			if (disposing) hook.Dispose();
+			_disposed = true;
+		}
 	}
 
 	public void Register(HotKeyGroup group)
@@ -78,7 +80,7 @@ public class HotKeyManager
 		{
 			if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
 			{
-				if (group.Method != null) Dispatcher.UIThread.Invoke(group.Method);
+				//if (group.Method != null) Dispatcher.UIThread.Invoke(group.Method);
 			}
 		}
 	}

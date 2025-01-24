@@ -25,6 +25,7 @@
   </PropertyGroup>
   <PropertyGroup Label="Avalonia">
     <AvaloniaNameGeneratorAttachDevTools Condition="'$(Configuration)' == 'Debug'">True</AvaloniaNameGeneratorAttachDevTools>
+    <NeutralLanguage>ja-JP</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>

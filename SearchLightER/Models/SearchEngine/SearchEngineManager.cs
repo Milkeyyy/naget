@@ -10,13 +10,13 @@ public static class SearchEngineManager
 {
 	private static readonly string FilePath = Path.Join(App.ConfigFolder, "SearchEngines.json");
 
-	private static ConfigurationBuilder _builder = new();
+	private static readonly ConfigurationBuilder _builder = new();
 	private static IConfigurationRoot? _config;
 
 	/// <summary>
 	/// 検索エンジン (<c>SearchEngineClass</c>) のリスト (コレクション)
 	/// </summary>
-	private static SearchEngineList? _engineCollection;
+	private static SearchEngineList _engineCollection;
 	/// <summary>
 	/// 検索エンジン (<c>SearchEngineClass</c>) のリスト
 	/// </summary>

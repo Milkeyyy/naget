@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using SearchLight.Models.Config;
 using SearchLight.Models.Config.HotKey;
 using SearchLight.Models.SearchEngine;
 using SearchLight.ViewModels;
@@ -28,10 +29,10 @@ public class App : Application
 	/// </summary>
 	public static string ConfigFolder => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductName);
 
-	public static Window MainWindow;
-	public static Window SettingsWindow;
-	public static Window BrowserWindow;
-	public static Models.Config.HotKey.HotKeyManager HotKeyManager;
+	public static Window? MainWindow { get; private set; }
+	public static Window? SettingsWindow { get; private set; }
+	public static Window? BrowserWindow { get; private set; }
+	public static Models.Config.HotKey.HotKeyManager? HotKeyManager { get; private set; }
 
 	public override void Initialize()
 	{
@@ -43,7 +44,9 @@ public class App : Application
 
 	public static void Exit()
 	{
-		HotKeyManager.Dispose();
+		HotKeyManager?.Dispose();
+		// コンフィグを保存
+		ConfigManager.Save();
 		// 検索エンジンデータを保存
 		SearchEngineManager.Save();
 		// 終了
@@ -62,6 +65,9 @@ public class App : Application
 			Debug.WriteLine("Config Directory: " + ConfigFolder);
 			Directory.CreateDirectory(ConfigFolder);
 
+			// コンフィグを読み込む
+			ConfigManager.Load();
+
 			// 検索エンジンのリストを読み込む
 			SearchEngineManager.Load();
 
@@ -73,8 +79,8 @@ public class App : Application
 
 			// ホットキーの登録
 			HotKeyManager = new Models.Config.HotKey.HotKeyManager();
-			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA], MainWindow.Show));
-			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ], SettingsWindow.Show));
+			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA]));
+			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ]));
 			HotKeyManager.Run();
 		}
 

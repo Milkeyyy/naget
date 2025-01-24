@@ -4,12 +4,10 @@ namespace SearchLight.Models.SearchEngine;
 
 public class SearchEngineClass(string name, string uri)
 {
-	private string _uri = uri;
-
 	/// <summary>
 	/// 検索エンジン固有のID
 	/// </summary>
-	public string ID { get; } = Guid.NewGuid().ToString();
+	public string ID { get; set; } = Guid.NewGuid().ToString();
 	/// <summary>
 	/// 検索エンジンの名前
 	/// </summary>
