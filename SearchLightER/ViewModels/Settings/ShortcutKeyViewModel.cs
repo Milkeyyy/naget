@@ -41,7 +41,6 @@ public class ShortcutKeyViewModel
 			{
 				// キー登録モードに入る
 				KeyRegistrationMode = true;
-				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Done;
 				var result = await App.HotKeyManager.StartKeyRegistrationAsync();
 				if (result != string.Empty && result != null)
 				{
@@ -49,7 +48,6 @@ public class ShortcutKeyViewModel
 					RegisteredKeysText = string.Join(", ", keys);
 				}
 				KeyRegistrationMode = false;
-				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
 			}
 		});
 
@@ -61,10 +59,10 @@ public class ShortcutKeyViewModel
 	}
 
 	[PropertyChanged(nameof(KeyRegistrationMode))]
-	private ValueTask KeyRegistrationModeChanged()
+	private ValueTask KeyRegistrationModeChanged(bool value)
 	{
 		Debug.WriteLine("KeyRegistrationMode Changed: " + KeyRegistrationMode);
-		KeyRegisterButtonText = KeyRegistrationMode ? Resources.Settings_ShortcutKey_RegisterKeys_Done : Resources.Settings_ShortcutKey_RegisterKeys_Register;
+		KeyRegisterButtonText = value ? Resources.Settings_ShortcutKey_RegisterKeys_Done : Resources.Settings_ShortcutKey_RegisterKeys_Register;
 		return default;
 	}
 }
