@@ -2,7 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SearchLight.Models;
+using SearchLight.Models.Config.HotKey;
+using SearchLight.Models.SearchEngine;
 using SearchLight.ViewModels;
 using SearchLight.Views;
 using SharpHook.Native;
@@ -30,7 +31,7 @@ public class App : Application
 	public static Window MainWindow;
 	public static Window SettingsWindow;
 	public static Window BrowserWindow;
-	public static Models.HotKeyManager HotKeyManager;
+	public static Models.Config.HotKey.HotKeyManager HotKeyManager;
 
 	public override void Initialize()
 	{
@@ -71,7 +72,7 @@ public class App : Application
 			desktop.MainWindow = SettingsWindow;
 
 			// ホットキーの登録
-			HotKeyManager = new Models.HotKeyManager();
+			HotKeyManager = new Models.Config.HotKey.HotKeyManager();
 			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA], MainWindow.Show));
 			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ], SettingsWindow.Show));
 			HotKeyManager.Run();

@@ -1,5 +1,5 @@
 ﻿using Epoxy;
-using SearchLight.Models;
+using SearchLight.Models.SearchEngine;
 
 namespace SearchLight.ViewModels;
 
