@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Epoxy;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace SearchLight.ViewModels;
 [ViewModel]
 public class BrowserWindowViewModel
 {
-	private WebView webview;
+	private WebView WebViewCtrl;
 
 	private string address = string.Empty;
 	private string beforeAddress = string.Empty;
@@ -44,9 +45,10 @@ public class BrowserWindowViewModel
 
 	public BrowserWindowViewModel(WebView wb)
 	{
-		webview = wb;
-		webview.Navigated += WebView_Navigated;
-		Address = CurrentAddress = "http://www.google.com/";
+		WebViewCtrl = wb;
+		WebViewCtrl.Navigated += WebView_Navigated;
+		WebViewCtrl.PropertyChanged += WebViewOnPropertyChanged;
+		//Address = CurrentAddress = "http://www.google.com/";
 
 		NavigateCommand = Command.Factory.Create(() =>
 		{
@@ -56,49 +58,49 @@ public class BrowserWindowViewModel
 
 		ShowDevToolsCommand = Command.Factory.Create(() =>
 		{
-			webview.ShowDeveloperTools();
+			WebViewCtrl.ShowDeveloperTools();
 			return default;
 		});
 
 		CutCommand = Command.Factory.Create(() =>
 		{
-			webview.EditCommands.Cut();
+			WebViewCtrl.EditCommands.Cut();
 			return default;
 		});
 
 		CopyCommand = Command.Factory.Create(() =>
 		{
-			webview.EditCommands.Copy();
+			WebViewCtrl.EditCommands.Copy();
 			return default;
 		});
 
 		PasteCommand = Command.Factory.Create(() =>
 		{
-			webview.EditCommands.Paste();
+			WebViewCtrl.EditCommands.Paste();
 			return default;
 		});
 
 		UndoCommand = Command.Factory.Create(() =>
 		{
-			webview.EditCommands.Undo();
+			WebViewCtrl.EditCommands.Undo();
 			return default;
 		});
 
 		RedoCommand = Command.Factory.Create(() =>
 		{
-			webview.EditCommands.Redo();
+			WebViewCtrl.EditCommands.Redo();
 			return default;
 		});
 
 		SelectAllCommand = Command.Factory.Create(() =>
 		{
-			webview.EditCommands.SelectAll();
+			WebViewCtrl.EditCommands.SelectAll();
 			return default;
 		});
 
 		DeleteCommand = Command.Factory.Create(() =>
 		{
-			webview.EditCommands.Delete();
+			WebViewCtrl.EditCommands.Delete();
 			return default;
 		});
 
@@ -121,33 +123,29 @@ public class BrowserWindowViewModel
 				x => x.WebViewCanGoForward
 			)*/
 		});
-
-		//PropertyChanged += OnPropertyChanged;
-		webview.PropertyChanged += WebViewOnPropertyChanged;
 	}
 
-	[PropertyChanged(nameof(CurrentAddress))]
-	private ValueTask OnCurrentAddressChangedAsync(string value)
-	{
-		Debug.WriteLine("OnAddressChanged: " + value);
-		Address = value;
-		return default;
-	}
+	// [PropertyChanged(nameof(WebViewCtrl.CanGoBack))]
+	// private ValueTask WebViewCanGoBackChanged(bool value)
+	// {
+	// 	Debug.WriteLine("WebView CanGoBack Changed: " + value);
+	// 	return default;
+	// }
+
+	// [PropertyChanged(nameof(WebViewCtrl.CanGoForward))]
+	// private ValueTask WebViewCanGoForwardChanged(bool value)
+	// {
+	// 	Debug.WriteLine("WebView CanGoForward Changed: " + value);
+	// 	return default;
+	// }
 
 	private void WebViewOnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
 	{
-		Debug.WriteLine("Property Name: " + e.Property.Name);
-		if (e.Property.Name == nameof(webview.Address))
-		{
-			//Debug.WriteLine("- Update Property");
-			//Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
-			
-			WebViewCanGoBack = webview.CanGoBack;
-			WebViewCanGoForward = webview.CanGoForward;
+		Debug.WriteLine("WebView PropertyChanged: " + e.Property.Name);
 
-			Debug.WriteLine("- Update Property");
-			Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
-		}
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
+		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 	}
 
 	private void WebView_Navigated(string url, string frameName)
@@ -155,26 +153,27 @@ public class BrowserWindowViewModel
 		Debug.WriteLine("WebView Navigated: " + url + " | " + frameName);
 		//Debug.WriteLine("- Update Property");
 		//Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
-		
-		WebViewCanGoBack = webview.CanGoBack;
-		WebViewCanGoForward = webview.CanGoForward;
 
-		Debug.WriteLine("- Update Property");
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
+
 		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 	}
 
 	private void WebView_GoBack()
 	{
-		beforeAddress = webview.Address;
-		webview.GoBack();
-		//WebViewCanGoBack = webview.CanGoBack;
+		beforeAddress = WebViewCtrl.Address;
+		WebViewCtrl.GoBack();
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 	}
 
 	private void WebView_GoForward()
 	{
 		beforeAddress = Address;
-		webview.GoForward();
-		//WebViewCanGoForward = webview.CanGoForward;
+		WebViewCtrl.GoForward();
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 	}
 
 	/*public bool WebViewCanGoBack
