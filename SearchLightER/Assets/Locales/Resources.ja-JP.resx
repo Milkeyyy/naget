@@ -195,4 +195,7 @@
   <data name="Settings.ShortcutKey.RegisterKeys.Done" xml:space="preserve">
     <value>完了</value>
   </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
+    <value>Esc を押してキャンセル</value>
+  </data>
 </root>

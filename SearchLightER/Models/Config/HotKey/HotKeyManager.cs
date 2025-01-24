@@ -1,14 +1,12 @@
 ﻿using Avalonia.Threading;
+using SearchLight.Assets.Locales;
+using SearchLight.ViewModels;
 using SharpHook;
 using SharpHook.Native;
-using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace SearchLight.Models.Config.HotKey;
@@ -81,6 +79,8 @@ public class HotKeyManager : IDisposable
 			if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
 			{
 				//if (group.Method != null) Dispatcher.UIThread.Invoke(group.Method);
+				// 設定されたIDの検索エンジンで検索を実行 TODO: 将来的に検索以外のこともできるようにする
+				Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(group.CommandId));
 			}
 		}
 	}
@@ -103,7 +103,7 @@ public class HotKeyManager : IDisposable
 		return g;
 	}
 
-	private async Task<string?> _StartKeyRegistrationAsync()
+	private async Task<string?> _StartKeyRegistrationAsync(IProgress<string>? progress = null)
 	{
 		if (keyRegsitrationMode == 1) return null;
 		else
@@ -115,17 +115,25 @@ public class HotKeyManager : IDisposable
 			while (keyRegsitrationMode == 1)
 			{
 				if (keyRegsitrationMode == -1) break;
-				await Task.Delay(100);
+				// キーが何も押されていない場合は Esc を押してキャンセル という表示にする 1つでも押されている場合は押されたキーをUIに表示する
+				if (registrationQueuedKeys.Count == 0) progress?.Report(Resources.Settings_ShortcutKey_RegisterKeys_PressEscToCancel);
+				else progress?.Report(string.Join("+", registrationQueuedKeys.Select(k => k.ToString())));
+				await Task.Delay(10);
 			}
 
 			// キー登録がキャンセルされた場合は空文字を返す
 			if (keyRegsitrationMode == -1)
 			{
 				_CancelKeyRegistration();
+				progress?.Report(string.Empty);
 				return string.Empty;
 			}
 			// キー登録が完了した場合は登録されたキーのIDを返す
 			var r = _StopKeyRegistration();
+			var regKeys = GetHotKeyGroupFromKey(r)?.ToString();
+			// 登録されたキーをUIに表示する
+			if (regKeys != null) progress?.Report(regKeys);
+			else if (r == null) progress?.Report(string.Empty);
 			return r;
 		}
 	}
@@ -152,9 +160,9 @@ public class HotKeyManager : IDisposable
 		return _GetHotKeyGroupFromKey(id);
 	}
 
-	public async Task<string?> StartKeyRegistrationAsync()
+	public async Task<string?> StartKeyRegistrationAsync(IProgress<string>? progress = null)
 	{
-		return await _StartKeyRegistrationAsync();
+		return await _StartKeyRegistrationAsync(progress);
 	}
 
 	public bool EndKeyRegistration()

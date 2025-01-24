@@ -1,5 +1,7 @@
 ﻿using Epoxy;
 using SearchLight.Models.SearchEngine;
+using System;
+using System.Globalization;
 
 namespace SearchLight.ViewModels;
 
@@ -28,21 +30,47 @@ public class MainWindowViewModel
 	// 検索実行コマンド
 	public Command SearchCommand { get; }
 
-	public MainWindowViewModel()
+	/// <summary>
+	/// ブラウザーを開いて検索を実行する
+	/// </summary>
+	private void DoSearch()
+	{
+		// ブラウザーを表示
+		App.BrowserWindow.Show();
+		// ブラウザーで検索結果を開く
+		//(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = "https://www.google.com/search?q=" + SearchWord;
+		(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = String.Format(CultureInfo.GetCultureInfo("en-US"), _currentSearchEngine.Uri, SearchWord);
+		// 検索テキストの内容を消す
+		SearchWord = string.Empty;
+		// 検索画面を閉じる
+		App.MainWindow.Hide();
+	}
+
+	/// <summary>
+	/// 指定されたIDの検索エンジンを使用して検索を実行する
+	/// </summary>
+	/// <param name="EngineId">対象となる検索エンジンのID</param>
+	public void Search(string? EngineId)
 	{
 		// 検索エンジンを読み込む
-		_currentSearchEngine = SearchEngineManager.EngineList[0];
+		if (EngineId != null)
+		{
+			var engine = SearchEngineManager.Get(EngineId);
+			_currentSearchEngine = engine ?? SearchEngineManager.EngineList[0];
+		}
+		else
+		{
+			_currentSearchEngine = SearchEngineManager.EngineList[0];
+		}
+		App.MainWindow.Show();
+	}
 
+	public MainWindowViewModel()
+	{
+		_currentSearchEngine = SearchEngineManager.EngineList[0];
 		SearchCommand = Command.Factory.Create(() =>
 		{
-			// ブラウザーを表示
-			App.BrowserWindow.Show();
-			// ブラウザーで検索結果を開く
-			(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = "https://www.google.com/search?q=" + SearchWord;
-			// 検索テキストの内容を消す
-			SearchWord = string.Empty;
-			// 検索画面を閉じる
-			App.MainWindow.Hide();
+			DoSearch();
 			return default;
 		});
 	}

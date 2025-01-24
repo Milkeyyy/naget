@@ -1,6 +1,7 @@
 ﻿using SharpHook.Native;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SearchLight.Models.Config.HotKey;
 
@@ -15,6 +16,10 @@ public class HotKeyGroup(HashSet<KeyCode> keys)
 	/// </summary>
 	public HashSet<KeyCode> Keys { get; } = keys;
 	public string CommandId { get; set; } = string.Empty;
+	public override string ToString()
+	{
+		return string.Join("+", Keys.Select(k => k.ToString()));
+	}
 }
 
 /*public class HotKeyList

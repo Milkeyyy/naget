@@ -124,6 +124,15 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
+        ///   Press Esc to Cancel に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_RegisterKeys_PressEscToCancel {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.RegisterKeys.PressEscToCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Register に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_ShortcutKey_RegisterKeys_Register {

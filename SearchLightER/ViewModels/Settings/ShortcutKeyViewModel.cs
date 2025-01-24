@@ -22,7 +22,7 @@ public class ShortcutKeyViewModel
 		ShortcutKeyWell.Add(Control.LoadedEvent, () =>
 		{
 			Debug.WriteLine("ShortcutKeyView Loaded");
-			RegisteredKeysText = "Not Set";
+			RegisteredKeysText = string.Empty;
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
 			return default;
 		});
@@ -41,11 +41,15 @@ public class ShortcutKeyViewModel
 			{
 				// キー登録モードに入る
 				KeyRegistrationMode = true;
-				var result = await App.HotKeyManager.StartKeyRegistrationAsync();
+				var progress = new Progress<string>(keys =>
+				{
+					RegisteredKeysText = keys;
+				});
+				var result = await App.HotKeyManager.StartKeyRegistrationAsync(progress);
 				if (result != string.Empty && result != null)
 				{
 					var keys = App.HotKeyManager.GetHotKeyGroupFromKey(result);
-					RegisteredKeysText = string.Join(", ", keys);
+					RegisteredKeysText = keys.ToString();
 				}
 				KeyRegistrationMode = false;
 			}

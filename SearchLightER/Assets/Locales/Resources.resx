@@ -195,4 +195,7 @@
   <data name="Settings.ShortcutKey.RegisterKeys.Done" xml:space="preserve">
     <value>Done</value>
   </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
+    <value>Press Esc to Cancel</value>
+  </data>
 </root>
