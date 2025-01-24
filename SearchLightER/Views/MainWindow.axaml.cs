@@ -1,8 +1,5 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using SearchLight.ViewModels;
-using System;
 
 namespace SearchLight.Views;
 
