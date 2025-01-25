@@ -55,7 +55,6 @@ public class App : Application
 
 	public override void OnFrameworkInitializationCompleted()
 	{
-		Assets.Locales.Resources.Culture = new CultureInfo("ja-JP");
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
 			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
@@ -70,6 +69,10 @@ public class App : Application
 
 			// 検索エンジンのリストを読み込む
 			SearchEngineManager.Load();
+
+			// 言語設定を適用
+			Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
+			Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
 
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();
