@@ -142,6 +142,15 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
+        ///   Name is Empty. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_NameIsEmpty {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.NameIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Not Set に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_ShortcutKey_Preset_NotSet {

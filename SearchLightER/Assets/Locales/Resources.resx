@@ -216,4 +216,7 @@
   <data name="Settings.ShortcutKey.Preset.NotSet" xml:space="preserve">
     <value>Not Set</value>
   </data>
+  <data name="Settings.ShortcutKey.Preset.NameIsEmpty" xml:space="preserve">
+    <value>Name is Empty.</value>
+  </data>
 </root>

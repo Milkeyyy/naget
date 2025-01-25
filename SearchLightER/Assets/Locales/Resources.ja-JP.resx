@@ -216,4 +216,7 @@
   <data name="Settings.ShortcutKey.Preset.NotSet" xml:space="preserve">
     <value>未設定</value>
   </data>
+  <data name="Settings.ShortcutKey.Preset.NameIsEmpty" xml:space="preserve">
+    <value>名前を入力してください。</value>
+  </data>
 </root>

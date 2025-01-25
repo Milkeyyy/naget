@@ -4,6 +4,7 @@ using FluentAvalonia.UI.Controls;
 using SearchLight.Assets.Locales;
 using SearchLight.Models.Config;
 using SearchLight.Models.Config.HotKey;
+using SearchLight.Views;
 using SearchLight.Views.Settings;
 using System;
 using System.Collections.ObjectModel;
@@ -133,6 +134,7 @@ public class ShortcutKeyViewModel
 		{
 			PresetList = ConfigManager.HotKeyManager.List;
 			PresetListSelectedIndex = 0;
+			RegisteredKeysText = PresetList[PresetListSelectedIndex].ToString();
 		}
 	}
 
@@ -153,7 +155,7 @@ public class ShortcutKeyViewModel
 		return default;
 	}
 
-	public async void ShowInputDialogAsync()
+	public async Task ShowInputDialogAsync()
 	{
 		var vm = new ShortcutKeyPresetCreatorViewModel();
 		var dialog = new ContentDialog
@@ -179,6 +181,13 @@ public class ShortcutKeyViewModel
 		if (result == ContentDialogResult.Primary)
 		{
 			Debug.WriteLine("HotKey Preset Create Dialog - User clicked Create");
+			if (string.IsNullOrWhiteSpace(vm.PresetName))
+			{
+				Debug.WriteLine("HotKey Preset Create Dialog - Preset Name is empty");
+				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_ShortcutKey_Preset_CreateNewPreset, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
+				await ShowInputDialogAsync();
+				return;
+			}
 			// プリセットを作成する
 			ConfigManager.HotKeyManager.CreateGroup(vm.PresetName);
 			// プリセットの一覧を更新
