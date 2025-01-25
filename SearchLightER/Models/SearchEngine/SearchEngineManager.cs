@@ -8,15 +8,24 @@ namespace SearchLight.Models.SearchEngine;
 
 public static class SearchEngineManager
 {
-	private static readonly string FilePath = Path.Join(App.ConfigFolder, "SearchEngines.json");
+	private static readonly string FilePath = Path.Join(App.ConfigFolder, "SearchEngine.json");
 
 	private static readonly ConfigurationBuilder _builder = new();
 	private static IConfigurationRoot? _config;
 
 	/// <summary>
+	/// デフォルトの検索エンジン一覧
+	/// </summary>
+	private static readonly HashSet<SearchEngineClass> _defaultEngine = [
+		new SearchEngineClass("Bing", "https://www.bing.com/search?form=&q={0}", "Bing"),
+		new SearchEngineClass("DuckDuckGo", "https://duckduckgo.com/?q={0}", "DuckDuckGo"),
+		new SearchEngineClass("Google", "https://www.google.com/search?q={0}", "Google")
+	];
+
+	/// <summary>
 	/// 検索エンジン (<c>SearchEngineClass</c>) のリスト (コレクション)
 	/// </summary>
-	private static SearchEngineList _engineCollection;
+	private static SearchEngineList _engineCollection = new();
 	/// <summary>
 	/// 検索エンジン (<c>SearchEngineClass</c>) のリスト
 	/// </summary>
@@ -27,12 +36,7 @@ public static class SearchEngineManager
 	/// </summary>
 	public static void Create()
 	{
-		_engineCollection = new()
-		{
-			List = [
-				new SearchEngineClass("Google", "https://www.google.com/search?q={0}")
-			]
-		};
+		_engineCollection.List = [.. _defaultEngine];
 	}
 
 	/// <summary>
@@ -56,7 +60,10 @@ public static class SearchEngineManager
 				.AddJsonFile(FilePath)
 				.Build();
 			SearchEngineList? data = _config.Get<SearchEngineList>();
-			if (data != null) _engineCollection = data;
+			if (data != null)
+			{
+				_engineCollection = data;
+			}
 			else
 			{
 				Create(); // null の場合は新規作成する
@@ -76,9 +83,10 @@ public static class SearchEngineManager
 	/// </summary>
 	/// <param name="id">対象となる検索エンジンのID</param>
 	/// <returns>指定されたIDに該当する検索エンジン 見つからない場合は <p>null</p></returns>
-	public static SearchEngineClass? Get(string id)
+	public static SearchEngineClass? Get(string? id = null)
 	{
-		return _engineCollection.List.Find(x => x.ID == id);
+		if (id == null) return _engineCollection.List[0];
+		return _engineCollection.List.Find(x => x.Id == id);
 	}
 
 	/// <summary>

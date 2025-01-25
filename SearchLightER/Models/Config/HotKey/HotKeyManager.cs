@@ -130,7 +130,7 @@ public class HotKeyManager : IDisposable
 			}
 			// キー登録が完了した場合は登録されたキーのIDを返す
 			var r = _StopKeyRegistration();
-			var regKeys = GetHotKeyGroupFromKey(r)?.ToString();
+			var regKeys = GetHotKeyGroupFromKey(r)?.ToString(); // 返されたIDからホットキーを取得する
 			// 登録されたキーをUIに表示する
 			if (regKeys != null) progress?.Report(regKeys);
 			else if (r == null) progress?.Report(string.Empty);

@@ -13,17 +13,17 @@ public class MainWindowViewModel
 	public string SearchWord { get; set; } = string.Empty;
 
 	// 選択中の検索エンジン
-	private SearchEngineClass _currentSearchEngine;
-	private string _currentSearchEngineId;
-	public string CurrentSearchEngineId // ID
+	private SearchEngineClass? _currentSearchEngine;
+	private string? _currentSearchEngineId;
+	public string? CurrentSearchEngineId // ID
 	{
-		get { return _currentSearchEngine.ID; }
+		get { return _currentSearchEngine?.Id; }
 		set { _currentSearchEngineId = value; }
 	}
-	private string _currentSearchEngineName;
-	public string CurrentSearchEngineName // 名前
+	private string? _currentSearchEngineName;
+	public string? CurrentSearchEngineName // 名前
 	{
-		get { return _currentSearchEngine.Name; }
+		get { return _currentSearchEngine?.Name; }
 		set { _currentSearchEngineName = value; }
 	}
 
