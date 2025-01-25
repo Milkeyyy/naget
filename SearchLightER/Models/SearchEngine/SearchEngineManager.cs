@@ -36,7 +36,8 @@ public static class SearchEngineManager
 	/// </summary>
 	public static void Create()
 	{
-		_engineCollection.List = [.. _defaultEngine];
+		//_engineCollection.List = [.. _defaultEngine];
+		_engineCollection.List = new(_defaultEngine);
 	}
 
 	/// <summary>

@@ -4,16 +4,23 @@ using System.Globalization;
 
 namespace SearchLight.Models.Config;
 
+public class ConfigBaseClass
+{
+	public string CreatedAt { get; set; } = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString();
+	public ConfigClass Config { get; set; } = new();
+}
+
 public class ConfigClass
 {
-	public ConfigClass()
+	public string? Language { get; set; }
+	public List<HotKey.HotKeyGroup>? HotKeys { get; set; }
+
+	public static ConfigClass Create()
 	{
-		CreatedAt = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString();
+		return new()
+		{
+			Language = CultureInfo.CurrentCulture.Name,
+			HotKeys = []
+		};
 	}
-
-	public string CreatedAt { get; set; }
-
-	public string Language { get; set; } = CultureInfo.CurrentCulture.Name;
-
-	public List<HotKey.HotKeyGroup> HotKeys { get; set; } = [];
 }

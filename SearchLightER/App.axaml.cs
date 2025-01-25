@@ -32,7 +32,6 @@ public class App : Application
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
 	public static Window? BrowserWindow { get; private set; }
-	public static Models.Config.HotKey.HotKeyManager? HotKeyManager { get; private set; }
 
 	public override void Initialize()
 	{
@@ -44,7 +43,7 @@ public class App : Application
 
 	public static void Exit()
 	{
-		HotKeyManager?.Dispose();
+		ConfigManager.HotKeyManager.Dispose();
 		// コンフィグを保存
 		ConfigManager.Save();
 		// 検索エンジンデータを保存
@@ -81,10 +80,9 @@ public class App : Application
 			desktop.MainWindow = SettingsWindow;
 
 			// ホットキーの登録
-			HotKeyManager = new Models.Config.HotKey.HotKeyManager();
-			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA]));
-			HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ]));
-			HotKeyManager.Run();
+			//ConfigManager.HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA]));
+			//ConfigManager.HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ]));
+			ConfigManager.HotKeyManager.Run();
 		}
 
 		base.OnFrameworkInitializationCompleted();

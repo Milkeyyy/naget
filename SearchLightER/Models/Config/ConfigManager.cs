@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using SearchLight.Models.SearchEngine;
+﻿using Avalonia.Controls;
+using Microsoft.Extensions.Configuration;
+using SearchLight.Models.Config.HotKey;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 
@@ -12,14 +15,27 @@ public static class ConfigManager
 	private static readonly ConfigurationBuilder _builder = new();
 	private static IConfigurationRoot? _config;
 
-	public static ConfigClass Config { get; set; } = new();
+	private static ConfigBaseClass _configBase = new();
+	/// <summary>
+	/// コンフィグクラス
+	/// </summary>
+	public static ConfigClass Config { get { return _configBase.Config; } }
+
+	/// <summary>
+	/// ホットキーマネージャー
+	/// </summary>
+	public static HotKey.HotKeyManager HotKeyManager { get; } = new();
 
 	/// <summary>
 	/// コンフィグを新規作成する
 	/// </summary>
 	public static void Create()
 	{
-		Config = new();
+		_configBase = new()
+		{
+			// 初期値が設定された ConfigClass を作成
+			Config = ConfigClass.Create()
+		};
 	}
 
 	/// <summary>
@@ -27,7 +43,11 @@ public static class ConfigManager
 	/// </summary>
 	public static void Save()
 	{
-		string data = JsonSerializer.Serialize(Config);
+		// ホットキーを読み込む
+		//Config.HotKeys = [.. HotKeyManager.List];
+		Config.HotKeys = new(HotKeyManager.List);
+		// ファイルへ保存
+		string data = JsonSerializer.Serialize(_configBase);
 		File.WriteAllText(FilePath, data);
 	}
 
@@ -39,13 +59,25 @@ public static class ConfigManager
 		// ファイルが存在する場合はそのファイルから読み込む
 		if (File.Exists(FilePath))
 		{
+			Debug.WriteLine("Loading config from file");
 			_config = _builder
 				.AddJsonFile(FilePath)
 				.Build();
-			ConfigClass? data = _config.Get<ConfigClass>();
-			if (data != null) Config = data;
+
+			_configBase = JsonSerializer.Deserialize<ConfigBaseClass>(File.ReadAllText(FilePath));
+
+			if (_configBase != null)
+			{
+				if (_configBase.Config == null)
+				{
+					Debug.WriteLine("- Config is null, Creating new config");
+					Create(); // null の場合は新規作成する
+					Save();
+				}
+			}
 			else
 			{
+				Debug.WriteLine("- Config is null, Creating new config");
 				Create(); // null の場合は新規作成する
 				Save();
 			}
@@ -53,8 +85,11 @@ public static class ConfigManager
 		// 存在しない場合は新規作成する
 		else
 		{
+			Debug.WriteLine("Creating new config");
 			Create();
 			Save();
 		}
+		// コンフィグからホットキーマネージャーへプリセット一覧を読み込む
+		HotKeyManager.LoadGroups(Config.HotKeys);
 	}
 }

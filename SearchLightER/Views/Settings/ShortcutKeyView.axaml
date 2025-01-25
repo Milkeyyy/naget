@@ -22,13 +22,16 @@
 			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="Keyboard">
 
 				<ui:SettingsExpander.Footer>
-					<ComboBox SelectedIndex="0">
-						<ComboBoxItem>Preset 1</ComboBoxItem>
-						<ComboBoxItem>Preset 2</ComboBoxItem>
-						<ComboBoxItem>Preset 3</ComboBoxItem>
-						<ComboBoxItem>Preset 4</ComboBoxItem>
-						<ComboBoxItem>Preset 5</ComboBoxItem>
-					</ComboBox>
+					<StackPanel Orientation="Horizontal">
+						<ComboBox IsEnabled="{Binding PresetList, Converter={x:Static ObjectConverters.IsNotNull}}" SelectedIndex="{Binding PresetListSelectedIndex}" ItemsSource="{Binding PresetList}" SelectedItem="{Binding SelectedPresetItem}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Name}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+						<Button Content="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}"/>
+					</StackPanel>
 				</ui:SettingsExpander.Footer>
 
 				<ui:SettingsExpanderItem Content="{x:Static lang:Resources.Settings_ShortcutKey_Key}">
@@ -36,26 +39,6 @@
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="{Binding RegisteredKeysText}" VerticalAlignment="Center"/>
 							<Button Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
-						</StackPanel>
-					</ui:SettingsExpanderItem.Footer>
-				</ui:SettingsExpanderItem>
-
-				<ui:SettingsExpanderItem Content="{x:Static lang:Resources.Settings_ShortcutKey_ModifierKeys}">
-					<ui:SettingsExpanderItem.Footer>
-						<StackPanel Orientation="Horizontal">
-							<CheckBox>Ctrl</CheckBox>
-							<CheckBox>Alt</CheckBox>
-							<CheckBox>Shift</CheckBox>
-							<CheckBox>Win</CheckBox>
-						</StackPanel>
-					</ui:SettingsExpanderItem.Footer>
-				</ui:SettingsExpanderItem>
-
-				<ui:SettingsExpanderItem Content="{x:Static lang:Resources.Settings_ShortcutKey_Key}">
-					<ui:SettingsExpanderItem.Footer>
-						<StackPanel Orientation="Horizontal">
-							<ComboBox SelectedIndex="0">
-							</ComboBox>
 						</StackPanel>
 					</ui:SettingsExpanderItem.Footer>
 				</ui:SettingsExpanderItem>

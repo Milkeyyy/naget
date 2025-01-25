@@ -5,6 +5,7 @@ using SharpHook;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,9 +14,22 @@ namespace SearchLight.Models.Config.HotKey;
 
 public class HotKeyManager : IDisposable
 {
-	private TaskPoolGlobalHook hook;
-	private HashSet<KeyCode> pressedKeys;
+	/// <summary>
+	/// キーのグローバルフック
+	/// </summary>
+	private readonly TaskPoolGlobalHook hook;
+	/// <summary>
+	/// 押されているキーの一覧
+	/// </summary>
+	private readonly HashSet<KeyCode> pressedKeys;
+	/// <summary>
+	/// ホットキーの一覧 (内部)
+	/// </summary>
 	private List<HotKeyGroup> groups;
+	/// <summary>
+	/// ホットキーの一覧
+	/// </summary>
+	public ReadOnlyCollection<HotKeyGroup> List => new(groups);
 
 	private int keyRegsitrationMode;
 	private HashSet<KeyCode> registrationQueuedKeys;
@@ -26,8 +40,10 @@ public class HotKeyManager : IDisposable
 		hook.KeyPressed += Hook_KeyPressed;
 		hook.KeyReleased += Hook_KeyReleased;
 
-		pressedKeys = [];
 		groups = [];
+
+		pressedKeys = [];
+
 		registrationQueuedKeys = [];
 	}
 
@@ -47,9 +63,29 @@ public class HotKeyManager : IDisposable
 		}
 	}
 
-	public void Register(HotKeyGroup group)
+	public void LoadGroups(List<HotKeyGroup> groups)
 	{
-		groups.Add(group);
+		this.groups = groups;
+		Debug.WriteLine($"HotKey Groups Loaded: {groups.Count}");
+	}
+
+	/// <summary>
+	/// 新しいグループを作成する
+	/// </summary>
+	/// <param name="name">グループの名前</param>
+	/// <param name="keys">キーの一覧</param>
+	public void CreateGroup(string name, HashSet<KeyCode>? keys = null)
+	{
+		groups.Add(new HotKeyGroup(name, keys));
+	}
+
+	/// <summary>
+	/// 指定されたIDのグループを削除する
+	/// </summary>
+	/// <param name="id">削除する対象のID</param>
+	public void DeleteGroup(string id)
+	{
+		groups.RemoveAll(x => x.Id == id);
 	}
 
 	public void Run()
@@ -71,16 +107,21 @@ public class HotKeyManager : IDisposable
 			}
 			Debug.WriteLine("Key added: " + e.Data.KeyCode);
 			registrationQueuedKeys.Add(e.Data.KeyCode);
+			return;
 		}
 
 		pressedKeys.Add(e.Data.KeyCode);
 		foreach (var group in groups)
 		{
-			if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
+			if (group != null)
 			{
-				//if (group.Method != null) Dispatcher.UIThread.Invoke(group.Method);
-				// 設定されたIDの検索エンジンで検索を実行 TODO: 将来的に検索以外のこともできるようにする
-				Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(group.CommandId));
+				if (group.Keys == null) continue;
+				if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
+				{
+					//if (group.Method != null) Dispatcher.UIThread.Invoke(group.Method);
+					// 設定されたIDの検索エンジンで検索を実行 TODO: 将来的に検索以外のこともできるようにする
+					Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(group.CommandId));
+				}
 			}
 		}
 	}
@@ -95,15 +136,17 @@ public class HotKeyManager : IDisposable
 		return groups.FirstOrDefault(x => x.Id == id);
 	}
 
-	private HotKeyGroup _RegisterKeys(HashSet<KeyCode> keys)
+	private HotKeyGroup _RegisterKeys(string groupId, HashSet<KeyCode> keys)
 	{
-		var g = new HotKeyGroup(keys);
-		groups.Add(g);
+		// 渡されたIDからホットキーグループを取得する
+		var g = _GetHotKeyGroupFromKey(groupId);
+		// 取得したグループのキーに渡されたキーを設定する
+		g.Keys = keys;
 		Debug.WriteLine("Key registered: " + string.Join(", ", keys));
 		return g;
 	}
 
-	private async Task<string?> _StartKeyRegistrationAsync(IProgress<string>? progress = null)
+	private async Task<string?> _StartKeyRegistrationAsync(string groupId, IProgress<string>? progress = null)
 	{
 		if (keyRegsitrationMode == 1) return null;
 		else
@@ -129,7 +172,7 @@ public class HotKeyManager : IDisposable
 				return string.Empty;
 			}
 			// キー登録が完了した場合は登録されたキーのIDを返す
-			var r = _StopKeyRegistration();
+			var r = _StopKeyRegistration(groupId);
 			var regKeys = GetHotKeyGroupFromKey(r)?.ToString(); // 返されたIDからホットキーを取得する
 			// 登録されたキーをUIに表示する
 			if (regKeys != null) progress?.Report(regKeys);
@@ -138,12 +181,12 @@ public class HotKeyManager : IDisposable
 		}
 	}
 
-	private string? _StopKeyRegistration()
+	private string? _StopKeyRegistration(string groupId)
 	{
 		Debug.WriteLine("Key registration stopped");
 		keyRegsitrationMode = 0;
 		if (registrationQueuedKeys.Count == 0) return null;
-		var g = _RegisterKeys(registrationQueuedKeys);
+		var g = _RegisterKeys(groupId, registrationQueuedKeys);
 		return g.Id;
 	}
 
@@ -155,16 +198,31 @@ public class HotKeyManager : IDisposable
 		return true;
 	}
 
+	/// <summary>
+	/// 指定されたIDに一致するホットキーグループを取得する
+	/// </summary>
+	/// <param name="id">対象のID</param>
+	/// <returns>ホットキーグループ 見つからなかった場合は null</returns>
 	public HotKeyGroup? GetHotKeyGroupFromKey(string id)
 	{
 		return _GetHotKeyGroupFromKey(id);
 	}
 
-	public async Task<string?> StartKeyRegistrationAsync(IProgress<string>? progress = null)
+	/// <summary>
+	/// ホットキーの登録を開始する
+	/// </summary>
+	/// <param name="groupId">登録する対象のグループのID</param>
+	/// <param name="progress">進捗状況</param>
+	/// <returns>登録されたホットキーグループのID</returns>
+	public async Task<string?> StartKeyRegistrationAsync(string groupId, IProgress<string>? progress = null)
 	{
-		return await _StartKeyRegistrationAsync(progress);
+		return await _StartKeyRegistrationAsync(groupId, progress);
 	}
 
+	/// <summary>
+	/// ホットキーの登録を終了する
+	/// </summary>
+	/// <returns>終了できた場合は true 既に登録が終了されている場合は false</returns>
 	public bool EndKeyRegistration()
 	{
 		if (keyRegsitrationMode != 1) return false;
@@ -172,6 +230,10 @@ public class HotKeyManager : IDisposable
 		return true;
 	}
 
+	/// <summary>
+	/// ホットキーの登録をキャンセルする
+	/// </summary>
+	/// <returns>終了できた場合は true 既に登録が終了されている場合は false</returns>
 	public bool CancelKeyRegistration()
 	{
 		if (keyRegsitrationMode != 1) return false;

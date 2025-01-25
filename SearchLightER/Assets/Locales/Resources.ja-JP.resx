@@ -198,4 +198,22 @@
   <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
     <value>Esc を押してキャンセル</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>デフォルト</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Create" xml:space="preserve">
+    <value>作成</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.CreateNewPreset" xml:space="preserve">
+    <value>新しいプリセットを作成</value>
+  </data>
+  <data name="Strings.Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Strings.Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.NotSet" xml:space="preserve">
+    <value>未設定</value>
+  </data>
 </root>

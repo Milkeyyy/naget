@@ -70,6 +70,15 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
+        ///   Default に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Search に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Search {
@@ -111,6 +120,33 @@ namespace SearchLight.Assets.Locales {
         public static string Settings_ShortcutKey_Preset {
             get {
                 return ResourceManager.GetString("Settings.ShortcutKey.Preset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Create に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Create {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Create New Preset に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_CreateNewPreset {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.CreateNewPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Not Set に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_NotSet {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.NotSet", resourceCulture);
             }
         }
         
@@ -192,6 +228,24 @@ namespace SearchLight.Assets.Locales {
         public static string Settings_Tab_Update {
             get {
                 return ResourceManager.GetString("Settings.Tab.Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cancel に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Strings_Cancel {
+            get {
+                return ResourceManager.GetString("Strings.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   OK に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Strings_Ok {
+            get {
+                return ResourceManager.GetString("Strings.Ok", resourceCulture);
             }
         }
         

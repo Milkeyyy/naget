@@ -198,4 +198,22 @@
   <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
     <value>Press Esc to Cancel</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.CreateNewPreset" xml:space="preserve">
+    <value>Create New Preset</value>
+  </data>
+  <data name="Strings.Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Strings.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.NotSet" xml:space="preserve">
+    <value>Not Set</value>
+  </data>
 </root>
