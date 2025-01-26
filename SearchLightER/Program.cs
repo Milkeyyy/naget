@@ -1,5 +1,5 @@
 ﻿using Avalonia;
-using Avalonia.ReactiveUI;
+using FluentIcons.Avalonia;
 using System;
 
 namespace SearchLight
@@ -18,6 +18,7 @@ namespace SearchLight
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
 				.WithInterFont()
+				.UseSegoeMetrics()
 				.LogToTrace();
 	}
 }
