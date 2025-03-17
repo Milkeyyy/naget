@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace SearchLight.Models.SearchEngine;
 
 public class SearchEngineList
 {
+	public string CreatedAt { get; set; }
+	public List<SearchEngineClass> List { get; set; }
+
 	public SearchEngineList()
 	{
 		CreatedAt = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString();
-		List = [
-			new SearchEngineClass("Bing", "https://www.bing.com/search?form=&q={0}", "Bing"),
-			new SearchEngineClass("DuckDuckGo", "https://duckduckgo.com/?q={0}", "DuckDuckGo"),
-			new SearchEngineClass("Google", "https://www.google.com/search?q={0}", "Google")
-		];
+		List = SearchEngineManager.DefaultEngineList.ToList();
 	}
 
-	public string CreatedAt { get; set; }
-
-	public List<SearchEngineClass> List { get; set; }
+	// JSONデシリアライズ用コンストラクター
+	[JsonConstructor]
+	public SearchEngineList(string CreatedAt, List<SearchEngineClass> List)
+	{
+		this.CreatedAt = CreatedAt;
+		this.List = List;
+	}
 }

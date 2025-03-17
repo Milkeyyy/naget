@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
@@ -10,26 +9,32 @@ public static class SearchEngineManager
 {
 	private static readonly string FilePath = Path.Join(App.ConfigFolder, "SearchEngine.json");
 
-	private static readonly ConfigurationBuilder _builder = new();
-	private static IConfigurationRoot? _config;
-
 	/// <summary>
 	/// デフォルトの検索エンジン一覧
 	/// </summary>
-	private static readonly HashSet<SearchEngineClass> _defaultEngine = [
+	private static readonly List<SearchEngineClass> _defaultEngineList = [
 		new SearchEngineClass("Bing", "https://www.bing.com/search?form=&q={0}", "Bing"),
 		new SearchEngineClass("DuckDuckGo", "https://duckduckgo.com/?q={0}", "DuckDuckGo"),
 		new SearchEngineClass("Google", "https://www.google.com/search?q={0}", "Google")
 	];
+	/// <summary>
+	/// デフォルトの検索エンジン一覧
+	/// </summary>
+	public static ReadOnlyCollection<SearchEngineClass> DefaultEngineList { get; } = new(_defaultEngineList);
 
 	/// <summary>
 	/// 検索エンジン (<c>SearchEngineClass</c>) のリスト (コレクション)
 	/// </summary>
-	private static SearchEngineList _engineCollection = new();
+	private static SearchEngineList _engineList = new();
 	/// <summary>
 	/// 検索エンジン (<c>SearchEngineClass</c>) のリスト
 	/// </summary>
-	public static ReadOnlyCollection<SearchEngineClass> EngineList => new(_engineCollection.List);
+	public static ReadOnlyCollection<SearchEngineClass> EngineList { get { return _engineList.List.AsReadOnly(); } }
+
+	public static SearchEngineClass GetDefaultEngine()
+	{
+		return _defaultEngineList[0];
+	}
 
 	/// <summary>
 	/// 検索エンジンのリストを新規作成する
@@ -37,7 +42,7 @@ public static class SearchEngineManager
 	public static void Create()
 	{
 		//_engineCollection.List = [.. _defaultEngine];
-		_engineCollection.List = new(_defaultEngine);
+		_engineList.List = new(_defaultEngineList);
 	}
 
 	/// <summary>
@@ -45,7 +50,7 @@ public static class SearchEngineManager
 	/// </summary>
 	public static void Save()
 	{
-		string data = JsonSerializer.Serialize(_engineCollection);
+		string data = JsonSerializer.Serialize(_engineList);
 		File.WriteAllText(FilePath, data);
 	}
 
@@ -57,13 +62,12 @@ public static class SearchEngineManager
 		// ファイルが存在する場合はそのファイルから読み込む
 		if (File.Exists(FilePath))
 		{
-			_config = _builder
-				.AddJsonFile(FilePath)
-				.Build();
-			SearchEngineList? data = _config.Get<SearchEngineList>();
+			// デシリアライズ
+			SearchEngineList data = JsonSerializer.Deserialize<SearchEngineList>(File.ReadAllText(FilePath)) ?? new SearchEngineList();
+			
 			if (data != null)
 			{
-				_engineCollection = data;
+				_engineList = data;
 			}
 			else
 			{
@@ -86,8 +90,8 @@ public static class SearchEngineManager
 	/// <returns>指定されたIDに該当する検索エンジン 見つからない場合は <p>null</p></returns>
 	public static SearchEngineClass? Get(string? id = null)
 	{
-		if (id == null) return _engineCollection.List[0];
-		return _engineCollection.List.Find(x => x.Id == id);
+		if (id == null) return _engineList.List[0];
+		return _engineList.List.Find(x => x.Id == id);
 	}
 
 	/// <summary>
@@ -97,7 +101,7 @@ public static class SearchEngineManager
 	/// <param name="uri">URL 検索ワードは {0}</param>
 	public static void Create(string name, string uri)
 	{
-		_engineCollection.List.Add(new SearchEngineClass(name, uri));
+		_engineList.List.Add(new SearchEngineClass(name, uri));
 	}
 
 	/// <summary>
@@ -110,7 +114,7 @@ public static class SearchEngineManager
 		var result = Get(id);
 		if (result != null)
 		{
-			_engineCollection.List.Remove(result);
+			_engineList.List.Remove(result);
 		}
 		else
 		{
