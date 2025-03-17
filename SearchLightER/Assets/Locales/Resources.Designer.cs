@@ -97,6 +97,51 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
+        ///   Shortcut Key に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Action に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Action {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   None に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Action_None {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Action.None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Web Search に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Action_WebSearch {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Action.WebSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Action_WebSearch_SearchEngine {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Action.WebSearch.SearchEngine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Key に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_ShortcutKey_Key {

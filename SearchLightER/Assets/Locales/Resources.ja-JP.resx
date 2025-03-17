@@ -219,4 +219,19 @@
   <data name="Settings.ShortcutKey.Preset.NameIsEmpty" xml:space="preserve">
     <value>名前を入力してください。</value>
   </data>
+  <data name="Settings.ShortcutKey.Action" xml:space="preserve">
+    <value>アクション</value>
+  </data>
+  <data name="Settings.ShortcutKey.Action.WebSearch" xml:space="preserve">
+    <value>ウェブ検索</value>
+  </data>
+  <data name="Settings.ShortcutKey.Action.WebSearch.SearchEngine" xml:space="preserve">
+    <value>検索エンジン</value>
+  </data>
+  <data name="Settings.ShortcutKey" xml:space="preserve">
+    <value>ショートカットキー</value>
+  </data>
+  <data name="Settings.ShortcutKey.Action.None" xml:space="preserve">
+    <value>なし</value>
+  </data>
 </root>

@@ -109,12 +109,15 @@ public static class SearchEngineManager
 	/// </summary>
 	/// <param name="id">対象となる検索エンジンのID</param>
 	/// <exception cref="KeyNotFoundException"></exception>
-	public static void Delete(string id)
+	public static bool Delete(string id)
 	{
+		if (_engineList.List.Count == 1) return false;
+
 		var result = Get(id);
 		if (result != null)
 		{
 			_engineList.List.Remove(result);
+			return true;
 		}
 		else
 		{

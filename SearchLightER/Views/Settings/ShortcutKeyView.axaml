@@ -6,6 +6,7 @@
 			 xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 xmlns:vm="using:SearchLight.ViewModels.Settings"
 			 xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
+			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="SearchLight.Views.Settings.ShortcutKeyView"
 			 x:DataType="vm:ShortcutKeyViewModel"
@@ -19,11 +20,11 @@
 	<Panel Margin="20">
 		<StackPanel>
 			<TextBlock Margin="0 0 0 20" FontSize="20" FontWeight="Bold">Test</TextBlock>
-			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="Keyboard">
-
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="{ic:SymbolIconSource Symbol=TextBulletListSquareSparkle}">
+				
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
-						<ComboBox IsEnabled="{Binding PresetList, Converter={x:Static ObjectConverters.IsNotNull}}" SelectedIndex="{Binding PresetListSelectedIndex}" ItemsSource="{Binding PresetList}" SelectedItem="{Binding SelectedPresetItem}">
+						<ComboBox MinWidth="200" IsVisible="{Binding HotKeyPresetList.Count}" SelectedIndex="{Binding SelectedPresetIndex}" ItemsSource="{Binding HotKeyPresetList}" SelectedItem="{Binding SelectedPresetItem}">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
 									<TextBlock Text="{Binding Name}"/>
@@ -34,14 +35,49 @@
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 
-				<ui:SettingsExpanderItem Content="{x:Static lang:Resources.Settings_ShortcutKey_Key}">
-					<ui:SettingsExpanderItem.Footer>
+				<ui:SettingsExpander IsEnabled="{Binding HotKeyPresetList.Count}" Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol='Keyboard'}">
+					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="{Binding RegisteredKeysText}" VerticalAlignment="Center"/>
 							<Button Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
 						</StackPanel>
-					</ui:SettingsExpanderItem.Footer>
-				</ui:SettingsExpanderItem>
+					</ui:SettingsExpander.Footer>
+
+				</ui:SettingsExpander>
+
+				<ui:SettingsExpander IsEnabled="{Binding HotKeyPresetList.Count}" IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol='ArrowUpRight'}">
+
+					<ui:SettingsExpander.Footer>
+						<StackPanel Orientation="Horizontal">
+							<ComboBox MinWidth="200" IsEnabled="{Binding HotKeyActionList, Converter={x:Static ObjectConverters.IsNotNull}}" SelectedIndex="{Binding SelectedActionIndex}" ItemsSource="{Binding HotKeyActionList}" SelectedItem="{Binding SelectedActionItem}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<ui:SymbolIcon Symbol="{Binding Icon}" FontSize="20"/>
+											<TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</StackPanel>
+					</ui:SettingsExpander.Footer>
+
+					<ui:SettingsExpanderItem IsVisible="{Binding SearchEngineListIsVisible}" Content="{x:Static lang:Resources.Settings_ShortcutKey_Action_WebSearch_SearchEngine}">
+						<ui:SettingsExpanderItem.Footer>
+							<ComboBox MinWidth="200" IsEnabled="{Binding SearchEngineList, Converter={x:Static ObjectConverters.IsNotNull}}" SelectedIndex="{Binding SearchEngineListSelectedIndex}" ItemsSource="{Binding SearchEngineList}" SelectedItem="{Binding SelectedSearchEngineItem}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<!--<ui:SymbolIcon Symbol="{Binding Icon}" FontSize="20"/>-->
+											<TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</ui:SettingsExpanderItem.Footer>
+					</ui:SettingsExpanderItem>
+
+				</ui:SettingsExpander>
 
 			</ui:SettingsExpander>
 		</StackPanel>

@@ -219,4 +219,19 @@
   <data name="Settings.ShortcutKey.Preset.NameIsEmpty" xml:space="preserve">
     <value>Name is Empty.</value>
   </data>
+  <data name="Settings.ShortcutKey.Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Settings.ShortcutKey.Action.WebSearch" xml:space="preserve">
+    <value>Web Search</value>
+  </data>
+  <data name="Settings.ShortcutKey.Action.WebSearch.SearchEngine" xml:space="preserve">
+    <value>Search Engine</value>
+  </data>
+  <data name="Settings.ShortcutKey" xml:space="preserve">
+    <value>Shortcut Key</value>
+  </data>
+  <data name="Settings.ShortcutKey.Action.None" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>

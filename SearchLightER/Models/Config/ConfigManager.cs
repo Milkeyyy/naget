@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.Configuration;
 using SearchLight.Models.Config.HotKey;
-using System.Collections.Generic;
+using SearchLight.Models.Config.HotKey.Action;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -11,6 +11,7 @@ namespace SearchLight.Models.Config;
 public static class ConfigManager
 {
 	private static readonly string FilePath = Path.Join(App.ConfigFolder, "Config.json");
+	//yaml private static readonly string FilePath = Path.Join(App.ConfigFolder, "Config.yml");
 
 	private static readonly ConfigurationBuilder _builder = new();
 	private static IConfigurationRoot? _config;
@@ -26,6 +27,8 @@ public static class ConfigManager
 	/// </summary>
 	public static HotKey.HotKeyManager HotKeyManager { get; } = new();
 
+	private static readonly JsonSerializerOptions jsOptions = new()/* { IgnoreReadOnlyFields = true }*/;
+
 	/// <summary>
 	/// コンフィグを新規作成する
 	/// </summary>
@@ -34,7 +37,7 @@ public static class ConfigManager
 		_configBase = new()
 		{
 			// 初期値が設定された ConfigClass を作成
-			Config = ConfigClass.Create()
+			Config = new ConfigClass()
 		};
 	}
 
@@ -45,9 +48,20 @@ public static class ConfigManager
 	{
 		// ホットキーを読み込む
 		//Config.HotKeys = [.. HotKeyManager.List];
-		Config.HotKeys = new(HotKeyManager.List);
+		Config.HotKeys = HotKeyManager.Groups;
+
+		Debug.WriteLine("Saving HotKeyGroup");
+		foreach (var group in Config.HotKeys)
+		{
+			Debug.WriteLine(group.Id);
+			Debug.WriteLine("- " + group.Name);
+			Debug.WriteLine("- " + group.Action);
+			Debug.WriteLine("- " + group);
+		}
+
 		// ファイルへ保存
-		string data = JsonSerializer.Serialize(_configBase);
+		string data = JsonSerializer.Serialize(_configBase, jsOptions);
+		//yaml string data = YamlSerializer.SerializeToString(_configBase);
 		File.WriteAllText(FilePath, data);
 	}
 
@@ -60,22 +74,15 @@ public static class ConfigManager
 		if (File.Exists(FilePath))
 		{
 			Debug.WriteLine("Loading config from file");
-			_config = _builder
-				.AddJsonFile(FilePath)
-				.Build();
+			//_config = _builder
+			//	.AddJsonFile(FilePath, false)
+			//	.Build();
 
-			_configBase = JsonSerializer.Deserialize<ConfigBaseClass>(File.ReadAllText(FilePath));
+			// ファイルから読み込んだデータをデシリアライズ (デシリアライズに失敗した場合は新規作成)
+			_configBase = JsonSerializer.Deserialize<ConfigBaseClass>(File.ReadAllText(FilePath)) ?? new ConfigBaseClass();
+			//yaml _configBase = YamlSerializer.Deserialize<ConfigBaseClass>(File.ReadAllBytes(FilePath));
 
-			if (_configBase != null)
-			{
-				if (_configBase.Config == null)
-				{
-					Debug.WriteLine("- Config is null, Creating new config");
-					Create(); // null の場合は新規作成する
-					Save();
-				}
-			}
-			else
+			if (_configBase.Config == null)
 			{
 				Debug.WriteLine("- Config is null, Creating new config");
 				Create(); // null の場合は新規作成する
@@ -89,7 +96,16 @@ public static class ConfigManager
 			Create();
 			Save();
 		}
+
 		// コンフィグからホットキーマネージャーへプリセット一覧を読み込む
-		HotKeyManager.LoadGroups(Config.HotKeys);
+		if (Config.HotKeys != null)
+		{
+			foreach (var group in Config.HotKeys)
+			{
+				// キーからホットキーアクションを取得
+				group.Action = HotKeyActionList.GetActionById(group.Action.Id);
+			}
+			HotKeyManager.LoadGroups(Config.HotKeys);
+		}
 	}
 }

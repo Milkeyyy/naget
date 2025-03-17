@@ -25,11 +25,11 @@ public class HotKeyManager : IDisposable
 	/// <summary>
 	/// ホットキーの一覧 (内部)
 	/// </summary>
-	private List<HotKeyGroup> groups;
+	public List<HotKeyGroup> Groups { get; set; }
 	/// <summary>
 	/// ホットキーの一覧
 	/// </summary>
-	public ReadOnlyCollection<HotKeyGroup> List => new(groups);
+	public ReadOnlyCollection<HotKeyGroup> List => new(Groups);
 
 	private int keyRegsitrationMode;
 	private HashSet<KeyCode> registrationQueuedKeys;
@@ -40,7 +40,7 @@ public class HotKeyManager : IDisposable
 		hook.KeyPressed += Hook_KeyPressed;
 		hook.KeyReleased += Hook_KeyReleased;
 
-		groups = [];
+		Groups = [];
 
 		pressedKeys = [];
 
@@ -65,8 +65,15 @@ public class HotKeyManager : IDisposable
 
 	public void LoadGroups(List<HotKeyGroup> groups)
 	{
-		this.groups = groups;
-		Debug.WriteLine($"HotKey Groups Loaded: {groups.Count}");
+		Debug.WriteLine("Group loaded: " + groups.Count);
+		this.Groups = groups;
+		/*foreach (var group in groups)
+		{
+			Debug.WriteLine(group.Id);
+			Debug.WriteLine("- " + group.Name);
+			Debug.WriteLine("- " + group.Action);
+			Debug.WriteLine("- " + group);
+		}*/
 	}
 
 	/// <summary>
@@ -76,7 +83,7 @@ public class HotKeyManager : IDisposable
 	/// <param name="keys">キーの一覧</param>
 	public void CreateGroup(string name, HashSet<KeyCode>? keys = null)
 	{
-		groups.Add(new HotKeyGroup(name, keys));
+		Groups.Add(new HotKeyGroup(name, keys));
 	}
 
 	/// <summary>
@@ -85,7 +92,7 @@ public class HotKeyManager : IDisposable
 	/// <param name="id">削除する対象のID</param>
 	public void DeleteGroup(string id)
 	{
-		groups.RemoveAll(x => x.Id == id);
+		Groups.RemoveAll(x => x.Id == id);
 	}
 
 	public void Run()
@@ -111,7 +118,7 @@ public class HotKeyManager : IDisposable
 		}
 
 		pressedKeys.Add(e.Data.KeyCode);
-		foreach (var group in groups)
+		foreach (var group in Groups)
 		{
 			if (group != null)
 			{
@@ -120,7 +127,7 @@ public class HotKeyManager : IDisposable
 				{
 					//if (group.Method != null) Dispatcher.UIThread.Invoke(group.Method);
 					// 設定されたIDの検索エンジンで検索を実行 TODO: 将来的に検索以外のこともできるようにする
-					Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(group.CommandId));
+					Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(group.Action.Id));
 				}
 			}
 		}
@@ -133,7 +140,7 @@ public class HotKeyManager : IDisposable
 
 	private HotKeyGroup? _GetHotKeyGroupFromKey(string id)
 	{
-		return groups.FirstOrDefault(x => x.Id == id);
+		return Groups.FirstOrDefault(x => x.Id == id);
 	}
 
 	private HotKeyGroup _RegisterKeys(string groupId, HashSet<KeyCode> keys)

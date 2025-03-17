@@ -10,17 +10,15 @@ public class ConfigBaseClass
 	public ConfigClass Config { get; set; } = new();
 }
 
+
 public class ConfigClass
 {
-	public string? Language { get; set; }
-	public List<HotKey.HotKeyGroup>? HotKeys { get; set; }
+	public string Language { get; set; }
+	public List<HotKey.HotKeyGroup> HotKeys { get; set; }
 
-	public static ConfigClass Create()
+	public ConfigClass()
 	{
-		return new()
-		{
-			Language = CultureInfo.CurrentCulture.Name,
-			HotKeys = []
-		};
+		Language = CultureInfo.CurrentCulture.Name;
+		HotKeys = [];
 	}
 }

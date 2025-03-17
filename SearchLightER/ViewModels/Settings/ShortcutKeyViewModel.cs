@@ -4,11 +4,15 @@ using FluentAvalonia.UI.Controls;
 using SearchLight.Assets.Locales;
 using SearchLight.Models.Config;
 using SearchLight.Models.Config.HotKey;
+using SearchLight.Models.Config.HotKey.Action;
+using SearchLight.Models.SearchEngine;
 using SearchLight.Views;
 using SearchLight.Views.Settings;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SearchLight.ViewModels.Settings;
@@ -18,11 +22,11 @@ public class ShortcutKeyViewModel
 {
 	public Well<UserControl> ShortcutKeyWell { get; } = Well.Factory.Create<UserControl>();
 
-	#region プリセット関連
+	#region プリセット
 	/// <summary>
 	/// プリセットの一覧
 	/// </summary>
-	public ReadOnlyCollection<HotKeyGroup>? PresetList { get; private set; }
+	public List<HotKeyGroup> HotKeyPresetList { get; set; }
 	/// <summary>
 	/// 選択中のプリセットのオブジェクト (HotKeyGroup)
 	/// </summary>
@@ -30,7 +34,7 @@ public class ShortcutKeyViewModel
 	/// <summary>
 	/// 選択中のプリセットのインデックス
 	/// </summary>
-	public int PresetListSelectedIndex { get; set; }
+	public int SelectedPresetIndex { get; set; }
 	/// <summary>
 	/// 選択中のプリセットの名前
 	/// </summary>
@@ -45,7 +49,7 @@ public class ShortcutKeyViewModel
 	public Command PresetCreateCommand { get; }
 	#endregion
 
-	#region キー登録関連
+	#region キー登録
 	/// <summary>
 	/// 登録されたキーのテキスト
 	/// </summary>
@@ -64,27 +68,49 @@ public class ShortcutKeyViewModel
 	public Command KeyRegisterCommand { get; }
 	#endregion
 
+	#region ホットキーアクション
+	/// <summary>
+	/// アクションの一覧
+	/// </summary>
+	public List<HotKeyAction> HotKeyActionList { get; set; }
+	/// <summary>
+	/// 選択中のアクションのオブジェクト
+	/// </summary>
+	public HotKeyAction SelectedActionItem { get; set; }
+	/// <summary>
+	/// 選択中のアクションのインデックス
+	/// </summary>
+	public int SelectedActionIndex { get; set; }
+	#endregion
+
+	#region アクション: 検索エンジン
+	public ReadOnlyCollection<SearchEngineClass> SearchEngineList { get; private set; }
+	public SearchEngineClass SelectedSearchEngineItem { get; set; }
+	public int SearchEngineListSelectedIndex { get; set; }
+	public bool SearchEngineListIsVisible { get; set; }
+	#endregion
+
 	public Command ExitCommand { get; }
 
 	public ShortcutKeyViewModel()
 	{
-		// プリセットの一覧を取得 登録されているプリセットの個数が0の場合はnull
-		LoadPresetList();
-
 		ShortcutKeyWell.Add(Control.LoadedEvent, () =>
 		{
 			Debug.WriteLine("ShortcutKeyView Loaded");
+
 			RegisteredKeysText = string.Empty;
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+			
+			// プリセット等を読み込む 登録されているプリセットの個数が0の場合はnull
+			LoadPresetList();
 			return default;
 		});
 
 		// プリセット作成コマンド
-		PresetCreateCommand = Command.Factory.Create(() =>
+		PresetCreateCommand = Command.Factory.Create(async () =>
 		{
 			Debug.WriteLine("Execute PresetCreateCommand");
-			ShowInputDialogAsync();
-			return default;
+			await ShowInputDialogAsync();
 		});
 
 		// キー登録コマンド
@@ -126,18 +152,54 @@ public class ShortcutKeyViewModel
 
 	private void LoadPresetList()
 	{
-		if (ConfigManager.HotKeyManager.List.Count == 0)
+		Debug.WriteLine("Load Preset List");
+
+		// プリセットの一覧を取得	
+		HotKeyPresetList = ConfigManager.Config.HotKeys;
+
+		if (HotKeyPresetList.Count == 0) return;
+		
+		RegisteredKeysText = HotKeyPresetList[SelectedPresetIndex].ToString();
+		
+		// アクションの一覧を取得
+		HotKeyActionList = Models.Config.HotKey.Action.HotKeyActionList.Actions.ToList();
+		//SelectedActionIndex = 0;
+		
+		// 検索エンジンの一覧を取得
+		SearchEngineList = SearchEngineManager.EngineList;
+		//SearchEngineListSelectedIndex = 0;
+
+		// 選択中のプリセットをリセット
+		SelectedPresetIndex = 0;
+	}
+
+	private void LoadActionList()
+	{
+		//SelectedActionItem = HotKeyAction.Get();
+	}
+
+	private void SaveValue()
+	{
+		Debug.WriteLine("Save Value");
+
+		if (HotKeyPresetList.Count == 0) return;
+
+		var action = HotKeyPresetList[SelectedPresetIndex].Action;
+		
+		// 選択されたプリセットのアクションを設定する
+		HotKeyPresetList[SelectedPresetIndex].Action = SelectedActionItem;
+		// アクションがウェブ検索の場合は検索エンジンを設定されているものにする
+		if (action.Id == "WebSearch")
 		{
-			PresetList = null;
-		}
-		else
-		{
-			PresetList = ConfigManager.HotKeyManager.List;
-			PresetListSelectedIndex = 0;
-			RegisteredKeysText = PresetList[PresetListSelectedIndex].ToString();
+			HotKeyPresetList[SelectedPresetIndex].Action.Property["SearchEngineId"] = SelectedSearchEngineItem.Id;
 		}
 	}
 
+	/// <summary>
+	/// キー登録モードが変更された時の処理
+	/// </summary>
+	/// <param name="value"></param>
+	/// <returns></returns>
 	[PropertyChanged(nameof(KeyRegistrationMode))]
 	private ValueTask KeyRegistrationModeChanged(bool value)
 	{
@@ -146,12 +208,88 @@ public class ShortcutKeyViewModel
 		return default;
 	}
 
+	/// <summary>
+	/// 選択されたプリセットが変更された時の処理
+	/// </summary>
+	/// <param name="value"></param>
+	/// <returns></returns>
 	[PropertyChanged(nameof(SelectedPresetItem))]
 	private ValueTask SelectedPresetItemChanged(HotKeyGroup? value)
 	{
 		Debug.WriteLine("SelectedPresetItem Changed: " + SelectedPresetName);
 		// 選択されたプリセットに登録されているキーを表示する
 		RegisteredKeysText = value?.ToString() ?? Resources.Settings_ShortcutKey_Preset_NotSet;
+		if (value != null)
+		{
+			Debug.WriteLine("- Execute");
+
+			// アクションの選択リストをプリセットのアクションにする
+			if (value.Action == null) SelectedActionItem = HotKeyActionList[0];
+			else SelectedActionItem = value.Action;
+
+			// アクションがウェブ検索の場合は検索エンジンを設定されているものにする
+			/*if (SelectedActionItem.Id == "WebSearch")
+			{
+				var eid = (string)value.Action.Property.GetValueOrDefault(
+					"SearchEngineId",
+					SearchEngineManager.GetDefaultEngine().Id
+				);
+				SelectedSearchEngineItem = SearchEngineManager.Get(eid) ?? SearchEngineManager.GetDefaultEngine();
+			}*/
+		}
+		SaveValue();
+		return default;
+	}
+
+	/// <summary>
+	/// 選択されたアクションが変更された時の処理
+	/// </summary>
+	/// <param name="value"></param>
+	/// <returns></returns>
+	[PropertyChanged(nameof(SelectedActionItem))]
+	private ValueTask SelectedActionItemChanged(HotKeyAction? value)
+	{
+		Debug.WriteLine("SelectedActionItem Changed: " + value?.Id);
+		if (value != null && HotKeyPresetList.Count != 0 && SelectedPresetItem != null && SearchEngineList != null)
+		{
+			Debug.WriteLine("- Execute");
+
+			// 選択されたアクションをプリセットに設定する
+			SelectedPresetItem.Action = value;
+			// アクションがウェブ検索の場合
+			if (value.Id == "WebSearch")
+			{
+				// 検索エンジンを読み込む
+				var eid = (string)value.Property.GetValueOrDefault(
+					"SearchEngineId",
+					SearchEngineManager.GetDefaultEngine().Id
+				).ToString();
+				Debug.WriteLine("Engine ID: " + eid);
+				SelectedSearchEngineItem = SearchEngineManager.Get(eid) ?? SearchEngineList[0];
+			}
+		}
+		// 選択されたアクションがウェブ検索の場合は検索エンジンのリストを表示する
+		SearchEngineListIsVisible = value?.Id == "WebSearch";
+		SaveValue();
+		return default;
+	}
+
+	/// <summary>
+	/// 選択された検索エンジンが変更された時の処理
+	/// </summary>
+	/// <param name="value"></param>
+	/// <returns></returns>
+	[PropertyChanged(nameof(SelectedSearchEngineItem))]
+	private ValueTask SelectedSearchEngineItemChanged(SearchEngineClass value)
+	{
+		Debug.WriteLine("SelectedSearchEngineItem Changed: " + value?.Id);
+		if (value == null) return default;
+		// 選択された検索エンジンをアクションに設定する
+		if (SelectedActionItem.Id == "WebSearch")
+		{
+			SelectedActionItem.Property["SearchEngineId"] = value.Id;
+		}
+		SaveValue();
 		return default;
 	}
 
