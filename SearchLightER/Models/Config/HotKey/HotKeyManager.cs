@@ -127,7 +127,7 @@ public class HotKeyManager : IDisposable
 				{
 					//if (group.Method != null) Dispatcher.UIThread.Invoke(group.Method);
 					// 設定されたIDの検索エンジンで検索を実行 TODO: 将来的に検索以外のこともできるようにする
-					Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(group.Action.Id));
+					Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(group.ActionObj.Id));
 				}
 			}
 		}

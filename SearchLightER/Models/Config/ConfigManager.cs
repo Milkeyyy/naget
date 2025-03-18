@@ -1,7 +1,5 @@
 ﻿using Avalonia.Controls;
-using Microsoft.Extensions.Configuration;
 using SearchLight.Models.Config.HotKey;
-using SearchLight.Models.Config.HotKey.Action;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -11,10 +9,6 @@ namespace SearchLight.Models.Config;
 public static class ConfigManager
 {
 	private static readonly string FilePath = Path.Join(App.ConfigFolder, "Config.json");
-	//yaml private static readonly string FilePath = Path.Join(App.ConfigFolder, "Config.yml");
-
-	private static readonly ConfigurationBuilder _builder = new();
-	private static IConfigurationRoot? _config;
 
 	private static ConfigBaseClass _configBase = new();
 	/// <summary>
@@ -47,7 +41,6 @@ public static class ConfigManager
 	public static void Save()
 	{
 		// ホットキーを読み込む
-		//Config.HotKeys = [.. HotKeyManager.List];
 		Config.HotKeys = HotKeyManager.Groups;
 
 		Debug.WriteLine("Saving HotKeyGroup");
@@ -55,13 +48,12 @@ public static class ConfigManager
 		{
 			Debug.WriteLine(group.Id);
 			Debug.WriteLine("- " + group.Name);
-			Debug.WriteLine("- " + group.Action);
+			Debug.WriteLine("- " + group.ActionObj);
 			Debug.WriteLine("- " + group);
 		}
 
 		// ファイルへ保存
 		string data = JsonSerializer.Serialize(_configBase, jsOptions);
-		//yaml string data = YamlSerializer.SerializeToString(_configBase);
 		File.WriteAllText(FilePath, data);
 	}
 
@@ -80,7 +72,6 @@ public static class ConfigManager
 
 			// ファイルから読み込んだデータをデシリアライズ (デシリアライズに失敗した場合は新規作成)
 			_configBase = JsonSerializer.Deserialize<ConfigBaseClass>(File.ReadAllText(FilePath)) ?? new ConfigBaseClass();
-			//yaml _configBase = YamlSerializer.Deserialize<ConfigBaseClass>(File.ReadAllBytes(FilePath));
 
 			if (_configBase.Config == null)
 			{
@@ -103,7 +94,9 @@ public static class ConfigManager
 			foreach (var group in Config.HotKeys)
 			{
 				// キーからホットキーアクションを取得
-				group.Action = HotKeyActionList.GetActionById(group.Action.Id);
+				//var action = HotKeyAction.(group.Action.Id);
+				//action.Property = group.Action.Property;
+				//group.Action.Property
 			}
 			HotKeyManager.LoadGroups(Config.HotKeys);
 		}
