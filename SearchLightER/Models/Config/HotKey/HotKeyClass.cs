@@ -1,5 +1,4 @@
 ﻿using SearchLight.Assets.Locales;
-using SearchLight.Models.Config.HotKey.Action;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
@@ -31,27 +30,24 @@ public class HotKeyGroup
 	/// </summary>
 	//[JsonIgnore]
 	[JsonPropertyName("Action")]
-	public HotKeyAction ActionObj { get; private set; }
+	public HotKeyAction Action { get; private set; }
 
 	[JsonIgnore]
-	public string ActionId { get { return ActionObj.Id; } set { ActionObj = HotKeyActionList.CreateInstance(value); } } // アクションのIDが変更されたらアクションを再生成
+	public HotKeyActionType ActionType
+	{
+		get { return Action.ActionType; }
+		set { if (Action.ActionType != value) Action = new HotKeyAction(value); } // アクションのタイプが変更されたらアクションを再生成 (すでに同じアクションの場合は行わない)
+	}
 
 	[JsonIgnore]
-	public Dictionary<string, string> ActionProperty => ActionObj.Property;
-
-	/// <summary>
-	/// アクション情報の辞書
-	/// </summary>
-	[JsonIgnore]
-	//[JsonPropertyName("Action")]
-	public Dictionary<string, object> ActionDict { get { return ActionObj.ToDictionary(); } }
+	public Dictionary<string, string> ActionProperty => Action.Property;
 
 	public HotKeyGroup(string name, HashSet<KeyCode>? keys = null)
 	{
 		Id = Guid.NewGuid().ToString();
 		Name = name;
 		Keys = keys;
-		ActionObj = HotKeyActionList.GetActionById("None");
+		Action = new HotKeyAction(HotKeyActionType.None);
 	}
 
 	/// <summary>
@@ -60,14 +56,14 @@ public class HotKeyGroup
 	/// <param name="Id"></param>
 	/// <param name="Name"></param>
 	/// <param name="Keys"></param>
-	/// <param name="ActionObj"></param>
+	/// <param name="Action"></param>
 	[JsonConstructor]
-	public HotKeyGroup(string Id, string Name, HashSet<KeyCode> Keys, HotKeyAction ActionObj)
+	public HotKeyGroup(string Id, string Name, HashSet<KeyCode> Keys, HotKeyAction Action)
 	{
 		this.Id = Id;
 		this.Name = Name;
 		this.Keys = Keys;
-		this.ActionObj = ActionObj; //new(ActionDict.Id, ActionDict.Property);
+		this.Action = Action; //new(ActionDict.Id, ActionDict.Property);
 	}
 
 	public override string ToString()

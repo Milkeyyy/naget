@@ -4,7 +4,6 @@ using FluentAvalonia.UI.Controls;
 using SearchLight.Assets.Locales;
 using SearchLight.Models.Config;
 using SearchLight.Models.Config.HotKey;
-using SearchLight.Models.Config.HotKey.Action;
 using SearchLight.Models.SearchEngine;
 using SearchLight.Views;
 using SearchLight.Views.Settings;
@@ -26,7 +25,7 @@ public class ShortcutKeyViewModel
 	/// <summary>
 	/// プリセットの一覧 (リストの一覧へバインドされるオブジェクト)
 	/// </summary>
-	public List<HotKeyGroup> HotKeyPresetList { get; set; } = [];
+	public ReadOnlyCollection<HotKeyGroup> HotKeyPresetList { get; set; } = new([]);
 	/// <summary>
 	/// 選択中のプリセットのオブジェクト (HotKeyGroup) (リストの選択項目へバインドされるオブジェクト)
 	/// </summary>
@@ -76,37 +75,33 @@ public class ShortcutKeyViewModel
 	/// <summary>
 	/// アクションの一覧 (リストの一覧へバインドされるオブジェクト)
 	/// </summary>
-	public static ReadOnlyCollection<HotKeyAction> HotKeyActionList { get { return Models.Config.HotKey.Action.HotKeyActionList.Actions; } }
+	public static ReadOnlyCollection<HotKeyAction> HotKeyActionList { get { return HotKeyAction.Actions; } }
 	/// <summary>
 	/// 選択中のアクションのオブジェクト (リストの選択項目へバインドされるオブジェクト)
 	/// </summary>
 	public HotKeyAction SelectedActionItem { get; set; }
 	/// <summary>
-	/// 選択中のアクションのID
+	/// 選択中のアクションのタイプ
 	/// </summary>
-	public string SelectedActionId {
-		get { return SelectedActionItem.Id; }
-		set { SelectedActionItem = Models.Config.HotKey.Action.HotKeyActionList.GetActionById(value); } // アクションのIDが変更されたら選択中のアクションのオブジェクトも変更する
+	public HotKeyActionType SelectedActionType {
+		get { return SelectedActionItem.ActionType; }
+		set { SelectedActionItem = HotKeyAction.GetActionByType(value); } // アクションのタイプが変更されたら選択中のアクションのオブジェクトも変更する
 	}
-	/// <summary>
-	/// 選択中のアクションの名前
-	/// </summary>
-	public string SelectedActionName { get { return SelectedActionItem.Name; } }
-	/// <summary>
-	/// 選択中のアクションのアイコン
-	/// </summary>
-	public Symbol SelectedActionIcon { get { return SelectedActionItem.Icon; } }
 	/// <summary>
 	/// 選択中のアクションのインデックス
 	/// </summary>
 	public int SelectedActionIndex { get; set; }
+	/// <summary>
+	/// 選択中のプリセットのアクション
+	/// </summary>
+	public HotKeyAction? PresetAction { get { return SelectedPresetItem?.Action; } }
 	#endregion
 
 	#region アクション: 検索エンジン
 	/// <summary>
 	/// 検索エンジンの一覧 (リストの一覧へバインドされるオブジェクト)
 	/// </summary>
-	public ReadOnlyCollection<SearchEngineClass> SearchEngineList { get; private set; }
+	public static ReadOnlyCollection<SearchEngineClass> SearchEngineList { get { return SearchEngineManager.EngineList; } }
 	/// <summary>
 	/// 選択中の検索エンジン (リストの選択項目へバインドされるオブジェクト)
 	/// </summary>
@@ -121,6 +116,11 @@ public class ShortcutKeyViewModel
 	public bool SearchEngineListIsVisible { get; set; }
 	#endregion
 
+	public bool HotKeyPresetListLoaded { get; set; }
+	public bool HotKeyPresetLoaded { get; set; }
+	public bool HotKeyActionLoaded { get; set; }
+	public bool HotKeyActionSearchEngineLoaded { get; set; }
+
 	public Command ExitCommand { get; }
 
 	public ShortcutKeyViewModel()
@@ -134,6 +134,12 @@ public class ShortcutKeyViewModel
 			
 			// プリセット等を読み込む 登録されているプリセットの個数が0の場合はnull
 			LoadPresetList();
+
+			/*HotKeyPresetListLoaded = true;
+
+			SelectedPresetIndex = 0;
+			if (SelectedPresetItem != null) SelectedActionItem = HotKeyAction.GetActionByType(SelectedPresetItem.Action.ActionType);*/
+
 			return default;
 		});
 
@@ -201,23 +207,34 @@ public class ShortcutKeyViewModel
 	{
 		Debug.WriteLine("Load Preset List");
 
-		// プリセットの一覧を取得	
-		HotKeyPresetList = ConfigManager.Config.HotKeys;
+		//HotKeyPresetListLoaded = false;
+
+		// プリセットの一覧を取得
+		HotKeyPresetList = ConfigManager.HotKeyManager.List;
 
 		if (HotKeyPresetList.Count == 0) return;
-		
-		RegisteredKeysText = HotKeyPresetList[SelectedPresetIndex].ToString();
-		
+
 		// アクションの一覧を取得
 		//HotKeyActionList = Models.Config.HotKey.Action.HotKeyActionList.Actions.ToList();
 		//SelectedActionIndex = 0;
-		
+
 		// 検索エンジンの一覧を取得
-		SearchEngineList = SearchEngineManager.EngineList;
+		//SearchEngineList = SearchEngineManager.EngineList;
 		//SearchEngineListSelectedIndex = 0;
+
+		HotKeyPresetListLoaded = true;
 
 		// 選択中のプリセットをリセット
 		SelectedPresetIndex = 0;
+
+		if (SelectedPresetItem != null)
+		{
+			// 選択中のアクションを選択されているプリセットのアクションにする
+			//SelectedActionItem = HotKeyAction.GetActionByType(SelectedPresetItem.Action.ActionType);
+			//LoadSearchEngine();
+		}
+
+		RegisteredKeysText = HotKeyPresetList[SelectedPresetIndex].ToString();
 	}
 
 	private void LoadActionList()
@@ -229,16 +246,43 @@ public class ShortcutKeyViewModel
 	{
 		Debug.WriteLine("Save Value");
 
-		if (HotKeyPresetList.Count == 0) return;
+		if (HotKeyPresetList.Count == 0 || SelectedPresetIndex == -1) return;
 
-		var action = HotKeyPresetList[SelectedPresetIndex].ActionObj;
+		var action = HotKeyPresetList[SelectedPresetIndex].Action;
 
 		// 選択されたプリセットのアクションを設定する
-		HotKeyPresetList[SelectedPresetIndex].ActionId = SelectedActionItem.Id;
+		ConfigManager.HotKeyManager.List[SelectedPresetIndex].ActionType = SelectedActionItem.ActionType;
 		// アクションがウェブ検索の場合は検索エンジンを設定されているものにする
-		if (action.Id == "WebSearch")
+		if (action.ActionType == HotKeyActionType.WebSearch)
 		{
-			HotKeyPresetList[SelectedPresetIndex].ActionProperty["SearchEngineId"] = SelectedSearchEngineItem.Id;
+			ConfigManager.HotKeyManager.List[SelectedPresetIndex].Action.Property["SearchEngineId"] = SelectedSearchEngineItem.Id;
+		}
+	}
+
+	private void LoadSearchEngine()
+	{
+		if (SelectedPresetItem == null) return;
+
+		Debug.WriteLine("Load Search Engine");
+		
+		// 検索エンジンを読み込む
+		string eid = SelectedPresetItem.Action.Property.GetValueOrDefault(
+			"SearchEngineId",
+			SearchEngineManager.GetDefaultEngine().Id
+		);
+		
+		Debug.WriteLine(" - SearchEngineId: " + eid);
+		
+		var se = SearchEngineManager.Get(eid);
+		if (se != null)
+		{
+			Debug.WriteLine(" - SearchEngine is not null");
+			SelectedSearchEngineItem = se;
+		}
+		else
+		{
+			Debug.WriteLine(" - SearchEngine is null");
+			SelectedSearchEngineItem = SearchEngineList[0];
 		}
 	}
 
@@ -264,30 +308,34 @@ public class ShortcutKeyViewModel
 	private ValueTask SelectedPresetItemChanged(HotKeyGroup? value)
 	{
 		Debug.WriteLine("SelectedPresetItem Changed: " + SelectedPresetName);
+
+		HotKeyPresetLoaded = false;
+
+		if (!HotKeyPresetListLoaded || value == null) return default;
+
 		// 選択されたプリセットに登録されているキーを表示する
 		RegisteredKeysText = value?.ToString() ?? Resources.Settings_ShortcutKey_Preset_NotSet;
-		if (value != null)
+
+		Debug.WriteLine("- Execute");
+
+		// アクションの選択リストをプリセットのアクションにする
+		if (value.Action == null) SelectedActionType = HotKeyActionList[0].ActionType;
+		else SelectedActionType = value.ActionType;
+
+		// 選択されたアクションがウェブ検索の場合は検索エンジンのリストを表示する
+		SearchEngineListIsVisible = value.Action.ActionType == HotKeyActionType.WebSearch;
+
+		// アクションがウェブ検索の場合は検索エンジンを設定されているものにする
+		if (value.ActionType == HotKeyActionType.WebSearch)
 		{
-			Debug.WriteLine("- Execute");
-
-			// アクションの選択リストをプリセットのアクションにする
-			if (value.ActionObj == null) SelectedActionId = HotKeyActionList[0].Id;
-			else SelectedActionId = value.ActionId;
-
-			// アクションがウェブ検索の場合は検索エンジンを設定されているものにする
-			if (SelectedActionId == "WebSearch")
-			{
-				// 検索エンジンを読み込む
-				var eid = (string)value.ActionProperty.GetValueOrDefault(
-					"SearchEngineId",
-					SearchEngineManager.GetDefaultEngine().Id
-				).ToString();
-				SelectedSearchEngineItem = SearchEngineManager.Get(eid) ?? SearchEngineList[0];
-			}
-			// 選択されたアクションがウェブ検索の場合は検索エンジンのリストを表示する
-			SearchEngineListIsVisible = value.ActionObj?.Id == "WebSearch";
+			Debug.WriteLine(" - WebSearch");
+			LoadSearchEngine();
 		}
+
+		HotKeyPresetLoaded = true;
+		
 		SaveValue();
+
 		return default;
 	}
 
@@ -299,48 +347,63 @@ public class ShortcutKeyViewModel
 	[PropertyChanged(nameof(SelectedActionItem))]
 	private ValueTask SelectedActionItemChanged(HotKeyAction? value)
 	{
-		Debug.WriteLine("SelectedActionItem Changed: " + value);
-		if (value != null && HotKeyPresetList?.Count != 0 && SelectedPresetItem != null && SearchEngineList != null)
+		Debug.WriteLine("SelectedActionItem Changed: " + value?.Name);
+
+		if (!HotKeyPresetListLoaded || value == null) return default;
+
+		HotKeyActionLoaded = false;
+
+		if (HotKeyPresetList?.Count != 0 && SelectedPresetItem != null && SearchEngineList != null)
 		{
 			Debug.WriteLine("- Execute");
 
 			// 選択されたアクションをプリセットに設定する
-			SelectedPresetItem.ActionId = value.Id;
-			// アクションがウェブ検索の場合
-			if (value.Id == "WebSearch")
-			{
-				// 検索エンジンを読み込む
-				var eid = (string)SelectedPresetItem.ActionProperty.GetValueOrDefault(
-					"SearchEngineId",
-					SearchEngineManager.GetDefaultEngine().Id
-				).ToString();
-				SelectedSearchEngineItem = SearchEngineManager.Get(eid) ?? SearchEngineList[0];
-			}
+			SelectedPresetItem.ActionType = value.ActionType;
+
 			// 選択されたアクションがウェブ検索の場合は検索エンジンのリストを表示する
-			SearchEngineListIsVisible = value.Id == "WebSearch";
+			SearchEngineListIsVisible = SelectedPresetItem.Action.ActionType == HotKeyActionType.WebSearch;
+
+			// アクションがウェブ検索の場合
+			if (value.ActionType == HotKeyActionType.WebSearch)
+			{
+				Debug.WriteLine("- WebSearch");
+				LoadSearchEngine();
+			}
+
+			HotKeyActionLoaded = true;
 		}
 		SaveValue();
+		return default;
+	}
+
+	[PropertyChanged(nameof(SearchEngineListIsVisible))]
+	private ValueTask SearchEngineListIsVisibleChanged(bool value)
+	{
+		Debug.WriteLine("SearchEngineListIsVisible Changed: " + value);
+		HotKeyActionSearchEngineLoaded = false;
 		return default;
 	}
 
 	/// <summary>
 	/// 選択された検索エンジンが変更された時の処理
 	/// </summary>
-	/// <param name="value"></param>
-	/// <returns></returns>
 	[PropertyChanged(nameof(SelectedSearchEngineItem))]
 	private ValueTask SelectedSearchEngineItemChanged(SearchEngineClass value)
 	{
 		Debug.WriteLine("SelectedSearchEngineItem Changed: " + value?.Id);
-		if (value != null && HotKeyPresetList?.Count != 0 && SelectedPresetItem != null && SearchEngineList != null)
+
+		if (!HotKeyPresetListLoaded || value == null) return default;
+
+		if (HotKeyPresetList?.Count != 0 && SelectedPresetItem != null && SearchEngineList != null)
 		{
 			// 選択された検索エンジンをアクションに設定する
-			if (SelectedActionId == "WebSearch")
+			if (SelectedActionType == HotKeyActionType.WebSearch)
 			{
-				SelectedPresetItem.ActionProperty["SearchEngineId"] = value.Id;
+				SelectedPresetItem.Action.Property["SearchEngineId"] = value.Id;
 			}
 			SaveValue();
 		}
+
 		return default;
 	}
 

@@ -80,8 +80,6 @@ public class App : Application
 			desktop.MainWindow = SettingsWindow;
 
 			// ホットキーの登録
-			//ConfigManager.HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcA]));
-			//ConfigManager.HotKeyManager.Register(new HotKeyGroup([KeyCode.VcLeftControl, KeyCode.VcLeftAlt, KeyCode.VcQ]));
 			ConfigManager.HotKeyManager.Run();
 		}
 

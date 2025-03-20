@@ -48,7 +48,7 @@ public static class ConfigManager
 		{
 			Debug.WriteLine(group.Id);
 			Debug.WriteLine("- " + group.Name);
-			Debug.WriteLine("- " + group.ActionObj);
+			Debug.WriteLine("- " + group.Action);
 			Debug.WriteLine("- " + group);
 		}
 
