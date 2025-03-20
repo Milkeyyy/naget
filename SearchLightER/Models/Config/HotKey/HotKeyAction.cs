@@ -1,14 +1,11 @@
 ﻿using Avalonia.Threading;
-using DynamicData;
 using FluentAvalonia.UI.Controls;
 using SearchLight.Assets.Locales;
 using SearchLight.Models.SearchEngine;
 using SearchLight.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace SearchLight.Models.Config.HotKey;
