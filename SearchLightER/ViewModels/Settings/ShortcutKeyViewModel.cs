@@ -142,6 +142,16 @@ public class ShortcutKeyViewModel
 			return default;
 		});
 
+		ShortcutKeyWell.Add(Control.UnloadedEvent, () =>
+		{
+			Debug.WriteLine("ShortcutKeyView Unloaded");
+
+			// キーの登録をキャンセルする
+			ConfigManager.HotKeyManager.CancelKeyRegistration();
+
+			return default;
+		});
+
 		// プリセット作成コマンド
 		PresetCreateCommand = Command.Factory.Create(async () =>
 		{
