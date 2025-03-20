@@ -100,7 +100,7 @@ public class HotKeyManager : IDisposable
 
 	private void Hook_KeyPressed(object? sender, KeyboardHookEventArgs e)
 	{
-		Debug.WriteLine("Key pressed: " + e.Data.KeyCode);
+		//Debug.WriteLine("Key pressed: " + e.Data.KeyCode);
 		// キー登録モードの場合は押されたキーを登録するキー一覧へ追加する
 		if (keyRegsitrationMode == 1)
 		{
@@ -111,7 +111,7 @@ public class HotKeyManager : IDisposable
 				var t = CancelKeyRegistration();
 				return;
 			}
-			Debug.WriteLine("- Key added: " + e.Data.KeyCode);
+			Debug.WriteLine("Key added: " + e.Data.KeyCode);
 			registrationQueuedKeys.Add(e.Data.KeyCode);
 			return;
 		}
