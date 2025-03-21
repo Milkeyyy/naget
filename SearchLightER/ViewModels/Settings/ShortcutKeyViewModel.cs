@@ -166,16 +166,17 @@ public class ShortcutKeyViewModel
 			Debug.WriteLine("- KeyRegistrationMode: " + KeyRegistrationMode);
 			if (KeyRegistrationMode)
 			{
-				Debug.WriteLine("End Key Registraion");
+				Debug.WriteLine("End Key Registration");
 				// キー登録モードを終了する
 				var result = ConfigManager.HotKeyManager.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
 			}
 			else
 			{
-				Debug.WriteLine("Start Key Registraion");
+				Debug.WriteLine("Start Key Registration");
 				// キー登録モードに入る
 				KeyRegistrationMode = true;
+				// キーが押されるたびに押された(登録される)キーを表示する
 				var progress = new Progress<string>(keys =>
 				{
 					RegisteredKeysText = keys;
@@ -304,7 +305,10 @@ public class ShortcutKeyViewModel
 	private ValueTask KeyRegistrationModeChanged(bool value)
 	{
 		Debug.WriteLine("KeyRegistrationMode Changed: " + KeyRegistrationMode);
+		// キー登録モードが有効になった場合はキー登録ボタンのテキストを変更する
 		KeyRegisterButtonText = value ? Resources.Settings_ShortcutKey_RegisterKeys_Done : Resources.Settings_ShortcutKey_RegisterKeys_Register;
+		// 登録されているホットキーを更新する
+		if (HotKeyPresetList != null) RegisteredKeysText = HotKeyPresetList[SelectedPresetIndex].ToString();
 		return default;
 	}
 
