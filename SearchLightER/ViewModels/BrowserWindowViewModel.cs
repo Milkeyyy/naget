@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Epoxy;
+using SearchLight.Models.Config;
+using SearchLight.Views;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WebViewControl;
@@ -10,6 +12,14 @@ namespace SearchLight.ViewModels;
 [ViewModel]
 public class BrowserWindowViewModel
 {
+	public Well<Window> BrowserWindowWell { get; } = Well.Factory.Create<Window>();
+
+	public WindowState WindowState { get; set; } = WindowState.Normal;
+	public double Width { get; set; } = 1280;
+	public double Height { get; set; } = 720;
+
+	public bool WindowOpened { get; set; }
+
 	private WebView WebViewCtrl;
 
 	private string address = string.Empty;
@@ -45,6 +55,41 @@ public class BrowserWindowViewModel
 
 	public BrowserWindowViewModel(WebView wb)
 	{
+		// ウィンドウが開かれた時のイベント
+		BrowserWindowWell.Add(Window.WindowOpenedEvent, () =>
+		{
+			Debug.WriteLine("BrowserWindow Opened");
+			
+			// ウィンドウの設定を読み込む
+			Width = ConfigManager.Config.BrowserWindow.Width;
+			Height = ConfigManager.Config.BrowserWindow.Height;
+			if (ConfigManager.Config.BrowserWindow.State == WindowState.Minimized) WindowState = WindowState.Normal;
+			else WindowState = ConfigManager.Config.BrowserWindow.State;
+
+			WindowOpened = true;
+
+			return default;
+		});
+
+		// ウィンドウが閉じられた時のイベント
+		BrowserWindowWell.Add<WindowClosingEventArgs>("Closing", e =>
+		{
+			Debug.WriteLine("BrowserWindow Closed");
+
+			// ウィンドウの設定を保存する
+			if (WindowState == WindowState.Normal)
+			{
+				ConfigManager.Config.BrowserWindow.Width = Width;
+				ConfigManager.Config.BrowserWindow.Height = Height;
+			}
+			ConfigManager.Config.BrowserWindow.State = WindowState;
+
+			// 開いているページのURLをリセット
+			CurrentAddress = "about:blank";
+
+			return default;
+		});
+
 		WebViewCtrl = wb;
 		WebViewCtrl.Navigated += WebView_Navigated;
 		WebViewCtrl.PropertyChanged += WebViewOnPropertyChanged;

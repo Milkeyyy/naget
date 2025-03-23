@@ -125,6 +125,7 @@ public class ShortcutKeyViewModel
 
 	public ShortcutKeyViewModel()
 	{
+		// ビューがロードされた時の処理
 		ShortcutKeyWell.Add(Control.LoadedEvent, () =>
 		{
 			Debug.WriteLine("ShortcutKeyView Loaded");
@@ -144,7 +145,7 @@ public class ShortcutKeyViewModel
 
 			return default;
 		});
-
+		// ビューがアンロードされた時の処理
 		ShortcutKeyWell.Add(Control.UnloadedEvent, () =>
 		{
 			Debug.WriteLine("ShortcutKeyView Unloaded");

@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using SearchLight.Models.Config;
 using SearchLight.ViewModels;
 using WebViewControl;
 
@@ -16,7 +17,6 @@ public partial class BrowserWindow : Window
 		Closing += (s, e) =>
 		{
 			((Window)s).Hide();
-			(DataContext as BrowserWindowViewModel).CurrentAddress = "about:blank";
 			e.Cancel = true;
 		};
 	}
