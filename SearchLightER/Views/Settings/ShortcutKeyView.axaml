@@ -24,32 +24,36 @@
 				
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
-						<ComboBox MinWidth="200" IsVisible="{Binding HotKeyPresetList.Count}" SelectedIndex="{Binding SelectedPresetIndex}" ItemsSource="{Binding HotKeyPresetList}" SelectedItem="{Binding SelectedPresetItem}">
+						<!--プリセット選択リスト-->
+						<ComboBox IsVisible="{Binding HotKeyPresetList.Count}" MinWidth="200" SelectedIndex="{Binding SelectedPresetIndex}" ItemsSource="{Binding HotKeyPresetList}" SelectedItem="{Binding SelectedPresetItem}">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
 									<TextBlock Text="{Binding Name}"/>
 								</DataTemplate>
 							</ComboBox.ItemTemplate>
 						</ComboBox>
+						<!--プリセット作成ボタン-->
 						<Button Content="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}"/>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 
-				<ui:SettingsExpander IsEnabled="{Binding HotKeyPresetList.Count}" Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol='Keyboard'}">
+				<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol='Keyboard'}">
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
+							<!--登録キーテキスト-->
 							<TextBlock Text="{Binding RegisteredKeysText}" VerticalAlignment="Center"/>
-							<Button Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
+							<!--キー登録ボタン-->
+							<Button IsEnabled="{Binding SelectedActionItem, Converter={x:Static ObjectConverters.IsNotNull}}" Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
 						</StackPanel>
 					</ui:SettingsExpander.Footer>
 
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander IsEnabled="{Binding HotKeyPresetList.Count}" IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol='ArrowUpRight'}">
+				<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol='ArrowUpRight'}">
 
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
-							<ComboBox MinWidth="200" IsEnabled="{Binding HotKeyActionList, Converter={x:Static ObjectConverters.IsNotNull}}" SelectedIndex="{Binding SelectedActionIndex}" ItemsSource="{Binding HotKeyActionList}" SelectedItem="{Binding SelectedActionItem}">
+							<ComboBox IsEnabled="{Binding SelectedActionItem, Converter={x:Static ObjectConverters.IsNotNull}}" MinWidth="200" SelectedIndex="{Binding SelectedActionIndex}" ItemsSource="{Binding HotKeyActionList}" SelectedItem="{Binding SelectedActionItem}">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">

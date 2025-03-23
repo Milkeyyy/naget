@@ -78,7 +78,7 @@ public class ShortcutKeyViewModel
 	/// <summary>
 	/// 選択中のアクションのオブジェクト (リストの選択項目へバインドされるオブジェクト)
 	/// </summary>
-	public HotKeyAction SelectedActionItem { get; set; }
+	public HotKeyAction? SelectedActionItem { get; set; }
 	/// <summary>
 	/// 選択中のアクションのタイプ
 	/// </summary>
@@ -104,7 +104,7 @@ public class ShortcutKeyViewModel
 	/// <summary>
 	/// 選択中の検索エンジン (リストの選択項目へバインドされるオブジェクト)
 	/// </summary>
-	public SearchEngineClass SelectedSearchEngineItem { get; set; }
+	public SearchEngineClass? SelectedSearchEngineItem { get; set; }
 	/// <summary>
 	/// 選択中の検索エンジンのインデックス
 	/// </summary>
@@ -115,6 +115,7 @@ public class ShortcutKeyViewModel
 	public bool SearchEngineListIsVisible { get; set; }
 	#endregion
 
+	public bool ViewIsLoaded { get; set; }
 	public bool HotKeyPresetListLoaded { get; set; }
 	public bool HotKeyPresetLoaded { get; set; }
 	public bool HotKeyActionLoaded { get; set; }
@@ -130,7 +131,9 @@ public class ShortcutKeyViewModel
 
 			RegisteredKeysText = string.Empty;
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
-			
+
+			ViewIsLoaded = true;
+
 			// プリセット等を読み込む 登録されているプリセットの個数が0の場合はnull
 			LoadPresetList();
 
@@ -181,12 +184,12 @@ public class ShortcutKeyViewModel
 				{
 					RegisteredKeysText = keys;
 				});
+				// キー登録を開始する
 				var result = await ConfigManager.HotKeyManager.StartKeyRegistrationAsync(SelectedPresetId, progress);
-				// キー登録が完了した場合は登録されたキーを表示する
-				if (result != string.Empty && result != null)
+				if (result != null)
 				{
 					var keys = ConfigManager.HotKeyManager.GetHotKeyGroupFromKey(result);
-					RegisteredKeysText = keys?.ToString() ?? string.Empty;
+					//RegisteredKeysText = keys?.ToString() ?? string.Empty;
 				}
 				KeyRegistrationMode = false;
 			}
@@ -217,39 +220,26 @@ public class ShortcutKeyViewModel
 	{
 		Debug.WriteLine("Load Preset List");
 
-		//HotKeyPresetListLoaded = false;
-
 		// プリセットの一覧を取得
 		HotKeyPresetList = ConfigManager.HotKeyManager.List;
 
 		if (HotKeyPresetList.Count == 0) return;
 
-		// アクションの一覧を取得
-		//HotKeyActionList = Models.Config.HotKey.Action.HotKeyActionList.Actions.ToList();
-		//SelectedActionIndex = 0;
-
-		// 検索エンジンの一覧を取得
-		//SearchEngineList = SearchEngineManager.EngineList;
-		//SearchEngineListSelectedIndex = 0;
-
 		HotKeyPresetListLoaded = true;
 
-		// 選択中のプリセットをリセット
-		SelectedPresetIndex = 0;
+		// すべての選択リストを初期化
+		SelectedPresetIndex = -1;
+		SelectedActionIndex = -1;
+		SearchEngineListSelectedIndex = -1;
+		SelectedPresetItem = null;
+		SelectedActionItem = null;
+		SelectedSearchEngineItem = null;
 
-		if (SelectedPresetItem != null)
+		// プリセット一覧が1つ以上の場合は選択リストのインデックスを0に設定する
+		if (HotKeyPresetList.Count > 0)
 		{
-			// 選択中のアクションを選択されているプリセットのアクションにする
-			//SelectedActionItem = HotKeyAction.GetActionByType(SelectedPresetItem.Action.ActionType);
-			//LoadSearchEngine();
+			SelectedPresetIndex = 0;
 		}
-
-		RegisteredKeysText = HotKeyPresetList[SelectedPresetIndex].ToString();
-	}
-
-	private void LoadActionList()
-	{
-		//SelectedActionItem = HotKeyAction.Get();
 	}
 
 	private void SaveValue()
@@ -324,7 +314,7 @@ public class ShortcutKeyViewModel
 
 		HotKeyPresetLoaded = false;
 
-		if (!HotKeyPresetListLoaded || value == null) return default;
+		if (!ViewIsLoaded || !HotKeyPresetListLoaded || value == null) return default;
 
 		// 選択されたプリセットに登録されているキーを表示する
 		RegisteredKeysText = value?.ToString() ?? Resources.Settings_ShortcutKey_Preset_NotSet;
@@ -336,7 +326,7 @@ public class ShortcutKeyViewModel
 		else SelectedActionType = value.ActionType;
 
 		// 選択されたアクションがウェブ検索の場合は検索エンジンのリストを表示する
-		SearchEngineListIsVisible = value.Action.ActionType == HotKeyActionType.WebSearch;
+		SearchEngineListIsVisible = value.Action?.ActionType == HotKeyActionType.WebSearch;
 
 		// アクションがウェブ検索の場合は検索エンジンを設定されているものにする
 		if (value.ActionType == HotKeyActionType.WebSearch)
@@ -362,7 +352,7 @@ public class ShortcutKeyViewModel
 	{
 		Debug.WriteLine("SelectedActionItem Changed: " + value?.Name);
 
-		if (!HotKeyPresetListLoaded || value == null) return default;
+		if (!ViewIsLoaded || !HotKeyPresetListLoaded || value == null) return default;
 
 		HotKeyActionLoaded = false;
 
@@ -405,7 +395,7 @@ public class ShortcutKeyViewModel
 	{
 		Debug.WriteLine("SelectedSearchEngineItem Changed: " + value?.Id);
 
-		if (!HotKeyPresetListLoaded || value == null) return default;
+		if (!ViewIsLoaded || !HotKeyPresetListLoaded || value == null) return default;
 
 		if (HotKeyPresetList?.Count != 0 && SelectedPresetItem != null && SearchEngineList != null)
 		{
