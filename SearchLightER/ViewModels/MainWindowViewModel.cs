@@ -21,11 +21,7 @@ public class MainWindowViewModel
 		set { _currentSearchEngineId = value; }
 	}
 	private string? _currentSearchEngineName;
-	public string? CurrentSearchEngineName // 名前
-	{
-		get { return _currentSearchEngine?.Name; }
-		set { _currentSearchEngineName = value; }
-	}
+	public string? CurrentSearchEngineName { get; set; }
 
 	// 検索実行コマンド
 	public Command SearchCommand { get; }
@@ -62,6 +58,9 @@ public class MainWindowViewModel
 		{
 			_currentSearchEngine = SearchEngineManager.EngineList[0];
 		}
+		// 検索エンジンの名前を更新
+		CurrentSearchEngineName = _currentSearchEngine.Name;
+		// ウィンドウを表示
 		App.MainWindow.Show();
 	}
 
