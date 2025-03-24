@@ -125,9 +125,7 @@ public class HotKeyManager : IDisposable
 				if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
 				{
 					Debug.WriteLine("HotKey pressed: " + group.Name);
-					//if (group.Method != null) Dispatcher.UIThread.Invoke(group.Method);
-					// 設定されたIDの検索エンジンで検索を実行 TODO: 将来的に検索以外のこともできるようにする
-					//Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(group.ActionObj.Id));
+					e.SuppressEvent = true;
 					group.Action.Action();
 				}
 			}
