@@ -62,6 +62,8 @@ public class MainWindowViewModel
 		CurrentSearchEngineName = _currentSearchEngine.Name;
 		// ウィンドウを表示
 		App.MainWindow.Show();
+		// ウィンドウをアクティブにする
+		App.MainWindow.Activate();
 	}
 
 	public MainWindowViewModel()
