@@ -8,6 +8,7 @@
 		xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="SearchLight.Views.SettingsWindow"
+		Icon="/Assets/Icon.ico"
 		Title="SettingsWindow"
 		WindowStartupLocation="CenterScreen"
 		>

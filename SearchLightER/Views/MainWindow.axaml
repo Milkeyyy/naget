@@ -7,7 +7,7 @@
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="60"
 		x:Class="SearchLight.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
-		Icon="/Assets/avalonia-logo.ico"
+		Icon="/Assets/Icon.ico"
 		Title="SearchLight"
 		TransparencyLevelHint="AcrylicBlur"
 		Background="Transparent"
