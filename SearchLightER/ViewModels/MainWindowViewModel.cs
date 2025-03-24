@@ -36,8 +36,6 @@ public class MainWindowViewModel
 		// ブラウザーで検索結果を開く
 		//(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = "https://www.google.com/search?q=" + SearchWord;
 		(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = string.Format(CultureInfo.GetCultureInfo("en-US"), _currentSearchEngine.Uri, SearchWord);
-		// 検索テキストの内容を消す
-		SearchWord = string.Empty;
 		// 検索画面を閉じる
 		App.MainWindow.Hide();
 	}
@@ -60,6 +58,8 @@ public class MainWindowViewModel
 		}
 		// 検索エンジンの名前を更新
 		CurrentSearchEngineName = _currentSearchEngine.Name;
+		// 検索テキストの内容を消す
+		SearchWord = string.Empty;
 		// ウィンドウを表示
 		App.MainWindow.Show();
 		// ウィンドウをアクティブにする
