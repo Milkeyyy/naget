@@ -15,7 +15,7 @@ public class HotKeyManager : IDisposable
 	/// <summary>
 	/// キーのグローバルフック
 	/// </summary>
-	private readonly TaskPoolGlobalHook hook;
+	private readonly SimpleGlobalHook hook;
 	/// <summary>
 	/// 押されているキーの一覧
 	/// </summary>
@@ -34,7 +34,7 @@ public class HotKeyManager : IDisposable
 
 	public HotKeyManager()
 	{
-		hook = new TaskPoolGlobalHook();
+		hook = new SimpleGlobalHook();
 		hook.KeyPressed += Hook_KeyPressed;
 		hook.KeyReleased += Hook_KeyReleased;
 
