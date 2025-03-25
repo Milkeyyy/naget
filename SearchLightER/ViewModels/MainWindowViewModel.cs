@@ -84,6 +84,7 @@ public class MainWindowViewModel
 		App.MainWindow.Show();
 		// ウィンドウをアクティブにする
 		App.MainWindow.Activate();
+		App.MainWindow.Focus();
 	}
 
 	public MainWindowViewModel()
