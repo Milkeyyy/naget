@@ -60,6 +60,7 @@ public class MainWindowViewModel
 		// 検索テキストの内容を消す
 		SearchWord = string.Empty;
 		// ウィンドウを表示
+		App.MainWindow.ShowActivated = true;
 		App.MainWindow.Show();
 		// ウィンドウをアクティブにする
 		App.MainWindow.Activate();
