@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +30,8 @@ public class HotKeyManager : IDisposable
 	/// </summary>
 	public ReadOnlyCollection<HotKeyGroup> List => new(Groups);
 
+	public Point MousePointerCoordinates { get; private set; } = new(0, 0);
+
 	private int keyRegsitrationMode;
 	private HashSet<KeyCode> registrationQueuedKeys;
 
@@ -37,6 +40,7 @@ public class HotKeyManager : IDisposable
 		hook = new SimpleGlobalHook();
 		hook.KeyPressed += Hook_KeyPressed;
 		hook.KeyReleased += Hook_KeyReleased;
+		hook.MouseMoved += Hook_MouseMoved;
 
 		Groups = [];
 
@@ -98,6 +102,11 @@ public class HotKeyManager : IDisposable
 		var t = hook.RunAsync();
 	}
 
+	/// <summary>
+	/// キーが押された時のイベント
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
 	private void Hook_KeyPressed(object? sender, KeyboardHookEventArgs e)
 	{
 		//Debug.WriteLine("Key pressed: " + e.Data.KeyCode);
@@ -132,9 +141,24 @@ public class HotKeyManager : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// キーが離された時のイベント
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
 	private void Hook_KeyReleased(object? sender, KeyboardHookEventArgs e)
 	{
 		pressedKeys.Remove(e.Data.KeyCode);
+	}
+
+	/// <summary>
+	/// マウスが移動した時のイベント
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void Hook_MouseMoved(object? sender, MouseHookEventArgs e)
+	{
+		MousePointerCoordinates = new(e.Data.X, e.Data.Y);
 	}
 
 	private HotKeyGroup? _GetHotKeyGroupFromKey(string id)

@@ -1,4 +1,6 @@
-﻿using Epoxy;
+﻿using Avalonia.Platform;
+using Epoxy;
+using SearchLight.Models.Config;
 using SearchLight.Models.SearchEngine;
 using System.Globalization;
 
@@ -59,6 +61,24 @@ public class MainWindowViewModel
 		CurrentSearchEngineName = _currentSearchEngine.Name;
 		// 検索テキストの内容を消す
 		SearchWord = string.Empty;
+
+		// マウスカーソルがあるディスプレイの中央位置を取得
+		// 取得できた場合はウィンドウの位置をディスプレイの中央にする
+		Screen? screen = App.MainWindow.Screens.ScreenFromPoint(
+			new(
+				ConfigManager.HotKeyManager.MousePointerCoordinates.X,
+				ConfigManager.HotKeyManager.MousePointerCoordinates.Y
+			)
+		);
+		if (screen != null)
+		{
+			var screenCenterPos = screen.WorkingArea.Center;
+			App.MainWindow.Position = new(
+				(int)(screenCenterPos.X - (App.MainWindow.Width / 2)),
+				(int)(screenCenterPos.Y - (App.MainWindow.Height / 2))
+			);
+		}
+
 		// ウィンドウを表示
 		App.MainWindow.ShowActivated = true;
 		App.MainWindow.Show();
