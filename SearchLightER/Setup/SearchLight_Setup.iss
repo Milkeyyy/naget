@@ -3,7 +3,10 @@
 
 #define MyAppName "SearchLight"
 #define MyAppInstallName "SearchLightR"
-#define MyAppVersion "1.0.0-alpha.1"
+#define MyAppVersion "1.0.0"
+#define MyAppReleaseChannel "alpha"
+#define MyAppReleaseNumber "1"
+#define MyAppVersionText MyAppVersion + "-" + MyAppReleaseChannel + "." + MyAppReleaseNumber
 #define MyAppPublisher "Milkeyyy"
 #define MyAppURL "https://milkeyyy.com/"
 #define MyAppExeName "SearchLight.exe"
@@ -16,13 +19,14 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{49FA0AF3-DB16-481F-8A64-8A7F9C34ABF1}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
+AppVersion={#MyAppVersionText}
+AppVerName={#MyAppName}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppCopyright=Copyright (C) 2025 {#MyAppPublisher}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
+VersionInfoVersion={#MyAppVersion}
 DefaultDialogFontName=Yu Gothic UI
 DefaultDirName={autopf}\{#MyAppInstallName}
 DisableDirPage=yes
@@ -71,4 +75,4 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Messages]
-BeveledLabel={#MyAppName} Setup [Version: {#MyAppVersion}]
+BeveledLabel={#MyAppName} Setup [Version: {#MyAppVersionText}]
