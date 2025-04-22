@@ -1,10 +1,10 @@
 ﻿using Avalonia.Platform;
 using Epoxy;
-using SearchLight.Models.Config;
-using SearchLight.Models.SearchEngine;
+using naget.Models.Config;
+using naget.Models.SearchEngine;
 using System.Globalization;
 
-namespace SearchLight.ViewModels;
+namespace naget.ViewModels;
 
 [ViewModel]
 public class MainWindowViewModel

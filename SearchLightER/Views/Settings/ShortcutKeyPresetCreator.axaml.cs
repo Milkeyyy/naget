@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
-using SearchLight.ViewModels.Settings;
+using naget.ViewModels.Settings;
 
-namespace SearchLight.Views.Settings;
+namespace naget.Views.Settings;
 
 public partial class ShortcutKeyPresetCreator : UserControl
 {

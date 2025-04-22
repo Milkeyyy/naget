@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SearchLight.Models.SearchEngine;
+namespace naget.Models.SearchEngine;
 
 public class SearchEngineClass(string name, string uri, string? id = null)
 {

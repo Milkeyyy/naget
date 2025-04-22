@@ -1,6 +1,6 @@
 ﻿using Epoxy;
 
-namespace SearchLight.ViewModels;
+namespace naget.ViewModels;
 
 [ViewModel]
 public class AppViewModel

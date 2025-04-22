@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
-using SearchLight.ViewModels;
+using naget.ViewModels;
 
-namespace SearchLight.Views;
+namespace naget.Views;
 
 public partial class MainWindow : Window
 {

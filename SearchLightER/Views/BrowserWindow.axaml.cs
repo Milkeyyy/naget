@@ -1,9 +1,9 @@
 ﻿using Avalonia.Controls;
-using SearchLight.Models.Config;
-using SearchLight.ViewModels;
+using naget.Models.Config;
+using naget.ViewModels;
 using WebViewControl;
 
-namespace SearchLight.Views;
+namespace naget.Views;
 
 public partial class BrowserWindow : Window
 {

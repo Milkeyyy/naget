@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SearchLight.Assets.Locales {
+namespace naget.Assets.Locales {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace SearchLight.Assets.Locales {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SearchLight.Assets.Locales.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("naget.Assets.Locales.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
-        ///   SearchLight に類似しているローカライズされた文字列を検索します。
+        ///   naget に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string App_Name {
             get {

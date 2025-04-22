@@ -1,4 +1,4 @@
-﻿using SearchLight.Assets.Locales;
+﻿using naget.Assets.Locales;
 using SharpHook;
 using SharpHook.Native;
 using System;
@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SearchLight.Models.Config.HotKey;
+namespace naget.Models.Config.HotKey;
 
 public class HotKeyManager : IDisposable
 {

@@ -1,10 +1,10 @@
 ﻿using Avalonia.Controls;
-using SearchLight.Models.Config.HotKey;
+using naget.Models.Config.HotKey;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 
-namespace SearchLight.Models.Config;
+namespace naget.Models.Config;
 
 public static class ConfigManager
 {

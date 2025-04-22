@@ -2,17 +2,17 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SearchLight.Models.Config;
-using SearchLight.Models.SearchEngine;
-using SearchLight.ViewModels;
-using SearchLight.Views;
+using naget.Models.Config;
+using naget.Models.SearchEngine;
+using naget.ViewModels;
+using naget.Views;
 using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 
-namespace SearchLight;
+namespace naget;
 
 public class App : Application
 {

@@ -2,7 +2,7 @@
 using FluentIcons.Avalonia;
 using System;
 
-namespace SearchLight
+namespace naget
 {
 	internal sealed class Program
 	{

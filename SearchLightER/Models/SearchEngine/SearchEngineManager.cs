@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 
-namespace SearchLight.Models.SearchEngine;
+namespace naget.Models.SearchEngine;
 
 public static class SearchEngineManager
 {

@@ -7,7 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <IncludeAvaloniaGenerators>true</IncludeAvaloniaGenerators>
-    <AssemblyName>SearchLight</AssemblyName>
+    <AssemblyName>naget</AssemblyName>
     <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
     <Copyright>Copyright (C) 2025 Milkeyyy</Copyright>
     <Description>SearchLight</Description>

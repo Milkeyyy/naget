@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
-namespace SearchLight.Models.Config;
+namespace naget.Models.Config;
 
 public class ConfigBaseClass
 {

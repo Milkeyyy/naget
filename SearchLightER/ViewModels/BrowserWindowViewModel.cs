@@ -1,13 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Epoxy;
-using SearchLight.Models.Config;
-using SearchLight.Views;
+using naget.Models.Config;
+using naget.Views;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WebViewControl;
 
-namespace SearchLight.ViewModels;
+namespace naget.ViewModels;
 
 [ViewModel]
 public class BrowserWindowViewModel

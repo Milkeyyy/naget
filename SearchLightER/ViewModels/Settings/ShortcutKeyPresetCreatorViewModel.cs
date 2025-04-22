@@ -1,7 +1,7 @@
 ﻿using Epoxy;
-using SearchLight.Models.Config;
+using naget.Models.Config;
 
-namespace SearchLight.ViewModels.Settings;
+namespace naget.ViewModels.Settings;
 
 [ViewModel]
 public class ShortcutKeyPresetCreatorViewModel

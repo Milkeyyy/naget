@@ -1,19 +1,19 @@
 ﻿using Avalonia.Controls;
 using Epoxy;
 using FluentAvalonia.UI.Controls;
-using SearchLight.Assets.Locales;
-using SearchLight.Models.Config;
-using SearchLight.Models.Config.HotKey;
-using SearchLight.Models.SearchEngine;
-using SearchLight.Views;
-using SearchLight.Views.Settings;
+using naget.Assets.Locales;
+using naget.Models.Config;
+using naget.Models.Config.HotKey;
+using naget.Models.SearchEngine;
+using naget.Views;
+using naget.Views.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace SearchLight.ViewModels.Settings;
+namespace naget.ViewModels.Settings;
 
 [ViewModel]
 public class ShortcutKeyViewModel

@@ -2,7 +2,7 @@
 using FluentAvalonia.UI.Controls;
 using System.Threading.Tasks;
 
-namespace SearchLight.Views;
+namespace naget.Views;
 
 public static class SuperDialog
 {

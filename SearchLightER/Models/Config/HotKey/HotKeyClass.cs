@@ -1,11 +1,11 @@
-﻿using SearchLight.Assets.Locales;
+﻿using naget.Assets.Locales;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 
-namespace SearchLight.Models.Config.HotKey;
+namespace naget.Models.Config.HotKey;
 
 public class HotKeyGroup
 {
