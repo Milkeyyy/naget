@@ -6,10 +6,5 @@ namespace naget.ViewModels.Settings;
 [ViewModel]
 public class ShortcutKeyPresetCreatorViewModel
 {
-	public string PresetName { get; set; }
-
-	public ShortcutKeyPresetCreatorViewModel()
-	{
-		PresetName = string.Empty;
-	}
+	public string PresetName { get; set; } = string.Empty;
 }
