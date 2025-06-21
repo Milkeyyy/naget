@@ -83,6 +83,9 @@
     <Compile Update="Views\BrowserWindow.axaml.cs">
       <DependentUpon>BrowserWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Settings\SearchEngineDialogContent.axaml.cs">
+      <DependentUpon>SearchEngineDialogContent.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Settings\ShortcutKeyPresetCreator.axaml.cs">
       <DependentUpon>ShortcutKeyPresetCreator.axaml</DependentUpon>
     </Compile>

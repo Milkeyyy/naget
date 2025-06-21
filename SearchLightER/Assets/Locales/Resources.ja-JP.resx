@@ -234,4 +234,16 @@
   <data name="Settings.ShortcutKey.Action.None" xml:space="preserve">
     <value>なし</value>
   </data>
+  <data name="Settings.Search.SearchEngine" xml:space="preserve">
+    <value>検索エンジン</value>
+  </data>
+  <data name="Settings.Search.Add" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="Settings.Search.Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Settings.Search.Edit" xml:space="preserve">
+    <value>編集</value>
+  </data>
 </root>

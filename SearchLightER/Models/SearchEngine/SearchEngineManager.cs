@@ -39,7 +39,7 @@ public static class SearchEngineManager
 	/// <summary>
 	/// 検索エンジンのリストを新規作成する
 	/// </summary>
-	public static void Create()
+	public static void CreateList()
 	{
 		//_engineCollection.List = [.. _defaultEngine];
 		_engineList.List = new(_defaultEngineList);
@@ -71,14 +71,14 @@ public static class SearchEngineManager
 			}
 			else
 			{
-				Create(); // null の場合は新規作成する
+				CreateList(); // null の場合は新規作成する
 				Save();
 			}
 		}
 		// 存在しない場合は新規作成する
 		else
 		{
-			Create();
+			CreateList();
 			Save();
 		}
 	}

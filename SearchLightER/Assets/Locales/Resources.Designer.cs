@@ -97,6 +97,42 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Add に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_Add {
+            get {
+                return ResourceManager.GetString("Settings.Search.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Delete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_Delete {
+            get {
+                return ResourceManager.GetString("Settings.Search.Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Edit に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_Edit {
+            get {
+                return ResourceManager.GetString("Settings.Search.Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Shortcut Key に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_ShortcutKey {
