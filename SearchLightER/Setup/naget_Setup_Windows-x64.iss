@@ -44,7 +44,8 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 OutputDir=..\..\_Pack
 OutputBaseFilename=naget_Setup
-Compression=lzma
+SetupIconFile=..\Assets\Logo\naget.ico
+Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
 
