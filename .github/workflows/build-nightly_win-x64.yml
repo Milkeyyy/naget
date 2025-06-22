@@ -115,7 +115,7 @@ jobs:
           prerelease: true
           body: 'Nightly - Commit ${{ github.sha }}'
           files: |
-            ./naget_Setup.exe
+            /naget_Setup.exe
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5
