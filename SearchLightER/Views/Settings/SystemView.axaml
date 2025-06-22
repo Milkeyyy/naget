@@ -2,7 +2,48 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:vm="using:naget.ViewModels.Settings"
+			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="naget.Views.Settings.SystemView">
-	System
+			 x:Class="naget.Views.Settings.SystemView"
+			 x:DataType="vm:SystemViewModel"
+			 epoxy:Fountain.Well="{Binding SystemViewWell}"
+>
+	<Design.DataContext>
+		<vm:SystemViewModel/>
+	</Design.DataContext>
+
+	<Panel Margin="20">
+		<StackPanel>
+			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_System}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+
+			<ui:SettingsExpander IsExpanded="True" IconSource="Earth">
+				<!--ヘッダー&注意書きテキスト-->
+				<ui:SettingsExpander.Header>
+					<StackPanel>
+						<!--ヘッダーテキスト-->
+						<TextBlock Text="{x:Static lang:Resources.Settings_System_Language}" VerticalAlignment="Center"/>
+						<!--設定の適用にはアプリの再起動が必要ですよテキスト-->
+						<TextBlock IsVisible="{Binding LanguageNoteTextIsVisible}" Text="{x:Static lang:Resources.Settings_System_Language_RequiredRestart}" FontSize="13" VerticalAlignment="Center"/>
+					</StackPanel>
+				</ui:SettingsExpander.Header>
+
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--言語選択リスト-->
+						<ComboBox MinWidth="200" ItemsSource="{Binding LanguageList}" SelectedItem="{Binding SelectedLanguage}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding DisplayName}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+		</StackPanel>
+	</Panel>
 </UserControl>

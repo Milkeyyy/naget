@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using naget.Models.Config.HotKey;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text.Json;
 
@@ -100,5 +101,16 @@ public static class ConfigManager
 			}
 			HotKeyManager.LoadGroups(Config.HotKeys);
 		}
+	}
+
+	/// <summary>
+	/// 表示言語を設定する (コンフィグの値は更新されない)
+	/// </summary>
+	/// <param name="code"></param>
+	public static void SetLanguage(string code)
+	{
+ 		Debug.WriteLine("Setting language to: " + code);
+		// 言語コードを設定する
+		Assets.Locales.Resources.Culture = new CultureInfo(Config.Language);
 	}
 }

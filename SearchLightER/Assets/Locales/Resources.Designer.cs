@@ -331,6 +331,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Language に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_System_Language {
+            get {
+                return ResourceManager.GetString("Settings.System.Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   You need to restart the application for the settings to take effect. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_System_Language_RequiredRestart {
+            get {
+                return ResourceManager.GetString("Settings.System.Language.RequiredRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Design に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Tab_Design {

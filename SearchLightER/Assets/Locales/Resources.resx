@@ -267,4 +267,10 @@
   <data name="Settings.Search.SearchEngine.Dialog.Delete.Confirm" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Settings.System.Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings.System.Language.RequiredRestart" xml:space="preserve">
+    <value>You need to restart the application for the settings to take effect.</value>
+  </data>
 </root>

@@ -267,4 +267,10 @@
   <data name="Settings.Search.SearchEngine.Dialog.Delete.Confirm" xml:space="preserve">
     <value>削除</value>
   </data>
+  <data name="Settings.System.Language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Settings.System.Language.RequiredRestart" xml:space="preserve">
+    <value>設定を適用するにはアプリケーションの再起動が必要です。</value>
+  </data>
 </root>

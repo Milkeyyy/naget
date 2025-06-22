@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace naget.Models.Config;
@@ -26,13 +27,20 @@ public class ConfigBaseClass
 
 public class ConfigClass
 {
+	// 対応言語一覧
+	[JsonIgnore]
+	public static readonly ReadOnlyCollection<Language> LanguageList = new([
+		new("en-US", "English (US)"),
+		new("ja-JP", "日本語 - Japanese")
+	]);
+	
 	public string Language { get; set; }
 	public List<HotKey.HotKeyGroup> HotKeys { get; set; }
 	public WindowConfig BrowserWindow { get; set; }
 
 	public ConfigClass()
 	{
-		Language = "en-US";
+		Language = LanguageList[0].Code;
 		HotKeys = [];
 		BrowserWindow = new WindowConfig();
 	}
@@ -66,6 +74,12 @@ public class WindowConfig
 		this.Width = Width;
 		this.Height = Height;
 	}
+}
+
+public class Language(string code, string displayName)
+{
+	public string Code { get; } = code;
+	public string DisplayName { get; } = displayName;
 }
 
 /*public class BrowserWindowConfig

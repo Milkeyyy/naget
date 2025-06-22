@@ -1,6 +1,5 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
+using naget.ViewModels.Settings;
 
 namespace naget.Views.Settings;
 
@@ -9,5 +8,7 @@ public partial class SystemView : UserControl
 	public SystemView()
 	{
 		InitializeComponent();
+
+		DataContext = new SystemViewModel();
 	}
 }
