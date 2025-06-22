@@ -1,6 +1,6 @@
 ﻿using naget.Assets.Locales;
 using SharpHook;
-using SharpHook.Native;
+using SharpHook.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

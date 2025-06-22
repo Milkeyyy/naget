@@ -1,5 +1,5 @@
 ﻿using naget.Assets.Locales;
-using SharpHook.Native;
+using SharpHook.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
