@@ -12,7 +12,7 @@
 			 x:DataType="vm:SearchViewModel"
 			 epoxy:Fountain.Well="{Binding SearchViewWell}"
 >
-
+	
 	<Design.DataContext>
 		<vm:SearchViewModel/>
 	</Design.DataContext>

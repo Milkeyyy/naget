@@ -186,6 +186,7 @@ public class SearchEngineViewModel
 				await ShowEditDialogAsync();
 				return;
 			}
+
 			// 検索エンジンの情報を更新する
 			SearchEngineManager.Rename(Id, vm.Name);
 			SearchEngineManager.UpdateUri(Id, vm.Url);
