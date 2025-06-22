@@ -81,13 +81,13 @@ jobs:
     - name: Build the Installer
       uses: Minionguyjpro/Inno-Setup-Action@main
       with:
-        path: "${{ env.GITHUB_WORKSPACE }}/SearchLightER/Setup/naget_Setup_Windows-x64.iss"
+        path: ${{ env.GITHUB_WORKSPACE }}/SearchLightER/Setup/naget_Setup_Windows-x64.iss
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build
-        path: "${{ env.GITHUB_WORKSPACE }}/_Pack/naget_Setup.exe"
+        path: ${{ env.GITHUB_WORKSPACE }}/_Pack/naget_Setup.exe
 
   update-nightly-releases:
     name: Update Nightly Releases
