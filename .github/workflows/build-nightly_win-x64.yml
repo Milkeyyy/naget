@@ -74,19 +74,18 @@ jobs:
     - name: Create the app package
       run: dotnet publish -c Release -r win-x64 /p:Platform=x64
 
-    - name: Create directory
-      shell: pwsh
-      run: New-Item -ItemType Directory ".\_Pack"
-
     - name: Create installer
       shell: pwsh
-      run: Start-Process -Wait -FilePath "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" -ArgumentList "${env:GITHUB_WORKSPACE}\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
+      run: |
+        $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+        New-Item -ItemType Directory "${env:GITHUB_WORKSPACE}/SearchLightER/_Pack"
+        $iscc "${env:GITHUB_WORKSPACE}\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build
-        path: "${env:GITHUB_WORKSPACE}/SearchLightER/_Pack/naget_Setup.exe"
+        path: "${{ env:GITHUB_WORKSPACE }}/SearchLightER/_Pack/naget_Setup.exe"
 
   update-nightly-releases:
     name: Update Nightly Releases
