@@ -246,4 +246,16 @@
   <data name="Settings.Search.Edit" xml:space="preserve">
     <value>編集</value>
   </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Add" xml:space="preserve">
+    <value>新しい検索エンジンを追加</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Edit" xml:space="preserve">
+    <value>検索エンジンを編集</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Name" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
 </root>

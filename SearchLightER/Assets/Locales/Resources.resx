@@ -246,4 +246,16 @@
   <data name="Settings.Search.Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Add" xml:space="preserve">
+    <value>Add New Search Engine</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Edit" xml:space="preserve">
+    <value>Edit Search Engine</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
 </root>

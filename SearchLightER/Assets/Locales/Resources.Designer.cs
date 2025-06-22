@@ -133,6 +133,42 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Add New Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Add {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Edit Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Edit {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Name に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Name {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   URL に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Url {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Shortcut Key に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_ShortcutKey {

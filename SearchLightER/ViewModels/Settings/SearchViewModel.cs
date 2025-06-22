@@ -77,7 +77,7 @@ public class SearchViewModel
 			{ DataContext = vm },
 
 			// タイトル
-			Title = Resources.Settings_ShortcutKey_Preset_CreateNewPreset,
+			Title = Resources.Settings_Search_SearchEngine_Dialog_Add,
 
 			// ボタンのテキスト
 			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
@@ -97,7 +97,7 @@ public class SearchViewModel
 			if (string.IsNullOrWhiteSpace(vm.Name) || string.IsNullOrWhiteSpace(vm.Url))
 			{
 				Debug.WriteLine("Search Engine Create Dialog - Preset Name or URL is empty");
-				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_ShortcutKey_Preset_CreateNewPreset, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
+				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_Search_SearchEngine_Dialog_Add, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
 				await ShowInputDialogAsync();
 				return;
 			}
@@ -121,6 +121,7 @@ public class SearchEngineViewModel
 	public string Name { get; set; } = string.Empty;
 	public string Uri { get; set; } = string.Empty;
 
+	public Command EditSearchEngineCommand { get; }
 	public Command DeleteSearchEngineCommand { get; }
 	public Command ReloadSearchEngineCommand { get; }
 
@@ -131,13 +132,70 @@ public class SearchEngineViewModel
 		Uri = searchEngine.Uri;
 		ReloadSearchEngineCommand = reloadCommand;
 
+		// 検索エンジンの編集コマンド
+		EditSearchEngineCommand = Command.Factory.Create(async () =>
+		{
+			Debug.WriteLine($"Edit Search Engine: {Name} ({Id})");
+			await ShowEditDialogAsync();
+		});
+
 		// 検索エンジンの削除コマンド
-		DeleteSearchEngineCommand = Command.Factory.Create(() =>
+		DeleteSearchEngineCommand = Command.Factory.Create(async () =>
 		{
 			Debug.WriteLine($"Delete Search Engine: {Name} ({Id})");
 			SearchEngineManager.Delete(Id);
 			ReloadSearchEngineCommand.Execute(null);
-			return default;
 		});
+	}
+
+	public async Task ShowEditDialogAsync()
+	{
+		var vm = new SearchEngineDialogContentViewModel();
+		var dialog = new ContentDialog
+		{
+			// 作成画面
+			Content = new SearchEngineDialogContent
+			{ DataContext = vm },
+
+			// タイトル
+			Title = Resources.Settings_Search_SearchEngine_Dialog_Edit,
+
+			// ボタンのテキスト
+			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
+			PrimaryButtonText = Resources.Strings_Ok,
+			CloseButtonText = Resources.Strings_Cancel,
+
+			// 作成ボタンが押された時の処理
+			//PrimaryButtonCommand = command
+		};
+
+		// ダイアログのデータコンテキストに現在の検索エンジンの情報を設定する
+		vm.Name = Name;
+		vm.Url = Uri;
+
+		// ダイアログを表示する
+		var result = await dialog.ShowAsync();
+
+		if (result == ContentDialogResult.Primary)
+		{
+			Debug.WriteLine("Search Engine Create Dialog - User clicked Create");
+			if (string.IsNullOrWhiteSpace(vm.Name) || string.IsNullOrWhiteSpace(vm.Url))
+			{
+				Debug.WriteLine("Search Engine Create Dialog - Preset Name or URL is empty");
+				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_Search_SearchEngine_Dialog_Edit, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
+				await ShowEditDialogAsync();
+				return;
+			}
+			// 検索エンジンの情報を更新する
+			SearchEngineManager.Rename(Id, vm.Name);
+			SearchEngineManager.UpdateUri(Id, vm.Url);
+
+			// 検索エンジン一覧を読み込み直す
+			ReloadSearchEngineCommand.Execute(null);
+		}
+		else
+		{
+			Debug.WriteLine("Search Engine Create Dialog - User clicked Cancel");
+		}
 	}
 }
