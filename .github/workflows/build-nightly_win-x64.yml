@@ -80,7 +80,7 @@ jobs:
 
     - name: Create installer
       shell: pwsh
-      run: Start-Process -FilePath "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" -ArgumentList "${env:GITHUB_WORKSPACE}\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
+      run: Start-Process -Wait -FilePath "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" -ArgumentList "${env:GITHUB_WORKSPACE}\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
