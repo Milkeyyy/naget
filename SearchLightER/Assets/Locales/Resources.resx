@@ -273,4 +273,7 @@
   <data name="Settings.System.Language.RequiredRestart" xml:space="preserve">
     <value>You need to restart the application for the settings to take effect.</value>
   </data>
+  <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
+    <value>Restart the Application to Apply</value>
+  </data>
 </root>

@@ -349,6 +349,15 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Restart the Application to Apply に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_System_Language_RestartApplication {
+            get {
+                return ResourceManager.GetString("Settings.System.Language.RestartApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Design に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Tab_Design {

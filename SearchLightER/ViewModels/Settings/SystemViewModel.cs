@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Epoxy;
 using naget.Models.Config;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -19,6 +20,8 @@ public class SystemViewModel
 
 	private bool ViewIsLoaded;
 
+	public Command RestartAppCommand { get; }
+
 	public SystemViewModel()
 	{
 		// ビューがロードされた時の処理
@@ -30,6 +33,13 @@ public class SystemViewModel
 			// ローカライズ設定の言語と選択リストの言語が異なる場合は注意書きテキストを表示する
 			LanguageNoteTextIsVisible = SelectedLanguage.Code != Assets.Locales.Resources.Culture.Name;
 			ViewIsLoaded = true;
+			return default;
+		});
+
+		RestartAppCommand = Command.Factory.Create(() =>
+		{
+			Debug.WriteLine("Execute Restart App Command");
+			App.RestartApplication();
 			return default;
 		});
 	}

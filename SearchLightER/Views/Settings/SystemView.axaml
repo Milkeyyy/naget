@@ -41,6 +41,14 @@
 								</DataTemplate>
 							</ComboBox.ItemTemplate>
 						</ComboBox>
+						<!--再起動ボタン-->
+						<Button Classes="accent" Margin="10 0 0 0" IsVisible="{Binding LanguageNoteTextIsVisible}" IsEnabled="{Binding LanguageNoteTextIsVisible}" Command="{Binding RestartAppCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_System_Language_RestartApplication}" Margin="0 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 			</ui:SettingsExpander>

@@ -50,6 +50,30 @@ public class App : Application
 		Environment.Exit(0);
 	}
 
+	public static void RestartApplication()
+	{
+		// 1. 新しいプロセスを起動するための情報を設定する
+		var processPath = Environment.ProcessPath;
+		
+		if (processPath != null)
+		{
+			Debug.WriteLine("アプリケーションを再起動します...");
+
+			// 2. 新しいプロセスを開始する
+			Process.Start(new ProcessStartInfo(processPath)
+			{
+				UseShellExecute = true // OSのシェル経由で起動する
+			});
+		}
+		else
+		{
+			Debug.WriteLine("再起動に失敗しました: 実行ファイルのパスを取得できませんでした。");
+		}
+
+		// 3. 現在のプロセスを終了する
+		Exit();
+	}
+
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

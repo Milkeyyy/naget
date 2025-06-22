@@ -273,4 +273,7 @@
   <data name="Settings.System.Language.RequiredRestart" xml:space="preserve">
     <value>設定を適用するにはアプリケーションの再起動が必要です。</value>
   </data>
+  <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
+    <value>アプリケーションを再起動して適用</value>
+  </data>
 </root>
