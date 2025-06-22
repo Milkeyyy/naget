@@ -313,6 +313,12 @@ public class ShortcutKeyViewModel
 	{
 		Debug.WriteLine("SelectedPresetItem Changed: " + SelectedPresetName);
 
+		if (value == null)
+		{
+			Debug.WriteLine("SelectedPresetItem is null");
+			return default;
+		}
+
 		HotKeyPresetLoaded = false;
 
 		if (!ViewIsLoaded || !HotKeyPresetListLoaded || value == null) return default;

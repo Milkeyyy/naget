@@ -43,7 +43,7 @@
 							<!--登録キーテキスト-->
 							<TextBlock Text="{Binding RegisteredKeysText}" VerticalAlignment="Center"/>
 							<!--キー登録ボタン-->
-							<Button IsEnabled="{Binding SelectedActionItem, Converter={x:Static ObjectConverters.IsNotNull}}" Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
+							<Button IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
 						</StackPanel>
 					</ui:SettingsExpander.Footer>
 
@@ -53,7 +53,8 @@
 
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
-							<ComboBox IsEnabled="{Binding SelectedActionItem, Converter={x:Static ObjectConverters.IsNotNull}}" MinWidth="200" SelectedIndex="{Binding SelectedActionIndex}" ItemsSource="{Binding HotKeyActionList}" SelectedItem="{Binding SelectedActionItem}">
+							<!--アクション選択リスト-->
+							<ComboBox IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" MinWidth="200" SelectedIndex="{Binding SelectedActionIndex}" ItemsSource="{Binding HotKeyActionList}" SelectedItem="{Binding SelectedActionItem}">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
