@@ -4,7 +4,6 @@
 #define MyAppName "naget"
 #define MyAppInstallName "naget"
 #define MyAppVersion GetVersionNumbersString('..\bin\x64\Release\net8.0\win-x64\publish\naget.exe')
-#define MyAppVersionText MyAppVersion + "-" + MyAppReleaseChannel + "." + MyAppReleaseNumber
 #define MyAppPublisher "Milkeyyy"
 #define MyAppURL "https://milkeyyy.com/"
 #define MyAppExeName "naget.exe"
@@ -17,7 +16,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{49FA0AF3-DB16-481F-8A64-8A7F9C34ABF1}
 AppName={#MyAppName}
-AppVersion={#MyAppVersionText}
+AppVersion={#MyAppVersion}-{#MyAppReleaseChannel}.{#MyAppReleaseNumber}
 AppVerName={#MyAppName}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -74,4 +73,4 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Messages]
-BeveledLabel={#MyAppName} Setup [Version: {#MyAppVersionText}]
+BeveledLabel={#MyAppName} Setup [Version: {#MyAppVersion}-{#MyAppReleaseChannel}.{#MyAppReleaseNumber}]
