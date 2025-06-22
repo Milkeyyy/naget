@@ -82,6 +82,7 @@ jobs:
       uses: Minionguyjpro/Inno-Setup-Action@main
       with:
         path: ${{ env.GITHUB_WORKSPACE }}/SearchLightER/Setup/naget_Setup_Windows-x64.iss
+        options: /O"${{ env.GITHUB_WORKSPACE }}/_Pack"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
