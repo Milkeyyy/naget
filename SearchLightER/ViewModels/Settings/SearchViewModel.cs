@@ -83,9 +83,6 @@ public class SearchViewModel
 			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
 			PrimaryButtonText = Resources.Strings_Ok,
 			CloseButtonText = Resources.Strings_Cancel,
-
-			// 作成ボタンが押された時の処理
-			//PrimaryButtonCommand = command
 		};
 
 		// ダイアログを表示する
