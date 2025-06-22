@@ -70,10 +70,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    # Restore the application
-    - name: Restore the application
-      run: dotnet restore
-
     # Create the app package
     - name: Create the app package
       run: dotnet publish -c Release -r win-x64 /p:Platform=x64
@@ -82,7 +78,7 @@ jobs:
       shell: pwsh
       run: |
         New-Item -ItemType Directory ".\_Pack"
-        ${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe "${env:GITHUB_WORKSPACE}\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
+        Start-Process -FilePath "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" -ArgumentList "${env:GITHUB_WORKSPACE}\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
