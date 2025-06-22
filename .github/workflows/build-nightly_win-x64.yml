@@ -85,7 +85,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build
-        path: "${{ env:GITHUB_WORKSPACE }}/SearchLightER/_Pack/naget_Setup.exe"
+        path: "${{ env.GITHUB_WORKSPACE }}/SearchLightER/_Pack/naget_Setup.exe"
 
   update-nightly-releases:
     name: Update Nightly Releases
