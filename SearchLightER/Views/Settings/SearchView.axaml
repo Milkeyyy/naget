@@ -2,7 +2,60 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:vm="using:naget.ViewModels.Settings"
+			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="SearchLight.Views.Settings.SearchView">
-	Search
+			 x:Class="naget.Views.Settings.SearchView"
+			 x:DataType="vm:SearchViewModel"
+			 epoxy:Fountain.Well="{Binding SearchViewWell}"
+>
+
+	<Design.DataContext>
+		<vm:SearchViewModel/>
+	</Design.DataContext>
+
+	<Panel Margin="20">
+		<StackPanel>
+			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_Search}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+
+			<TextBlock Text="{x:Static lang:Resources.Settings_Search_SearchEngine}" Margin="0 0 0 8" FontSize="16" FontWeight="Bold"/>
+			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_Search_SearchEngine}" IconSource="{ic:SymbolIconSource Symbol='Keyboard'}">
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--登録キーテキスト-->
+						<!--<TextBlock Text="" VerticalAlignment="Center"/>-->
+						<!--検索エンジン新規作成ボタン-->
+						<Button Content="{x:Static lang:Resources.Settings_Search_Add}" IsEnabled="True" Margin="10 0 0 0" Command="{Binding CreateSearchEngineCommand}"/>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+			
+			<!--各検索エンジンのコントロールを動的に生成する-->
+			<ItemsControl ItemsSource="{Binding SearchEngineList}" Margin="0 2 0 20">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid Margin="0 1">
+							<ui:SettingsExpander Header="{Binding Name}" IconSource="　">
+								<ui:SettingsExpander.Footer>
+									<StackPanel Orientation="Horizontal">
+										<!--登録キーテキスト-->
+										<!--<TextBlock Text="" VerticalAlignment="Center"/>-->
+										<!--編集ボタン-->
+										<Button Content="{x:Static lang:Resources.Settings_Search_Edit}" IsEnabled="" Margin="10 0 0 0" Command="{Binding EditSearchEngineCommand}"/>
+										<!--削除ボタン-->
+										<Button Content="{x:Static lang:Resources.Settings_Search_Delete}" IsEnabled="" Margin="5 0 0 0" Command="{Binding DeleteSearchEngineCommand}"/>
+									</StackPanel>
+								</ui:SettingsExpander.Footer>
+							</ui:SettingsExpander>
+							<!--<Button Content="{x:Static lang:Resources.Settings_Search_Edit}" Command="{Binding EditCommand}" Margin="0 0 5 0"/>
+							<Button Content="{x:Static lang:Resources.Settings_Search_Delete}" Command="{Binding DeleteCommand}"/>-->
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</StackPanel>
+	</Panel>
 </UserControl>

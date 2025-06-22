@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SearchLight.Assets.Locales {
+namespace naget.Assets.Locales {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace SearchLight.Assets.Locales {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SearchLight.Assets.Locales.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("naget.Assets.Locales.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,20 @@ namespace SearchLight.Assets.Locales {
         }
         
         /// <summary>
-        ///   SearchLight に類似しているローカライズされた文字列を検索します。
+        ///   naget に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string App_Name {
             get {
                 return ResourceManager.GetString("App.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Default に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
             }
         }
         
@@ -84,6 +93,123 @@ namespace SearchLight.Assets.Locales {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Add に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_Add {
+            get {
+                return ResourceManager.GetString("Settings.Search.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Delete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_Delete {
+            get {
+                return ResourceManager.GetString("Settings.Search.Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Edit に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_Edit {
+            get {
+                return ResourceManager.GetString("Settings.Search.Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Add New Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Add {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Edit Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Edit {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Name に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Name {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   URL に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Url {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Shortcut Key に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Action に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Action {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   None に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Action_None {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Action.None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Web Search に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Action_WebSearch {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Action.WebSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Action_WebSearch_SearchEngine {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Action.WebSearch.SearchEngine", resourceCulture);
             }
         }
         
@@ -111,6 +237,69 @@ namespace SearchLight.Assets.Locales {
         public static string Settings_ShortcutKey_Preset {
             get {
                 return ResourceManager.GetString("Settings.ShortcutKey.Preset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Create に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Create {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Create New Preset に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_CreateNewPreset {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.CreateNewPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Name is Empty. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_NameIsEmpty {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.NameIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Not Set に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_NotSet {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.NotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Done に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_RegisterKeys_Done {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.RegisterKeys.Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Press Esc to Cancel に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_RegisterKeys_PressEscToCancel {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.RegisterKeys.PressEscToCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Register に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_RegisterKeys_Register {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.RegisterKeys.Register", resourceCulture);
             }
         }
         
@@ -165,6 +354,24 @@ namespace SearchLight.Assets.Locales {
         public static string Settings_Tab_Update {
             get {
                 return ResourceManager.GetString("Settings.Tab.Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cancel に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Strings_Cancel {
+            get {
+                return ResourceManager.GetString("Strings.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   OK に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Strings_Ok {
+            get {
+                return ResourceManager.GetString("Strings.Ok", resourceCulture);
             }
         }
         

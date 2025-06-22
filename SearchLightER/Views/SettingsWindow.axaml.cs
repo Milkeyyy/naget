@@ -2,10 +2,9 @@
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
-using SearchLight.ViewModels;
 using System;
 
-namespace SearchLight.Views;
+namespace naget.Views;
 
 public partial class SettingsWindow : AppWindow
 {
@@ -13,7 +12,7 @@ public partial class SettingsWindow : AppWindow
 	{
 		InitializeComponent();
 
-		DataContext = new SettingsWindowViewModel();
+		//DataContext = new SettingsShortcutKeyViewModel();
 
 		TitleBar.ExtendsContentIntoTitleBar = true;
 
@@ -33,7 +32,7 @@ public partial class SettingsWindow : AppWindow
 	{
 		if (e.SelectedItem is NavigationViewItem nvi)
 		{
-			var smpPage = $"SearchLight.Views.Settings.{nvi.Tag}";
+			var smpPage = $"naget.Views.Settings.{nvi.Tag}";
 			var pg = Activator.CreateInstance(Type.GetType(smpPage));
 			(sender as NavigationView).Content = pg;
 		}

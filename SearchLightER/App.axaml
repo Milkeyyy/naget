@@ -1,29 +1,27 @@
 ﻿<Application xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:vm="using:SearchLight.ViewModels"
+			 xmlns:vm="using:naget.ViewModels"
 			 xmlns:sty="using:FluentAvalonia.Styling"
-			 xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
-			 x:Class="SearchLight.App"
+			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+			 x:Class="naget.App"
 			 x:DataType="vm:AppViewModel"
-			 xmlns:local="using:SearchLight"
-			 RequestedThemeVariant="Default">
+			 xmlns:local="using:naget"
+			 RequestedThemeVariant="Default"
+>
 			 <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
-	<Application.DataTemplates>
-		<local:ViewLocator/>
-	</Application.DataTemplates>
-  
+	
 	<Application.Styles>
-		<sty:FluentAvaloniaTheme />
+		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
+		<sty:FluentAvaloniaTheme CustomAccentColor="#e61953" />
 	</Application.Styles>
 
 	<TrayIcon.Icons>
 		<TrayIcons>
-			<TrayIcon Icon="/Assets/SearchLight.ico"
+			<TrayIcon Icon="/Assets/Icon.ico"
 					  ToolTipText="{x:Static lang:Resources.App_Name}">
 				<TrayIcon.Menu>
 					<NativeMenu>
-						<NativeMenuItem Icon="/Assets/SearchLight.ico" Header="{x:Static lang:Resources.App_Name}" />
+						<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" />
 						<NativeMenuItemSeparator />
 						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_InAppBrowser}" Command="{Binding OpenInAppBrowserWindowCommand}" />
 						<NativeMenuItemSeparator />

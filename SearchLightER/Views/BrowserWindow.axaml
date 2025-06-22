@@ -1,16 +1,26 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:vm="using:SearchLight.ViewModels"
+		xmlns:vm="using:naget.ViewModels"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
+		xmlns:epoxy="https://github.com/kekyo/Epoxy"
+		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 		xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-		x:Class="SearchLight.Views.BrowserWindow"
+		x:Class="naget.Views.BrowserWindow"
 		x:DataType="vm:BrowserWindowViewModel"
-		Title="Browser"
+		Icon="/Assets/Icon.ico"
 		TransparencyLevelHint="AcrylicBlur"
-		Background="Transparent">
+		Background="Transparent"
+		epoxy:Fountain.Well="{Binding BrowserWindowWell}"
+		Title="Browser"
+		WindowState="{Binding WindowState, Mode=TwoWay}"
+		Width="{Binding Width, Mode=TwoWay}"
+		Height="{Binding Height, Mode=TwoWay}"
+		MinWidth="800"
+		MinHeight="450"
+		WindowStartupLocation="CenterScreen"
+>
 
 	<NativeMenu.Menu>
 		<NativeMenu>
@@ -32,8 +42,8 @@
 			<NativeMenuItem Header="Navigate">
 				<NativeMenuItem.Menu>
 					<NativeMenu>
-						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}" IsEnabled="{Binding webviewCanGoBack}"/>
-						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}" IsEnabled="{Binding webviewCanGoForward}"/>
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}"/>
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}"/>
 					</NativeMenu>
 				</NativeMenuItem.Menu>
 			</NativeMenuItem>
@@ -55,9 +65,9 @@
 		<DockPanel>
 			
 			<DockPanel DockPanel.Dock="Top" Margin="10 10 10 10">
-				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
-				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
-				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding ShowDevToolsCommand}">Show DevTools</Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" IsEnabled="{Binding WebViewCanGoBack}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" IsEnabled="{Binding WebViewCanGoForward}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
+				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding ShowDevToolsCommand}">DevTools</Button>
 				<TextBox Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
 					<TextBox.KeyBindings>
 						<KeyBinding Gesture="Enter" Command="{Binding NavigateCommand}" />

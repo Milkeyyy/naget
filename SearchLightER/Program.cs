@@ -1,8 +1,8 @@
 ﻿using Avalonia;
-using Avalonia.ReactiveUI;
+using FluentIcons.Avalonia;
 using System;
 
-namespace SearchLight
+namespace naget
 {
 	internal sealed class Program
 	{
@@ -18,7 +18,7 @@ namespace SearchLight
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
 				.WithInterFont()
-				.LogToTrace()
-				.UseReactiveUI();
+				.UseSegoeMetrics()
+				.LogToTrace();
 	}
 }

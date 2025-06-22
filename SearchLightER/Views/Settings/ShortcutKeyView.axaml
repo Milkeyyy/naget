@@ -2,44 +2,86 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
 			 xmlns:ui="using:FluentAvalonia.UI.Controls"
-			 xmlns:lang="clr-namespace:SearchLight.Assets.Locales;assembly=SearchLight"
+			 xmlns:vm="using:naget.ViewModels.Settings"
+			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="SearchLight.Views.Settings.ShortcutKeyView">
+			 x:Class="naget.Views.Settings.ShortcutKeyView"
+			 x:DataType="vm:ShortcutKeyViewModel"
+			 epoxy:Fountain.Well="{Binding ShortcutKeyWell}"
+>
+
+	<Design.DataContext>
+		<vm:ShortcutKeyViewModel/>
+	</Design.DataContext>
+
 	<Panel Margin="20">
 		<StackPanel>
-			<TextBlock Margin="0 0 0 20" FontSize="20" FontWeight="Bold">Test</TextBlock>
-			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="Keyboard">
+			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="{ic:SymbolIconSource Symbol=TextBulletListSquareSparkle}">
 				
 				<ui:SettingsExpander.Footer>
-					<ComboBox SelectedIndex="0">
-						<ComboBoxItem>Preset 1</ComboBoxItem>
-						<ComboBoxItem>Preset 2</ComboBoxItem>
-						<ComboBoxItem>Preset 3</ComboBoxItem>
-						<ComboBoxItem>Preset 4</ComboBoxItem>
-						<ComboBoxItem>Preset 5</ComboBoxItem>
-					</ComboBox>
+					<StackPanel Orientation="Horizontal">
+						<!--プリセット選択リスト-->
+						<ComboBox IsVisible="{Binding HotKeyPresetList.Count}" MinWidth="200" SelectedIndex="{Binding SelectedPresetIndex}" ItemsSource="{Binding HotKeyPresetList}" SelectedItem="{Binding SelectedPresetItem}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Name}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+						<!--プリセット作成ボタン-->
+						<Button Content="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}"/>
+					</StackPanel>
 				</ui:SettingsExpander.Footer>
 
-				<ui:SettingsExpanderItem Content="{x:Static lang:Resources.Settings_ShortcutKey_ModifierKeys}">
-					<ui:SettingsExpanderItem.Footer>
+				<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol='Keyboard'}">
+					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
-							<CheckBox>Ctrl</CheckBox>
-							<CheckBox>Alt</CheckBox>
-							<CheckBox>Shift</CheckBox>
-							<CheckBox>Win</CheckBox>
+							<!--登録キーテキスト-->
+							<TextBlock Text="{Binding RegisteredKeysText}" VerticalAlignment="Center"/>
+							<!--キー登録ボタン-->
+							<Button IsEnabled="{Binding SelectedActionItem, Converter={x:Static ObjectConverters.IsNotNull}}" Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
 						</StackPanel>
-					</ui:SettingsExpanderItem.Footer>
-				</ui:SettingsExpanderItem>
+					</ui:SettingsExpander.Footer>
 
-				<ui:SettingsExpanderItem Content="{x:Static lang:Resources.Settings_ShortcutKey_Key}">
-					<ui:SettingsExpanderItem.Footer>
+				</ui:SettingsExpander>
+
+				<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol='ArrowUpRight'}">
+
+					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
-							<ComboBox SelectedIndex="0">
+							<ComboBox IsEnabled="{Binding SelectedActionItem, Converter={x:Static ObjectConverters.IsNotNull}}" MinWidth="200" SelectedIndex="{Binding SelectedActionIndex}" ItemsSource="{Binding HotKeyActionList}" SelectedItem="{Binding SelectedActionItem}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<ui:SymbolIcon Symbol="{Binding Icon}" FontSize="20"/>
+											<TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
 							</ComboBox>
 						</StackPanel>
-					</ui:SettingsExpanderItem.Footer>
-				</ui:SettingsExpanderItem>
+					</ui:SettingsExpander.Footer>
+
+					<ui:SettingsExpanderItem IsVisible="{Binding SearchEngineListIsVisible}" Content="{x:Static lang:Resources.Settings_ShortcutKey_Action_WebSearch_SearchEngine}">
+						<ui:SettingsExpanderItem.Footer>
+							<ComboBox MinWidth="200" IsEnabled="{Binding SearchEngineList, Converter={x:Static ObjectConverters.IsNotNull}}" SelectedIndex="{Binding SearchEngineListSelectedIndex}" ItemsSource="{Binding SearchEngineList}" SelectedItem="{Binding SelectedSearchEngineItem}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<!--<ui:SymbolIcon Symbol="{Binding Icon}" FontSize="20"/>-->
+											<TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</ui:SettingsExpanderItem.Footer>
+					</ui:SettingsExpanderItem>
+
+				</ui:SettingsExpander>
 
 			</ui:SettingsExpander>
 		</StackPanel>

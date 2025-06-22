@@ -1,129 +1,238 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Logging;
-using ReactiveUI;
-using System;
-using System.ComponentModel;
+using Epoxy;
+using naget.Models.Config;
+using naget.Views;
 using System.Diagnostics;
-using System.Reactive;
-using System.Windows.Input;
-using Tmds.DBus.Protocol;
+using System.Threading.Tasks;
 using WebViewControl;
 
-namespace SearchLight.ViewModels;
+namespace naget.ViewModels;
 
-public class BrowserWindowViewModel : ViewModelBase
+[ViewModel]
+public class BrowserWindowViewModel
 {
-	private WebView webview;
+	public Well<Window> BrowserWindowWell { get; } = Well.Factory.Create<Window>();
+
+	public WindowState WindowState { get; set; } = WindowState.Normal;
+	public double Width { get; set; } = 1280;
+	public double Height { get; set; } = 720;
+
+	public bool WindowOpened { get; set; }
+
+	private WebView WebViewCtrl;
 
 	private string address = string.Empty;
-	private string currentAddress = string.Empty;
 	private string beforeAddress = string.Empty;
-	public bool webviewCanGoBack { get; private set; }
-	public bool webviewCanGoForward { get; private set; }
+	public bool WebViewCanGoBack { get; private set; }
+	public bool WebViewCanGoForward { get; private set; }
+
+	public string Address { get; set; }
+
+	public string CurrentAddress { get; set; }
+
+	public Command NavigateCommand { get; }
+
+	public Command ShowDevToolsCommand { get; }
+
+	public Command CutCommand { get; }
+
+	public Command CopyCommand { get; }
+
+	public Command PasteCommand { get; }
+
+	public Command UndoCommand { get; }
+
+	public Command RedoCommand { get; }
+
+	public Command SelectAllCommand { get; }
+
+	public Command DeleteCommand { get; }
+
+	public Command BackCommand { get; }
+
+	public Command ForwardCommand { get; }
 
 	public BrowserWindowViewModel(WebView wb)
 	{
-		webview = wb;
-		webview.Navigated += WebView_Navigated;
-		//Address = CurrentAddress = "http://www.google.com/";
+		// ウィンドウが開かれた時のイベント
+		BrowserWindowWell.Add(Window.WindowOpenedEvent, () =>
+		{
+			Debug.WriteLine("BrowserWindow Opened");
+			
+			// ウィンドウの設定を読み込む
+			Width = ConfigManager.Config.BrowserWindow.Width;
+			Height = ConfigManager.Config.BrowserWindow.Height;
+			if (ConfigManager.Config.BrowserWindow.State == WindowState.Minimized) WindowState = WindowState.Normal;
+			else WindowState = ConfigManager.Config.BrowserWindow.State;
 
-		NavigateCommand = ReactiveCommand.Create(() => {
+			WindowOpened = true;
+
+			return default;
+		});
+
+		// ウィンドウが閉じられた時のイベント
+		BrowserWindowWell.Add<WindowClosingEventArgs>("Closing", e =>
+		{
+			Debug.WriteLine("BrowserWindow Closed");
+
+			// ウィンドウの設定を保存する
+			if (WindowState == WindowState.Normal)
+			{
+				ConfigManager.Config.BrowserWindow.Width = Width;
+				ConfigManager.Config.BrowserWindow.Height = Height;
+			}
+			ConfigManager.Config.BrowserWindow.State = WindowState;
+
+			// 開いているページのURLをリセット
+			CurrentAddress = "about:blank";
+
+			return default;
+		});
+
+		WebViewCtrl = wb;
+		WebViewCtrl.Navigated += WebView_Navigated;
+		WebViewCtrl.PropertyChanged += WebViewOnPropertyChanged;
+		Address = CurrentAddress;
+
+		NavigateCommand = Command.Factory.Create(() =>
+		{
 			CurrentAddress = Address;
+			return default;
 		});
 
-		ShowDevToolsCommand = ReactiveCommand.Create(() => {
-			webview.ShowDeveloperTools();
+		ShowDevToolsCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.ShowDeveloperTools();
+			return default;
 		});
 
-		CutCommand = ReactiveCommand.Create(() => {
-			webview.EditCommands.Cut();
+		CutCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.EditCommands.Cut();
+			return default;
 		});
 
-		CopyCommand = ReactiveCommand.Create(() => {
-			webview.EditCommands.Copy();
+		CopyCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.EditCommands.Copy();
+			return default;
 		});
 
-		PasteCommand = ReactiveCommand.Create(() => {
-			webview.EditCommands.Paste();
+		PasteCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.EditCommands.Paste();
+			return default;
 		});
 
-		UndoCommand = ReactiveCommand.Create(() => {
-			webview.EditCommands.Undo();
+		UndoCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.EditCommands.Undo();
+			return default;
 		});
 
-		RedoCommand = ReactiveCommand.Create(() => {
-			webview.EditCommands.Redo();
+		RedoCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.EditCommands.Redo();
+			return default;
 		});
 
-		SelectAllCommand = ReactiveCommand.Create(() => {
-			webview.EditCommands.SelectAll();
+		SelectAllCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.EditCommands.SelectAll();
+			return default;
 		});
 
-		DeleteCommand = ReactiveCommand.Create(() => {
-			webview.EditCommands.Delete();
+		DeleteCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.EditCommands.Delete();
+			return default;
 		});
 
-		BackCommand = ReactiveCommand.Create(
-			WebView_GoBack/*,
+		BackCommand = Command.Factory.Create(() =>
+		{
+			WebView_GoBack();
+			return default;
+			/*,
 			this.WhenAnyValue(
 				x => x.WebViewCanGoBack
 			)*/
-		);
+		});
 
-		ForwardCommand = ReactiveCommand.Create(
-			WebView_GoForward/*,
-            this.WhenAnyValue(
+		ForwardCommand = Command.Factory.Create(() =>
+		{
+			WebView_GoForward();
+			return default;
+			/*,
+			this.WhenAnyValue(
 				x => x.WebViewCanGoForward
 			)*/
-		);
-
-		PropertyChanged += OnPropertyChanged;
-		webview.PropertyChanged += WebViewOnPropertyChanged;
+		});
 	}
 
-	private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+	[PropertyChanged(nameof(WebViewCtrl.CanGoBack))]
+	private ValueTask WebViewCanGoBackChanged(bool value)
 	{
-		if (e.PropertyName == nameof(CurrentAddress))
-		{
-			Address = CurrentAddress;
-		}
+		Debug.WriteLine("WebView CanGoBack Changed: " + value);
+		return default;
+	}
+
+	[PropertyChanged(nameof(WebViewCtrl.CanGoForward))]
+	private ValueTask WebViewCanGoForwardChanged(bool value)
+	{
+		Debug.WriteLine("WebView CanGoForward Changed: " + value);
+		return default;
+	}
+
+	[PropertyChanged(nameof(CurrentAddress))]
+	private ValueTask OnCurrentAddressChangedAsync(string value)
+	{
+		Debug.WriteLine("CurrentAddress Changed: " + value);
+
+		Address = value;
+
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
+		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+
+		return default;
 	}
 
 	private void WebViewOnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
 	{
-		Debug.WriteLine("Property Name: " + e.Property.Name);
-		if (e.Property.Name == nameof(webview.Address))
-		{
-			Debug.WriteLine("- Update Property");
-			Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
-			
-			webviewCanGoBack = webview.CanGoBack;
-			webviewCanGoForward = webview.CanGoForward;
-		}
+		Debug.WriteLine("WebView PropertyChanged: " + e.Property.Name);
+
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
+		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 	}
 
 	private void WebView_Navigated(string url, string frameName)
-    {
-		Debug.WriteLine("WebView Navigated: " + url + " | " + frameName);
-		Debug.WriteLine("- Update Property");
-		Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
-		//WebViewCanGoBack = webview.CanGoBack;
-		//WebViewCanGoForward = webview.CanGoForward;
-    }
-
-    private void WebView_GoBack()
 	{
-		beforeAddress = webview.Address;
-		webview.GoBack();
-		//WebViewCanGoBack = webview.CanGoBack;
+		Debug.WriteLine("WebView Navigated: " + url + " | " + frameName);
+		//Debug.WriteLine("- Update Property");
+		//Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
+
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
+
+		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+	}
+
+	private void WebView_GoBack()
+	{
+		beforeAddress = WebViewCtrl.Address;
+		WebViewCtrl.GoBack();
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 	}
 
 	private void WebView_GoForward()
 	{
 		beforeAddress = Address;
-		webview.GoForward();
-		//WebViewCanGoForward = webview.CanGoForward;
+		WebViewCtrl.GoForward();
+		WebViewCanGoBack = WebViewCtrl.CanGoBack;
+		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 	}
 
 	/*public bool WebViewCanGoBack
@@ -137,38 +246,4 @@ public class BrowserWindowViewModel : ViewModelBase
 		get => webviewCanGoForward;
 		set => this.RaiseAndSetIfChanged(ref webviewCanGoForward, value);
 	}*/
-
-	public string Address
-	{
-		get => address;
-		set => this.RaiseAndSetIfChanged(ref address, value);
-	}
-
-	public string CurrentAddress
-	{
-		get => currentAddress;
-		set => this.RaiseAndSetIfChanged(ref currentAddress, value);
-	}
-
-	public ReactiveCommand<Unit, Unit> NavigateCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> ShowDevToolsCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> CutCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> CopyCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> PasteCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> UndoCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> RedoCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> SelectAllCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> BackCommand { get; }
-
-	public ReactiveCommand<Unit, Unit> ForwardCommand { get; }
 }

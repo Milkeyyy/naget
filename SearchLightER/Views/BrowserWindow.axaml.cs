@@ -1,10 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using SearchLight.ViewModels;
+﻿using Avalonia.Controls;
+using naget.Models.Config;
+using naget.ViewModels;
 using WebViewControl;
 
-namespace SearchLight.Views;
+namespace naget.Views;
 
 public partial class BrowserWindow : Window
 {
@@ -18,7 +17,6 @@ public partial class BrowserWindow : Window
 		Closing += (s, e) =>
 		{
 			((Window)s).Hide();
-			(DataContext as BrowserWindowViewModel).CurrentAddress = "about:blank";
 			e.Cancel = true;
 		};
 	}
