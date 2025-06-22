@@ -74,13 +74,14 @@ jobs:
     - name: Create the app package
       run: dotnet publish -c Release -r win-x64 /p:Platform=x64
 
-    - name: Create directory
+    - name: Create Directory
       shell: pwsh
       run: New-Item -ItemType Directory "$env:GITHUB_WORKSPACE/SearchLightER/_Pack"
 
-    - name: Create installer
-      shell: pwsh
-      run: Start-Process -NoNewWindow -Wait -FilePath "$env:ProgramFiles(x86)\Inno Setup 6\ISCC.exe" -ArgumentList "$env:GITHUB_WORKSPACE\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
+    - name: Build the Installer
+      uses: Minionguyjpro/Inno-Setup-Action@main
+      with:
+        path: "{{ $env.GITHUB_WORKSPACE }}/SearchLightER/Setup/naget_Setup_Windows-x64.iss"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
