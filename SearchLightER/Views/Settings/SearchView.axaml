@@ -28,7 +28,7 @@
 						<!--登録キーテキスト-->
 						<!--<TextBlock Text="" VerticalAlignment="Center"/>-->
 						<!--検索エンジン新規作成ボタン-->
-						<Button Content="{x:Static lang:Resources.Settings_Search_Add}" IsEnabled="" Margin="10 0 0 0" Command="{Binding AddSearchEngineCommand}"/>
+						<Button Content="{x:Static lang:Resources.Settings_Search_Add}" IsEnabled="True" Margin="10 0 0 0" Command="{Binding CreateSearchEngineCommand}"/>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 			</ui:SettingsExpander>
@@ -46,7 +46,7 @@
 										<!--編集ボタン-->
 										<Button Content="{x:Static lang:Resources.Settings_Search_Edit}" IsEnabled="" Margin="10 0 0 0" Command=""/>
 										<!--削除ボタン-->
-										<Button Content="{x:Static lang:Resources.Settings_Search_Delete}" IsEnabled="" Margin="5 0 0 0" Command=""/>
+										<Button Content="{x:Static lang:Resources.Settings_Search_Delete}" IsEnabled="" Margin="5 0 0 0" Command="{Binding DeleteSearchEngineCommand}"/>
 									</StackPanel>
 								</ui:SettingsExpander.Footer>
 							</ui:SettingsExpander>
