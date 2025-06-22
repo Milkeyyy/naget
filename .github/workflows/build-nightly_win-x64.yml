@@ -99,9 +99,8 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
-          pattern: naget_Setup.exe
+          name: build
           path: /
-          merge-multiple: true
       - run: |
           dir \
 
