@@ -115,7 +115,9 @@ jobs:
           tag_name: nightly
           name: 'Nightly Build'
           prerelease: true
-          body: 'Nightly - Commit ${{ github.sha }}'
+          body: |
+            Nightly - Commit ${{ github.sha }}
+            - ${{ github.event.head_commit.message }}
           files: |
             /naget_Setup.exe
 
