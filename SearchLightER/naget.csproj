@@ -1,156 +1,156 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <IncludeAvaloniaGenerators>true</IncludeAvaloniaGenerators>
-    <AssemblyName>naget</AssemblyName>
-    <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
-    <Copyright>Copyright (C) 2025 Milkeyyy</Copyright>
-    <Description>SearchLight</Description>
-    <Platforms>x64;ARM64</Platforms>
+	<OutputType>WinExe</OutputType>
+	<TargetFramework>net8.0</TargetFramework>
+	<Nullable>enable</Nullable>
+	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+	<ApplicationManifest>app.manifest</ApplicationManifest>
+	<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+	<IncludeAvaloniaGenerators>true</IncludeAvaloniaGenerators>
+	<AssemblyName>naget</AssemblyName>
+	<ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
+	<Copyright>Copyright (C) 2025 Milkeyyy</Copyright>
+	<Description>SearchLight</Description>
+	<Platforms>x64;ARM64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>
-    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+	<RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <!-- 単一ファイル化 & ファイルサイズ削減 & 圧縮 -->
   <PropertyGroup>
-    <!--<PublishSingleFile>true</PublishSingleFile>
-    <TrimMode>full</TrimMode>
-    <SelfContained>true</SelfContained>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>-->
-    <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
+	<!--<PublishSingleFile>true</PublishSingleFile>
+	<TrimMode>full</TrimMode>
+	<SelfContained>true</SelfContained>
+	<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+	<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>-->
+	<DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Label="Avalonia">
-    <AvaloniaNameGeneratorAttachDevTools Condition="'$(Configuration)' == 'Debug'">True</AvaloniaNameGeneratorAttachDevTools>
+	<AvaloniaNameGeneratorAttachDevTools Condition="'$(Configuration)' == 'Debug'">True</AvaloniaNameGeneratorAttachDevTools>
   </PropertyGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
+	<AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Remove="Assets\Locales\Resources.ja-JP.resx" />
-    <AvaloniaResource Remove="Assets\Locales\Resources.resx" />
+	<AvaloniaResource Remove="Assets\Locales\Resources.ja-JP.resx" />
+	<AvaloniaResource Remove="Assets\Locales\Resources.resx" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\Icon.ico" />
+	<Content Include="Assets\Icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.13" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.13" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.13" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.13" />
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <!--<PackageReference Include="Avalonia.Diagnostics" Version="11.0.13">
-      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>none</IncludeAssets>
-    </PackageReference>-->
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.13" Condition="'$(Configuration)' == 'Debug'" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.13" />
-    <PackageReference Include="Epoxy.Avalonia11" Version="1.16.0" />
-    <PackageReference Include="FluentAvaloniaUI" Version="2.0.5" />
-    <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.271" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
-    <PackageReference Include="roslynator.analyzers" Version="4.12.10">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="SharpHook" Version="5.3.8" />
-    <PackageReference Include="System.Text.Json" Version="9.0.1" />
-    <PackageReference Include="WebViewControl-Avalonia" Version="3.120.8" Condition="'$(Platform)' == 'x64' Or '$(RuntimeIdentifier)' == 'win-x64' Or '$(RuntimeIdentifier)' == 'osx-x64'" />
-    <PackageReference Include="WebViewControl-Avalonia-ARM64" Version="3.120.8" Condition="'$(Platform)' == 'arm64' Or '$(RuntimeIdentifier)' == 'win-arm64' Or '$(RuntimeIdentifier)' == 'osx-arm64'" />
+	<PackageReference Include="Avalonia" Version="11.0.13" />
+	<PackageReference Include="Avalonia.Desktop" Version="11.0.13" />
+	<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.13" />
+	<PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.13" />
+	<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+	<!--<PackageReference Include="Avalonia.Diagnostics" Version="11.0.13">
+	  <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+	  <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>none</IncludeAssets>
+	</PackageReference>-->
+	<PackageReference Include="Avalonia.Diagnostics" Version="11.0.13" Condition="'$(Configuration)' == 'Debug'" />
+	<PackageReference Include="Avalonia.ReactiveUI" Version="11.0.13" />
+	<PackageReference Include="Epoxy.Avalonia11" Version="1.16.0" />
+	<PackageReference Include="FluentAvaloniaUI" Version="2.0.5" />
+	<PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.271" />
+	<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.1" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
+	<PackageReference Include="roslynator.analyzers" Version="4.12.10">
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  <PrivateAssets>all</PrivateAssets>
+	</PackageReference>
+	<PackageReference Include="SharpHook" Version="5.3.8" />
+	<PackageReference Include="System.Text.Json" Version="9.0.1" />
+	<PackageReference Include="WebViewControl-Avalonia" Version="3.120.8" Condition="'$(Platform)' == 'x64' Or '$(RuntimeIdentifier)' == 'win-x64' Or '$(RuntimeIdentifier)' == 'osx-x64'" />
+	<PackageReference Include="WebViewControl-Avalonia-ARM64" Version="3.120.8" Condition="'$(Platform)' == 'arm64' Or '$(RuntimeIdentifier)' == 'win-arm64' Or '$(RuntimeIdentifier)' == 'osx-arm64'" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Assets\Locales\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Views\BrowserWindow.axaml.cs">
-      <DependentUpon>BrowserWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Settings\SearchEngineDialogContent.axaml.cs">
-      <DependentUpon>SearchEngineDialogContent.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Settings\ShortcutKeyPresetCreator.axaml.cs">
-      <DependentUpon>ShortcutKeyPresetCreator.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Settings\InAppBrowserView.axaml.cs">
-      <DependentUpon>InAppBrowserView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Settings\SystemView.axaml.cs">
-      <DependentUpon>SystemView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Settings\UpdateView.axaml.cs">
-      <DependentUpon>UpdateView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Settings\ShortcutKeyView.axaml.cs">
-      <DependentUpon>ShortcutKeyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Settings\SearchView.axaml.cs">
-      <DependentUpon>SearchView.axaml</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Assets\Locales\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+	<Compile Update="Assets\Locales\Resources.Designer.cs">
+	  <DesignTime>True</DesignTime>
+	  <AutoGen>True</AutoGen>
+	  <DependentUpon>Resources.resx</DependentUpon>
+	</Compile>
+	<Compile Update="Views\BrowserWindow.axaml.cs">
+	  <DependentUpon>BrowserWindow.axaml</DependentUpon>
+	</Compile>
+	<Compile Update="Views\Settings\SearchEngineDialogContent.axaml.cs">
+	  <DependentUpon>SearchEngineDialogContent.axaml</DependentUpon>
+	</Compile>
+	<Compile Update="Views\Settings\ShortcutKeyPresetCreator.axaml.cs">
+	  <DependentUpon>ShortcutKeyPresetCreator.axaml</DependentUpon>
+	</Compile>
+	<Compile Update="Views\Settings\InAppBrowserView.axaml.cs">
+	  <DependentUpon>InAppBrowserView.axaml</DependentUpon>
+	</Compile>
+	<Compile Update="Views\Settings\SystemView.axaml.cs">
+	  <DependentUpon>SystemView.axaml</DependentUpon>
+	</Compile>
+	<Compile Update="Views\Settings\UpdateView.axaml.cs">
+	  <DependentUpon>UpdateView.axaml</DependentUpon>
+	</Compile>
+	<Compile Update="Views\Settings\ShortcutKeyView.axaml.cs">
+	  <DependentUpon>ShortcutKeyView.axaml</DependentUpon>
+	</Compile>
+	<Compile Update="Views\Settings\SearchView.axaml.cs">
+	  <DependentUpon>SearchView.axaml</DependentUpon>
+	</Compile>
+	<EmbeddedResource Update="Assets\Locales\Resources.resx">
+	  <Generator>PublicResXFileCodeGenerator</Generator>
+	  <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
   </ItemGroup>
 
   <!-- CEFのリソース(locales)がコピーされない問題の対策-->
   <!--Windows-->
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-    <!--x64-->
-    <None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(Platform)' == 'x64'">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>runtimes\win-x64\native\locales\%(Filename)%(Extension)</Link>
-    </None>
+	<!--x64-->
+	<None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(Platform)' == 'x64'">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <Link>runtimes\win-x64\native\locales\%(Filename)%(Extension)</Link>
+	</None>
 		<None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(RuntimeIdentifier)' == 'win-x64'">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>locales\%(Filename)%(Extension)</Link>
-    </None>
-    <!--arm64-->
-    <None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(Platform)' == 'arm64'">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>runtimes\win-arm64\native\locales\%(Filename)%(Extension)</Link>
-    </None>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <Link>locales\%(Filename)%(Extension)</Link>
+	</None>
+	<!--arm64-->
+	<None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(Platform)' == 'arm64'">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <Link>runtimes\win-arm64\native\locales\%(Filename)%(Extension)</Link>
+	</None>
 		<None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(RuntimeIdentifier)' == 'win-arm64'">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>locales\%(Filename)%(Extension)</Link>
-    </None>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <Link>locales\%(Filename)%(Extension)</Link>
+	</None>
   </ItemGroup>
   <!--macOS-->
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-      <!--x64-->
-      <None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(Platform)' == 'x64'">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <Link>runtimes\osx-x64\native\locales\%(Filename)%(Extension)</Link>
-      </None>
+	<ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+	  <!--x64-->
+	  <None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(Platform)' == 'x64'">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<Link>runtimes\osx-x64\native\locales\%(Filename)%(Extension)</Link>
+	  </None>
 			<None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <Link>locales\%(Filename)%(Extension)</Link>
-      </None>
-      <!--arm64-->
-      <None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(Platform)' == 'arm64'">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <Link>runtimes\osx-arm64\native\locales\%(Filename)%(Extension)</Link>
-      </None>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<Link>locales\%(Filename)%(Extension)</Link>
+	  </None>
+	  <!--arm64-->
+	  <None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(Platform)' == 'arm64'">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<Link>runtimes\osx-arm64\native\locales\%(Filename)%(Extension)</Link>
+	  </None>
 			<None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <Link>locales\%(Filename)%(Extension)</Link>
-      </None>
-    </ItemGroup>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<Link>locales\%(Filename)%(Extension)</Link>
+	  </None>
+	</ItemGroup>
 </Project>
