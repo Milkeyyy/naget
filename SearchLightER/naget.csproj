@@ -10,7 +10,7 @@
 	<AssemblyName>naget</AssemblyName>
 	<ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
 	<Copyright>Copyright (C) 2025 Milkeyyy</Copyright>
-	<Description>SearchLight</Description>
+	<Description>naget</Description>
 	<Platforms>x64;ARM64</Platforms>
   </PropertyGroup>
 
