@@ -142,6 +142,33 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Delete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_Confirm {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Do you want to remove search engine &quot;{0}&quot;? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_Description {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Delete Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_Title {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Edit Search Engine に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Search_SearchEngine_Dialog_Edit {

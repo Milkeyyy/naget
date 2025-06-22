@@ -140,8 +140,7 @@ public class SearchEngineViewModel
 		DeleteSearchEngineCommand = Command.Factory.Create(async () =>
 		{
 			Debug.WriteLine($"Delete Search Engine: {Name} ({Id})");
-			SearchEngineManager.Delete(Id);
-			ReloadSearchEngineCommand.Execute(null);
+			await ShowDeleteDialogAsync();
 		});
 	}
 
@@ -161,9 +160,6 @@ public class SearchEngineViewModel
 			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
 			PrimaryButtonText = Resources.Strings_Ok,
 			CloseButtonText = Resources.Strings_Cancel,
-
-			// 作成ボタンが押された時の処理
-			//PrimaryButtonCommand = command
 		};
 
 		// ダイアログのデータコンテキストに現在の検索エンジンの情報を設定する
@@ -194,6 +190,41 @@ public class SearchEngineViewModel
 		else
 		{
 			Debug.WriteLine("Search Engine Create Dialog - User clicked Cancel");
+		}
+	}
+
+	public async Task ShowDeleteDialogAsync()
+	{
+		var dialog = new ContentDialog
+		{
+			// 説明
+			Content = string.Format(Resources.Settings_Search_SearchEngine_Dialog_Delete_Description, Name),
+
+			// タイトル
+			Title = Resources.Settings_Search_SearchEngine_Dialog_Delete_Title,
+
+			// ボタンのテキスト
+			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
+			PrimaryButtonText = Resources.Settings_Search_SearchEngine_Dialog_Delete_Confirm,
+			CloseButtonText = Resources.Strings_Cancel,
+		};
+
+		// ダイアログを表示する
+		var result = await dialog.ShowAsync();
+
+		if (result == ContentDialogResult.Primary)
+		{
+			Debug.WriteLine("Search Engine Delete Dialog - User clicked Delete");
+
+			// 検索エンジンを削除する
+			SearchEngineManager.Delete(Id);
+
+			// 検索エンジン一覧を読み込み直す
+			ReloadSearchEngineCommand.Execute(null);
+		}
+		else
+		{
+			Debug.WriteLine("Search Engine Delete Dialog - User clicked Cancel");
 		}
 	}
 }
