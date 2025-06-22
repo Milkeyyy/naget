@@ -57,6 +57,10 @@ public class ShortcutKeyViewModel
 	/// </summary>
 	public string KeyRegisterButtonText { get; private set; } = Resources.Settings_ShortcutKey_RegisterKeys_Register;
 	/// <summary>
+	/// キー登録ボタンのアイコン
+	/// </summary>
+	public string KeyRegisterButtonIcon { get; private set; } = "PlayFilled";
+	/// <summary>
 	/// キー登録モードかどうか
 	/// </summary>
 	public bool KeyRegistrationMode { get; private set; }
@@ -132,6 +136,7 @@ public class ShortcutKeyViewModel
 
 			RegisteredKeysText = string.Empty;
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+			KeyRegisterButtonIcon = "PlayFilled";
 
 			ViewIsLoaded = true;
 
@@ -174,6 +179,7 @@ public class ShortcutKeyViewModel
 				// キー登録モードを終了する
 				var result = ConfigManager.HotKeyManager.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+				KeyRegisterButtonIcon = "PlayFilled";
 			}
 			else
 			{
@@ -206,6 +212,7 @@ public class ShortcutKeyViewModel
 				Debug.WriteLine("End Key Registraion");
 				var result = ConfigManager.HotKeyManager.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+				KeyRegisterButtonIcon = "PlayFilled";
 			}
 			return default;
 		});
@@ -297,7 +304,16 @@ public class ShortcutKeyViewModel
 	{
 		Debug.WriteLine("KeyRegistrationMode Changed: " + KeyRegistrationMode);
 		// キー登録モードが有効になった場合はキー登録ボタンのテキストを変更する
-		KeyRegisterButtonText = value ? Resources.Settings_ShortcutKey_RegisterKeys_Done : Resources.Settings_ShortcutKey_RegisterKeys_Register;
+		if (value)
+		{
+			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Done;
+			KeyRegisterButtonIcon = "Accept";
+		}
+		else
+		{
+			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+			KeyRegisterButtonIcon = "PlayFilled";
+		}
 		// 登録されているホットキーを更新する
 		if (HotKeyPresetList != null) RegisteredKeysText = HotKeyPresetList[SelectedPresetIndex].ToString();
 		return default;

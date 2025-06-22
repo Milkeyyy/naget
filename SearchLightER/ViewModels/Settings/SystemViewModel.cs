@@ -3,9 +3,8 @@ using Epoxy;
 using naget.Models.Config;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace naget.ViewModels.Settings;
 

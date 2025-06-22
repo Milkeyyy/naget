@@ -33,7 +33,14 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 						<!--プリセット作成ボタン-->
-						<Button Content="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}"/>
+						<Button Classes="accent" IsEnabled="" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<!--<ic:SymbolIcon Symbol="Add"/>-->
+									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="0 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 
@@ -43,7 +50,14 @@
 							<!--登録キーテキスト-->
 							<TextBlock Text="{Binding RegisteredKeysText}" VerticalAlignment="Center"/>
 							<!--キー登録ボタン-->
-							<Button IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
+							<Button Classes="accent" IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<!--<ui:SymbolIcon Symbol="{Binding KeyRegisterButtonIcon}"/>-->
+										<TextBlock Foreground="White" Text="{Binding KeyRegisterButtonText}" Margin="0 0 0 0"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
 						</StackPanel>
 					</ui:SettingsExpander.Footer>
 
