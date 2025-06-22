@@ -77,9 +77,9 @@ jobs:
     - name: Create installer
       shell: pwsh
       run: |
-        $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-        New-Item -ItemType Directory "${env:GITHUB_WORKSPACE}/SearchLightER/_Pack"
-        $iscc "${env:GITHUB_WORKSPACE}\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
+        $iscc = "$env:ProgramFiles(x86)\Inno Setup 6\ISCC.exe"
+        New-Item -ItemType Directory "$env:GITHUB_WORKSPACE/SearchLightER/_Pack"
+        $iscc "$env:GITHUB_WORKSPACE\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
