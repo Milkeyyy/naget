@@ -82,7 +82,10 @@ jobs:
       uses: Minionguyjpro/Inno-Setup-Action@main
       with:
         path: ${{ env.GITHUB_WORKSPACE }}/SearchLightER/Setup/naget_Setup_Nightly_Windows-x64.iss
-        options: /O/_Pack /dMyAppReleaseChannel="nightly" /dMyAppReleaseNumber="${{ github.sha }}"
+        options: |
+          /O/_Pack
+          /dMyAppReleaseChannel="nightly"
+          /dMyAppReleaseNumber="${{ github.sha }}"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
