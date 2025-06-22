@@ -11,7 +11,7 @@
 		Icon="/Assets/Icon.ico"
 		Title="SettingsWindow"
 		WindowStartupLocation="CenterScreen"
-		>
+>
 
 	<NativeMenu.Menu>
 		<NativeMenu>
