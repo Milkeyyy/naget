@@ -33,7 +33,7 @@ public class ConfigClass
 
 	public ConfigClass()
 	{
-		Language = CultureInfo.CurrentCulture.Name;
+		Language = "en-US";
 		HotKeys = [];
 		BrowserWindow = new WindowConfig();
 	}
