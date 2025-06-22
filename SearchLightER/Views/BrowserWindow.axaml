@@ -43,7 +43,7 @@
 				<NativeMenuItem.Menu>
 					<NativeMenu>
 						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}"/>
-						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}"/>
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}" />
 					</NativeMenu>
 				</NativeMenuItem.Menu>
 			</NativeMenuItem>
@@ -51,22 +51,22 @@
 	</NativeMenu.Menu>
 
 	<Panel>
-			<ExperimentalAcrylicBorder IsHitTestVisible="False">
-				<ExperimentalAcrylicBorder.Material>
-					<ExperimentalAcrylicMaterial
-						BackgroundSource="Digger"
-						TintColor="{DynamicResource SystemAltHighColor}"
-						TintOpacity="1"
-						FallbackColor="Black"
-						MaterialOpacity="0.65" />
-				</ExperimentalAcrylicBorder.Material>
-			</ExperimentalAcrylicBorder>
+		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
+					BackgroundSource="Digger"
+					TintColor="{DynamicResource SystemAltHighColor}"
+					TintOpacity="1"
+					FallbackColor="Black"
+					MaterialOpacity="0.65" />
+			</ExperimentalAcrylicBorder.Material>
+		</ExperimentalAcrylicBorder>
 
 		<DockPanel>
 			
 			<DockPanel DockPanel.Dock="Top" Margin="10 10 10 10">
-				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" IsEnabled="{Binding WebViewCanGoBack}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
-				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" IsEnabled="{Binding WebViewCanGoForward}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
 				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding ShowDevToolsCommand}">DevTools</Button>
 				<TextBox Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
 					<TextBox.KeyBindings>

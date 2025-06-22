@@ -8,7 +8,7 @@
 			 x:Class="naget.Views.Settings.SearchEngineDialogContent"
 			 x:DataType="vm:SearchEngineDialogContentViewModel"
 >
-
+	
 	<Design.DataContext>
 		<vm:SearchEngineDialogContentViewModel/>
 	</Design.DataContext>
