@@ -36,13 +36,13 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
-name: .NET Core Desktop
+name: Build Nightly
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "dev" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
 jobs:
 
@@ -50,7 +50,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Release]
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -70,25 +70,25 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    # Restore the application
-    - name: Restore the application
-      run: dotnet restore
-
     # Create the app package
     - name: Create the app package
       run: dotnet publish -c Release -r win-x64 /p:Platform=x64
 
-    - name: Create installer
+    - name: Create Directory
       shell: pwsh
-      run: |
-        New-Item -ItemType Directory ".\_Pack"
-        ${{ env:ProgramFiles(x86) }}\Inno Setup 6\ISCC.exe "${{ env:GITHUB_WORKSPACE }}\SearchLightER\Setup\naget_Setup_Windows-x64.iss"
+      run: New-Item -ItemType Directory "/_Pack"
+
+    - name: Build the Installer
+      uses: Minionguyjpro/Inno-Setup-Action@main
+      with:
+        path: ${{ env.GITHUB_WORKSPACE }}/SearchLightER/Setup/naget_Setup_Windows-x64.iss
+        options: /O/_Pack
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build
-        path: "${{ env:GITHUB_WORKSPACE }}/SearchLightER/_Pack/naget_Setup.exe"
+        path: /_Pack/naget_Setup.exe
 
   update-nightly-releases:
     name: Update Nightly Releases
@@ -100,10 +100,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: naget_Setup.exe
-          path: ./
+          path: /
           merge-multiple: true
       - run: |
-          dir .\
+          dir \
 
       - name: Update Nightly Release
         uses: andelf/nightly-release@main
@@ -115,7 +115,7 @@ jobs:
           prerelease: true
           body: 'Nightly - Commit ${{ github.sha }}'
           files: |
-            ./naget_Setup.exe
+            /naget_Setup.exe
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5
