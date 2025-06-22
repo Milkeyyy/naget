@@ -100,10 +100,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: naget_Setup.exe
-          path: ./
+          path: /
           merge-multiple: true
       - run: |
-          dir .\
+          dir \
 
       - name: Update Nightly Release
         uses: andelf/nightly-release@main
