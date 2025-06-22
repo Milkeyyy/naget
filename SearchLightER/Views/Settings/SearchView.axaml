@@ -22,13 +22,18 @@
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_Search}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
 			<TextBlock Text="{x:Static lang:Resources.Settings_Search_SearchEngine}" Margin="0 0 0 8" FontSize="16" FontWeight="Bold"/>
-			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_Search_SearchEngine}" IconSource="{ic:SymbolIconSource Symbol='Keyboard'}">
+			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_Search_SearchEngine}" IconSource="Find">
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
-						<!--登録キーテキスト-->
-						<!--<TextBlock Text="" VerticalAlignment="Center"/>-->
 						<!--検索エンジン新規作成ボタン-->
-						<Button Content="{x:Static lang:Resources.Settings_Search_Add}" IsEnabled="True" Margin="10 0 0 0" Command="{Binding CreateSearchEngineCommand}"/>
+						<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding CreateSearchEngineCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<ic:SymbolIcon Symbol="Add"/>
+									<TextBlock Text="{x:Static lang:Resources.Settings_Search_Add}" Margin="5 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 			</ui:SettingsExpander>
@@ -38,15 +43,33 @@
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Grid Margin="0 1">
-							<ui:SettingsExpander Header="{Binding Name}" IconSource="　">
+							<ui:SettingsExpander IconSource="　">
+								<ui:SettingsExpander.Header>
+									<StackPanel>
+										<TextBlock Text="{Binding Name}" FontWeight="DemiBold" VerticalAlignment="Center"/>
+										<SelectableTextBlock Text="{Binding Uri}" Foreground="" VerticalAlignment="Center"/>
+									</StackPanel>
+								</ui:SettingsExpander.Header>
 								<ui:SettingsExpander.Footer>
 									<StackPanel Orientation="Horizontal">
-										<!--登録キーテキスト-->
-										<!--<TextBlock Text="" VerticalAlignment="Center"/>-->
 										<!--編集ボタン-->
-										<Button Content="{x:Static lang:Resources.Settings_Search_Edit}" IsEnabled="" Margin="10 0 0 0" Command="{Binding EditSearchEngineCommand}"/>
+										<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding EditSearchEngineCommand}">
+											<Button.Content>
+												<StackPanel Orientation="Horizontal">
+													<ic:SymbolIcon Symbol="Edit"/>
+													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Edit}" Margin="5 0 0 0"/>
+												</StackPanel>
+											</Button.Content>
+										</Button>
 										<!--削除ボタン-->
-										<Button Content="{x:Static lang:Resources.Settings_Search_Delete}" IsEnabled="" Margin="5 0 0 0" Command="{Binding DeleteSearchEngineCommand}"/>
+										<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding DeleteSearchEngineCommand}">
+											<Button.Content>
+												<StackPanel Orientation="Horizontal">
+													<ic:SymbolIcon Symbol="Delete"/>
+													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Delete}" Margin="5 0 0 0"/>
+												</StackPanel>
+											</Button.Content>
+										</Button>
 									</StackPanel>
 								</ui:SettingsExpander.Footer>
 							</ui:SettingsExpander>
