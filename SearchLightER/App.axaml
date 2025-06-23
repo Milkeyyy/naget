@@ -12,6 +12,9 @@
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
 		<sty:FluentAvaloniaTheme CustomAccentColor="#e61953" />
+		<Style Selector="ContentPresenter">
+			<Setter Property="FontFamily" Value="{DynamicResource DefaultFont}" />
+		</Style>
 	</Application.Styles>
 
 	<TrayIcon.Icons>

@@ -47,7 +47,7 @@
 								<ui:SettingsExpander.Header>
 									<StackPanel>
 										<TextBlock Text="{Binding Name}" FontWeight="DemiBold" VerticalAlignment="Center"/>
-										<SelectableTextBlock Text="{Binding Uri}" Foreground="" VerticalAlignment="Center"/>
+										<SelectableTextBlock Text="{Binding Uri}" VerticalAlignment="Center"/>
 									</StackPanel>
 								</ui:SettingsExpander.Header>
 								<ui:SettingsExpander.Footer>
