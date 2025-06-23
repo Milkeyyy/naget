@@ -10,7 +10,7 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="naget.Views.Settings.SearchView"
 			 x:DataType="vm:SearchViewModel"
-			 epoxy:Fountain.Well="{Binding SearchViewWell}"
+			 epoxy:Fountain.Well="{Binding ViewWell}"
 >
 	
 	<Design.DataContext>

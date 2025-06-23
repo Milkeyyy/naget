@@ -16,7 +16,7 @@ namespace naget.ViewModels.Settings;
 [ViewModel]
 public class SearchViewModel
 {
-	public Well<UserControl> SearchViewWell { get; } = Well.Factory.Create<UserControl>();
+	public Well<UserControl> ViewWell { get; } = Well.Factory.Create<UserControl>();
 
 	public ReadOnlyCollection<SearchEngineViewModel> SearchEngineList { get; private set; }
 
@@ -28,7 +28,7 @@ public class SearchViewModel
 		SearchEngineList = new([]);
 
 		// ビューがロードされた時の処理
-		SearchViewWell.Add(Control.LoadedEvent, () =>
+		ViewWell.Add(Control.LoadedEvent, () =>
 		{
 			Debug.WriteLine("SearchView Loaded");
 			Debug.WriteLine(SearchEngineList);

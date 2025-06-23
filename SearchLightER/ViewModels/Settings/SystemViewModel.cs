@@ -12,7 +12,7 @@ namespace naget.ViewModels.Settings;
 [ViewModel]
 public class SystemViewModel
 {
-	public Well<UserControl> SystemViewWell { get; } = Well.Factory.Create<UserControl>();
+	public Well<UserControl> ViewWell { get; } = Well.Factory.Create<UserControl>();
 
 	public static ReadOnlyCollection<Language> LanguageList => ConfigClass.LanguageList;
 	public Language SelectedLanguage { get; set; } = LanguageList[0];
@@ -25,7 +25,7 @@ public class SystemViewModel
 	public SystemViewModel()
 	{
 		// ビューがロードされた時の処理
-		SystemViewWell.Add(Control.LoadedEvent, () =>
+		ViewWell.Add(Control.LoadedEvent, () =>
 		{
 			Debug.WriteLine("SystemView Loaded");
 			// コンフィグの言語設定から該当する言語を取得して選択中言語に設定する

@@ -11,7 +11,7 @@ namespace naget.ViewModels.Settings;
 [ViewModel]
 public class DesignViewModel
 {
-	public Well<UserControl> DesignViewWell { get; } = Well.Factory.Create<UserControl>();
+	public Well<UserControl> ViewWell { get; } = Well.Factory.Create<UserControl>();
 
 	public static ReadOnlyCollection<string> ThemeList => ConfigClass.ThemeList;
 	public string SelectedTheme { get; set; }
@@ -21,7 +21,7 @@ public class DesignViewModel
 	public DesignViewModel()
 	{
 		// ビューがロードされた時の処理
-		DesignViewWell.Add(Control.LoadedEvent, () =>
+		ViewWell.Add(Control.LoadedEvent, () =>
 		{
 			Debug.WriteLine("DesignView Loaded");
 			// コンフィグのテーマ設定から該当するテーマを取得して選択中テーマに設定する
