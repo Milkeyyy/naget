@@ -297,4 +297,7 @@
   <data name="Window.InAppBrowser" xml:space="preserve">
     <value>Browser</value>
   </data>
+  <data name="TrayMenu.CheckUpdate" xml:space="preserve">
+    <value>Check Update</value>
+  </data>
 </root>

@@ -116,7 +116,7 @@ public class App : Application
 	private static async void StartSparkle()
 	{
 		await _sparkle.StartLoop(true);
-		// 手動更新チェック
+		// 手動アップデートチェック
 		await ManualUpdateCheck();
 	}
 
@@ -168,9 +168,20 @@ public class App : Application
 			)
 			{
 				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(),
-				RelaunchAfterUpdate = true,
-				UseNotificationToast = true
+				RelaunchAfterUpdate = false,
+				UseNotificationToast = true,
+				CustomInstallerArguments = "/SILENT"
 			};
+			
+			_sparkle.PreparingToExit += (sender, e) =>
+			{
+				Exit();
+				// アプリケーション終了時に Sparkle のループを停止
+				//e.Cancel = true;
+				//_sparkle.StopLoop();
+				//Debug.WriteLine("Sparkle loop stopped.");
+			};
+
 			// ループの開始
 			StartSparkle();
 		}

@@ -475,6 +475,15 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Check Update に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string TrayMenu_CheckUpdate {
+            get {
+                return ResourceManager.GetString("TrayMenu.CheckUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Exit に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string TrayMenu_Exit {
