@@ -123,6 +123,7 @@ class Build : NukeBuild
 				.SetKeyValueDefinition("MyArch", SetupArch)
 				.SetKeyValueDefinition("MyPlatformArch", Platform)
 				.SetKeyValueDefinition("MyPlatform", Runtime)
+				.SetOutputBaseFilename($"naget_Setup_{Runtime}")
 				.SetOutputDir(output)
 				.SetScriptFile(RootDirectory / "SearchLightER" / "Setup" / $"naget_Setup_{buildInfo["release_channel"]}.iss")
 			);
