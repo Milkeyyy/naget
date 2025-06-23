@@ -1,4 +1,5 @@
 ﻿using Epoxy;
+using naget.Models.Config;
 
 namespace naget.ViewModels;
 
@@ -13,7 +14,7 @@ public class AppViewModel
 	{
 		OpenInAppBrowserWindowCommand = Command.Factory.Create(() =>
 		{
-			(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = "https://www.google.com/";
+			(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = ConfigManager.Config.BrowserWindow.StartPage;
 			App.BrowserWindow.Show();
 			return default;
 		});

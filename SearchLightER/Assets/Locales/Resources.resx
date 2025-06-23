@@ -288,4 +288,7 @@
   <data name="Settings.Design.Theme.Name.Default" xml:space="preserve">
     <value>System Default</value>
   </data>
+  <data name="Settings.InAppBrowser.StartPage" xml:space="preserve">
+    <value>Start Page</value>
+  </data>
 </root>

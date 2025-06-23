@@ -2,7 +2,32 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:cv="clr-namespace:naget.Converter;assembly=naget"
+			 xmlns:vm="using:naget.ViewModels.Settings"
+			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="naget.Views.Settings.InAppBrowserView">
-	InAppBrowser
+			 x:Class="naget.Views.Settings.InAppBrowserView"
+			 x:DataType="vm:InAppBrowserViewModel"
+			 epoxy:Fountain.Well="{Binding ViewWell}"
+>
+	<Design.DataContext>
+		<vm:InAppBrowserViewModel/>
+	</Design.DataContext>
+
+	<Panel Margin="20">
+		<StackPanel>
+			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_InAppBrowser}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_InAppBrowser_StartPage}" IconSource="Home">
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--スタートページURLテキストボックス-->
+						<TextBox Text="{Binding StartPageUrl}" HorizontalContentAlignment="Left" MinWidth="250"/>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+		</StackPanel>
+	</Panel>
 </UserControl>

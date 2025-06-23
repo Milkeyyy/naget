@@ -46,7 +46,7 @@ public class ConfigClass
 	public string Language { get; set; } // 言語コード ("en-US", "ja-JP")
 	public string Theme { get; set; } // テーマの名前 ("Default", "Dark", "Light")
 	public List<HotKey.HotKeyGroup> HotKeys { get; set; }
-	public WindowConfig BrowserWindow { get; set; }
+	public BrowserWindowConfig BrowserWindow { get; set; }
 
 	public ConfigClass()
 	{
@@ -54,16 +54,16 @@ public class ConfigClass
 		Language = LanguageList[0].Code;
 		Theme = ThemeList[0]; // システム設定
 		HotKeys = [];
-		BrowserWindow = new WindowConfig();
+		BrowserWindow = new BrowserWindowConfig();
 	}
 
 	[JsonConstructor]
-	public ConfigClass(string Language, string Theme, List<HotKey.HotKeyGroup> HotKeys, WindowConfig BrowserWindow)
+	public ConfigClass(string language, string theme, List<HotKey.HotKeyGroup> hotKeys, BrowserWindowConfig browserWindow)
 	{
-		this.Language = Language;
-		this.Theme = Theme;
-		this.HotKeys = HotKeys;
-		this.BrowserWindow = BrowserWindow;
+		Language = language;
+		Theme = theme;
+		HotKeys = hotKeys;
+		BrowserWindow = browserWindow;
 	}
 }
 
@@ -81,11 +81,30 @@ public class WindowConfig
 	}
 
 	[JsonConstructor]
-	public WindowConfig(WindowState State, double Width, double Height)
+	public WindowConfig(WindowState state, double width, double height)
 	{
-		this.State = State;
-		this.Width = Width;
-		this.Height = Height;
+		State = state;
+		Width = width;
+		Height = height;
+	}
+}
+
+public class BrowserWindowConfig : WindowConfig
+{
+	public string StartPage { get; set; }
+
+	public BrowserWindowConfig()
+	{
+		StartPage = "https://www.google.com/";
+	}
+
+	[JsonConstructor]
+	public BrowserWindowConfig(WindowState state, double width, double height, string startPage)
+	{
+		State = state;
+		Width = width;
+		Height = height;
+		StartPage = startPage;
 	}
 }
 

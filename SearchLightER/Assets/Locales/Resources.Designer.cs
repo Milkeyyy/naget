@@ -133,6 +133,15 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Start Page に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_InAppBrowser_StartPage {
+            get {
+                return ResourceManager.GetString("Settings.InAppBrowser.StartPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Add に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Search_Add {
