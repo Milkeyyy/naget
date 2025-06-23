@@ -1,5 +1,6 @@
 ﻿using Nuke.Common;
 using Nuke.Common.IO;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.InnoSetup;
 using System.Collections.Generic;
@@ -131,7 +132,7 @@ class Build : NukeBuild
 			AbsolutePath output = RootDirectory / "_Pack" / Runtime;
 			DotNetTasks.DotNetRestore(s => s.SetProjectFile(directory / "naget.csproj"));
 			DotNetTasks.DotNetMSBuild(s => s
-				//.SetProcessWorkingDirectory(directory)
+				.SetProcessWorkingDirectory(directory)
 				.SetTargets("BundleApp")
 				.SetConfiguration(Configuration)
 				.SetVersion(buildInfo["version"])
