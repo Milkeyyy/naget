@@ -121,6 +121,8 @@ class Build : NukeBuild
 				.SetKeyValueDefinition("MyAppReleaseChannel", buildInfo["release_channel"])
 				.SetKeyValueDefinition("MyAppReleaseNumber", buildInfo["release_number"])
 				.SetKeyValueDefinition("MyArch", SetupArch)
+				.SetKeyValueDefinition("MyPlatformArch", Platform)
+				.SetKeyValueDefinition("MyPlatform", Runtime)
 				.SetOutputDir(output)
 				.SetScriptFile(RootDirectory / "SearchLightER" / "Setup" / $"naget_Setup_{buildInfo["release_channel"]}.iss")
 			);
