@@ -65,34 +65,20 @@ jobs:
       - run: |
           dir \
 
-      - name: Generate GitHub Token
-        id: generate_token
-        uses: actions/create-github-app-token@v2
-        with:
-          app-id: ${{ secrets.RELEASES_REPO_APP_ID }}
-          private-key: ${{ secrets.RELEASES_REPO_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-          repositories: |
-            naget-Releases
+      # - name: Generate GitHub Token
+      #   id: generate_token
+      #   uses: actions/create-github-app-token@v2
+      #   with:
+      #     app-id: ${{ secrets.RELEASES_REPO_APP_ID }}
+      #     private-key: ${{ secrets.RELEASES_REPO_PRIVATE_KEY }}
+      #     owner: ${{ github.repository_owner }}
+      #     repositories: |
+      #       naget-Releases
 
-      - name: Update Nightly Release (Public)
-        uses: andelf/nightly-release@main
-        env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-        with:
-          tag_name: nightly
-          name: 'Nightly Build'
-          prerelease: true
-          body: |
-            Nightly Build - Commit `${{ github.sha }}`
-            - ${{ github.event.head_commit.message }}
-          files: |
-            /naget_Setup.exe
-
-      # - name: Update Nightly Release
+      # - name: Update Nightly Release (Public)
       #   uses: andelf/nightly-release@main
       #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
       #   with:
       #     tag_name: nightly
       #     name: 'Nightly Build'
@@ -102,6 +88,20 @@ jobs:
       #       - ${{ github.event.head_commit.message }}
       #     files: |
       #       /naget_Setup.exe
+
+      - name: Update Nightly Release
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: nightly
+          name: 'Nightly Build'
+          prerelease: true
+          body: |
+            Nightly Build - Commit `${{ github.sha }}`
+            - ${{ github.event.head_commit.message }}
+          files: |
+            /naget_Setup.exe
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5
