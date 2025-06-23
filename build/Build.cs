@@ -136,7 +136,17 @@ class Build : NukeBuild
 
 			AbsolutePath directory = RootDirectory / "SearchLightER";
 			AbsolutePath output = RootDirectory / "_Pack" / Runtime;
-			DotNetTasks.DotNetRestore(s => s.SetProjectFile(directory / "naget.csproj"));
+
+			DotNetTasks.DotNetRestore(_ => _
+				.SetProjectFile(ProjectFile)
+				.SetRuntime(Runtime)
+				.SetPlatform(Platform)
+				.SetVersion(buildInfo["version"])
+				.SetFileVersion(buildInfo["version"])
+				.SetAssemblyVersion(buildInfo["version"])
+				.SetInformationalVersion(buildInfo["version"])
+			);
+			
 			DotNetTasks.DotNetMSBuild(s => s
 				.SetProcessWorkingDirectory(directory)
 				.SetTargets("BundleApp")
