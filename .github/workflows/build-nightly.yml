@@ -12,8 +12,8 @@ jobs:
     name: Build
     strategy:
       matrix:
-        # rid: [ 'win-x64', 'win-arm64', 'osx-arm64' ]
-        rid: [ 'win-x64', 'win-arm64']
+        rid: [ 'win-x64', 'win-arm64', 'osx-arm64' ]
+        # rid: [ 'win-x64', 'win-arm64']
 
     runs-on: windows-latest
 
@@ -116,6 +116,7 @@ jobs:
             - ${{ github.event.head_commit.message }}
           files: |
             ./naget_Setup*.exe
+            ./naget.app
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5
