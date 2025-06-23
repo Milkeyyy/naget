@@ -2,11 +2,15 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Metadata;
 using Avalonia.Styling;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
 using naget.Views;
+using NetSparkleUpdater;
+using NetSparkleUpdater.Enums;
+using NetSparkleUpdater.SignatureVerifiers;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -27,6 +31,8 @@ public class App : Application
 	/// コンフィグ等のファイルを保存するフォルダー
 	/// </summary>
 	public static string ConfigFolder => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductName);
+
+	private SparkleUpdater _sparkle;
 
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
@@ -138,6 +144,20 @@ public class App : Application
 
 			// ホットキーの登録
 			ConfigManager.HotKeyManager.Run();
+
+			// Sparkle の初期化
+			_sparkle = new(
+				"",
+				new Ed25519Checker(
+					SecurityMode.Strict,
+					"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
+				)
+			) {
+				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(),
+				RelaunchAfterUpdate = true
+			};
+			// 自動アップデートチェックの開始
+			_sparkle.StartLoop(true);
 		}
 
 		base.OnFrameworkInitializationCompleted();
