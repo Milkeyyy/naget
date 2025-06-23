@@ -2,6 +2,8 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
+		<Platforms>x64;ARM64</Platforms>
+		<RuntimeIdentifiers>win-x64;win-arm64;osx-arm64</RuntimeIdentifiers>
 		<Nullable>enable</Nullable>
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
@@ -16,16 +18,10 @@
 		<Company>Milkeyyy</Company>
 		<Copyright>Copyright (C) 2025 Milkeyyy</Copyright>
 		<Description>naget</Description>
-		<Platforms>x64;ARM64</Platforms>
-		<RuntimeIdentifiers>win-x64;win-arm64;osx-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	<PropertyGroup>
