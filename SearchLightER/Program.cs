@@ -18,7 +18,6 @@ namespace naget
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
 				.WithInterFont()
-				.UseSegoeMetrics()
 				.LogToTrace();
 	}
 }
