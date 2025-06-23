@@ -57,7 +57,7 @@
 											<Button.Content>
 												<StackPanel Orientation="Horizontal">
 													<ic:SymbolIcon Symbol="Edit"/>
-													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Edit}" Margin="5 0 0 0"/>
+													<!--<TextBlock Text="{x:Static lang:Resources.Settings_Search_Edit}" Margin="5 0 0 0"/>-->
 												</StackPanel>
 											</Button.Content>
 										</Button>
@@ -66,7 +66,7 @@
 											<Button.Content>
 												<StackPanel Orientation="Horizontal">
 													<ic:SymbolIcon Symbol="Delete"/>
-													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Delete}" Margin="5 0 0 0"/>
+													<!--<TextBlock Text="{x:Static lang:Resources.Settings_Search_Delete}" Margin="5 0 0 0"/>-->
 												</StackPanel>
 											</Button.Content>
 										</Button>
