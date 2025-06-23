@@ -14,7 +14,7 @@ jobs:
       matrix:
         rid: [ 'win-x64', 'win-arm64', 'osx-arm64' ]
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     env:
       OUTPUT_DIR: ./_Pack
@@ -32,13 +32,13 @@ jobs:
 
     - name: Create Directory
       shell: pwsh
-      run: mkdir -p ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}
+      run: New-Item -ItemType Directory -ErrorAction SilentlyContinue ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}
 
     # ビルド (Windows)
     - if: ${{ !startsWith(matrix.rid, 'win') }}
       name: Build
       run: |
-        ./build.sh \
+        ./build.cmd \
         --runtime ${{ matrix.rid }} \
         --releasechannel nightly \
         --releasenumber ${{ github.sha }} \
@@ -46,7 +46,7 @@ jobs:
     - if: ${{ startsWith(matrix.rid, 'win') }}
       name: Build Installer
       run: |
-        ./build.sh buildinstaller \
+        ./build.cmd buildinstaller \
         --runtime ${{ matrix.rid }} \
         --releasechannel nightly \
         --releasenumber ${{ github.sha }} \
@@ -55,7 +55,7 @@ jobs:
     - if: ${{ startsWith(matrix.rid, 'osx') }}
       name: Build and Bundle
       run: |
-        ./build.sh bundleapp \
+        ./build.cmd bundleapp \
         --runtime ${{ matrix.rid }} \
         --releasechannel nightly \
         --releasenumber ${{ github.sha }} \
