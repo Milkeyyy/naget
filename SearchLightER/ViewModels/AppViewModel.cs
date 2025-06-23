@@ -8,6 +8,7 @@ public class AppViewModel
 {
 	public Command OpenInAppBrowserWindowCommand { get; }
 	public Command OpenSettingsWindowCommand { get; }
+	public Command CheckUpdateCommand { get; }
 	public Command ExitAppCommand { get; }
 
 	public AppViewModel()
@@ -22,6 +23,10 @@ public class AppViewModel
 		{
 			App.SettingsWindow.Show();
 			return default;
+		});
+		CheckUpdateCommand = Command.Factory.Create(async () =>
+		{
+			await App.ManualUpdateCheck();
 		});
 		ExitAppCommand = Command.Factory.Create(() =>
 		{

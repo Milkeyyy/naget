@@ -26,6 +26,8 @@
 						<NativeMenuItemSeparator />
 						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Settings}" Command="{Binding OpenSettingsWindowCommand}" />
 						<NativeMenuItemSeparator />
+						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_CheckUpdate}" Command="{Binding CheckUpdateCommand}" />
+						<NativeMenuItemSeparator />
 						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Exit}" Command="{Binding ExitAppCommand}" />
 					</NativeMenu>
 				</TrayIcon.Menu>

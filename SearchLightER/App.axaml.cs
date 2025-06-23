@@ -2,16 +2,21 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Metadata;
 using Avalonia.Styling;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
 using naget.Views;
+using NetSparkleUpdater;
+using NetSparkleUpdater.Enums;
+using NetSparkleUpdater.SignatureVerifiers;
 using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace naget;
 
@@ -27,6 +32,8 @@ public class App : Application
 	/// コンフィグ等のファイルを保存するフォルダー
 	/// </summary>
 	public static string ConfigFolder => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductName);
+
+	private static SparkleUpdater _sparkle;
 
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
@@ -106,6 +113,18 @@ public class App : Application
 		}
 	}
 
+	private static async void StartSparkle()
+	{
+		await _sparkle.StartLoop(true);
+		// 手動アップデートチェック
+		await ManualUpdateCheck();
+	}
+
+	public static async Task ManualUpdateCheck()
+	{
+		await _sparkle.CheckForUpdatesAtUserRequest();
+	}
+
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -138,6 +157,33 @@ public class App : Application
 
 			// ホットキーの登録
 			ConfigManager.HotKeyManager.Run();
+
+			// Sparkle の初期化
+			_sparkle = new(
+				"https://naget.milkeyyy.com/appcast.xml",
+				new Ed25519Checker(
+					SecurityMode.OnlyVerifySoftwareDownloads,
+					"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
+				)
+			)
+			{
+				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(),
+				RelaunchAfterUpdate = false,
+				UseNotificationToast = true,
+				CustomInstallerArguments = "/SILENT"
+			};
+			
+			_sparkle.PreparingToExit += (sender, e) =>
+			{
+				Exit();
+				// アプリケーション終了時に Sparkle のループを停止
+				//e.Cancel = true;
+				//_sparkle.StopLoop();
+				//Debug.WriteLine("Sparkle loop stopped.");
+			};
+
+			// ループの開始
+			StartSparkle();
 		}
 
 		base.OnFrameworkInitializationCompleted();

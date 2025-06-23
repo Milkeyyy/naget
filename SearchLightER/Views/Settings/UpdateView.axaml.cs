@@ -1,6 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 
 namespace naget.Views.Settings;
 
@@ -9,5 +7,7 @@ public partial class UpdateView : UserControl
 	public UpdateView()
 	{
 		InitializeComponent();
+
+		DataContext = new ViewModels.Settings.UpdateViewModel();
 	}
 }
