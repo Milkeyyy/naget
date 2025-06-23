@@ -97,6 +97,42 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Theme に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Design_Theme {
+            get {
+                return ResourceManager.GetString("Settings.Design.Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Dark に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Design_Theme_Name_Dark {
+            get {
+                return ResourceManager.GetString("Settings.Design.Theme.Name.Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System Default に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Design_Theme_Name_Default {
+            get {
+                return ResourceManager.GetString("Settings.Design.Theme.Name.Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Light に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Design_Theme_Name_Light {
+            get {
+                return ResourceManager.GetString("Settings.Design.Theme.Name.Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Add に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Search_Add {

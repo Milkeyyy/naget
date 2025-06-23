@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
@@ -74,6 +75,37 @@ public class App : Application
 		Exit();
 	}
 
+	/// <summary>
+	/// アプリ全体のテーマを変更する
+	/// </summary>
+	/// <param name="name"></param>
+	public static void ChangeTheme(string name)
+	{
+		if (Current == null)
+		{
+			Debug.WriteLine("Current Application is null, cannot change theme.");
+			return;
+		}
+
+		switch (name)
+		{
+			case "Default":
+				Current.RequestedThemeVariant = ThemeVariant.Default;
+				break;
+			case "Light":
+				Current.RequestedThemeVariant = ThemeVariant.Light;
+				break;
+			case "Dark":
+				Current.RequestedThemeVariant = ThemeVariant.Dark;
+				break;
+			default:
+				// 未知のテーマの場合はデフォルトに戻す
+				Current.RequestedThemeVariant = ThemeVariant.Default;
+				Debug.WriteLine($"Unknown theme selected: {name}");
+				break;
+		}
+	}
+
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -94,6 +126,9 @@ public class App : Application
 			// 言語設定を適用
 			Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
 			Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
+
+			// テーマを適用
+			ChangeTheme(ConfigManager.Config.Theme);
 
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();

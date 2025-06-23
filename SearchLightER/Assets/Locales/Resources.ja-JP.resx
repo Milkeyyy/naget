@@ -276,4 +276,16 @@
   <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
     <value>アプリケーションを再起動して適用</value>
   </data>
+  <data name="Settings.Design.Theme" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Dark" xml:space="preserve">
+    <value>ダーク</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Light" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Default" xml:space="preserve">
+    <value>システム</value>
+  </data>
 </root>

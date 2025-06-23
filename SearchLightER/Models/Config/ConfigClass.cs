@@ -33,22 +33,35 @@ public class ConfigClass
 		new("en-US", "English (US)"),
 		new("ja-JP", "日本語 - Japanese")
 	]);
-	
-	public string Language { get; set; }
+
+	// 対応テーマ一覧
+	[JsonIgnore]
+	public static readonly ReadOnlyCollection<string> ThemeList = new([
+		"Default",
+		"Dark",
+		"Light"
+	]);
+
+	// コンフィグの各項目
+	public string Language { get; set; } // 言語コード ("en-US", "ja-JP")
+	public string Theme { get; set; } // テーマの名前 ("Default", "Dark", "Light")
 	public List<HotKey.HotKeyGroup> HotKeys { get; set; }
 	public WindowConfig BrowserWindow { get; set; }
 
 	public ConfigClass()
 	{
+		// 初期値の設定
 		Language = LanguageList[0].Code;
+		Theme = ThemeList[0]; // システム設定
 		HotKeys = [];
 		BrowserWindow = new WindowConfig();
 	}
 
 	[JsonConstructor]
-	public ConfigClass(string Language, List<HotKey.HotKeyGroup> HotKeys, WindowConfig BrowserWindow)
+	public ConfigClass(string Language, string Theme, List<HotKey.HotKeyGroup> HotKeys, WindowConfig BrowserWindow)
 	{
 		this.Language = Language;
+		this.Theme = Theme;
 		this.HotKeys = HotKeys;
 		this.BrowserWindow = BrowserWindow;
 	}
