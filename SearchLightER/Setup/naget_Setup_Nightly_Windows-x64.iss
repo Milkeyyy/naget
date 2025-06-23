@@ -48,7 +48,7 @@ DisableWelcomePage=no
 WizardImageStretch=yes
 WizardImageFile=..\Assets\Logo\Setup_Banner.bmp
 WizardSmallImageFile=..\Assets\Logo\Setup_Icon.bmp
-Compression=lzma2/max
+Compression=zip
 SolidCompression=yes
 WizardStyle=modern
 
