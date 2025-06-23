@@ -457,6 +457,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Update に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Update_Check {
+            get {
+                return ResourceManager.GetString("Settings.Update.Check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Check Update に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Update_CheckUpdate {
+            get {
+                return ResourceManager.GetString("Settings.Update.CheckUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cancel に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Strings_Cancel {

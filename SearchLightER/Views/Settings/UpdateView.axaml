@@ -2,7 +2,46 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:vm="using:naget.ViewModels.Settings"
+			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="naget.Views.Settings.UpdateView">
-	Update
+			 x:Class="naget.Views.Settings.UpdateView"
+			 x:DataType="vm:UpdateViewModel"
+			 epoxy:Fountain.Well="{Binding ViewWell}"
+>
+	<Design.DataContext>
+		<vm:UpdateViewModel/>
+	</Design.DataContext>
+
+	<Panel Margin="20">
+		<StackPanel>
+			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_Update}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+
+			<ui:SettingsExpander IsExpanded="True" IconSource="Refresh">
+				<!--ヘッダー&注意書きテキスト-->
+				<ui:SettingsExpander.Header>
+					<StackPanel>
+						<!--ヘッダーテキスト-->
+						<TextBlock Text="{x:Static lang:Resources.Settings_Update_Check}" VerticalAlignment="Center"/>
+					</StackPanel>
+				</ui:SettingsExpander.Header>
+
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--アップデートチェックボタン-->
+						<Button Classes="accent" Margin="10 0 0 0" Command="{Binding CheckUpdateCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_Update_CheckUpdate}" Margin="0 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+		</StackPanel>
+	</Panel>
 </UserControl>

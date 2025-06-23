@@ -300,4 +300,10 @@
   <data name="TrayMenu.CheckUpdate" xml:space="preserve">
     <value>アップデートを確認</value>
   </data>
+  <data name="Settings.Update.Check" xml:space="preserve">
+    <value>アップデート</value>
+  </data>
+  <data name="Settings.Update.CheckUpdate" xml:space="preserve">
+    <value>アップデートを確認</value>
+  </data>
 </root>
