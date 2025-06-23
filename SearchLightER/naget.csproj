@@ -69,6 +69,7 @@
 	<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
 	<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.6" />
 	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
+	<PackageReference Include="NetSparkleUpdater.UI.Avalonia" Version="3.0.2" />
 	<PackageReference Include="roslynator.analyzers" Version="4.13.1">
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  <PrivateAssets>all</PrivateAssets>
