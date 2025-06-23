@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace naget;
 
@@ -32,43 +33,11 @@ public class App : Application
 	/// </summary>
 	public static string ConfigFolder => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductName);
 
-	private SparkleUpdater _sparkle;
+	private static SparkleUpdater _sparkle;
 
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
 	public static Window? BrowserWindow { get; private set; }
-
-	public App()
-	{
-		// フォルダーを作成する
-		Debug.WriteLine("Config Directory: " + ConfigFolder);
-		Directory.CreateDirectory(ConfigFolder);
-
-		// コンフィグを読み込む
-		ConfigManager.Load();
-
-		// 検索エンジンのリストを読み込む
-		SearchEngineManager.Load();
-
-		// 言語設定を適用
-		Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
-		Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
-		
-		// Sparkle の初期化
-		_sparkle = new(
-			"https://naget.milkeyyy.com/appcast.xml",
-			new Ed25519Checker(
-				SecurityMode.Unsafe,
-				"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
-			)
-		)
-		{
-			UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(),
-			RelaunchAfterUpdate = true
-		};
-		// ループの開始
-		StartSparkle();
-	}
 
 	public override void Initialize()
 	{
@@ -144,9 +113,16 @@ public class App : Application
 		}
 	}
 
-	private async void StartSparkle()
+	private static async void StartSparkle()
 	{
 		await _sparkle.StartLoop(true);
+		// 手動更新チェック
+		await ManualUpdateCheck();
+	}
+
+	public static async Task ManualUpdateCheck()
+	{
+		await _sparkle.CheckForUpdatesAtUserRequest();
 	}
 
 	public override void OnFrameworkInitializationCompleted()
@@ -155,6 +131,20 @@ public class App : Application
 		{
 			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
 			desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+			// フォルダーを作成する
+			Debug.WriteLine("Config Directory: " + ConfigFolder);
+			Directory.CreateDirectory(ConfigFolder);
+
+			// コンフィグを読み込む
+			ConfigManager.Load();
+
+			// 検索エンジンのリストを読み込む
+			SearchEngineManager.Load();
+
+			// 言語設定を適用
+			Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
+			Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
 
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);
@@ -167,6 +157,22 @@ public class App : Application
 
 			// ホットキーの登録
 			ConfigManager.HotKeyManager.Run();
+
+			// Sparkle の初期化
+			_sparkle = new(
+				"https://naget.milkeyyy.com/appcast.xml",
+				new Ed25519Checker(
+					SecurityMode.OnlyVerifySoftwareDownloads,
+					"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
+				)
+			)
+			{
+				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(),
+				RelaunchAfterUpdate = true,
+				UseNotificationToast = true
+			};
+			// ループの開始
+			StartSparkle();
 		}
 
 		base.OnFrameworkInitializationCompleted();
