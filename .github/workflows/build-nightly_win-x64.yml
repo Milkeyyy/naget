@@ -37,28 +37,16 @@ jobs:
     # ビルド (Windows)
     - if: ${{ !startsWith(matrix.rid, 'win') }}
       name: Build
-      run: |
-        ./build.cmd \
-        --runtime ${{ matrix.rid }} \
-        --releasechannel nightly \
-        --releasenumber ${{ github.sha }} \
+      run: ./build.cmd --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
     - if: ${{ startsWith(matrix.rid, 'win') }}
       name: Build Installer
-      run: |
-        ./build.cmd buildinstaller \
-        --runtime ${{ matrix.rid }} \
-        --releasechannel nightly \
-        --releasenumber ${{ github.sha }} \
+      run: ./build.cmd buildinstaller --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
     # ビルド (macOS)
     - if: ${{ startsWith(matrix.rid, 'osx') }}
       name: Build and Bundle
-      run: |
-        ./build.cmd bundleapp \
-        --runtime ${{ matrix.rid }} \
-        --releasechannel nightly \
-        --releasenumber ${{ github.sha }} \
+      run: ./build.cmd bundleapp --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
 
     # アップロード (Windows)
