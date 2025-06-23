@@ -127,6 +127,9 @@ jobs:
         with:
           app-id: ${{ secrets.RELEASES_REPO_APP_ID }}
           private-key: ${{ secrets.RELEASES_REPO_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            naget/naget-Releases
 
       - name: Update Nightly Release (Public)
         uses: andelf/nightly-release@main
