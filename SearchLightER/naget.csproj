@@ -17,6 +17,7 @@
 		<Copyright>Copyright (C) 2025 Milkeyyy</Copyright>
 		<Description>naget</Description>
 		<Platforms>x64;ARM64</Platforms>
+		<RuntimeIdentifiers>win-x64;win-arm64;osx-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	<PropertyGroup>
