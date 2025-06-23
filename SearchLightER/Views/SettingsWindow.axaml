@@ -5,13 +5,19 @@
 		xmlns:sty="using:FluentAvalonia.Styling"
 		xmlns:ui="using:FluentAvalonia.UI.Controls"
 		xmlns:vm="using:naget.ViewModels"
+		xmlns:local="clr-namespace:naget;assembly=naget"
 		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="naget.Views.SettingsWindow"
-		Icon="/Assets/Icon.ico"
-		Title="SettingsWindow"
+		x:DataType="vm:SettingsWindowViewModel"
 		WindowStartupLocation="CenterScreen"
+		Icon="/Assets/Icon.ico"
+		Title="{Binding WindowTitle}"
 >
+
+	<Design.DataContext>
+		<vm:SettingsWindowViewModel />
+	</Design.DataContext>
 
 	<NativeMenu.Menu>
 		<NativeMenu>

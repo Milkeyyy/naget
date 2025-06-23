@@ -581,5 +581,23 @@ namespace naget.Assets.Locales {
                 return ResourceManager.GetString("WebBrowser.Navigation.Forward", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Browser に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Window_InAppBrowser {
+            get {
+                return ResourceManager.GetString("Window.InAppBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Window_Settings {
+            get {
+                return ResourceManager.GetString("Window.Settings", resourceCulture);
+            }
+        }
     }
 }

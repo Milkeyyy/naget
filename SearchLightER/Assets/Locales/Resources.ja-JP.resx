@@ -291,4 +291,10 @@
   <data name="Settings.InAppBrowser.StartPage" xml:space="preserve">
     <value>スタートページ</value>
   </data>
+  <data name="Window.Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Window.InAppBrowser" xml:space="preserve">
+    <value>ブラウザー</value>
+  </data>
 </root>

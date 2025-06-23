@@ -2,6 +2,7 @@
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
+using naget.ViewModels;
 using System;
 
 namespace naget.Views;
@@ -12,7 +13,7 @@ public partial class SettingsWindow : AppWindow
 	{
 		InitializeComponent();
 
-		//DataContext = new SettingsShortcutKeyViewModel();
+		DataContext = new SettingsWindowViewModel();
 
 		TitleBar.ExtendsContentIntoTitleBar = true;
 
