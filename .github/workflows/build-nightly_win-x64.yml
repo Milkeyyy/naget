@@ -35,7 +35,7 @@ jobs:
       run: New-Item -ItemType Directory -ErrorAction SilentlyContinue ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}
 
     # ビルド (Windows)
-    - if: ${{ !startsWith(matrix.rid, 'win') }}
+    - if: ${{ startsWith(matrix.rid, 'win') }}
       name: Build
       run: ./build.cmd --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
