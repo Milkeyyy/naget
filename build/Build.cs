@@ -133,7 +133,6 @@ class Build : NukeBuild
 		{
 			var buildInfo = GetBuildInfo();
 
-			// dotnet msbuild -t:BundleApp -p:RuntimeIdentifier=osx-arm64 -p:TargetFramework=net9.0 -p:UseAppHost=true -p:SelfContained=true
 			AbsolutePath directory = RootDirectory / "SearchLightER";
 			AbsolutePath output = RootDirectory / "_Pack" / Runtime;
 			DotNetTasks.DotNetRestore(s => s.SetProjectFile(directory / "naget.csproj"));

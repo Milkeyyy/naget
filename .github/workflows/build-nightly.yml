@@ -12,7 +12,8 @@ jobs:
     name: Build
     strategy:
       matrix:
-        rid: [ 'win-x64', 'win-arm64', 'osx-arm64' ]
+        # rid: [ 'win-x64', 'win-arm64', 'osx-arm64' ]
+        rid: [ 'win-x64', 'win-arm64']
 
     runs-on: windows-latest
 
