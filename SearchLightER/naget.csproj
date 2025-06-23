@@ -75,7 +75,7 @@
 	</PackageReference>
 	<PackageReference Include="SharpHook" Version="6.1.2" />
 	<PackageReference Include="System.Text.Json" Version="9.0.1" />
-	<PackageReference Include="WebViewControl-Avalonia" Version="3.120.8" Condition="'$(Platform)' == 'x64' Or '$(RuntimeIdentifier)' == 'win-x64' Or '$(RuntimeIdentifier)' == 'osx-x64'" />
+	<PackageReference Include="WebViewControl-Avalonia" Version="3.120.10" Condition="'$(Platform)' == 'x64' Or '$(RuntimeIdentifier)' == 'win-x64' Or '$(RuntimeIdentifier)' == 'osx-x64'" />
 	<PackageReference Include="WebViewControl-Avalonia-ARM64" Version="3.120.8" Condition="'$(Platform)' == 'arm64' Or '$(RuntimeIdentifier)' == 'win-arm64' Or '$(RuntimeIdentifier)' == 'osx-arm64'" />
   </ItemGroup>
 
