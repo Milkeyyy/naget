@@ -16,6 +16,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      OUTPUT_DIR: ./_Pack
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -29,7 +32,7 @@ jobs:
 
     - name: Create Directory
       shell: pwsh
-      run: mkdir -p /_Pack/${{ matrix.rid }}
+      run: mkdir -p ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}
 
     # ビルド (Windows)
     - if: ${{ !startsWith(matrix.rid, 'win') }}
@@ -64,7 +67,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build-${{ matrix.rid }}
-        path: /_Pack/${{ matrix.rid }}/naget_Setup.exe
+        path: ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget_Setup.exe
 
     # アップロード (macOS)
     - if: ${{ !startsWith(matrix.rid, 'osx') }}
@@ -72,7 +75,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build-${{ matrix.rid }}
-        path: /_Pack/${{ matrix.rid }}/naget.app
+        path: ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app
 
   update-nightly-releases:
     name: Update Nightly Releases
