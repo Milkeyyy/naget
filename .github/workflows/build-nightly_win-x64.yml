@@ -116,7 +116,28 @@ jobs:
           name: 'Nightly Build'
           prerelease: true
           body: |
-            Nightly - Commit ${{ github.sha }}
+            Nightly Build - Commit `${{ github.sha }}`
+            - ${{ github.event.head_commit.message }}
+          files: |
+            /naget_Setup.exe
+
+      - name: Generate GitHub Token
+        id: generate_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.RELEASES_REPO_APP_ID }}
+          private_key: ${{ secrets.RELEASES_REPO_PRIVATE_KEY }}
+
+      - name: Update Nightly Release (Public)
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        with:
+          tag_name: nightly
+          name: 'Nightly Build'
+          prerelease: true
+          body: |
+            Nightly Build - Commit `${{ github.sha }}`
             - ${{ github.event.head_commit.message }}
           files: |
             /naget_Setup.exe
