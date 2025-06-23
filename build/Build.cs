@@ -111,14 +111,18 @@ class Build : NukeBuild
 		{
 			AbsolutePath output = RootDirectory / "_Pack" / Runtime;
 
+			var SetupArch = "x64compatible";
+			if (Runtime == "win-arm64") SetupArch = "arm64";
+
 			var buildInfo = GetBuildInfo();
 
 			InnoSetupTasks.InnoSetup(c => c
 				.SetKeyValueDefinition("MyAppVersion", buildInfo["version"])
 				.SetKeyValueDefinition("MyAppReleaseChannel", buildInfo["release_channel"])
 				.SetKeyValueDefinition("MyAppReleaseNumber", buildInfo["release_number"])
+				.SetKeyValueDefinition("MyArch", SetupArch)
 				.SetOutputDir(output)
-				.SetScriptFile(RootDirectory / "SearchLightER" / "Setup" / $"naget_Setup_{buildInfo["release_channel"]}_{Runtime}.iss")
+				.SetScriptFile(RootDirectory / "SearchLightER" / "Setup" / $"naget_Setup_{buildInfo["release_channel"]}.iss")
 			);
 		});
 
