@@ -5,11 +5,11 @@
     <description>Most recent changes with links to updates</description>
     <language>en</language>
     <item>
-      <title>naget 1.0.0.0-nightly.0</title>
+      <title>naget 1.0.0-nightly.0</title>
       <pubDate>Mon, 23 Jun 2025 18:18:03 +09:00</pubDate>
-      <sparkle:version>1.0.0.0-nightly.0</sparkle:version>
-      <sparkle:shortVersionString>1.0.0.0</sparkle:shortVersionString>
-      <enclosure url="https://github.com/Milkeyyy/naget-Releases/releases/download/nightly/naget_Setup.exe" sparkle:version="1.0.0.0-nightly.0" sparkle:shortVersionString="1.0.0.0" length="132181726" sparkle:os="windows" type="application/x-msdos-program" sparkle:criticalUpdate="false" sparkle:edSignature="d03DrHaTuDJxP8gXALrK+sHQVU2it98EZudjNQbs5YiGbwieuqy8YoxfZixjIktYmVlWukv2vTU/8Ph6wDhuBA==" />
+      <sparkle:version>1.0.0-nightly.0</sparkle:version>
+      <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+      <enclosure url="https://github.com/Milkeyyy/naget-Releases/releases/download/nightly/naget_Setup.exe" sparkle:version="1.0.0-nightly.0" sparkle:shortVersionString="1.0.0" length="132181726" sparkle:os="windows" type="application/x-msdos-program" sparkle:criticalUpdate="false" sparkle:edSignature="d03DrHaTuDJxP8gXALrK+sHQVU2it98EZudjNQbs5YiGbwieuqy8YoxfZixjIktYmVlWukv2vTU/8Ph6wDhuBA==" />
     </item>
   </channel>
 </rss>
