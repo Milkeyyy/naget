@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
 			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:cv="clr-namespace:naget.Converter;assembly=naget"
 			 xmlns:vm="using:naget.ViewModels.Settings"
 			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
@@ -16,6 +17,11 @@
 	<Design.DataContext>
 		<vm:ShortcutKeyViewModel/>
 	</Design.DataContext>
+
+	<UserControl.Resources>
+		<!--アクション名コンバーター-->
+		<cv:HotKeyActionNameConverter x:Key="hotKeyActionNameConverter"/>
+	</UserControl.Resources>
 
 	<Panel Margin="20">
 		<StackPanel>
@@ -73,7 +79,7 @@
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
 											<ui:SymbolIcon Symbol="{Binding Icon}" FontSize="20"/>
-											<TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
+											<TextBlock Text="{Binding Id, Converter={StaticResource hotKeyActionNameConverter}}" Margin="10 0 0 0"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
