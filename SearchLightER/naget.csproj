@@ -83,8 +83,8 @@
 		</PackageReference>
 		<PackageReference Include="SharpHook" Version="6.1.2" />
 		<PackageReference Include="System.Text.Json" Version="9.0.6" />
-		<PackageReference Include="WebViewControl-Avalonia" Version="3.120.10" Condition="$(Platform.EndsWith('x64')) Or $(RuntimeIdentifier.EndsWith('x64'))" />
-		<PackageReference Include="WebViewControl-Avalonia-ARM64" Version="3.120.8" Condition="$(Platform.EndsWith('arm64')) Or $(RuntimeIdentifier.EndsWith('arm64'))" />
+		<PackageReference Include="WebViewControl-Avalonia" Version="3.120.10" Condition="$(Platform.EndsWith('x64')) Or $(RuntimeIdentifier.EndsWith('x64')) Or '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'" />
+		<PackageReference Include="WebViewControl-Avalonia-ARM64" Version="3.120.8" Condition="$(Platform.EndsWith('arm64')) Or $(RuntimeIdentifier.EndsWith('arm64')) Or '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM64'" />
 	</ItemGroup>
 
 	<ItemGroup>
