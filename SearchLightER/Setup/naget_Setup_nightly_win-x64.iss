@@ -3,7 +3,6 @@
 
 #define MyAppName "naget"
 #define MyAppInstallName "naget"
-#define MyAppVersion GetVersionNumbersString('..\bin\x64\Release\net8.0\win-x64\publish\naget.exe')
 #define MyAppPublisher "Milkeyyy"
 #define MyAppURL "https://milkeyyy.com/"
 #define MyAppExeName "naget.exe"
