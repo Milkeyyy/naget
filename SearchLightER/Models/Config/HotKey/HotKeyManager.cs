@@ -43,7 +43,6 @@ public class HotKeyManager : IDisposable
 		);
 		hook.KeyPressed += Hook_KeyPressed;
 		hook.KeyReleased += Hook_KeyReleased;
-		hook.MouseMoved += Hook_MouseMoved;
 
 		Groups = [];
 
@@ -136,9 +135,9 @@ public class HotKeyManager : IDisposable
 				if (group.Keys == null) continue;
 				if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
 				{
-					Debug.WriteLine("HotKey pressed: " + group.Name);
 					e.SuppressEvent = true;
 					group.Action.Action();
+					Debug.WriteLine("HotKey pressed: " + group.Name);
 				}
 			}
 		}
@@ -152,16 +151,6 @@ public class HotKeyManager : IDisposable
 	private void Hook_KeyReleased(object? sender, KeyboardHookEventArgs e)
 	{
 		pressedKeys.Remove(e.Data.KeyCode);
-	}
-
-	/// <summary>
-	/// マウスが移動した時のイベント
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void Hook_MouseMoved(object? sender, MouseHookEventArgs e)
-	{
-		MousePointerCoordinates = new(e.Data.X, e.Data.Y);
 	}
 
 	private HotKeyGroup? _GetHotKeyGroupFromKey(string id)
