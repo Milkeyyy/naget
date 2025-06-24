@@ -16,7 +16,7 @@ public class HotKeyManager : IDisposable
 	/// <summary>
 	/// キーのグローバルフック
 	/// </summary>
-	private readonly SimpleGlobalHook hook;
+	private readonly TaskPoolGlobalHook hook;
 	/// <summary>
 	/// 押されているキーの一覧
 	/// </summary>
@@ -37,7 +37,10 @@ public class HotKeyManager : IDisposable
 
 	public HotKeyManager()
 	{
-		hook = new SimpleGlobalHook();
+		hook = new TaskPoolGlobalHook(
+			globalHookType: GlobalHookType.Keyboard, // グローバルフックのタイプをキーボードに設定
+			runAsyncOnBackgroundThread: true // バックグラウンドスレッドで実行する
+		);
 		hook.KeyPressed += Hook_KeyPressed;
 		hook.KeyReleased += Hook_KeyReleased;
 		hook.MouseMoved += Hook_MouseMoved;
