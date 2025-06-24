@@ -59,7 +59,7 @@ jobs:
       name: Create DMG
       run: |
         npm install --global create-dmg
-        create-dmg '${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ matrix.rid }} --dmg-title=naget
+        create-dmg '${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ matrix.rid }} || true
 
     - if: ${{ startsWith(matrix.rid, 'osx') }}
       name: Rename DMG
