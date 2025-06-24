@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Metadata;
+using Avalonia.Platform;
 using Avalonia.Styling;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
@@ -167,7 +167,7 @@ public class App : Application
 				)
 			)
 			{
-				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(),
+				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(new WindowIcon(AssetLoader.Open(new Uri("avares://naget/Assets/Icon.ico")))),
 				RelaunchAfterUpdate = false,
 				UseNotificationToast = true,
 				CustomInstallerArguments = "/SILENT"
