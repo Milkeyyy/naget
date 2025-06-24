@@ -7,6 +7,7 @@
 			 x:DataType="vm:AppViewModel"
 			 xmlns:local="using:naget"
 			 RequestedThemeVariant="Default"
+			 Name="naget"
 >
 
 	<!--<Application.Resources>
@@ -39,8 +40,7 @@
 	<!--通知領域アイコン-->
 	<TrayIcon.Icons>
 		<TrayIcons>
-			<TrayIcon Icon="/Assets/Icon.ico"
-					  ToolTipText="{x:Static lang:Resources.App_Name}">
+			<TrayIcon Icon="/Assets/Icon.ico" ToolTipText="{x:Static lang:Resources.App_Name}">
 				<TrayIcon.Menu>
 					<NativeMenu>
 						<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" />
