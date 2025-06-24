@@ -29,8 +29,8 @@
 						<Button Classes="accent" IsEnabled="" Margin="10 0 0 0" Command="{Binding CreateSearchEngineCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<!--<ic:SymbolIcon Symbol="Add"/>-->
-									<TextBlock Text="{x:Static lang:Resources.Settings_Search_Add}" Foreground="White" Margin="0 0 0 0"/>
+									<ic:SymbolIcon Symbol="Add" FontSize="15"/>
+									<TextBlock Text="{x:Static lang:Resources.Settings_Search_Add}" Foreground="White" Margin="10 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
 						</Button>
@@ -56,8 +56,8 @@
 										<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding EditSearchEngineCommand}">
 											<Button.Content>
 												<StackPanel Orientation="Horizontal">
-													<ic:SymbolIcon Symbol="Edit"/>
-													<!--<TextBlock Text="{x:Static lang:Resources.Settings_Search_Edit}" Margin="5 0 0 0"/>-->
+													<ic:SymbolIcon Symbol="Edit" FontSize="15"/>
+													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Edit}" Margin="10 0 0 0"/>
 												</StackPanel>
 											</Button.Content>
 										</Button>
@@ -65,8 +65,8 @@
 										<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding DeleteSearchEngineCommand}">
 											<Button.Content>
 												<StackPanel Orientation="Horizontal">
-													<ic:SymbolIcon Symbol="Delete"/>
-													<!--<TextBlock Text="{x:Static lang:Resources.Settings_Search_Delete}" Margin="5 0 0 0"/>-->
+													<ic:SymbolIcon Symbol="Delete" FontSize="15"/>
+													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Delete}" Margin="10 0 0 0"/>
 												</StackPanel>
 											</Button.Content>
 										</Button>
