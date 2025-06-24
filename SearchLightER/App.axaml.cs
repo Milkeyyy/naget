@@ -153,8 +153,6 @@ public class App : Application
 			SettingsWindow = new SettingsWindow();
 			BrowserWindow = new BrowserWindow();
 
-			desktop.MainWindow = SettingsWindow;
-
 			// ホットキーの登録
 			ConfigManager.HotKeyManager.Run();
 
