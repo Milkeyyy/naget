@@ -1,11 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Media;
-using naget.Models.Config;
-using naget.Models.SearchEngine;
 using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 
 namespace naget
 {
