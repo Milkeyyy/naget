@@ -56,18 +56,14 @@ jobs:
       run: ./build.sh bundleapp --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
     - if: ${{ startsWith(matrix.rid, 'osx') }}
-      name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 'latest'
+      name: Create DMG
+      run: |
+        npm install --global create-dmg
+        create-dmg '${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ matrix.rid }} --dmg-title=naget
 
     - if: ${{ startsWith(matrix.rid, 'osx') }}
-      name: Install create-dmg
-      run: npm install --global create-dmg
-
-    - if: ${{ startsWith(matrix.rid, 'osx') }}
-      name: Run create-dmg
-      run: create-dmg '${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ matrix.rid }} --dmg-title=naget
+      name: Rename DMG
+      run: mv ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget*.dmg ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.dmg
 
     # アップロード (Windows)
     - if: ${{ startsWith(matrix.rid, 'win') }}
