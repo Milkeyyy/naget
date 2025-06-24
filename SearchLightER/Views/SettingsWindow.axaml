@@ -19,19 +19,6 @@
 		<vm:SettingsWindowViewModel />
 	</Design.DataContext>
 
-	<NativeMenu.Menu>
-		<NativeMenu>
-			<NativeMenuItem Header="Settings">
-				<NativeMenu>
-					<NativeMenuItem Header="Option 1"   />
-					<NativeMenuItem Header="Option 2"   />
-					<NativeMenuItemSeparator />
-					<NativeMenuItem Header="Option 3"  />
-				</NativeMenu>
-			</NativeMenuItem>
-		</NativeMenu>
-	</NativeMenu.Menu>
-
 	<Panel Margin="0 48 0 0">
 		<ui:NavigationView x:Name="navigationMenu" Height="NaN" PaneDisplayMode="Auto" IsSettingsVisible="False">
 			<ui:NavigationView.MenuItems>
