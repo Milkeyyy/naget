@@ -592,6 +592,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Edit に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_NativeMenu_Edit {
+            get {
+                return ResourceManager.GetString("WebBrowser.NativeMenu.Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Navigate に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_NativeMenu_Navigate {
+            get {
+                return ResourceManager.GetString("WebBrowser.NativeMenu.Navigate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Back に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string WebBrowser_Navigation_Back {

@@ -25,7 +25,7 @@
 
 	<NativeMenu.Menu>
 		<NativeMenu>
-			<NativeMenuItem Header="Edit">
+			<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_NativeMenu_Edit}">
 				<NativeMenuItem.Menu>
 					<NativeMenu>
 						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Undo}" Command="{Binding UndoCommand}" Gesture="CMD+Z" />
@@ -40,7 +40,7 @@
 					</NativeMenu>
 				</NativeMenuItem.Menu>
 			</NativeMenuItem>
-			<NativeMenuItem Header="Navigate">
+			<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_NativeMenu_Navigate}">
 				<NativeMenuItem.Menu>
 					<NativeMenu>
 						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}"/>

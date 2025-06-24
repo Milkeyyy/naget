@@ -306,4 +306,10 @@
   <data name="Settings.Update.CheckUpdate" xml:space="preserve">
     <value>アップデートを確認</value>
   </data>
+  <data name="WebBrowser.NativeMenu.Edit" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="WebBrowser.NativeMenu.Navigate" xml:space="preserve">
+    <value>操作</value>
+  </data>
 </root>
