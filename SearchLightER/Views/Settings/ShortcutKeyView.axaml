@@ -42,15 +42,15 @@
 						<Button Classes="accent" IsEnabled="" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<!--<ic:SymbolIcon Symbol="Add"/>-->
-									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="0 0 0 0"/>
+									<ic:SymbolIcon Symbol="Add" FontSize="15"/>
+									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
 						</Button>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 
-				<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol='Keyboard'}">
+				<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol=Keyboard}">
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
 							<!--登録キーテキスト-->
@@ -59,8 +59,8 @@
 							<Button Classes="accent" IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}">
 								<Button.Content>
 									<StackPanel Orientation="Horizontal">
-										<!--<ui:SymbolIcon Symbol="{Binding KeyRegisterButtonIcon}"/>-->
-										<TextBlock Foreground="White" Text="{Binding KeyRegisterButtonText}" Margin="0 0 0 0"/>
+										<ui:SymbolIcon Symbol="{Binding KeyRegisterButtonIcon}" FontSize="15"/>
+										<TextBlock Foreground="White" Text="{Binding KeyRegisterButtonText}" Margin="10 0 0 0"/>
 									</StackPanel>
 								</Button.Content>
 							</Button>
@@ -69,7 +69,7 @@
 
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol='ArrowUpRight'}">
+				<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol=ArrowUpRight}">
 
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
