@@ -115,8 +115,7 @@ jobs:
             Nightly Build - Commit `${{ github.sha }}`
             - ${{ github.event.head_commit.message }}
           files: |
-            ./naget_Setup*.exe
-            ./naget*.app
+            ./naget*
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5
