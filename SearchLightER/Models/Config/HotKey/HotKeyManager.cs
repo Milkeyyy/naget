@@ -112,20 +112,20 @@ public class HotKeyManager : IDisposable
 	/// <param name="e"></param>
 	private void Hook_KeyPressed(object? sender, KeyboardHookEventArgs e)
 	{
-		//Debug.WriteLine("Key pressed: " + e.Data.KeyCode);
-		// キー登録モードの場合は押されたキーを登録するキー一覧へ追加する
 		if (keyRegsitrationMode == 1)
 		{
-			// Escキーが押されたらキー登録をキャンセルする
 			if (e.Data.KeyCode == KeyCode.VcEscape)
 			{
+				// クリアのみロック
 				lock (registrationLock)
 				{
 					registrationQueuedKeys.Clear();
 				}
-				var t = CancelKeyRegistration();
+				// ロック外でキャンセル
+				CancelKeyRegistration();
 				return;
 			}
+			// 追加のみロック
 			lock (registrationLock)
 			{
 				registrationQueuedKeys.Add(e.Data.KeyCode);
@@ -133,12 +133,12 @@ public class HotKeyManager : IDisposable
 			return;
 		}
 
+		// 以降は既存の処理
 		pressedKeys.Add(e.Data.KeyCode);
 		foreach (var group in Groups)
 		{
-			if (group != null)
+			if (group != null && group.Keys != null)
 			{
-				if (group.Keys == null) continue;
 				if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
 				{
 					e.SuppressEvent = true;
