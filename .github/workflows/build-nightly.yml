@@ -13,9 +13,15 @@ jobs:
     strategy:
       matrix:
         rid: [ 'win-x64', 'win-arm64', 'osx-arm64' ]
-        # rid: [ 'win-x64', 'win-arm64']
+        runner: [ 'windows-latest' ]
+        exclude:
+          - rid: osx-arm64
+            runner: windows-latest
+        include:
+          - rid: osx-arm64
+            runner: macos-latest
 
-    runs-on: windows-latest
+    runs-on: ${{ matrix.runner }}
 
     env:
       OUTPUT_DIR: ./_Pack
@@ -47,7 +53,7 @@ jobs:
     # ビルド (macOS)
     - if: ${{ startsWith(matrix.rid, 'osx') }}
       name: Build and Bundle
-      run: ./build.cmd bundleapp --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+      run: ./build.sh bundleapp --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
     - if: ${{ startsWith(matrix.rid, 'osx') }}
       name: Setup Node.js
