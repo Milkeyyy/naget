@@ -79,6 +79,10 @@ jobs:
           path: ./
           merge-multiple: true
 
+      - name: File List
+        shell: pwsh
+        run: ls ./
+
       # - name: Generate GitHub Token
       #   id: generate_token
       #   uses: actions/create-github-app-token@v2
