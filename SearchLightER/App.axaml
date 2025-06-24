@@ -23,7 +23,7 @@
 	</Application.Styles>
 
 	<!--ネイティブメニュー (macOS/Linux)-->
-	<NativeMenu.Menu>
+	<!--<NativeMenu.Menu>
 		<NativeMenu>
 			<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" />
 			<NativeMenuItemSeparator />
@@ -34,7 +34,7 @@
 			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_CheckUpdate}" Command="{Binding CheckUpdateCommand}" />
 			<NativeMenuItemSeparator />
 			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Exit}" Command="{Binding ExitAppCommand}" />
-		</NativeMenu>
+		</NativeMenu>-->
 	</NativeMenu.Menu>
 
 	<!--通知領域アイコン-->
