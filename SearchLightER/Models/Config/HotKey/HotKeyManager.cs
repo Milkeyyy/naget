@@ -34,6 +34,7 @@ public class HotKeyManager : IDisposable
 
 	private int keyRegsitrationMode;
 	private HashSet<KeyCode> registrationQueuedKeys;
+	private readonly object registrationLock = new object();
 
 	public HotKeyManager()
 	{
@@ -118,12 +119,17 @@ public class HotKeyManager : IDisposable
 			// Escキーが押されたらキー登録をキャンセルする
 			if (e.Data.KeyCode == KeyCode.VcEscape)
 			{
-				registrationQueuedKeys = [];
+				lock (registrationLock)
+				{
+					registrationQueuedKeys.Clear();
+				}
 				var t = CancelKeyRegistration();
 				return;
 			}
-			Debug.WriteLine("Key added: " + e.Data.KeyCode);
-			registrationQueuedKeys.Add(e.Data.KeyCode);
+			lock (registrationLock)
+			{
+				registrationQueuedKeys.Add(e.Data.KeyCode);
+			}
 			return;
 		}
 
@@ -175,14 +181,20 @@ public class HotKeyManager : IDisposable
 		{
 			Debug.WriteLine("Key registration started");
 			keyRegsitrationMode = 1;
-			registrationQueuedKeys = [];
+			lock (registrationLock)
+			{
+				registrationQueuedKeys.Clear();
+			}
 
 			while (keyRegsitrationMode == 1)
 			{
 				if (keyRegsitrationMode == -1) break;
-				// キーが何も押されていない場合は Esc を押してキャンセル という表示にする 1つでも押されている場合は押されたキーをUIに表示する
-				if (registrationQueuedKeys.Count == 0) progress?.Report(Resources.Settings_ShortcutKey_RegisterKeys_PressEscToCancel);
-				else progress?.Report(string.Join("+", registrationQueuedKeys.Select(k => k.ToString())));
+				lock (registrationLock)
+				{
+					// キーが何も押されていない場合は Esc を押してキャンセル という表示にする 1つでも押されている場合は押されたキーをUIに表示する
+					if (registrationQueuedKeys.Count == 0) progress?.Report(Resources.Settings_ShortcutKey_RegisterKeys_PressEscToCancel);
+					else progress?.Report(string.Join(" + ", registrationQueuedKeys.Select(k => KeyCodeName.Get(k))));
+				}
 				await Task.Delay(10);
 			}
 
