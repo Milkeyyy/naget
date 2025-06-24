@@ -117,7 +117,7 @@ public class App : Application
 	{
 		await _sparkle.StartLoop(true);
 		// 手動アップデートチェック
-		await ManualUpdateCheck();
+		//await ManualUpdateCheck();
 	}
 
 	public static async Task ManualUpdateCheck()
