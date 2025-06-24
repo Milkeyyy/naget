@@ -21,6 +21,22 @@
 		</Style>-->
 	</Application.Styles>
 
+	<!--ネイティブメニュー (macOS/Linux)-->
+	<NativeMenu.Menu>
+		<NativeMenu>
+			<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" />
+			<NativeMenuItemSeparator />
+			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_InAppBrowser}" Command="{Binding OpenInAppBrowserWindowCommand}" />
+			<NativeMenuItemSeparator />
+			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Settings}" Command="{Binding OpenSettingsWindowCommand}" />
+			<NativeMenuItemSeparator />
+			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_CheckUpdate}" Command="{Binding CheckUpdateCommand}" />
+			<NativeMenuItemSeparator />
+			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Exit}" Command="{Binding ExitAppCommand}" />
+		</NativeMenu>
+	</NativeMenu.Menu>
+
+	<!--通知領域アイコン-->
 	<TrayIcon.Icons>
 		<TrayIcons>
 			<TrayIcon Icon="/Assets/Icon.ico"
