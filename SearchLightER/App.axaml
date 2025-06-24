@@ -34,8 +34,8 @@
 			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_CheckUpdate}" Command="{Binding CheckUpdateCommand}" />
 			<NativeMenuItemSeparator />
 			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Exit}" Command="{Binding ExitAppCommand}" />
-		</NativeMenu>-->
-	</NativeMenu.Menu>
+		</NativeMenu>
+	</NativeMenu.Menu>-->
 
 	<!--通知領域アイコン-->
 	<TrayIcon.Icons>
