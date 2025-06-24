@@ -49,6 +49,19 @@ jobs:
       name: Build and Bundle
       run: ./build.cmd bundleapp --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
+    - if: ${{ startsWith(matrix.rid, 'osx') }}
+      name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'latest'
+
+    - if: ${{ startsWith(matrix.rid, 'osx') }}
+      name: Install create-dmg
+      run: npm install --global create-dmg
+
+    - if: ${{ startsWith(matrix.rid, 'osx') }}
+      name: Run create-dmg
+      run: create-dmg '${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ matrix.rid }} --dmg-title=naget
 
     # アップロード (Windows)
     - if: ${{ startsWith(matrix.rid, 'win') }}
@@ -64,7 +77,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build-${{ matrix.rid }}
-        path: ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app
+        path: ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.dmg
 
   update-nightly-releases:
     name: Update Nightly Releases
