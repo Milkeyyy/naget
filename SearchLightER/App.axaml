@@ -8,13 +8,17 @@
 			 xmlns:local="using:naget"
 			 RequestedThemeVariant="Default"
 >
+
+	<!--<Application.Resources>
+		<FontFamily x:Key="DefaultFont">avares://naget/Assets/Fonts#Noto Sans JP</FontFamily>
+	</Application.Resources>-->
 	
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
 		<sty:FluentAvaloniaTheme CustomAccentColor="#e61953" />
-		<Style Selector="ContentPresenter">
-			<Setter Property="FontFamily" Value="{DynamicResource DefaultFont}" />
-		</Style>
+		<!--<Style Selector=":is(TopLevel)">
+			<Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
+		</Style>-->
 	</Application.Styles>
 
 	<TrayIcon.Icons>
