@@ -20,7 +20,8 @@
 	<Panel Margin="20">
 		<StackPanel>
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_InAppBrowser}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
-			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_InAppBrowser_StartPage}" IconSource="Home">
+
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_InAppBrowser_StartPage}" IconSource="{ic:SymbolIconSource Symbol=Home}">
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--スタートページURLテキストボックス-->

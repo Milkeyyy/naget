@@ -26,6 +26,7 @@
 	<Panel Margin="20">
 		<StackPanel>
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+
 			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="{ic:SymbolIconSource Symbol=TextBulletListSquareSparkle}">
 				
 				<ui:SettingsExpander.Footer>

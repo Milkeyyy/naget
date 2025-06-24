@@ -22,7 +22,7 @@
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_Search}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
 			<TextBlock Text="{x:Static lang:Resources.Settings_Search_SearchEngine}" Margin="0 0 0 8" FontSize="16" FontWeight="Bold"/>
-			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_Search_SearchEngine}" IconSource="Find">
+			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_Search_SearchEngine}" IconSource="{ic:SymbolIconSource Symbol=Search}">
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--検索エンジン新規作成ボタン-->

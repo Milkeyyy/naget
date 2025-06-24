@@ -20,7 +20,7 @@
 		<StackPanel>
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_Update}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
-			<ui:SettingsExpander IsExpanded="True" IconSource="Upload">
+			<ui:SettingsExpander IsExpanded="True" IconSource="Refresh">
 				<!--ヘッダー&注意書きテキスト-->
 				<ui:SettingsExpander.Header>
 					<StackPanel>
