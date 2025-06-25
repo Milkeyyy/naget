@@ -24,10 +24,6 @@ public static class HotKeyHelper
 	/// </summary>
 	private static readonly HashSet<KeyCode> pressedKeys;
 	/// <summary>
-	/// 押されているキーの文字列表現
-	/// </summary>
-	private static string PressedKeysString { get { return string.Join(";", pressedKeys.Select(k => k.ToString())); } }
-	/// <summary>
 	/// ホットキーの一覧 (内部)
 	/// </summary>
 	public static List<HotKeyGroup> Groups => ConfigManager.HotKeyManager.Groups;
@@ -181,7 +177,6 @@ public static class HotKeyHelper
 		// キー登録がキャンセルされた場合
 		if (registrationMode == HotKeyRegistrationMode.Canceled)
 		{
-			Debug.WriteLine("Key registration canceled");
 			EndKeyRegistration();
 
 			// キー登録モードをリセット
@@ -203,20 +198,10 @@ public static class HotKeyHelper
 		return true;
 	}
 
-	/// <summary>
-	/// アロー↑リ
-	/// </summary>
-	public static void DaolerKeyRegistration()
-	{
-		lock (registrationQueuedKeysLock)
-		{
-			registrationQueuedKeys.Clear();
-		}
-	}
-
 	public static bool EndKeyRegistration()
 	{
 		if (registrationMode == HotKeyRegistrationMode.None || registrationMode == HotKeyRegistrationMode.Canceled) return false;
+		Debug.WriteLine("Key registration ended");
 		registrationMode = HotKeyRegistrationMode.None;
 		return true;
 	}
@@ -224,6 +209,7 @@ public static class HotKeyHelper
 	public static bool CancelKeyRegistration()
 	{
 		if (registrationMode == HotKeyRegistrationMode.None || registrationMode == HotKeyRegistrationMode.Canceled) return false;
+		Debug.WriteLine("Key registration canceled");
 		registrationMode = HotKeyRegistrationMode.Canceled;
 		return true;
 	}
@@ -233,6 +219,5 @@ public enum HotKeyRegistrationMode
 {
 	None = 0,
 	Registering = 1,
-	Daoler = 2,
 	Canceled = -1
 }
