@@ -1,26 +1,14 @@
-﻿using naget.Assets.Locales;
-using SharpHook;
-using SharpHook.Data;
-using System;
+﻿using SharpHook.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace naget.Models.Config.HotKey;
 
-public class HotKeyManager : IDisposable
+public class HotKeyManager
 {
-	/// <summary>
-	/// キーのグローバルフック
-	/// </summary>
-	private readonly TaskPoolGlobalHook hook;
-	/// <summary>
-	/// 押されているキーの一覧
-	/// </summary>
-	private readonly HashSet<KeyCode> pressedKeys;
 	/// <summary>
 	/// ホットキーの一覧 (内部)
 	/// </summary>
@@ -32,46 +20,15 @@ public class HotKeyManager : IDisposable
 
 	public Point MousePointerCoordinates { get; private set; } = new(0, 0);
 
-	private int keyRegsitrationMode;
-	private HashSet<KeyCode> registrationQueuedKeys;
-	private readonly object registrationLock = new object();
-
 	public HotKeyManager()
 	{
-		hook = new TaskPoolGlobalHook(
-			globalHookType: GlobalHookType.Keyboard, // グローバルフックのタイプをキーボードに設定
-			runAsyncOnBackgroundThread: true // バックグラウンドスレッドで実行する
-		);
-		hook.KeyPressed += Hook_KeyPressed;
-		hook.KeyReleased += Hook_KeyReleased;
-
 		Groups = [];
-
-		pressedKeys = [];
-
-		registrationQueuedKeys = [];
-	}
-
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
-	private bool _disposed;
-	protected virtual void Dispose(bool disposing)
-	{
-		if (!_disposed)
-		{
-			if (disposing) hook.Dispose();
-			_disposed = true;
-		}
 	}
 
 	public void LoadGroups(List<HotKeyGroup> groups)
 	{
 		Debug.WriteLine("Group loaded: " + groups.Count);
-		this.Groups = groups;
+		Groups = groups;
 		/*foreach (var group in groups)
 		{
 			Debug.WriteLine(group.Id);
@@ -100,136 +57,25 @@ public class HotKeyManager : IDisposable
 		Groups.RemoveAll(x => x.Id == id);
 	}
 
-	public void Run()
-	{
-		var t = hook.RunAsync();
-	}
-
-	/// <summary>
-	/// キーが押された時のイベント
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void Hook_KeyPressed(object? sender, KeyboardHookEventArgs e)
-	{
-		if (keyRegsitrationMode == 1)
-		{
-			if (e.Data.KeyCode == KeyCode.VcEscape)
-			{
-				// クリアのみロック
-				lock (registrationLock)
-				{
-					registrationQueuedKeys.Clear();
-				}
-				// ロック外でキャンセル
-				CancelKeyRegistration();
-				return;
-			}
-			// 追加のみロック
-			lock (registrationLock)
-			{
-				registrationQueuedKeys.Add(e.Data.KeyCode);
-			}
-			return;
-		}
-
-		// 以降は既存の処理
-		pressedKeys.Add(e.Data.KeyCode);
-		foreach (var group in Groups)
-		{
-			if (group != null && group.Keys != null)
-			{
-				if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
-				{
-					e.SuppressEvent = true;
-					group.Action.Action();
-					Debug.WriteLine("HotKey pressed: " + group.Name);
-				}
-			}
-		}
-	}
-
-	/// <summary>
-	/// キーが離された時のイベント
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void Hook_KeyReleased(object? sender, KeyboardHookEventArgs e)
-	{
-		pressedKeys.Remove(e.Data.KeyCode);
-	}
-
 	private HotKeyGroup? _GetHotKeyGroupFromKey(string id)
 	{
 		return Groups.FirstOrDefault(x => x.Id == id);
 	}
 
-	private HotKeyGroup _RegisterKeys(string groupId, HashSet<KeyCode> keys)
+	/// <summary>
+	/// 指定されたIDのグループにキーを登録する
+	/// </summary>
+	/// <param name="groupId"></param>
+	/// <param name="keys"></param>
+	/// <returns></returns>
+	public HotKeyGroup RegisterKeys(string groupId, HashSet<KeyCode> keys)
 	{
 		// 渡されたIDからホットキーグループを取得する
 		var g = _GetHotKeyGroupFromKey(groupId);
 		// 取得したグループのキーに渡されたキーを設定する
 		g.Keys = keys;
-		Debug.WriteLine("Key registered: " + string.Join(", ", keys));
+		Debug.WriteLine($"Key registered: {groupId} | " + string.Join(", ", keys));
 		return g;
-	}
-
-	private async Task<string?> _StartKeyRegistrationAsync(string groupId, IProgress<string>? progress = null)
-	{
-		if (keyRegsitrationMode == 1) return null;
-		else
-		{
-			Debug.WriteLine("Key registration started");
-			keyRegsitrationMode = 1;
-			lock (registrationLock)
-			{
-				registrationQueuedKeys.Clear();
-			}
-
-			while (keyRegsitrationMode == 1)
-			{
-				if (keyRegsitrationMode == -1) break;
-				lock (registrationLock)
-				{
-					// キーが何も押されていない場合は Esc を押してキャンセル という表示にする 1つでも押されている場合は押されたキーをUIに表示する
-					if (registrationQueuedKeys.Count == 0) progress?.Report(Resources.Settings_ShortcutKey_RegisterKeys_PressEscToCancel);
-					else progress?.Report(string.Join(" + ", registrationQueuedKeys.Select(k => KeyCodeName.Get(k))));
-				}
-				await Task.Delay(10);
-			}
-
-			// キー登録がキャンセルされた場合は空文字を返す
-			if (keyRegsitrationMode == -1)
-			{
-				_CancelKeyRegistration();
-				progress?.Report(string.Empty);
-				return string.Empty;
-			}
-			// キー登録が完了した場合は登録されたキーのIDを返す
-			var r = _StopKeyRegistration(groupId);
-			var regKeys = GetHotKeyGroupFromKey(r)?.ToString(); // 返されたIDからホットキーを取得する
-			// 登録されたキーをUIに表示する
-			if (regKeys != null) progress?.Report(regKeys);
-			else if (r == null) progress?.Report(string.Empty);
-			return r;
-		}
-	}
-
-	private string? _StopKeyRegistration(string groupId)
-	{
-		Debug.WriteLine("Key registration stopped");
-		keyRegsitrationMode = 0;
-		if (registrationQueuedKeys.Count == 0) return null;
-		var g = _RegisterKeys(groupId, registrationQueuedKeys);
-		return g.Id;
-	}
-
-	private bool _CancelKeyRegistration()
-	{
-		Debug.WriteLine("Key registration canceled");
-		keyRegsitrationMode = 0;
-		registrationQueuedKeys = [];
-		return true;
 	}
 
 	/// <summary>
@@ -241,44 +87,4 @@ public class HotKeyManager : IDisposable
 	{
 		return _GetHotKeyGroupFromKey(id);
 	}
-
-	/// <summary>
-	/// ホットキーの登録を開始する
-	/// </summary>
-	/// <param name="groupId">登録する対象のグループのID</param>
-	/// <param name="progress">進捗状況</param>
-	/// <returns>登録されたホットキーグループのID</returns>
-	public async Task<string?> StartKeyRegistrationAsync(string groupId, IProgress<string>? progress = null)
-	{
-		return await _StartKeyRegistrationAsync(groupId, progress);
-	}
-
-	/// <summary>
-	/// ホットキーの登録を終了する
-	/// </summary>
-	/// <returns>終了できた場合は true 既に登録が終了されている場合は false</returns>
-	public bool EndKeyRegistration()
-	{
-		if (keyRegsitrationMode != 1) return false;
-		keyRegsitrationMode = 0;
-		return true;
-	}
-
-	/// <summary>
-	/// ホットキーの登録をキャンセルする
-	/// </summary>
-	/// <returns>終了できた場合は true 既に登録が終了されている場合は false</returns>
-	public bool CancelKeyRegistration()
-	{
-		if (keyRegsitrationMode != 1) return false;
-		keyRegsitrationMode = -1;
-		return true;
-	}
-
-	/*
-	public void RemoveKeys(KeyCode keyCode)
-	{
-		_pressedKeys.Remove(keyCode);
-	}
-	*/
 }

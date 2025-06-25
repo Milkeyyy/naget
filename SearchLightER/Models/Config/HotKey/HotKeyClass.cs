@@ -68,7 +68,7 @@ public class HotKeyGroup
 
 	public override string ToString()
 	{
-		if (Keys == null) return Resources.Settings_ShortcutKey_Preset_NotSet;
+		if (Keys == null || Keys.Count == 0) return Resources.Settings_ShortcutKey_Preset_NotSet;
 		return string.Join(" + ", Keys.Select(k => KeyCodeName.Get(k)));
 	}
 }

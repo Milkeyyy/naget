@@ -195,9 +195,6 @@
   <data name="Settings.ShortcutKey.RegisterKeys.Done" xml:space="preserve">
     <value>完了</value>
   </data>
-  <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
-    <value>Esc を押してキャンセル</value>
-  </data>
   <data name="Default" xml:space="preserve">
     <value>デフォルト</value>
   </data>
@@ -311,5 +308,8 @@
   </data>
   <data name="WebBrowser.NativeMenu.Navigate" xml:space="preserve">
     <value>操作</value>
+  </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
+    <value>Esc を押してキャンセル</value>
   </data>
 </root>

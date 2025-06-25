@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
 using Avalonia.Styling;
+using naget.Helpers;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
@@ -49,7 +50,7 @@ public class App : Application
 
 	public static void Exit()
 	{
-		ConfigManager.HotKeyManager.Dispose();
+		HotKeyHelper.Stop();
 		// コンフィグを保存
 		ConfigManager.Save();
 		// 検索エンジンデータを保存
@@ -154,7 +155,8 @@ public class App : Application
 			BrowserWindow = new BrowserWindow();
 
 			// ホットキーの登録
-			ConfigManager.HotKeyManager.Run();
+			//ConfigManager.HotKeyManager.Run();
+			HotKeyHelper.Run();
 
 			// Sparkle の初期化
 			_sparkle = new(
