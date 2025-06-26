@@ -66,7 +66,7 @@ jobs:
       shell: pwsh
       run: |
         dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ./ -e exe --output-file-name appcast_nightly_${{ env.rid }} --file-version ${{ env.APP_VERSION }} --channel nightly
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e exe --output-file-name appcast_nightly_${{ env.rid }} --file-version ${{ env.APP_VERSION }} --channel nightly
 
     # ビルド (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
@@ -88,7 +88,7 @@ jobs:
       shell: pwsh
       run: |
         dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ./ -e dmg --output-file-name appcast_nightly_${{ env.rid }} --file-version ${{ env.APP_VERSION }} --channel nightly
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e dmg --output-file-name appcast_nightly_${{ env.rid }} --file-version ${{ env.APP_VERSION }} --channel nightly
 
     # アップロード (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
