@@ -165,7 +165,7 @@ public class App : Application
 
 			// Sparkle の初期化
 			_sparkle = new(
-				"https://update.naget.milkeyyy.com/appcast_nightly_" + RuntimeInformation.RuntimeIdentifier + ".xml",
+				"https://update-naget.milkeyyy.com/appcast_nightly_" + RuntimeInformation.RuntimeIdentifier + ".xml",
 				new Ed25519Checker(
 					SecurityMode.OnlyVerifySoftwareDownloads,
 					"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
