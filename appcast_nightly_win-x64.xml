@@ -5,12 +5,12 @@
     <description>Most recent changes with links to updates</description>
     <language>en</language>
     <item>
-      <title>naget 1.0.0-nightly.f0fefe939edf08a8310147ab3f2a0e693eaf</title>
-      <pubDate>Thu, 26 Jun 2025 15:06:20 +00:00</pubDate>
-      <sparkle:version>1.0.0-nightly.f0fefe939edf08a8310147ab3f2a0e693eaf</sparkle:version>
+      <title>naget 1.0.0-nightly.5bbd10c2241f370e8ea35b45a0c39e15fb3c</title>
+      <pubDate>Thu, 26 Jun 2025 15:16:37 +00:00</pubDate>
+      <sparkle:version>1.0.0-nightly.5bbd10c2241f370e8ea35b45a0c39e15fb3c</sparkle:version>
       <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
       <sparkle:channel>nightly</sparkle:channel>
-      <enclosure url="https://github.com/Milkeyyy/naget/releases/download/nightly/naget_Setup_win-x64.exe" sparkle:version="1.0.0-nightly.f0fefe939edf08a8310147ab3f2a0e693eaf" sparkle:shortVersionString="1.0.0" length="206365147" sparkle:os="windows-x64" type="application/x-msdos-program" sparkle:criticalUpdate="false" sparkle:signature="LVkg1bKvo1Pjq4v8klN/MDOH3hgm9Fpk7cUI5x2Y6s0BcmrmoIegYIn/kGga2uC+MSuocSmYIMzkBjyhkgEwBg==" />
+      <enclosure url="https://github.com/Milkeyyy/naget/releases/download/nightly/naget_Setup_win-x64.exe" sparkle:version="1.0.0-nightly.5bbd10c2241f370e8ea35b45a0c39e15fb3c" sparkle:shortVersionString="1.0.0" length="206365214" sparkle:os="windows-x64" type="application/x-msdos-program" sparkle:criticalUpdate="false" sparkle:signature="cxPRnBPjFitJVpzpRYXmlN24Z5albIF+5aq1bEtRycgC6rlYgZ/InSP/gkdcdj9XEsNEWjPrCQHlwMSlmJr7Bg==" />
     </item>
   </channel>
 </rss>
