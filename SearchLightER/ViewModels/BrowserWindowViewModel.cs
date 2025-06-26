@@ -1,8 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Epoxy;
+using naget.Assets.Locales;
 using naget.Models.Config;
-using naget.Views;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WebViewControl;
@@ -13,6 +13,24 @@ namespace naget.ViewModels;
 public class BrowserWindowViewModel
 {
 	public Well<Window> BrowserWindowWell { get; } = Well.Factory.Create<Window>();
+
+	public string WindowTitleText { get; private set; } = Resources.Window_InAppBrowser;
+	public string WindowTitle
+	{
+		get
+		{
+			if (string.IsNullOrWhiteSpace(WindowTitleText))
+			{
+				// 渡されたタイトルが空の場合はデフォルトのタイトルにする
+				return Resources.Window_InAppBrowser + " - " + App.ProductName;
+			}
+			else
+			{
+				return WindowTitleText;
+			}
+		}
+		set { WindowTitleText = value; }
+	}
 
 	public WindowState WindowState { get; set; } = WindowState.Normal;
 	public double Width { get; set; } = 1280;
@@ -195,6 +213,9 @@ public class BrowserWindowViewModel
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 
+		// ウィンドウタイトルを更新する
+		WindowTitle = WebViewCtrl.Title;
+
 		return default;
 	}
 
@@ -205,6 +226,9 @@ public class BrowserWindowViewModel
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+
+		// ウィンドウタイトルを更新する
+		WindowTitle = WebViewCtrl.Title;
 	}
 
 	private void WebView_Navigated(string url, string frameName)
@@ -215,6 +239,9 @@ public class BrowserWindowViewModel
 
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
+
+		// ウィンドウタイトルを更新する
+		WindowTitle = WebViewCtrl.Title;
 
 		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 	}

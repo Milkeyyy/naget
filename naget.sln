@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{78763C41-441D-4709-A7F1-B5518EC0FAD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -26,6 +28,14 @@ Global
 		{A1F3038B-A838-444D-88CE-201DCDF23E28}.Release|ARM64.Build.0 = Release|ARM64
 		{A1F3038B-A838-444D-88CE-201DCDF23E28}.Release|x64.ActiveCfg = Release|x64
 		{A1F3038B-A838-444D-88CE-201DCDF23E28}.Release|x64.Build.0 = Release|x64
+		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Debug|x64.Build.0 = Debug|Any CPU
+		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Release|ARM64.Build.0 = Release|Any CPU
+		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Release|x64.ActiveCfg = Release|Any CPU
+		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

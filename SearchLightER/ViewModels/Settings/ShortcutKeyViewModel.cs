@@ -2,6 +2,7 @@
 using Epoxy;
 using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
+using naget.Helpers;
 using naget.Models.Config;
 using naget.Models.Config.HotKey;
 using naget.Models.SearchEngine;
@@ -57,6 +58,10 @@ public class ShortcutKeyViewModel
 	/// </summary>
 	public string KeyRegisterButtonText { get; private set; } = Resources.Settings_ShortcutKey_RegisterKeys_Register;
 	/// <summary>
+	/// キー登録ボタンのアイコン
+	/// </summary>
+	public string KeyRegisterButtonIcon { get; private set; } = "PlayFilled";
+	/// <summary>
 	/// キー登録モードかどうか
 	/// </summary>
 	public bool KeyRegistrationMode { get; private set; }
@@ -68,6 +73,10 @@ public class ShortcutKeyViewModel
 	/// キー登録終了コマンド
 	/// </summary>
 	public Command KeyRegisterEndCommand { get; }
+	/// <summary>
+	/// キー登録キャンセルコマンド
+	/// </summary>
+	public Command KeyRegisterCancelCommand { get; }
 	#endregion
 
 	#region ホットキーアクション
@@ -132,6 +141,7 @@ public class ShortcutKeyViewModel
 
 			RegisteredKeysText = string.Empty;
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+			KeyRegisterButtonIcon = "PlayFilled";
 
 			ViewIsLoaded = true;
 
@@ -151,7 +161,7 @@ public class ShortcutKeyViewModel
 			Debug.WriteLine("ShortcutKeyView Unloaded");
 
 			// キーの登録をキャンセルする
-			ConfigManager.HotKeyManager.CancelKeyRegistration();
+			HotKeyHelper.CancelKeyRegistration();
 
 			return default;
 		});
@@ -172,8 +182,9 @@ public class ShortcutKeyViewModel
 			{
 				Debug.WriteLine("End Key Registration");
 				// キー登録モードを終了する
-				var result = ConfigManager.HotKeyManager.EndKeyRegistration();
+				var result = HotKeyHelper.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+				KeyRegisterButtonIcon = "PlayFilled";
 			}
 			else
 			{
@@ -186,12 +197,7 @@ public class ShortcutKeyViewModel
 					RegisteredKeysText = keys;
 				});
 				// キー登録を開始する
-				var result = await ConfigManager.HotKeyManager.StartKeyRegistrationAsync(SelectedPresetId, progress);
-				if (result != null)
-				{
-					var keys = ConfigManager.HotKeyManager.GetHotKeyGroupFromKey(result);
-					//RegisteredKeysText = keys?.ToString() ?? string.Empty;
-				}
+				await HotKeyHelper.StartKeyRegistrationAsync(SelectedPresetId, progress);
 				KeyRegistrationMode = false;
 			}
 		});
@@ -204,8 +210,26 @@ public class ShortcutKeyViewModel
 			if (KeyRegistrationMode)
 			{
 				Debug.WriteLine("End Key Registraion");
-				var result = ConfigManager.HotKeyManager.EndKeyRegistration();
+				var result = HotKeyHelper.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+				KeyRegisterButtonIcon = "PlayFilled";
+			}
+			return default;
+		});
+
+		// キー登録キャンセルコマンド
+		KeyRegisterCancelCommand = Command.Factory.Create(() =>
+		{
+			Debug.WriteLine("Execute KeyRegisterCancelCommand");
+			Debug.WriteLine("- KeyRegistrationMode: " + KeyRegistrationMode);
+			if (KeyRegistrationMode)
+			{
+				Debug.WriteLine("Cancel Key Registraion");
+				var result = HotKeyHelper.CancelKeyRegistration();
+				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+				KeyRegisterButtonIcon = "PlayFilled";
+				// 現在登録されているキーを表示し直す
+				RegisteredKeysText = SelectedPresetItem?.ToString() ?? Resources.Settings_ShortcutKey_Preset_NotSet;
 			}
 			return default;
 		});
@@ -297,7 +321,16 @@ public class ShortcutKeyViewModel
 	{
 		Debug.WriteLine("KeyRegistrationMode Changed: " + KeyRegistrationMode);
 		// キー登録モードが有効になった場合はキー登録ボタンのテキストを変更する
-		KeyRegisterButtonText = value ? Resources.Settings_ShortcutKey_RegisterKeys_Done : Resources.Settings_ShortcutKey_RegisterKeys_Register;
+		if (value)
+		{
+			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Done;
+			KeyRegisterButtonIcon = "Accept";
+		}
+		else
+		{
+			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
+			KeyRegisterButtonIcon = "PlayFilled";
+		}
 		// 登録されているホットキーを更新する
 		if (HotKeyPresetList != null) RegisteredKeysText = HotKeyPresetList[SelectedPresetIndex].ToString();
 		return default;
@@ -312,6 +345,14 @@ public class ShortcutKeyViewModel
 	private ValueTask SelectedPresetItemChanged(HotKeyGroup? value)
 	{
 		Debug.WriteLine("SelectedPresetItem Changed: " + SelectedPresetName);
+
+		KeyRegisterCancelCommand.Execute(null);
+
+		if (value == null)
+		{
+			Debug.WriteLine("SelectedPresetItem is null");
+			return default;
+		}
 
 		HotKeyPresetLoaded = false;
 

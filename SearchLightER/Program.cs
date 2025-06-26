@@ -1,5 +1,5 @@
 ﻿using Avalonia;
-using FluentIcons.Avalonia;
+using Avalonia.Media;
 using System;
 
 namespace naget
@@ -10,15 +10,25 @@ namespace naget
 		// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
 		// yet and stuff might break.
 		[STAThread]
-		public static void Main(string[] args) => BuildAvaloniaApp()
-			.StartWithClassicDesktopLifetime(args);
+		public static void Main(string[] args)
+		{
+			BuildAvaloniaApp()
+				.StartWithClassicDesktopLifetime(args);
+		}
 
 		// Avalonia configuration, don't remove; also used by visual designer.
 		public static AppBuilder BuildAvaloniaApp()
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
-				.WithInterFont()
-				.UseSegoeMetrics()
+				.UseSkia()
+				.With(new FontManagerOptions
+				{
+					DefaultFamilyName = "avares://naget/Assets/Fonts#Noto Sans JP",
+					FontFallbacks = [
+						new FontFallback { FontFamily = new FontFamily("avares://naget/Assets/Fonts#Noto Sans JP") }
+					]
+				})
+				.With(new MacOSPlatformOptions() { ShowInDock = false }) // (macOS) Dock に表示しない
 				.LogToTrace();
 	}
 }

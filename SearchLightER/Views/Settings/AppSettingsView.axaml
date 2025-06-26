@@ -1,0 +1,110 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:cv="clr-namespace:naget.Converter;assembly=naget"
+			 xmlns:vm="using:naget.ViewModels.Settings"
+			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="naget.Views.Settings.AppSettingsView"
+			 x:DataType="vm:AppSettingsViewModel"
+			 epoxy:Fountain.Well="{Binding ViewWell}"
+>
+
+	<Design.DataContext>
+		<vm:AppSettingsViewModel/>
+	</Design.DataContext>
+
+	<UserControl.Resources>
+		<!--テーマ名コンバーター-->
+		<cv:ThemeNameConverter x:Key="themeNameConverter"/>
+	</UserControl.Resources>
+
+	<Panel Margin="20">
+		<StackPanel>
+			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_AppSettings}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+
+			<!--設定の適用にはアプリの再起動が必要ですよ表示-->
+			<ui:InfoBar Title="{x:Static lang:Resources.Settings_System_Language_RequiredRestart}" Severity="Warning" IsOpen="{Binding LanguageNoteTextIsVisible}" IsClosable="False" Margin="0 0 0 10">
+				<ui:InfoBar.ActionButton>
+					<!--アプリケーション再起動ボタン-->
+					<Button Classes="accent" HorizontalAlignment="Right" Margin="0 0 0 0" Command="{Binding RestartAppCommand}">
+						<Button.Content>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Foreground="WhiteSmoke" Text="{x:Static lang:Resources.Settings_System_Language_RestartApplication}" Margin="0 0 0 0"/>
+							</StackPanel>
+						</Button.Content>
+					</Button>
+				</ui:InfoBar.ActionButton>
+			</ui:InfoBar>
+
+			<!--テーマ-->
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" IconSource="{ic:SymbolIconSource Symbol=ColorFill}">
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--テーマ選択リスト-->
+						<ComboBox MinWidth="200" ItemsSource="{Binding ThemeList}" SelectedItem="{Binding SelectedTheme}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<!--コンバーターでテーマ名をローカライズしたものを選択肢のテキストとして表示する-->
+									<TextBlock Text="{Binding, Converter={StaticResource themeNameConverter}}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+
+			<!--言語-->
+			<ui:SettingsExpander IsExpanded="True" IconSource="{ic:SymbolIconSource Symbol=Earth}">
+				<!--ヘッダー&注意書きテキスト-->
+				<ui:SettingsExpander.Header>
+					<StackPanel>
+						<!--ヘッダーテキスト-->
+						<TextBlock Text="{x:Static lang:Resources.Settings_System_Language}" VerticalAlignment="Center"/>
+					</StackPanel>
+				</ui:SettingsExpander.Header>
+
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--言語選択リスト-->
+						<ComboBox MinWidth="200" ItemsSource="{Binding LanguageList}" SelectedItem="{Binding SelectedLanguage}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding DisplayName}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+
+			<!--アップデート-->
+			<ui:SettingsExpander IsExpanded="True" IconSource="Refresh">
+				<!--ヘッダー&注意書きテキスト-->
+				<ui:SettingsExpander.Header>
+					<StackPanel>
+						<!--ヘッダーテキスト-->
+						<TextBlock Text="{x:Static lang:Resources.Settings_Update_Check}" VerticalAlignment="Center"/>
+					</StackPanel>
+				</ui:SettingsExpander.Header>
+
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--アップデートチェックボタン-->
+						<Button Margin="10 0 0 0" Command="{Binding CheckUpdateCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{x:Static lang:Resources.Settings_Update_CheckUpdate}" Margin="0 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+		</StackPanel>
+	</Panel>
+</UserControl>

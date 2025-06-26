@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using naget.ViewModels.Settings;
 
 namespace naget.Views.Settings;
 

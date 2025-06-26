@@ -195,9 +195,6 @@
   <data name="Settings.ShortcutKey.RegisterKeys.Done" xml:space="preserve">
     <value>Done</value>
   </data>
-  <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
-    <value>Press Esc to Cancel</value>
-  </data>
   <data name="Default" xml:space="preserve">
     <value>Default</value>
   </data>
@@ -257,5 +254,71 @@
   </data>
   <data name="Settings.Search.SearchEngine.Dialog.Url" xml:space="preserve">
     <value>URL</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.Description" xml:space="preserve">
+    <value>Do you want to delete search engine "{0}"?</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.Title" xml:space="preserve">
+    <value>Delete Search Engine</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.Confirm" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Settings.System.Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings.System.Language.RequiredRestart" xml:space="preserve">
+    <value>You need to restart the application for the settings to take effect.</value>
+  </data>
+  <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
+    <value>Restart the Application to Apply</value>
+  </data>
+  <data name="Settings.Design.Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Default" xml:space="preserve">
+    <value>System Default</value>
+  </data>
+  <data name="Settings.InAppBrowser.StartPage" xml:space="preserve">
+    <value>Start Page</value>
+  </data>
+  <data name="Window.Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Window.InAppBrowser" xml:space="preserve">
+    <value>Browser</value>
+  </data>
+  <data name="TrayMenu.CheckUpdate" xml:space="preserve">
+    <value>Check Update</value>
+  </data>
+  <data name="Settings.Update.Check" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Settings.Update.CheckUpdate" xml:space="preserve">
+    <value>Check Update</value>
+  </data>
+  <data name="WebBrowser.NativeMenu.Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="WebBrowser.NativeMenu.Navigate" xml:space="preserve">
+    <value>Navigate</value>
+  </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
+    <value>Press Esc to Cancel</value>
+  </data>
+  <data name="Settings.Tab.AppSettings" xml:space="preserve">
+    <value>App Settings</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Description" xml:space="preserve">
+    <value>There must be at least one search engine.</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Title" xml:space="preserve">
+    <value>This search engine cannot be deleted</value>
   </data>
 </root>

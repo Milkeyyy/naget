@@ -97,6 +97,51 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Theme に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Design_Theme {
+            get {
+                return ResourceManager.GetString("Settings.Design.Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Dark に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Design_Theme_Name_Dark {
+            get {
+                return ResourceManager.GetString("Settings.Design.Theme.Name.Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System Default に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Design_Theme_Name_Default {
+            get {
+                return ResourceManager.GetString("Settings.Design.Theme.Name.Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Light に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Design_Theme_Name_Light {
+            get {
+                return ResourceManager.GetString("Settings.Design.Theme.Name.Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Start Page に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_InAppBrowser_StartPage {
+            get {
+                return ResourceManager.GetString("Settings.InAppBrowser.StartPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Add に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Search_Add {
@@ -138,6 +183,51 @@ namespace naget.Assets.Locales {
         public static string Settings_Search_SearchEngine_Dialog_Add {
             get {
                 return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   There must be at least one search engine. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_CannotDelete_Description {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   This search engine cannot be deleted に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_CannotDelete_Title {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Delete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_Confirm {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Do you want to delete search engine &quot;{0}&quot;? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_Description {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Delete Search Engine に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_Title {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.Title", resourceCulture);
             }
         }
         
@@ -304,6 +394,42 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Language に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_System_Language {
+            get {
+                return ResourceManager.GetString("Settings.System.Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   You need to restart the application for the settings to take effect. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_System_Language_RequiredRestart {
+            get {
+                return ResourceManager.GetString("Settings.System.Language.RequiredRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Restart the Application to Apply に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_System_Language_RestartApplication {
+            get {
+                return ResourceManager.GetString("Settings.System.Language.RestartApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   App Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Tab_AppSettings {
+            get {
+                return ResourceManager.GetString("Settings.Tab.AppSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Design に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Tab_Design {
@@ -358,6 +484,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Update に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Update_Check {
+            get {
+                return ResourceManager.GetString("Settings.Update.Check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Check Update に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Update_CheckUpdate {
+            get {
+                return ResourceManager.GetString("Settings.Update.CheckUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cancel に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Strings_Cancel {
@@ -372,6 +516,15 @@ namespace naget.Assets.Locales {
         public static string Strings_Ok {
             get {
                 return ResourceManager.GetString("Strings.Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Check Update に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string TrayMenu_CheckUpdate {
+            get {
+                return ResourceManager.GetString("TrayMenu.CheckUpdate", resourceCulture);
             }
         }
         
@@ -466,6 +619,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Edit に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_NativeMenu_Edit {
+            get {
+                return ResourceManager.GetString("WebBrowser.NativeMenu.Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Navigate に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_NativeMenu_Navigate {
+            get {
+                return ResourceManager.GetString("WebBrowser.NativeMenu.Navigate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Back に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string WebBrowser_Navigation_Back {
@@ -480,6 +651,24 @@ namespace naget.Assets.Locales {
         public static string WebBrowser_Navigation_Forward {
             get {
                 return ResourceManager.GetString("WebBrowser.Navigation.Forward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Browser に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Window_InAppBrowser {
+            get {
+                return ResourceManager.GetString("Window.InAppBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Window_Settings {
+            get {
+                return ResourceManager.GetString("Window.Settings", resourceCulture);
             }
         }
     }

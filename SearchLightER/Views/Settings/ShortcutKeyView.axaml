@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
 			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:cv="clr-namespace:naget.Converter;assembly=naget"
 			 xmlns:vm="using:naget.ViewModels.Settings"
 			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
@@ -17,9 +18,15 @@
 		<vm:ShortcutKeyViewModel/>
 	</Design.DataContext>
 
+	<UserControl.Resources>
+		<!--アクション名コンバーター-->
+		<cv:HotKeyActionNameConverter x:Key="hotKeyActionNameConverter"/>
+	</UserControl.Resources>
+
 	<Panel Margin="20">
 		<StackPanel>
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+
 			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="{ic:SymbolIconSource Symbol=TextBulletListSquareSparkle}">
 				
 				<ui:SettingsExpander.Footer>
@@ -33,32 +40,47 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 						<!--プリセット作成ボタン-->
-						<Button Content="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}"/>
+						<Button Classes="accent" IsEnabled="" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<ic:SymbolIcon Symbol="Add" FontSize="15"/>
+									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 
-				<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol='Keyboard'}">
+				<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol=Keyboard}">
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
 							<!--登録キーテキスト-->
 							<TextBlock Text="{Binding RegisteredKeysText}" VerticalAlignment="Center"/>
 							<!--キー登録ボタン-->
-							<Button IsEnabled="{Binding SelectedActionItem, Converter={x:Static ObjectConverters.IsNotNull}}" Content="{Binding KeyRegisterButtonText}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}"/>
+							<Button Classes="accent" IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<ui:SymbolIcon Symbol="{Binding KeyRegisterButtonIcon}" FontSize="15"/>
+										<TextBlock Foreground="White" Text="{Binding KeyRegisterButtonText}" Margin="10 0 0 0"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
 						</StackPanel>
 					</ui:SettingsExpander.Footer>
 
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol='ArrowUpRight'}">
+				<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol=ArrowUpRight}">
 
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
-							<ComboBox IsEnabled="{Binding SelectedActionItem, Converter={x:Static ObjectConverters.IsNotNull}}" MinWidth="200" SelectedIndex="{Binding SelectedActionIndex}" ItemsSource="{Binding HotKeyActionList}" SelectedItem="{Binding SelectedActionItem}">
+							<!--アクション選択リスト-->
+							<ComboBox IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" MinWidth="200" SelectedIndex="{Binding SelectedActionIndex}" ItemsSource="{Binding HotKeyActionList}" SelectedItem="{Binding SelectedActionItem}">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
 											<ui:SymbolIcon Symbol="{Binding Icon}" FontSize="20"/>
-											<TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
+											<TextBlock Text="{Binding Id, Converter={StaticResource hotKeyActionNameConverter}}" Margin="10 0 0 0"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>Application</title>
+    <description>Most recent changes with links to updates</description>
+    <language>en</language>
+    <item>
+      <title>Application 1.0.0.0-nightly.0</title>
+      <pubDate>Mon, 23 Jun 2025 17:30:35 +09:00</pubDate>
+      <sparkle:version>1.0.0.0-nightly.0</sparkle:version>
+      <sparkle:shortVersionString>1.0.0.0</sparkle:shortVersionString>
+      <enclosure url="naget_Setup.exe" sparkle:version="1.0.0.0-nightly.0" sparkle:shortVersionString="1.0.0.0" length="132185700" sparkle:os="windows" type="application/x-msdos-program" sparkle:criticalUpdate="false" sparkle:signature="kZ2w+JjY9hKXZbearbDpyCrozDwkHAzPMKH/8GGd2gx8rvgfUXzjSJYY/eu+e2u/RcMzQT6GBfK8aXNtvpJUCw==" />
+    </item>
+  </channel>
+</rss>

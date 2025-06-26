@@ -10,7 +10,7 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="naget.Views.Settings.SearchView"
 			 x:DataType="vm:SearchViewModel"
-			 epoxy:Fountain.Well="{Binding SearchViewWell}"
+			 epoxy:Fountain.Well="{Binding ViewWell}"
 >
 	
 	<Design.DataContext>
@@ -22,15 +22,15 @@
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_Search}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
 			<TextBlock Text="{x:Static lang:Resources.Settings_Search_SearchEngine}" Margin="0 0 0 8" FontSize="16" FontWeight="Bold"/>
-			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_Search_SearchEngine}" IconSource="Find">
+			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_Search_SearchEngine}" IconSource="{ic:SymbolIconSource Symbol=Search}">
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--検索エンジン新規作成ボタン-->
-						<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding CreateSearchEngineCommand}">
+						<Button Classes="accent" IsEnabled="" Margin="10 0 0 0" Command="{Binding CreateSearchEngineCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<ic:SymbolIcon Symbol="Add"/>
-									<TextBlock Text="{x:Static lang:Resources.Settings_Search_Add}" Margin="5 0 0 0"/>
+									<ic:SymbolIcon Symbol="Add" FontSize="15"/>
+									<TextBlock Text="{x:Static lang:Resources.Settings_Search_Add}" Foreground="White" Margin="10 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
 						</Button>
@@ -47,7 +47,7 @@
 								<ui:SettingsExpander.Header>
 									<StackPanel>
 										<TextBlock Text="{Binding Name}" FontWeight="DemiBold" VerticalAlignment="Center"/>
-										<SelectableTextBlock Text="{Binding Uri}" Foreground="" VerticalAlignment="Center"/>
+										<SelectableTextBlock Text="{Binding Uri}" VerticalAlignment="Center"/>
 									</StackPanel>
 								</ui:SettingsExpander.Header>
 								<ui:SettingsExpander.Footer>
@@ -56,8 +56,8 @@
 										<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding EditSearchEngineCommand}">
 											<Button.Content>
 												<StackPanel Orientation="Horizontal">
-													<ic:SymbolIcon Symbol="Edit"/>
-													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Edit}" Margin="5 0 0 0"/>
+													<ic:SymbolIcon Symbol="Edit" FontSize="15"/>
+													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Edit}" Margin="10 0 0 0"/>
 												</StackPanel>
 											</Button.Content>
 										</Button>
@@ -65,8 +65,8 @@
 										<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding DeleteSearchEngineCommand}">
 											<Button.Content>
 												<StackPanel Orientation="Horizontal">
-													<ic:SymbolIcon Symbol="Delete"/>
-													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Delete}" Margin="5 0 0 0"/>
+													<ic:SymbolIcon Symbol="Delete" FontSize="15"/>
+													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Delete}" Margin="10 0 0 0"/>
 												</StackPanel>
 											</Button.Content>
 										</Button>

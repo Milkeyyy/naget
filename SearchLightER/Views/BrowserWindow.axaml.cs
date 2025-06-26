@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using naget.Models.Config;
 using naget.ViewModels;
 using WebViewControl;
 

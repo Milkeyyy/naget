@@ -195,9 +195,6 @@
   <data name="Settings.ShortcutKey.RegisterKeys.Done" xml:space="preserve">
     <value>完了</value>
   </data>
-  <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
-    <value>Esc を押してキャンセル</value>
-  </data>
   <data name="Default" xml:space="preserve">
     <value>デフォルト</value>
   </data>
@@ -257,5 +254,71 @@
   </data>
   <data name="Settings.Search.SearchEngine.Dialog.Url" xml:space="preserve">
     <value>URL</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.Description" xml:space="preserve">
+    <value>検索エンジン「{0}」を削除しますか？</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.Title" xml:space="preserve">
+    <value>検索エンジンを削除</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.Confirm" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Settings.System.Language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Settings.System.Language.RequiredRestart" xml:space="preserve">
+    <value>設定を適用するにはアプリケーションの再起動が必要です。</value>
+  </data>
+  <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
+    <value>アプリケーションを再起動して適用</value>
+  </data>
+  <data name="Settings.Design.Theme" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Dark" xml:space="preserve">
+    <value>ダーク</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Light" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="Settings.Design.Theme.Name.Default" xml:space="preserve">
+    <value>システム</value>
+  </data>
+  <data name="Settings.InAppBrowser.StartPage" xml:space="preserve">
+    <value>スタートページ</value>
+  </data>
+  <data name="Window.Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Window.InAppBrowser" xml:space="preserve">
+    <value>ブラウザー</value>
+  </data>
+  <data name="TrayMenu.CheckUpdate" xml:space="preserve">
+    <value>アップデートを確認</value>
+  </data>
+  <data name="Settings.Update.Check" xml:space="preserve">
+    <value>アップデート</value>
+  </data>
+  <data name="Settings.Update.CheckUpdate" xml:space="preserve">
+    <value>アップデートを確認</value>
+  </data>
+  <data name="WebBrowser.NativeMenu.Edit" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="WebBrowser.NativeMenu.Navigate" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
+    <value>Esc を押してキャンセル</value>
+  </data>
+  <data name="Settings.Tab.AppSettings" xml:space="preserve">
+    <value>アプリケーション設定</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Description" xml:space="preserve">
+    <value>検索エンジンは一つ以上存在している必要があります。</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Title" xml:space="preserve">
+    <value>検索エンジンを削除できません</value>
   </data>
 </root>

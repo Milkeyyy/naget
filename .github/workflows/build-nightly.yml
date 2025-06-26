@@ -1,0 +1,153 @@
+name: Build Nightly
+
+on:
+  push:
+    branches: [ "dev" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+jobs:
+
+  build:
+    name: Build
+    strategy:
+      matrix:
+        rid: [ 'win-x64', 'win-arm64', 'osx-arm64' ]
+        runner: [ 'windows-latest' ]
+        exclude:
+          - rid: osx-arm64
+            runner: windows-latest
+        include:
+          - rid: osx-arm64
+            runner: macos-latest
+
+    runs-on: ${{ matrix.runner }}
+
+    env:
+      OUTPUT_DIR: ./_Pack
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Create Directory
+      shell: pwsh
+      run: New-Item -ItemType Directory -ErrorAction SilentlyContinue ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}
+
+    # ビルド (Windows)
+    - if: ${{ startsWith(matrix.rid, 'win') }}
+      name: Build
+      run: ./build.cmd --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+
+    - if: ${{ startsWith(matrix.rid, 'win') }}
+      name: Build Installer
+      run: ./build.cmd buildinstaller --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+
+    # ビルド (macOS)
+    - if: ${{ startsWith(matrix.rid, 'osx') }}
+      name: Build and Bundle
+      run: ./build.sh bundleapp --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+
+    - if: ${{ startsWith(matrix.rid, 'osx') }}
+      name: Create DMG
+      run: |
+        npm install --global create-dmg
+        create-dmg '${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ matrix.rid }} || true
+
+    - if: ${{ startsWith(matrix.rid, 'osx') }}
+      name: Rename DMG
+      run: mv ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget*.dmg ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget_${{ matrix.rid }}.dmg
+
+    # アップロード (Windows)
+    - if: ${{ startsWith(matrix.rid, 'win') }}
+      name: Upload Installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ matrix.rid }}
+        path: ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget_Setup_${{ matrix.rid }}.exe
+
+    # アップロード (macOS)
+    - if: ${{ startsWith(matrix.rid, 'osx') }}
+      name: Upload Bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ matrix.rid }}
+        path: ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget_${{ matrix.rid }}.dmg
+
+  update-nightly-releases:
+    name: Update Nightly Releases
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-*
+          path: ./
+          merge-multiple: true
+
+      - name: File List
+        shell: pwsh
+        run: ls ./
+
+      # - name: Generate GitHub Token
+      #   id: generate_token
+      #   uses: actions/create-github-app-token@v2
+      #   with:
+      #     app-id: ${{ secrets.RELEASES_REPO_APP_ID }}
+      #     private-key: ${{ secrets.RELEASES_REPO_PRIVATE_KEY }}
+      #     owner: ${{ github.repository_owner }}
+      #     repositories: |
+      #       naget-Releases
+
+      # - name: Update Nightly Release (Public)
+      #   uses: andelf/nightly-release@main
+      #   env:
+      #     GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      #   with:
+      #     tag_name: nightly
+      #     name: 'Nightly Build'
+      #     prerelease: true
+      #     body: |
+      #       Nightly Build - Commit `${{ github.sha }}`
+      #       - ${{ github.event.head_commit.message }}
+            
+      #       #### **macOS で `"naget.app" は壊れているため開けません。` という旨の警告が表示されて起動できない場合**
+      #       ターミナルを起動し、以下のコマンドを実行してください。
+      #       ```sh
+      #       xattr -rc "/Applications/naget.app"
+      #     files: |
+      #       ./naget*
+
+      - name: Update Nightly Release
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: nightly
+          name: 'Nightly Build'
+          prerelease: true
+          body: |
+            Nightly Build - Commit `${{ github.sha }}`
+            - ${{ github.event.head_commit.message }}
+            
+            #### **macOS で `"naget.app" は壊れているため開けません。` という旨の警告が表示されて起動できない場合**
+            ターミナルを起動し、以下のコマンドを実行してください。
+            ```sh
+            xattr -rc "/Applications/naget.app"
+            ```
+          files: |
+            ./naget*
+
+      - name: Delete Build Artifact
+        uses: GeekyEggo/delete-artifact@v5
+        with:
+          name: build-*
