@@ -5,11 +5,12 @@
     <description>Most recent changes with links to updates</description>
     <language>en</language>
     <item>
-      <title>naget channel</title>
-      <pubDate>Thu, 26 Jun 2025 14:42:40 +00:00</pubDate>
-      <sparkle:version>channel</sparkle:version>
-      <sparkle:shortVersionString>channel</sparkle:shortVersionString>
-      <enclosure url="https://github.com/Milkeyyy/naget/releases/download/nightly/naget_osx-arm64.dmg" sparkle:version="channel" sparkle:shortVersionString="channel" length="197267203" sparkle:os="mac-arm64" type="application/octet-stream" sparkle:criticalUpdate="false" sparkle:signature="sUrjLvJu90M8+U+9pSujKSaNitgNCu9RH+LW6L7uTs0Neo3gRuz4PJoPOfTuz8XucY3MoQSRCNh+T51CI+XeCg==" />
+      <title>naget 1.0.0</title>
+      <pubDate>Thu, 26 Jun 2025 15:05:45 +00:00</pubDate>
+      <sparkle:version>1.0.0</sparkle:version>
+      <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+      <sparkle:channel>nightly</sparkle:channel>
+      <enclosure url="https://github.com/Milkeyyy/naget/releases/download/nightly/naget_osx-arm64.dmg" sparkle:version="1.0.0" sparkle:shortVersionString="1.0.0" length="197267271" sparkle:os="mac-arm64" type="application/octet-stream" sparkle:criticalUpdate="false" sparkle:signature="OFlo72SWnFsER144qlOo8lWT6afNTe9pxSav4sRlpIlgDt6rNVbuB711xPwgacLWpf9yP7Tt84c5mZZksDavCw==" />
     </item>
   </channel>
 </rss>
