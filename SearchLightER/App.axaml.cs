@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace naget;
@@ -164,7 +165,7 @@ public class App : Application
 
 			// Sparkle の初期化
 			_sparkle = new(
-				"https://naget.milkeyyy.com/appcast.xml",
+				"https://update.naget.milkeyyy.com/appcast_nightly_" + RuntimeInformation.RuntimeIdentifier + ".xml",
 				new Ed25519Checker(
 					SecurityMode.OnlyVerifySoftwareDownloads,
 					"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
@@ -172,7 +173,7 @@ public class App : Application
 			)
 			{
 				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(new WindowIcon(AssetLoader.Open(new Uri("avares://naget/Assets/Icon.ico")))),
-				RelaunchAfterUpdate = false,
+				RelaunchAfterUpdate = true,
 				UseNotificationToast = true,
 				CustomInstallerArguments = "/SILENT"
 			};
