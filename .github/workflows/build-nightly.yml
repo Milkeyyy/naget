@@ -48,9 +48,9 @@ jobs:
       shell: pwsh
       run: |
         $buildInfo = (Get-Content "./build.json" | ConvertFrom-Json)
-        echo "APP_VERSION=$buildInfo.version" >> $GITHUB_ENV
-        echo "APP_RELEASE_CHANNEL=$buildInfo.release_channel" >> $GITHUB_ENV
-        echo "APP_RELEASE_NUMBER=$buildInfo.release_number" >> $GITHUB_ENV
+        echo "APP_VERSION=$buildInfo.version" >> $env:GITHUB_ENV
+        echo "APP_RELEASE_CHANNEL=$buildInfo.release_channel" >> $env:GITHUB_ENV
+        echo "APP_RELEASE_NUMBER=$buildInfo.release_number" >> $env:GITHUB_ENV
 
     # ビルド (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
