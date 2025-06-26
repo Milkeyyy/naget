@@ -50,6 +50,9 @@ public class App : Application
 
 	public static void Exit()
 	{
+		// Sparkle のループを停止
+		_sparkle.Dispose();
+		// SharpHook を停止
 		HotKeyHelper.Stop();
 		// コンフィグを保存
 		ConfigManager.Save();
