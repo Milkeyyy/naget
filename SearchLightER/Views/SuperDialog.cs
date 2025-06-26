@@ -22,5 +22,4 @@ public static class SuperDialog
 		};
 		await dialog.ShowAsync(root);
 	}
-
 }
