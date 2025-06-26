@@ -98,34 +98,34 @@ jobs:
         shell: pwsh
         run: ls ./
 
-      - name: Generate GitHub Token
-        id: generate_token
-        uses: actions/create-github-app-token@v2
-        with:
-          app-id: ${{ secrets.RELEASES_REPO_APP_ID }}
-          private-key: ${{ secrets.RELEASES_REPO_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-          repositories: |
-            naget-Releases
+      # - name: Generate GitHub Token
+      #   id: generate_token
+      #   uses: actions/create-github-app-token@v2
+      #   with:
+      #     app-id: ${{ secrets.RELEASES_REPO_APP_ID }}
+      #     private-key: ${{ secrets.RELEASES_REPO_PRIVATE_KEY }}
+      #     owner: ${{ github.repository_owner }}
+      #     repositories: |
+      #       naget-Releases
 
-      - name: Update Nightly Release (Public)
-        uses: andelf/nightly-release@main
-        env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-        with:
-          tag_name: nightly
-          name: 'Nightly Build'
-          prerelease: true
-          body: |
-            Nightly Build - Commit `${{ github.sha }}`
-            - ${{ github.event.head_commit.message }}
+      # - name: Update Nightly Release (Public)
+      #   uses: andelf/nightly-release@main
+      #   env:
+      #     GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      #   with:
+      #     tag_name: nightly
+      #     name: 'Nightly Build'
+      #     prerelease: true
+      #     body: |
+      #       Nightly Build - Commit `${{ github.sha }}`
+      #       - ${{ github.event.head_commit.message }}
             
-            #### **macOS で `"naget.app" は壊れているため開けません。` という旨の警告が表示されて起動できない場合**
-            ターミナルを起動し、以下のコマンドを実行してください。
-            ```sh
-            xattr -rc "/Applications/naget.app"
-          files: |
-            ./naget*
+      #       #### **macOS で `"naget.app" は壊れているため開けません。` という旨の警告が表示されて起動できない場合**
+      #       ターミナルを起動し、以下のコマンドを実行してください。
+      #       ```sh
+      #       xattr -rc "/Applications/naget.app"
+      #     files: |
+      #       ./naget*
 
       - name: Update Nightly Release
         uses: andelf/nightly-release@main
