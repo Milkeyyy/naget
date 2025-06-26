@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Epoxy;
 using naget.Assets.Locales;
 using naget.Models.Config;
-using naget.Views;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WebViewControl;
