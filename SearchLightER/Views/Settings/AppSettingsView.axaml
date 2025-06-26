@@ -4,22 +4,47 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
 			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:cv="clr-namespace:naget.Converter;assembly=naget"
 			 xmlns:vm="using:naget.ViewModels.Settings"
 			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="naget.Views.Settings.SystemView"
-			 x:DataType="vm:SystemViewModel"
+			 x:Class="naget.Views.Settings.AppSettingsView"
+			 x:DataType="vm:AppSettingsViewModel"
 			 epoxy:Fountain.Well="{Binding ViewWell}"
 >
+
 	<Design.DataContext>
-		<vm:SystemViewModel/>
+		<vm:AppSettingsViewModel/>
 	</Design.DataContext>
+
+	<UserControl.Resources>
+		<!--テーマ名コンバーター-->
+		<cv:ThemeNameConverter x:Key="themeNameConverter"/>
+	</UserControl.Resources>
 
 	<Panel Margin="20">
 		<StackPanel>
-			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_System}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
+			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_AppSettings}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
+			<!--テーマ-->
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" IconSource="{ic:SymbolIconSource Symbol=ColorFill}">
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--テーマ選択リスト-->
+						<ComboBox MinWidth="200" ItemsSource="{Binding ThemeList}" SelectedItem="{Binding SelectedTheme}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<!--コンバーターでテーマ名をローカライズしたものを選択肢のテキストとして表示する-->
+									<TextBlock Text="{Binding, Converter={StaticResource themeNameConverter}}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+
+			<!--言語-->
 			<ui:SettingsExpander IsExpanded="True" IconSource="{ic:SymbolIconSource Symbol=Earth}">
 				<!--ヘッダー&注意書きテキスト-->
 				<ui:SettingsExpander.Header>
@@ -46,6 +71,30 @@
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_System_Language_RestartApplication}" Margin="0 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+
+			<!--アップデート-->
+			<ui:SettingsExpander IsExpanded="True" IconSource="Refresh">
+				<!--ヘッダー&注意書きテキスト-->
+				<ui:SettingsExpander.Header>
+					<StackPanel>
+						<!--ヘッダーテキスト-->
+						<TextBlock Text="{x:Static lang:Resources.Settings_Update_Check}" VerticalAlignment="Center"/>
+					</StackPanel>
+				</ui:SettingsExpander.Header>
+
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--アップデートチェックボタン-->
+						<Button Classes="accent" Margin="10 0 0 0" Command="{Binding CheckUpdateCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_Update_CheckUpdate}" Margin="0 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
 						</Button>

@@ -4,6 +4,7 @@ using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using naget.ViewModels;
 using System;
+using System.Diagnostics;
 
 namespace naget.Views;
 
@@ -31,10 +32,25 @@ public partial class SettingsWindow : AppWindow
 
 	private void OnNavigationMenuSelectionChanged(object sender, NavigationViewSelectionChangedEventArgs e)
 	{
+		string smpPage;
+		object pg;
+
 		if (e.SelectedItem is NavigationViewItem nvi)
 		{
-			var smpPage = $"naget.Views.Settings.{nvi.Tag}";
-			var pg = Activator.CreateInstance(Type.GetType(smpPage));
+			if (nvi.Tag == null) return; // タグがnullの場合は何もしない
+
+			Debug.WriteLine($"Navigation Selected: {nvi.Tag}");
+
+			/*// 設定が選択された場合はアプリケーション設定のページを表示する
+			if ((string)nvi.Tag == "Settings") { smpPage = "naget.Views.Settings.AppSettingsView"; }
+			// それ以外は指定されたタグに基づいてページを表示する
+			else { smpPage = $"naget.Views.Settings.{nvi.Tag}"; }*/
+
+			smpPage = $"naget.Views.Settings.{nvi.Tag}";
+
+			Debug.WriteLine($"- Page: {smpPage}");
+
+			pg = Activator.CreateInstance(Type.GetType(smpPage));
 			(sender as NavigationView).Content = pg;
 		}
 	}

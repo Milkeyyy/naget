@@ -403,6 +403,15 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   App Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Tab_AppSettings {
+            get {
+                return ResourceManager.GetString("Settings.Tab.AppSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Design に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Tab_Design {

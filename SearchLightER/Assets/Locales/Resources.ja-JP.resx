@@ -312,4 +312,7 @@
   <data name="Settings.ShortcutKey.RegisterKeys.PressEscToCancel" xml:space="preserve">
     <value>Esc を押してキャンセル</value>
   </data>
+  <data name="Settings.Tab.AppSettings" xml:space="preserve">
+    <value>アプリケーション設定</value>
+  </data>
 </root>

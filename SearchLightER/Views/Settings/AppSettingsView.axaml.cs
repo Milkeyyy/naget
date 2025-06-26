@@ -3,12 +3,12 @@ using naget.ViewModels.Settings;
 
 namespace naget.Views.Settings;
 
-public partial class SystemView : UserControl
+public partial class AppSettingsView : UserControl
 {
-	public SystemView()
+	public AppSettingsView()
 	{
 		InitializeComponent();
 
-		DataContext = new SystemViewModel();
+		DataContext = new AppSettingsViewModel();
 	}
 }

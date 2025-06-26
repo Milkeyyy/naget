@@ -93,6 +93,9 @@
 		<Compile Update="Views\BrowserWindow.axaml.cs">
 			<DependentUpon>BrowserWindow.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\Settings\AppSettingsView.axaml.cs">
+		  <DependentUpon>AppSettingsView.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\Settings\SearchEngineDialogContent.axaml.cs">
 			<DependentUpon>SearchEngineDialogContent.axaml</DependentUpon>
 		</Compile>
@@ -101,12 +104,6 @@
 		</Compile>
 		<Compile Update="Views\Settings\InAppBrowserView.axaml.cs">
 			<DependentUpon>InAppBrowserView.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\SystemView.axaml.cs">
-			<DependentUpon>SystemView.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\UpdateView.axaml.cs">
-			<DependentUpon>UpdateView.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Settings\ShortcutKeyView.axaml.cs">
 			<DependentUpon>ShortcutKeyView.axaml</DependentUpon>
