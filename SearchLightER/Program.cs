@@ -20,6 +20,7 @@ namespace naget
 		public static AppBuilder BuildAvaloniaApp()
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
+				.UseSkia()
 				.With(new FontManagerOptions
 				{
 					DefaultFamilyName = "avares://naget/Assets/Fonts#Noto Sans JP",
