@@ -36,7 +36,7 @@ class Build : NukeBuild
 	private Dictionary<string, string> GetBuildInfo()
 	{
 		var d = JsonSerializer.Deserialize<Dictionary<string, string>>(
-			File.ReadAllText(RootDirectory / "build.json"),
+			File.ReadAllText(RootDirectory / "SearchLightER" / "build.json"),
 			new JsonSerializerOptions
 			{
 				Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
