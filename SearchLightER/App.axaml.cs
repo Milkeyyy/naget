@@ -45,6 +45,21 @@ public class App : Application
 		var a = Assembly.GetExecutingAssembly().GetName();
 		if (a.Name != null) _name = a.Name;
 		if (a.Version != null) _version = a.Version.ToString();
+
+		// フォルダーを作成する
+		Debug.WriteLine("Config Directory: " + ConfigFolder);
+		Directory.CreateDirectory(ConfigFolder);
+
+		// コンフィグを読み込む
+		ConfigManager.Load();
+
+		// 検索エンジンのリストを読み込む
+		SearchEngineManager.Load();
+
+		// 言語設定を適用
+		Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
+		Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
+
 		AvaloniaXamlLoader.Load(this);
 	}
 
@@ -135,20 +150,6 @@ public class App : Application
 		{
 			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
 			desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-
-			// フォルダーを作成する
-			Debug.WriteLine("Config Directory: " + ConfigFolder);
-			Directory.CreateDirectory(ConfigFolder);
-
-			// コンフィグを読み込む
-			ConfigManager.Load();
-
-			// 検索エンジンのリストを読み込む
-			SearchEngineManager.Load();
-
-			// 言語設定を適用
-			Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
-			Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
 
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);
