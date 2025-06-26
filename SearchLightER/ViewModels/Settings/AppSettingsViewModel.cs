@@ -15,6 +15,9 @@ public class AppSettingsViewModel
 
 	public Well<UserControl> ViewWell { get; } = Well.Factory.Create<UserControl>();
 
+	public bool LanguageNoteTextIsVisible { get; set; }
+	public Command RestartAppCommand { get; }
+
 	#region テーマ設定関連
 	public static ReadOnlyCollection<string> ThemeList => ConfigClass.ThemeList;
 	public string SelectedTheme { get; set; }
@@ -23,8 +26,6 @@ public class AppSettingsViewModel
 	#region 言語設定関連
 	public static ReadOnlyCollection<Language> LanguageList => ConfigClass.LanguageList;
 	public Language SelectedLanguage { get; set; } = LanguageList[0];
-	public bool LanguageNoteTextIsVisible { get; set; }
-	public Command RestartAppCommand { get; }
 	#endregion
 
 	#region アップデート関連

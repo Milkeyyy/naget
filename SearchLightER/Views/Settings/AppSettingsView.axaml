@@ -27,6 +27,20 @@
 		<StackPanel>
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_AppSettings}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
+			<!--設定の適用にはアプリの再起動が必要ですよ表示-->
+			<ui:InfoBar Title="{x:Static lang:Resources.Settings_System_Language_RequiredRestart}" Severity="Warning" IsOpen="{Binding LanguageNoteTextIsVisible}" IsClosable="False" Margin="0 0 0 10">
+				<ui:InfoBar.ActionButton>
+					<!--アプリケーション再起動ボタン-->
+					<Button Classes="accent" HorizontalAlignment="Right" Margin="0 0 0 0" Command="{Binding RestartAppCommand}">
+						<Button.Content>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Foreground="WhiteSmoke" Text="{x:Static lang:Resources.Settings_System_Language_RestartApplication}" Margin="0 0 0 0"/>
+							</StackPanel>
+						</Button.Content>
+					</Button>
+				</ui:InfoBar.ActionButton>
+			</ui:InfoBar>
+
 			<!--テーマ-->
 			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" IconSource="{ic:SymbolIconSource Symbol=ColorFill}">
 				<ui:SettingsExpander.Footer>
@@ -51,8 +65,6 @@
 					<StackPanel>
 						<!--ヘッダーテキスト-->
 						<TextBlock Text="{x:Static lang:Resources.Settings_System_Language}" VerticalAlignment="Center"/>
-						<!--設定の適用にはアプリの再起動が必要ですよテキスト-->
-						<TextBlock IsVisible="{Binding LanguageNoteTextIsVisible}" Text="{x:Static lang:Resources.Settings_System_Language_RequiredRestart}" FontSize="13" VerticalAlignment="Center"/>
 					</StackPanel>
 				</ui:SettingsExpander.Header>
 
@@ -66,14 +78,6 @@
 								</DataTemplate>
 							</ComboBox.ItemTemplate>
 						</ComboBox>
-						<!--再起動ボタン-->
-						<Button Classes="accent" Margin="10 0 0 0" IsVisible="{Binding LanguageNoteTextIsVisible}" IsEnabled="{Binding LanguageNoteTextIsVisible}" Command="{Binding RestartAppCommand}">
-							<Button.Content>
-								<StackPanel Orientation="Horizontal">
-									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_System_Language_RestartApplication}" Margin="0 0 0 0"/>
-								</StackPanel>
-							</Button.Content>
-						</Button>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 			</ui:SettingsExpander>
@@ -91,10 +95,10 @@
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--アップデートチェックボタン-->
-						<Button Classes="accent" Margin="10 0 0 0" Command="{Binding CheckUpdateCommand}">
+						<Button Margin="10 0 0 0" Command="{Binding CheckUpdateCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_Update_CheckUpdate}" Margin="0 0 0 0"/>
+									<TextBlock Text="{x:Static lang:Resources.Settings_Update_CheckUpdate}" Margin="0 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
 						</Button>
