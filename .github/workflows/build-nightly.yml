@@ -12,19 +12,22 @@ jobs:
     name: Build
     strategy:
       matrix:
-        rid: [ 'win-x64', 'win-arm64', 'osx-arm64' ]
+        os: [ 'win' ]
+        arch: [ 'x64', 'arm64' ]
         runner: [ 'windows-latest' ]
-        exclude:
-          - rid: osx-arm64
-            runner: windows-latest
         include:
-          - rid: osx-arm64
+          - os: osx
+            arch: arm64
             runner: macos-latest
 
     runs-on: ${{ matrix.runner }}
 
     env:
+      rid: ${{ matrix.os }}-${{ matrix.arch }}
       OUTPUT_DIR: ./_Pack
+      APPCAST_DL_BASE_URL: https://github.com/Milkeyyy/naget/releases/download/nightly
+      SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+      SPARKLE_PUBLIC_KEY: ${{ secrets.SPARKLE_PUBLIC_KEY }}
 
     steps:
     - name: Checkout
@@ -39,47 +42,73 @@ jobs:
 
     - name: Create Directory
       shell: pwsh
-      run: New-Item -ItemType Directory -ErrorAction SilentlyContinue ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}
+      run: New-Item -ItemType Directory -ErrorAction SilentlyContinue ${{ env.OUTPUT_DIR }}/${{ env.rid }}
+
+    - name: Load Build Info
+      shell: pwsh
+      run: |
+        $buildInfo = (Get-Content "./build.json" | ConvertFrom-Json)
+        echo $buildInfo.version >> $APP_VERSION
+        echo $buildInfo.release_channel >> $APP_RELEASE_CHANNEL
+        echo $buildInfo.release_number >> $APP_RELEASE_NUMBER
 
     # ビルド (Windows)
-    - if: ${{ startsWith(matrix.rid, 'win') }}
+    - if: ${{ startsWith(env.rid, 'win') }}
       name: Build
-      run: ./build.cmd --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+      run: ./build.cmd --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
-    - if: ${{ startsWith(matrix.rid, 'win') }}
+    - if: ${{ startsWith(env.rid, 'win') }}
       name: Build Installer
-      run: ./build.cmd buildinstaller --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+      run: ./build.cmd buildinstaller --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+
+    - if: ${{ startsWith(env.rid, 'win') }}
+      name: Generate App Cast (Windows)
+      shell: pwsh
+      run: |
+        dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ./ -e exe --output-file-name appcast_nightly_${{ env.rid }} --file-version ${{ env.APP_VERSION }} --channel nightly
 
     # ビルド (macOS)
-    - if: ${{ startsWith(matrix.rid, 'osx') }}
+    - if: ${{ startsWith(env.rid, 'osx') }}
       name: Build and Bundle
-      run: ./build.sh bundleapp --runtime ${{ matrix.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+      run: ./build.sh bundleapp --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
-    - if: ${{ startsWith(matrix.rid, 'osx') }}
+    - if: ${{ startsWith(env.rid, 'osx') }}
       name: Create DMG
       run: |
         npm install --global create-dmg
-        create-dmg '${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ matrix.rid }} || true
+        create-dmg '${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ env.rid }} || true
 
-    - if: ${{ startsWith(matrix.rid, 'osx') }}
+    - if: ${{ startsWith(env.rid, 'osx') }}
       name: Rename DMG
-      run: mv ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget*.dmg ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget_${{ matrix.rid }}.dmg
+      run: mv ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget*.dmg ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg
+
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Generate App Cast (macOS)
+      shell: pwsh
+      run: |
+        dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ./ -e dmg --output-file-name appcast_nightly_${{ env.rid }} --file-version ${{ env.APP_VERSION }} --channel nightly
 
     # アップロード (Windows)
-    - if: ${{ startsWith(matrix.rid, 'win') }}
+    - if: ${{ startsWith(env.rid, 'win') }}
       name: Upload Installer
       uses: actions/upload-artifact@v4
       with:
-        name: build-${{ matrix.rid }}
-        path: ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget_Setup_${{ matrix.rid }}.exe
+        name: build-${{ env.rid }}
+        path: |
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_Setup_${{ env.rid }}.exe
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.xml*
 
     # アップロード (macOS)
-    - if: ${{ startsWith(matrix.rid, 'osx') }}
+    - if: ${{ startsWith(env.rid, 'osx') }}
       name: Upload Bundle
       uses: actions/upload-artifact@v4
       with:
-        name: build-${{ matrix.rid }}
-        path: ${{ env.OUTPUT_DIR }}/${{ matrix.rid }}/naget_${{ matrix.rid }}.dmg
+        name: build-${{ env.rid }}
+        path: |
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.xml*
 
   update-nightly-releases:
     name: Update Nightly Releases
@@ -87,6 +116,11 @@ jobs:
     needs: build
 
     steps:
+      - name: Checkout (gh-pages)
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -97,35 +131,6 @@ jobs:
       - name: File List
         shell: pwsh
         run: ls ./
-
-      # - name: Generate GitHub Token
-      #   id: generate_token
-      #   uses: actions/create-github-app-token@v2
-      #   with:
-      #     app-id: ${{ secrets.RELEASES_REPO_APP_ID }}
-      #     private-key: ${{ secrets.RELEASES_REPO_PRIVATE_KEY }}
-      #     owner: ${{ github.repository_owner }}
-      #     repositories: |
-      #       naget-Releases
-
-      # - name: Update Nightly Release (Public)
-      #   uses: andelf/nightly-release@main
-      #   env:
-      #     GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-      #   with:
-      #     tag_name: nightly
-      #     name: 'Nightly Build'
-      #     prerelease: true
-      #     body: |
-      #       Nightly Build - Commit `${{ github.sha }}`
-      #       - ${{ github.event.head_commit.message }}
-            
-      #       #### **macOS で `"naget.app" は壊れているため開けません。` という旨の警告が表示されて起動できない場合**
-      #       ターミナルを起動し、以下のコマンドを実行してください。
-      #       ```sh
-      #       xattr -rc "/Applications/naget.app"
-      #     files: |
-      #       ./naget*
 
       - name: Update Nightly Release
         uses: andelf/nightly-release@main
@@ -146,6 +151,13 @@ jobs:
             ```
           files: |
             ./naget*
+
+      - name: Push App Cast
+        shell: pwsh
+        run: |
+          git add ./appcast_*.xml
+          git commit -m "Nightly Build - ${{ github.sha }}"
+          git push
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5
