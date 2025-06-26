@@ -1,5 +1,4 @@
 ﻿using Epoxy;
-using naget.Models.Config;
 
 namespace naget.ViewModels.Settings;
 

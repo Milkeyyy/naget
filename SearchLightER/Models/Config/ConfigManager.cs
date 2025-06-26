@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using naget.Helpers;
 using naget.Models.Config.HotKey;
 using System.Diagnostics;
 using System.Globalization;
