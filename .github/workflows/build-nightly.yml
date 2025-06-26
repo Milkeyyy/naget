@@ -112,8 +112,10 @@ jobs:
 
   update-nightly-releases:
     name: Update Nightly Releases
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout (gh-pages)
@@ -130,7 +132,6 @@ jobs:
           merge-multiple: true
 
       - name: File List
-        shell: pwsh
         run: ls ./
 
       - name: Update Nightly Release
@@ -154,13 +155,10 @@ jobs:
             ./naget*
 
       - name: Push App Cast
-        shell: pwsh
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ./appcast_*.xml
-          git commit -m "Nightly Build - ${{ github.sha }}"
-          git push
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: Nightly Build - ${{ github.sha }}
+          file_pattern: ./appcast_*.xml
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5
