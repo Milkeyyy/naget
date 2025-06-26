@@ -216,7 +216,18 @@ public class SearchEngineViewModel
 			Debug.WriteLine("Search Engine Delete Dialog - User clicked Delete");
 
 			// 検索エンジンを削除する
-			SearchEngineManager.Delete(Id);
+			var r = SearchEngineManager.Delete(Id);
+
+			// 削除できなかった場合はダイアログで通知する
+			if (!r)
+			{
+				await SuperDialog.Info(
+				App.SettingsWindow,
+				Resources.Settings_Search_SearchEngine_Dialog_Delete_CannotDelete_Title,
+				Resources.Settings_Search_SearchEngine_Dialog_Delete_CannotDelete_Description
+			);
+				return;
+			}
 
 			// 検索エンジン一覧を読み込み直す
 			ReloadSearchEngineCommand.Execute(null);

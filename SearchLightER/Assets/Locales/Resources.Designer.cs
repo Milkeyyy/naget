@@ -187,6 +187,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   There must be at least one search engine. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_CannotDelete_Description {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   This search engine cannot be deleted に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Search_SearchEngine_Dialog_Delete_CannotDelete_Title {
+            get {
+                return ResourceManager.GetString("Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Delete に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Search_SearchEngine_Dialog_Delete_Confirm {
@@ -196,7 +214,7 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
-        ///   Do you want to remove search engine &quot;{0}&quot;? に類似しているローカライズされた文字列を検索します。
+        ///   Do you want to delete search engine &quot;{0}&quot;? に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Search_SearchEngine_Dialog_Delete_Description {
             get {

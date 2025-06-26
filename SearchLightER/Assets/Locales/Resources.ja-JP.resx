@@ -315,4 +315,10 @@
   <data name="Settings.Tab.AppSettings" xml:space="preserve">
     <value>アプリケーション設定</value>
   </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Description" xml:space="preserve">
+    <value>検索エンジンは一つ以上存在している必要があります。</value>
+  </data>
+  <data name="Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Title" xml:space="preserve">
+    <value>検索エンジンを削除できません</value>
+  </data>
 </root>
