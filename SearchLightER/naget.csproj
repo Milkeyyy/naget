@@ -40,6 +40,8 @@
 	</PropertyGroup>
 	<PropertyGroup Label="Avalonia">
 		<AvaloniaNameGeneratorAttachDevTools Condition="'$(Configuration)' == 'Debug'">True</AvaloniaNameGeneratorAttachDevTools>
+		<Title>$(AssemblyName)</Title>
+		<FileVersion></FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -53,6 +55,7 @@
 
 	<ItemGroup>
 		<Content Include="Assets\Icon.ico" />
+		<EmbeddedResource Include="build.json" />
 	</ItemGroup>
 
 	<ItemGroup>

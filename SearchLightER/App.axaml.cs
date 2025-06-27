@@ -2,23 +2,20 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Platform;
 using Avalonia.Styling;
+using naget.Common;
 using naget.Helpers;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
 using naget.Views;
-using NetSparkleUpdater;
-using NetSparkleUpdater.Enums;
-using NetSparkleUpdater.SignatureVerifiers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace naget;
 
@@ -30,12 +27,25 @@ public class App : Application
 	private static string _version = string.Empty;
 	public static string ProductVersion => _version;
 
+	public static int ProductInternalVersion { get { return Utils.ConvertToInt(_version.Replace(".", string.Empty), 0); } }
+
+	private static string _releaseChannel = string.Empty;
+	public static string ProductReleaseChannel => _releaseChannel;
+	
+	private static string _releaseNumber = string.Empty;
+	public static string ProductReleaseNumber => _releaseNumber;
+
+	public static string ProductFullVersion => $"{ProductVersion}-{ProductReleaseChannel}.{ProductReleaseNumber}";
+
+	private static string _copyright = string.Empty;
+	public static string ProductCopyright => _copyright;
+
 	/// <summary>
 	/// コンフィグ等のファイルを保存するフォルダー
 	/// </summary>
 	public static string ConfigFolder => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductName);
 
-	private static SparkleUpdater _sparkle;
+	public static Updater Updater { get; private set; }
 
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
@@ -43,9 +53,26 @@ public class App : Application
 
 	public override void Initialize()
 	{
-		var a = Assembly.GetExecutingAssembly().GetName();
-		if (a.Name != null) _name = a.Name;
-		if (a.Version != null) _version = a.Version.ToString();
+		Assembly asm = Assembly.GetExecutingAssembly();
+
+		if (asm.GetName().Name != null) _name = asm.GetName().Name ?? "naget";
+
+		// バージョン情報を読み込む
+		var info = string.Empty;
+		using var stream = asm.GetManifestResourceStream("naget.build.json");
+		if (stream != null)
+		{
+			using var reader = new StreamReader(stream);
+			info = reader.ReadToEnd();
+
+			var infoDict = JsonSerializer.Deserialize<Dictionary<string, string>>(info);
+			if (infoDict != null)
+			{
+				_version = infoDict.GetValueOrDefault("version", asm.GetName().Version?.ToString() ?? "0.0.0");
+				_releaseChannel = infoDict.GetValueOrDefault("release_channel", "unknown");
+				_releaseNumber = infoDict.GetValueOrDefault("release_number", "0");
+			}
+		}
 
 		// フォルダーを作成する
 		Debug.WriteLine("Config Directory: " + ConfigFolder);
@@ -64,16 +91,20 @@ public class App : Application
 		AvaloniaXamlLoader.Load(this);
 	}
 
-	public static void Exit()
+	public static void Save()
 	{
-		// Sparkle のループを停止
-		_sparkle.Dispose();
 		// SharpHook を停止
 		HotKeyHelper.Stop();
 		// コンフィグを保存
 		ConfigManager.Save();
 		// 検索エンジンデータを保存
 		SearchEngineManager.Save();
+	}
+
+	public static void Exit()
+	{
+		// ホットキーヘルパーの停止とコンフィグ等の保存
+		Save();
 		// 終了
 		Environment.Exit(0);
 	}
@@ -133,18 +164,6 @@ public class App : Application
 		}
 	}
 
-	private static async void StartSparkle()
-	{
-		await _sparkle.StartLoop(true);
-		// 手動アップデートチェック
-		//await ManualUpdateCheck();
-	}
-
-	public static async Task ManualUpdateCheck()
-	{
-		await _sparkle.CheckForUpdatesAtUserRequest();
-	}
-
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -163,35 +182,9 @@ public class App : Application
 			//ConfigManager.HotKeyManager.Run();
 			HotKeyHelper.Run();
 
-			// Sparkle の初期化
-			_sparkle = new(
-				"https://update-naget.milkeyyy.com/appcast_nightly_" + RuntimeInformation.RuntimeIdentifier + ".xml",
-				new Ed25519Checker(
-					SecurityMode.OnlyVerifySoftwareDownloads,
-					"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
-				)
-			)
-			{
-				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(new WindowIcon(AssetLoader.Open(new Uri("avares://naget/Assets/Icon.ico")))),
-				RelaunchAfterUpdate = true,
-				UseNotificationToast = true,
-				CustomInstallerArguments = "/SILENT"
-			};
-			
-			_sparkle.PreparingToExit += (sender, e) =>
-			{
-				// コンフィグを保存
-				ConfigManager.Save();
-				// 検索エンジンデータを保存
-				SearchEngineManager.Save();
-				// アプリケーション終了時に Sparkle のループを停止
-				//e.Cancel = true;
-				//_sparkle.StopLoop();
-				//Debug.WriteLine("Sparkle loop stopped.");
-			};
-
 			// ループの開始
-			StartSparkle();
+			Updater = new();
+			Updater.Start();
 		}
 
 		base.OnFrameworkInitializationCompleted();

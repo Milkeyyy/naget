@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Epoxy;
+using naget.Helpers;
 using naget.Models.Config;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -65,7 +66,7 @@ public class AppSettingsViewModel
 		CheckUpdateCommand = Command.Factory.Create(async () =>
 		{
 			Debug.WriteLine("Execute Check Update Command");
-			await App.ManualUpdateCheck();
+			await App.Updater.ManualCheck();
 		});
 	}
 

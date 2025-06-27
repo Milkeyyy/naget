@@ -1,4 +1,5 @@
 ﻿using Epoxy;
+using naget.Helpers;
 using naget.Models.Config;
 
 namespace naget.ViewModels;
@@ -40,7 +41,7 @@ public class AppViewModel
 		// アップデートチェック
 		CheckUpdateCommand = Command.Factory.Create(async () =>
 		{
-			await App.ManualUpdateCheck();
+			await App.Updater.ManualCheck();
 		});
 		// アプリケーション終了
 		ExitAppCommand = Command.Factory.Create(() =>
