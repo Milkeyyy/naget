@@ -51,6 +51,7 @@ class Build : NukeBuild
 		{
 			d["release_number"] = ReleaseNumber;
 		}
+		d["full_version"] = d["version"] + "-" + d["release_channel"] + "." + d["release_number"];
 		return d;
 	}
 
@@ -69,10 +70,10 @@ class Build : NukeBuild
 				.SetProjectFile(ProjectFile)
 				.SetRuntime(Runtime)
 				.SetPlatform(Platform)
-				.SetVersion(buildInfo["version"])
+				.SetVersion(buildInfo["full_version"])
+				.SetInformationalVersion(buildInfo["full_version"])
 				.SetFileVersion(buildInfo["version"])
 				.SetAssemblyVersion(buildInfo["version"])
-				.SetInformationalVersion(buildInfo["version"])
 			);
 		});
 
@@ -98,10 +99,10 @@ class Build : NukeBuild
 				.SetConfiguration(Configuration)
 				.SetRuntime(Runtime)
 				.SetPlatform(Platform)
-				.SetVersion(buildInfo["version"])
+				.SetVersion(buildInfo["full_version"])
+				.SetInformationalVersion(buildInfo["full_version"])
 				.SetFileVersion(buildInfo["version"])
 				.SetAssemblyVersion(buildInfo["version"])
-				.SetInformationalVersion(buildInfo["version"])
 				.EnableNoRestore()
 			);
 		});
@@ -141,24 +142,24 @@ class Build : NukeBuild
 				.SetProjectFile(ProjectFile)
 				.SetRuntime(Runtime)
 				.SetPlatform(Platform)
-				.SetVersion(buildInfo["version"])
+				.SetVersion(buildInfo["full_version"])
+				.SetInformationalVersion(buildInfo["full_version"])
 				.SetFileVersion(buildInfo["version"])
 				.SetAssemblyVersion(buildInfo["version"])
-				.SetInformationalVersion(buildInfo["version"])
 			);
 			
 			DotNetTasks.DotNetMSBuild(s => s
 				.SetProcessWorkingDirectory(directory)
 				.SetTargets("BundleApp")
 				.SetConfiguration(Configuration)
-				.SetVersion(buildInfo["version"])
+				.SetVersion(buildInfo["full_version"])
+				.SetInformationalVersion(buildInfo["full_version"])
 				.SetFileVersion(buildInfo["version"])
 				.SetAssemblyVersion(buildInfo["version"])
-				.SetInformationalVersion(buildInfo["version"])
 				.SetPlatform(Platform)
 				.SetProperty("PublishDir", output)
 				.SetProperty("CFBundleVersion", buildInfo["version"])
-				.SetProperty("CFBundleShortVersionString", buildInfo["version"])
+				.SetProperty("CFBundleShortVersionString", buildInfo["full_version"])
 				.SetProperty("RuntimeIdentifier", Runtime)
 				.SetProperty("UseAppHost", true)
 				.SetProperty("SelfContained", false));
