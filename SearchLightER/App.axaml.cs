@@ -180,7 +180,10 @@ public class App : Application
 			
 			_sparkle.PreparingToExit += (sender, e) =>
 			{
-				Exit();
+				// コンフィグを保存
+				ConfigManager.Save();
+				// 検索エンジンデータを保存
+				SearchEngineManager.Save();
 				// アプリケーション終了時に Sparkle のループを停止
 				//e.Cancel = true;
 				//_sparkle.StopLoop();
