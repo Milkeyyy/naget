@@ -4,9 +4,7 @@ using naget.Assets.Locales;
 using naget.Common;
 using naget.Views;
 using NetSparkleUpdater;
-using NetSparkleUpdater.AppCastHandlers;
 using NetSparkleUpdater.Enums;
-using NetSparkleUpdater.Interfaces;
 using NetSparkleUpdater.SignatureVerifiers;
 using System;
 using System.Diagnostics;
@@ -203,66 +201,6 @@ public class Updater : SparkleUpdater
 
 		Debug.WriteLine($"- Status: {info.Status} / {info.Updates.Count}");
 
-		string updVersion;
-		string updReleaseChannel;
-		string updReleaseNumber;
-		foreach (var u in info.Updates)
-		{
-			if (u != null)
-			{
-				try
-				{
-					Debug.WriteLine($"       Title: {u.Title}");
-					Debug.WriteLine($" Description: {u.Description}");
-					Debug.WriteLine($"     Version: {u.Version}");
-					Debug.WriteLine($"ShortVersion: {u.ShortVersion}");
-					Debug.WriteLine($"     Channel: {u.Channel}");
-					Debug.WriteLine($"          OS: {u.OperatingSystem}");
-					Debug.WriteLine($"        Date: {u.PublicationDate}");
-
-					updVersion = u.ShortVersion ?? string.Empty;
-					var vs = u.Version?.Split("-");
-					if (vs == null)
-					{
-						Debug.WriteLine($"Version comparison failed: Splitted Version Strings is Null");
-						break;
-					}
-					updReleaseChannel = vs[1].Split(".")[0] ?? string.Empty;
-					updReleaseNumber = vs[1].Split(".")[1] ?? string.Empty;
-
-					Debug.WriteLine($"NetSparkle UpdateStatus: {info.Status}");
-
-					// バージョン比較を行う
-					// リリース番号が整数である (コミットハッシュとかではない) 場合はそれを比較する
-					if (Utils.ConvertToInt(App.ProductReleaseNumber, -1) != -1 && Utils.ConvertToInt(updReleaseNumber, -1) != -1)
-					{
-						Debug.WriteLine("Compare Release Number");
-						if (Utils.ConvertToInt(App.ProductReleaseNumber) < Utils.ConvertToInt(updReleaseNumber))
-						{
-							info.Status = UpdateStatus.UpdateAvailable;
-							break;
-						}
-					}
-					// それ以外の場合はリリース番号が異なるかどうかを比較する
-					else
-					{
-						if (App.ProductReleaseNumber != updReleaseNumber)
-						{
-							info.Status = UpdateStatus.UpdateNotAvailable;
-							break;
-						}
-					}
-				}
-				catch(Exception ex)
-				{
-					Debug.WriteLine($"Version comparison failed: {ex.Message}");
-					Debug.WriteLine($"{ex.StackTrace}");
-					info.Status = UpdateStatus.CouldNotDetermine;
-					return;
-				}
-			}
-		}
-
 		// 既に最新バージョンの場合
 		if (info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
 		{
@@ -274,6 +212,66 @@ public class Updater : SparkleUpdater
 			);
 			return;
 		}
+
+		//string updVersion;
+		//string updReleaseChannel;
+		//string updReleaseNumber;
+		//foreach (var u in info.Updates)
+		//{
+		//	if (u != null)
+		//	{
+		//		try
+		//		{
+		//			Debug.WriteLine($"       Title: {u.Title}");
+		//			Debug.WriteLine($" Description: {u.Description}");
+		//			Debug.WriteLine($"     Version: {u.Version}");
+		//			Debug.WriteLine($"ShortVersion: {u.ShortVersion}");
+		//			Debug.WriteLine($"     Channel: {u.Channel}");
+		//			Debug.WriteLine($"          OS: {u.OperatingSystem}");
+		//			Debug.WriteLine($"        Date: {u.PublicationDate}");
+
+		//			updVersion = u.ShortVersion ?? string.Empty;
+		//			var vs = u.Version?.Split("-");
+		//			if (vs == null)
+		//			{
+		//				Debug.WriteLine($"Version comparison failed: Splitted Version Strings is Null");
+		//				break;
+		//			}
+		//			updReleaseChannel = vs[1].Split(".")[0] ?? string.Empty;
+		//			updReleaseNumber = vs[1].Split(".")[1] ?? string.Empty;
+
+		//			Debug.WriteLine($"NetSparkle UpdateStatus: {info.Status}");
+
+		//			// バージョン比較を行う
+		//			// リリース番号が整数である (コミットハッシュとかではない) 場合はそれを比較する
+		//			if (Utils.ConvertToInt(App.ProductReleaseNumber, -1) != -1 && Utils.ConvertToInt(updReleaseNumber, -1) != -1)
+		//			{
+		//				Debug.WriteLine("Compare Release Number");
+		//				if (Utils.ConvertToInt(App.ProductReleaseNumber) < Utils.ConvertToInt(updReleaseNumber))
+		//				{
+		//					info.Status = UpdateStatus.UpdateAvailable;
+		//					break;
+		//				}
+		//			}
+		//			// それ以外の場合はリリース番号が異なるかどうかを比較する
+		//			else
+		//			{
+		//				if (App.ProductReleaseNumber != updReleaseNumber)
+		//				{
+		//					info.Status = UpdateStatus.UpdateNotAvailable;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		catch(Exception ex)
+		//		{
+		//			Debug.WriteLine($"Version comparison failed: {ex.Message}");
+		//			Debug.WriteLine($"{ex.StackTrace}");
+		//			info.Status = UpdateStatus.CouldNotDetermine;
+		//			return;
+		//		}
+		//	}
+		//}
 	}
 
 	public async Task ShowDialogAsync(AppCastItem info)
