@@ -4,10 +4,14 @@ using naget.Assets.Locales;
 using naget.Common;
 using naget.Views;
 using NetSparkleUpdater;
+using NetSparkleUpdater.AppCastHandlers;
 using NetSparkleUpdater.Enums;
+using NetSparkleUpdater.Interfaces;
 using NetSparkleUpdater.SignatureVerifiers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +33,7 @@ public class Updater : SparkleUpdater
 		)
 	)
 	{
-		//UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(new WindowIcon(AssetLoader.Open(new Uri("avares://naget/Assets/Icon.ico"))));
+		AppCastHelper.AppCastFilter = new CustomAppCastFilter();
 		RelaunchAfterUpdate = true;
 		UseNotificationToast = false;
 		CustomInstallerArguments = "/SILENT";
@@ -51,13 +55,6 @@ public class Updater : SparkleUpdater
 		{
 			// コンフィグ等の保存を実行
 			//App.Save();
-		};
-
-		// アップデート検知時のイベント
-		UpdateDetectedAsync += async (s, e) =>
-		{
-			// アップデート確認ダイアログを表示する
-			await ShowDialogAsync(e.LatestVersion);
 		};
 
 		// ダウンロード処理用ダイアログの初期化
@@ -167,28 +164,6 @@ public class Updater : SparkleUpdater
 		];
 	}
 
-	//{
-	//	// Sparkle の初期化
-	//	Sparkle = new(
-	//		"https://update-naget.milkeyyy.com/appcast_nightly_" + RuntimeInformation.RuntimeIdentifier + ".xml",
-	//		new Ed25519Checker(
-	//			SecurityMode.OnlyVerifySoftwareDownloads,
-	//			"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
-	//		)
-	//	)
-	//	{
-	//		UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(new WindowIcon(AssetLoader.Open(new Uri("avares://naget/Assets/Icon.ico")))),
-	//		RelaunchAfterUpdate = true,
-	//		UseNotificationToast = false,
-	//		CustomInstallerArguments = "/SILENT",
-	//	};
-
-	//	Sparkle.PreparingToExit += (sender, e) =>
-	//	{
-	//		App.Save();
-	//	};
-	//}
-
 	public void Start()
 	{
 		var t = StartLoop(true);
@@ -198,22 +173,11 @@ public class Updater : SparkleUpdater
 	{
 		Debug.WriteLine("Start manual update check");
 		UpdateInfo info = await CheckForUpdatesQuietly();
-
-		Debug.WriteLine($"- Status: {info.Status} / {info.Updates.Count}");
-
-		// 既に最新バージョンの場合
-		if (info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
-		{
-			Debug.WriteLine("Show Update not available dialog");
-			await SuperDialog.Info(
-				App.SettingsWindow,
-				Resources.Updater_Dialog_UpdateNotAvailable_Title,
-				string.Format(Resources.Updater_Dialog_UpdateNotAvailable_Description, App.ProductFullVersion)
-			);
-			return;
-		}
+		
+		Debug.WriteLine($"- NetSparkle Status: {info.Status} / {info.Updates.Count}");
 
 		//string updVersion;
+		//int updInternalVersion;
 		//string updReleaseChannel;
 		//string updReleaseNumber;
 		//foreach (var u in info.Updates)
@@ -231,6 +195,7 @@ public class Updater : SparkleUpdater
 		//			Debug.WriteLine($"        Date: {u.PublicationDate}");
 
 		//			updVersion = u.ShortVersion ?? string.Empty;
+		//			updInternalVersion = Utils.ConvertToInt(updVersion.Replace(".", string.Empty), 0);
 		//			var vs = u.Version?.Split("-");
 		//			if (vs == null)
 		//			{
@@ -243,12 +208,19 @@ public class Updater : SparkleUpdater
 		//			Debug.WriteLine($"NetSparkle UpdateStatus: {info.Status}");
 
 		//			// バージョン比較を行う
+		//			if (App.ProductInternalVersion < updInternalVersion)
+		//			{
+		//				Debug.WriteLine($" - naget UpdateStatus: Available - Internal Version");
+		//				info.Status = UpdateStatus.UpdateAvailable;
+		//				break;
+		//			}
 		//			// リリース番号が整数である (コミットハッシュとかではない) 場合はそれを比較する
-		//			if (Utils.ConvertToInt(App.ProductReleaseNumber, -1) != -1 && Utils.ConvertToInt(updReleaseNumber, -1) != -1)
+		//			else if (Utils.ConvertToInt(App.ProductReleaseNumber, -1) != -1 && Utils.ConvertToInt(updReleaseNumber, -1) != -1)
 		//			{
 		//				Debug.WriteLine("Compare Release Number");
 		//				if (Utils.ConvertToInt(App.ProductReleaseNumber) < Utils.ConvertToInt(updReleaseNumber))
 		//				{
+		//					Debug.WriteLine($" - naget UpdateStatus: Available - Release Number");
 		//					info.Status = UpdateStatus.UpdateAvailable;
 		//					break;
 		//				}
@@ -258,12 +230,14 @@ public class Updater : SparkleUpdater
 		//			{
 		//				if (App.ProductReleaseNumber != updReleaseNumber)
 		//				{
+		//					Debug.WriteLine($" - naget UpdateStatus: Available - Release Number");
 		//					info.Status = UpdateStatus.UpdateNotAvailable;
 		//					break;
 		//				}
+		//				Debug.WriteLine($" - naget Status: Not Available");
 		//			}
 		//		}
-		//		catch(Exception ex)
+		//		catch (Exception ex)
 		//		{
 		//			Debug.WriteLine($"Version comparison failed: {ex.Message}");
 		//			Debug.WriteLine($"{ex.StackTrace}");
@@ -272,6 +246,24 @@ public class Updater : SparkleUpdater
 		//		}
 		//	}
 		//}
+
+		if (info.Status == UpdateStatus.UpdateAvailable)
+		{
+			// アップデート確認ダイアログを表示する
+			await ShowDialogAsync(info.Updates[0]);
+			
+		}
+		// 既に最新バージョンの場合
+		else if(info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
+		{
+			Debug.WriteLine("Show Update not available dialog");
+			await SuperDialog.Info(
+				App.SettingsWindow,
+				Resources.Updater_Dialog_UpdateNotAvailable_Title,
+				string.Format(Resources.Updater_Dialog_UpdateNotAvailable_Description, App.ProductFullVersion)
+			);
+			return;
+		}
 	}
 
 	public async Task ShowDialogAsync(AppCastItem info)
@@ -301,7 +293,91 @@ public class Updater : SparkleUpdater
 	}
 }
 
-//public class CustomAppCastFilter : IAppCastFilter
-//{
-//	ChannelAppCastFilter
-//}
+public class CustomAppCastFilter : IAppCastFilter
+{
+	public IEnumerable<AppCastItem> GetFilteredAppCastItems(SemVerLike installed, IEnumerable<AppCastItem> items)
+	{
+		string updVersion;
+		int updInternalVersion;
+		string updReleaseChannel;
+		string updReleaseNumber;
+		return items.Where((item) =>
+		{
+			try
+			{
+				Debug.WriteLine("Current Info");
+				Debug.WriteLine($"        Title: {App.ProductName}");
+				Debug.WriteLine($"      Version: {App.ProductFullVersion}");
+				Debug.WriteLine($" ShortVersion: {App.ProductVersion}");
+				Debug.WriteLine($"	 Release Ch: {App.ProductReleaseChannel}");
+				Debug.WriteLine($"  Release Num: {App.ProductReleaseNumber}");
+				Debug.WriteLine($"==============================");
+				Debug.WriteLine("Latest Info");
+				Debug.WriteLine($"        Title: {item.Title}");
+				Debug.WriteLine($"  Description: {item.Description}");
+				Debug.WriteLine($"      Version: {item.Version}");
+				Debug.WriteLine($" ShortVersion: {item.ShortVersion}");
+				Debug.WriteLine($"      Channel: {item.Channel}");
+				Debug.WriteLine($"           OS: {item.OperatingSystem}");
+				Debug.WriteLine($"         Date: {item.PublicationDate}");
+
+				updVersion = item.ShortVersion ?? string.Empty;
+				updInternalVersion = Utils.ConvertToInt(updVersion.Replace(".", string.Empty), 0);
+				var vs = item.Version?.Split("-");
+				if (vs == null)
+				{
+					Debug.WriteLine("Version comparison failed: Splitted Version Strings is Null");
+					return false;
+				}
+				else if (vs.Length == 0)
+				{
+					Debug.WriteLine("Version comparison failed: Splitted Version Strings Count is 0");
+					return false;
+				}
+
+				string sp = ".";
+				if (vs[1].Contains('+')) sp = "+";
+
+				updReleaseChannel = vs[1].Split(sp)[0] ?? string.Empty;
+				updReleaseNumber = vs[1].Split(sp)[1] ?? string.Empty;
+
+				Debug.WriteLine($"   Release Ch: {updReleaseChannel}");
+				Debug.WriteLine($"  Release Num: {updReleaseNumber}");
+
+				// バージョン比較を行う
+				if (App.ProductInternalVersion < updInternalVersion)
+				{
+					Debug.WriteLine(" - naget UpdateStatus: Available - Internal Version");
+					return true;
+				}
+				// リリース番号が整数である (コミットハッシュとかではない) 場合はそれを比較する
+				else if (Utils.ConvertToInt(App.ProductReleaseNumber, -1) != -1 && Utils.ConvertToInt(updReleaseNumber, -1) != -1)
+				{
+					Debug.WriteLine("Compare Release Number");
+					if (Utils.ConvertToInt(App.ProductReleaseNumber) < Utils.ConvertToInt(updReleaseNumber))
+					{
+						Debug.WriteLine(" - naget UpdateStatus: Available - Release Number");
+						return true;
+					}
+				}
+				// それ以外の場合はリリース番号が異なるかどうかを比較する
+				else
+				{
+					if (App.ProductReleaseNumber != updReleaseNumber)
+					{
+						Debug.WriteLine(" - naget UpdateStatus: Available - Release Number");
+						return true;
+					}
+					Debug.WriteLine(" - naget Status: Not Available");
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Version comparison failed: {ex.Message}");
+				Debug.WriteLine($"{ex.StackTrace}");
+				return false;
+			}
+			return false;
+		});
+	}
+}
