@@ -51,15 +51,16 @@ jobs:
         echo "APP_VERSION=$($buildInfo.version)" >> $env:GITHUB_ENV
         echo "APP_RELEASE_CHANNEL=$($buildInfo.release_channel)" >> $env:GITHUB_ENV
         echo "APP_RELEASE_NUMBER=$($buildInfo.release_number)" >> $env:GITHUB_ENV
+        python -c 'print("COMMIT_HASH_SHORT=" + ("${{ env.COMMIT_HASH_SHORT }}"[0:7]))' >> $env:GITHUB_ENV
 
     # ビルド (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
       name: Build
-      run: ./build.cmd --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+      run: ./build.cmd --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
 
     - if: ${{ startsWith(env.rid, 'win') }}
       name: Build Installer
-      run: ./build.cmd buildinstaller --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+      run: ./build.cmd buildinstaller --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
 
     - if: ${{ startsWith(env.rid, 'win') }}
       name: Generate App Cast (Windows)
@@ -71,7 +72,7 @@ jobs:
     # ビルド (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Build and Bundle
-      run: ./build.sh bundleapp --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
+      run: ./build.sh bundleapp --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
 
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Create Folder
@@ -169,7 +170,7 @@ jobs:
           name: 'Nightly Build'
           prerelease: true
           body: |
-            Nightly Build - Commit `${{ github.sha }}`
+            Nightly Build - Commit `${{ env.COMMIT_HASH_SHORT }}`
             - ${{ github.event.head_commit.message }}
             
             #### **macOS で `"naget.app" は壊れているため開けません。` という旨の警告が表示されて起動できない場合**
@@ -183,7 +184,7 @@ jobs:
       - name: Push App Cast
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: Nightly Build - ${{ github.sha }}
+          commit_message: Nightly Build - ${{ env.COMMIT_HASH_SHORT }}
           file_pattern: ./appcast_*.xml
 
       - name: Delete Build Artifact
