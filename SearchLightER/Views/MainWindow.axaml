@@ -15,6 +15,7 @@
 		ExtendClientAreaChromeHints="NoChrome"
 		WindowStartupLocation="CenterScreen"
 		ShowInTaskbar="False"
+		ShowActivated="True"
 		CanResize="False"
 		Topmost="True"
 		Width="800"
