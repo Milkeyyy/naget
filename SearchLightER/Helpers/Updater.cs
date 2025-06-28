@@ -2,8 +2,11 @@
 using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
 using naget.Common;
+using naget.Views;
 using NetSparkleUpdater;
+using NetSparkleUpdater.AppCastHandlers;
 using NetSparkleUpdater.Enums;
+using NetSparkleUpdater.Interfaces;
 using NetSparkleUpdater.SignatureVerifiers;
 using System;
 using System.Diagnostics;
@@ -193,17 +196,12 @@ public class Updater : SparkleUpdater
 		var t = StartLoop(true);
 	}
 
-	public async Task ManualCheck()
+	public async Task ManualCheck(bool showDialog = false)
 	{
 		Debug.WriteLine("Start manual update check");
 		UpdateInfo info = await CheckForUpdatesQuietly();
 
 		Debug.WriteLine($"- Status: {info.Status} / {info.Updates.Count}");
-
-		if (info.Updates.Count == 0)
-		{
-			return;
-		}
 
 		string updVersion;
 		string updReleaseChannel;
@@ -235,13 +233,8 @@ public class Updater : SparkleUpdater
 					Debug.WriteLine($"NetSparkle UpdateStatus: {info.Status}");
 
 					// バージョン比較を行う
-					// NetSparkle がアップデートありと判断した場合はループから抜けてアップデート処理へ移る
-					if (info.Status == UpdateStatus.UpdateAvailable)
-					{
-						break;
-					}
 					// リリース番号が整数である (コミットハッシュとかではない) 場合はそれを比較する
-					else if (Utils.ConvertToInt(App.ProductReleaseNumber, -1) != -1 && Utils.ConvertToInt(updReleaseNumber, -1) != -1)
+					if (Utils.ConvertToInt(App.ProductReleaseNumber, -1) != -1 && Utils.ConvertToInt(updReleaseNumber, -1) != -1)
 					{
 						Debug.WriteLine("Compare Release Number");
 						if (Utils.ConvertToInt(App.ProductReleaseNumber) < Utils.ConvertToInt(updReleaseNumber))
@@ -265,9 +258,21 @@ public class Updater : SparkleUpdater
 					Debug.WriteLine($"Version comparison failed: {ex.Message}");
 					Debug.WriteLine($"{ex.StackTrace}");
 					info.Status = UpdateStatus.CouldNotDetermine;
-					break;
+					return;
 				}
 			}
+		}
+
+		// 既に最新バージョンの場合
+		if (info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
+		{
+			Debug.WriteLine("Show Update not available dialog");
+			await SuperDialog.Info(
+				App.SettingsWindow,
+				Resources.Updater_Dialog_UpdateNotAvailable_Title,
+				string.Format(Resources.Updater_Dialog_UpdateNotAvailable_Description, App.ProductFullVersion)
+			);
+			return;
 		}
 	}
 
@@ -297,3 +302,8 @@ public class Updater : SparkleUpdater
 		}
 	}
 }
+
+//public class CustomAppCastFilter : IAppCastFilter
+//{
+//	ChannelAppCastFilter
+//}

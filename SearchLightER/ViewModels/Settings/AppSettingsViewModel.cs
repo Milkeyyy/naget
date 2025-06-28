@@ -66,7 +66,7 @@ public class AppSettingsViewModel
 		CheckUpdateCommand = Command.Factory.Create(async () =>
 		{
 			Debug.WriteLine("Execute Check Update Command");
-			await App.Updater.ManualCheck();
+			await App.Updater.ManualCheck(true);
 		});
 	}
 

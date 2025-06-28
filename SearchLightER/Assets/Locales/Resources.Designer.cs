@@ -675,6 +675,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   The latest version ({0}) is already installed. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_UpdateNotAvailable_Description {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.UpdateNotAvailable.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Latest Version is Installed に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_UpdateNotAvailable_Title {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.UpdateNotAvailable.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Copy に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string WebBrowser_ContextMenu_Copy {
