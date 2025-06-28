@@ -51,7 +51,7 @@ jobs:
         echo "APP_VERSION=$($buildInfo.version)" >> $env:GITHUB_ENV
         echo "APP_RELEASE_CHANNEL=$($buildInfo.release_channel)" >> $env:GITHUB_ENV
         echo "APP_RELEASE_NUMBER=$($buildInfo.release_number)" >> $env:GITHUB_ENV
-        python -c 'print("COMMIT_HASH_SHORT=" + ("${{ env.COMMIT_HASH_SHORT }}"[0:7]))' >> $env:GITHUB_ENV
+        python -c 'print("COMMIT_HASH_SHORT=" + ("${{ github.sha }}"[0:7]))' >> $env:GITHUB_ENV
 
     # ビルド (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
