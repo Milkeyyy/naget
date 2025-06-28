@@ -76,8 +76,14 @@ jobs:
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Create DMG
       run: |
-        npm install --global create-dmg
-        create-dmg '${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ env.rid }} || true
+        brew install create-dmg
+        create-dmg --volname 'naget Installer' -- '${{ env.OUTPUT_DIR }}/${{ env.rid }}.dmg' '${{ env.OUTPUT_DIR }}/${{ env.rid }}'
+
+    # - if: ${{ startsWith(env.rid, 'osx') }}
+    #   name: Create DMG
+    #   run: |
+    #     npm install --global create-dmg
+    #     create-dmg '${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ env.rid }} || true
 
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Rename DMG
