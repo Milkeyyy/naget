@@ -133,6 +133,15 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   About に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_About {
+            get {
+                return ResourceManager.GetString("Settings.About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Theme に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Design_Theme {

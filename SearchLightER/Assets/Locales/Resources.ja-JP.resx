@@ -368,4 +368,7 @@
   <data name="Updater.Dialog.UpdateNotAvailable.Description" xml:space="preserve">
     <value>既に最新のバージョン ({0}) がインストールされています。</value>
   </data>
+  <data name="Settings.About" xml:space="preserve">
+    <value>このアプリについて</value>
+  </data>
 </root>

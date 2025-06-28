@@ -43,7 +43,7 @@
 			<TrayIcon Icon="/Assets/Icon.ico" ToolTipText="{x:Static lang:Resources.App_Name}">
 				<TrayIcon.Menu>
 					<NativeMenu>
-						<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" />
+						<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" Command="{Binding OpenAboutCommand}" />
 						<NativeMenuItemSeparator />
 						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_InAppBrowser}" Command="{Binding OpenInAppBrowserWindowCommand}" />
 						<NativeMenuItemSeparator />

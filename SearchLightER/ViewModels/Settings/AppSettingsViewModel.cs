@@ -33,6 +33,8 @@ public class AppSettingsViewModel
 	public Command CheckUpdateCommand { get; }
 	#endregion
 
+	public Command AboutClickCommand { get; }
+
 	public AppSettingsViewModel()
 	{
 		// ビューがロードされた時の処理
@@ -67,6 +69,13 @@ public class AppSettingsViewModel
 		{
 			Debug.WriteLine("Execute Check Update Command");
 			await App.Updater.ManualCheck(true);
+		});
+
+		// アプリケーション情報表示コマンド
+		AboutClickCommand = Command.Factory.Create(() =>
+		{
+			App.AboutWindow.ShowDialog(App.SettingsWindow);
+			return default;
 		});
 	}
 

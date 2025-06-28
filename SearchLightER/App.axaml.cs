@@ -57,6 +57,7 @@ public class App : Application
 
 	public static Updater Updater { get; private set; }
 
+	public static Window? AboutWindow { get; private set; }
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
 	public static Window? BrowserWindow { get; private set; }
@@ -184,6 +185,7 @@ public class App : Application
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);
 
+			AboutWindow = new AboutWindow();
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();
 			BrowserWindow = new BrowserWindow();

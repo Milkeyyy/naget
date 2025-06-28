@@ -368,4 +368,7 @@ Latest Version: {1}</value>
   <data name="Updater.Dialog.UpdateNotAvailable.Description" xml:space="preserve">
     <value>The latest version ({0}) is already installed.</value>
   </data>
+  <data name="Settings.About" xml:space="preserve">
+    <value>About</value>
+  </data>
 </root>

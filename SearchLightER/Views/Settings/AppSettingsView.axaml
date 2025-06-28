@@ -83,7 +83,7 @@
 			</ui:SettingsExpander>
 
 			<!--アップデート-->
-			<ui:SettingsExpander IsExpanded="True" IconSource="Refresh">
+			<ui:SettingsExpander IsExpanded="True" IconSource="{ic:FluentIconSource Icon=ArrowSync}" >
 				<!--ヘッダー&注意書きテキスト-->
 				<ui:SettingsExpander.Header>
 					<StackPanel>
@@ -104,6 +104,17 @@
 						</Button>
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+
+			<!--このアプリについて-->
+			<ui:SettingsExpander IsExpanded="True" IsClickEnabled="True" IconSource="{ic:FluentIconSource Icon=Info}" ActionIconSource="{ic:FluentIconSource Icon=Open}" Command="{Binding AboutClickCommand}">
+				<!--ヘッダー&注意書きテキスト-->
+				<ui:SettingsExpander.Header>
+					<StackPanel>
+						<!--ヘッダーテキスト-->
+						<TextBlock Text="{x:Static lang:Resources.Settings_About}" VerticalAlignment="Center"/>
+					</StackPanel>
+				</ui:SettingsExpander.Header>
 			</ui:SettingsExpander>
 		</StackPanel>
 	</Panel>

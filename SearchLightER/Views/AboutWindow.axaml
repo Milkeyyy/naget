@@ -1,0 +1,35 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+		xmlns:vm="using:naget.ViewModels"
+		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+		mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+		x:Class="naget.Views.AboutWindow"
+		x:DataType="vm:AboutWindowViewModel"
+		WindowStartupLocation="CenterScreen"
+		ShowActivated="True"
+		CanResize="False"
+		SizeToContent="WidthAndHeight"
+		Icon="/Assets/Icon.ico"
+		Title="{Binding WindowTitle}"
+>
+
+	<Design.DataContext>
+		<vm:AboutWindowViewModel />
+	</Design.DataContext>
+
+	<StackPanel Margin="40 30 40 30" Spacing="10" VerticalAlignment="Center">
+		<StackPanel Orientation="Horizontal">
+			<!--ロゴ-->
+			<Image Source="/Assets/Logo/naget_Symbol_1-1.png" Width="64" VerticalAlignment="Center"/>
+			<!--アプリ名 & バージョン-->
+			<StackPanel Orientation="Vertical" Margin="20 0 0 0">
+				<TextBlock Text="{Binding TitleText}" FontSize="24" FontWeight="Heavy" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+				<TextBlock Text="{Binding VersionText}" FontSize="18" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+			</StackPanel>
+		</StackPanel>
+		<TextBlock Text="Copyright (C) 2025 Milkeyyy" FontSize="12" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+	</StackPanel>
+</Window>
