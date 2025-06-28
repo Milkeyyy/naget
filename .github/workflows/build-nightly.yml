@@ -89,7 +89,7 @@ jobs:
       name: Create DMG
       run: |
         brew install create-dmg
-        create-dmg --volname 'naget Installer' --window-size 800 400 --icon size 100 --icon "naget.app" 200 190 --app-drop-link 600 185 --hide-extension "naget.app" "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg" "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/"
+        create-dmg --volname "naget Installer" --window-size 800 400 --icon size 100 --icon "naget.app" 200 190 --app-drop-link 600 185 --hide-extension "naget.app" "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg" "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/"
 
     # - if: ${{ startsWith(env.rid, 'osx') }}
     #   name: Create DMG
