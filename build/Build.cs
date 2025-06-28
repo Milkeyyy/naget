@@ -31,12 +31,13 @@ class Build : NukeBuild
 	[Parameter]
 	string Platform => Runtime.Split("-")[1];
 
-	readonly string ProjectFile = RootDirectory / "SearchLightER" / "naget.csproj";
+	readonly static AbsolutePath ProjectFolder = RootDirectory / "SearchLightER";
+	readonly static AbsolutePath ProjectFile = ProjectFolder / "naget.csproj";
 
-	private Dictionary<string, string> GetBuildInfo()
+	private Dictionary<string, string> LoadAndSaveBuildInfo()
 	{
 		var d = JsonSerializer.Deserialize<Dictionary<string, string>>(
-			File.ReadAllText(RootDirectory / "SearchLightER" / "build.json"),
+			File.ReadAllText(ProjectFolder / "build.json"),
 			new JsonSerializerOptions
 			{
 				Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
@@ -54,7 +55,10 @@ class Build : NukeBuild
 		catch { rn = -1; }
 		if (rn == -1) st = "+";
 		d["full_version"] = $"{d["version"]}-{d["release_channel"]}{st}{d["release_number"]}";
-		
+
+		// 書き換えたビルド情報を上書き保存する
+		File.WriteAllText(ProjectFolder / "build.json", JsonSerializer.Serialize(d));
+
 		return d;
 	}
 
@@ -67,7 +71,7 @@ class Build : NukeBuild
 	Target Restore => _ => _
 		.Executes(() =>
 		{
-			var buildInfo = GetBuildInfo();
+			var buildInfo = LoadAndSaveBuildInfo();
 
 			DotNetTasks.DotNetRestore(_ => _
 				.SetProjectFile(ProjectFile)
@@ -84,7 +88,7 @@ class Build : NukeBuild
 		.DependsOn(Restore)
 		.Executes(() =>
 		{
-			var buildInfo = GetBuildInfo();
+			var buildInfo = LoadAndSaveBuildInfo();
 
 			//DotNetTasks.DotNetBuild(_ => _
 			//	.SetProjectFile(ProjectFile)
@@ -118,7 +122,7 @@ class Build : NukeBuild
 			var SetupArch = "x64compatible";
 			if (Runtime == "win-arm64") SetupArch = "arm64";
 
-			var buildInfo = GetBuildInfo();
+			var buildInfo = LoadAndSaveBuildInfo();
 
 			InnoSetupTasks.InnoSetup(c => c
 				.SetKeyValueDefinition("MyAppVersion", buildInfo["version"])
@@ -129,16 +133,16 @@ class Build : NukeBuild
 				.SetKeyValueDefinition("MyPlatform", Runtime)
 				.SetOutputBaseFilename($"naget_Setup_{Runtime}")
 				.SetOutputDir(output)
-				.SetScriptFile(RootDirectory / "SearchLightER" / "Setup" / $"naget_Setup_{buildInfo["release_channel"]}.iss")
+				.SetScriptFile(ProjectFolder / "Setup" / $"naget_Setup_{buildInfo["release_channel"]}.iss")
 			);
 		});
 
 	Target BundleApp => _ => _
 		.Executes(() =>
 		{
-			var buildInfo = GetBuildInfo();
+			var buildInfo = LoadAndSaveBuildInfo();
 
-			AbsolutePath directory = RootDirectory / "SearchLightER";
+			AbsolutePath directory = ProjectFolder;
 			AbsolutePath output = RootDirectory / "_Pack" / Runtime;
 
 			DotNetTasks.DotNetRestore(_ => _
