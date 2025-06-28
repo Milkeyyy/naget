@@ -125,6 +125,7 @@ class Build : NukeBuild
 			var buildInfo = LoadAndSaveBuildInfo();
 
 			InnoSetupTasks.InnoSetup(c => c
+				.SetKeyValueDefinition("MyAppFullVersion", buildInfo["full_version"])
 				.SetKeyValueDefinition("MyAppVersion", buildInfo["version"])
 				.SetKeyValueDefinition("MyAppReleaseChannel", buildInfo["release_channel"])
 				.SetKeyValueDefinition("MyAppReleaseNumber", buildInfo["release_number"])
