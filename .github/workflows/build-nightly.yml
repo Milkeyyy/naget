@@ -77,7 +77,7 @@ jobs:
       name: Create DMG
       run: |
         brew install create-dmg
-        create-dmg --volname 'naget Installer' -- '${{ env.OUTPUT_DIR }}/${{ env.rid }}.dmg' '${{ env.OUTPUT_DIR }}/${{ env.rid }}'
+        create-dmg --volname 'naget Installer' '${{ env.OUTPUT_DIR }}/${{ env.rid }}.dmg' '${{ env.OUTPUT_DIR }}/${{ env.rid }}'
 
     # - if: ${{ startsWith(env.rid, 'osx') }}
     #   name: Create DMG
