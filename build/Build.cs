@@ -43,15 +43,18 @@ class Build : NukeBuild
 				WriteIndented = true,
 			}
 		);
-		if (ReleaseChannel != null) 
-		{
-			d["release_channel"] = ReleaseChannel;
-		}
-		if (ReleaseNumber != null)
-		{
-			d["release_number"] = ReleaseNumber;
-		}
-		d["full_version"] = d["version"] + "-" + d["release_channel"] + "." + d["release_number"];
+
+		if (ReleaseChannel != null)  { d["release_channel"] = ReleaseChannel; }
+		if (ReleaseNumber != null) { d["release_number"] = ReleaseNumber; }
+
+		int rn;
+		string st = ".";
+		// リリース番号が数字でない場合は . ではなく + で区切る
+		try { rn = int.Parse(d["release_number"]); }
+		catch { rn = -1; }
+		if (rn == -1) st = "+";
+		d["full_version"] = $"{d["version"]}-{d["release_channel"]}{st}{d["release_number"]}";
+		
 		return d;
 	}
 

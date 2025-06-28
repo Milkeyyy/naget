@@ -35,7 +35,17 @@ public class App : Application
 	private static string _releaseNumber = string.Empty;
 	public static string ProductReleaseNumber => _releaseNumber;
 
-	public static string ProductFullVersion => $"{ProductVersion}-{ProductReleaseChannel}.{ProductReleaseNumber}";
+	public static string ProductFullVersion
+	{
+		get
+		{
+			string st = ".";
+			// リリース番号が数字でない場合は . ではなく + で区切る
+			var rn = Utils.ConvertToInt(ProductReleaseNumber, -1);
+			if (rn == -1) st = "+";
+			return $"{ProductVersion}-{ProductReleaseChannel}{st}{ProductReleaseNumber}";
+		}
+	}
 
 	private static string _copyright = string.Empty;
 	public static string ProductCopyright => _copyright;
