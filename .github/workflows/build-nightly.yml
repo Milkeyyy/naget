@@ -74,17 +74,22 @@ jobs:
       run: ./build.sh bundleapp --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.sha }}
 
     - if: ${{ startsWith(env.rid, 'osx') }}
-      name: Move and Rename App
+      name: Create Folder
       shell: pwsh
       run: |
         New-Item -ItemType Directory -ErrorAction SilentlyContinue "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output"
+
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Move and Rename App
+      shell: pwsh
+      run: |
         Move-Item -Path "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget.app" -Destination "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/naget.app"
 
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Create DMG
       run: |
         brew install create-dmg
-        create-dmg --volname 'naget Installer' --window-size 800 400 --icon size 100 --icon "naget.app" 200 190 --app-drop-link 600 185 --hide-extension "naget.app" '${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg' '${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/'
+        create-dmg --volname 'naget Installer' --window-size 800 400 --icon size 100 --icon "naget.app" 200 190 --app-drop-link 600 185 --hide-extension "naget.app" "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg" "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/"
 
     # - if: ${{ startsWith(env.rid, 'osx') }}
     #   name: Create DMG
