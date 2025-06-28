@@ -6,11 +6,11 @@
     <language>en</language>
     <item>
       <title>naget 1.0.0</title>
-      <pubDate>Sat, 28 Jun 2025 08:09:11 +00:00</pubDate>
+      <pubDate>Sat, 28 Jun 2025 10:18:52 +00:00</pubDate>
       <sparkle:version>1.0.0</sparkle:version>
       <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
       <sparkle:channel>nightly</sparkle:channel>
-      <enclosure url="https://github.com/Milkeyyy/naget/releases/download/nightly/naget_osx-arm64.dmg" sparkle:version="1.0.0" sparkle:shortVersionString="1.0.0" length="186584719" sparkle:os="mac-arm64" type="application/octet-stream" sparkle:criticalUpdate="false" sparkle:signature="5sXhNqqROUiBPQrSn2jEJSXreI0iCc03CLIF79KVkumUNUURlE+VAetMyTZdBlKCULr6tXN6ilfydVKdV9s4Cw==" />
+      <enclosure url="https://github.com/Milkeyyy/naget/releases/download/nightly/naget_osx-arm64.dmg" sparkle:version="1.0.0" sparkle:shortVersionString="1.0.0" length="186591291" sparkle:os="mac-arm64" type="application/octet-stream" sparkle:criticalUpdate="false" sparkle:signature="YXd/QZ1NEFGhDen37hl3IIyCKOVV6aVwdG2uPiKHZwIaD+or+QeS+cBHJvAtpH4HLY0MyuoVXd97XRGmA6IYDg==" />
     </item>
   </channel>
 </rss>
