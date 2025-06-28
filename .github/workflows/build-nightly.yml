@@ -91,8 +91,9 @@ jobs:
         brew install create-dmg
         create-dmg \
         --volname "naget Installer" \
+        --volicon ".SearchLightER/Assets/Logo/naget.icns" \
         --window-size 800 400 \
-        --icon size 100 \
+        --icon-size 100 \
         --icon "naget.app" 200 190 \
         --app-drop-link 600 185 \
         --hide-extension "naget.app" \
