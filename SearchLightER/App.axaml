@@ -16,7 +16,7 @@
 	
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
-		<sty:FluentAvaloniaTheme CustomAccentColor="#e61953" />
+		<sty:FluentAvaloniaTheme CustomAccentColor="#e62152" />
 		<!--<Style Selector=":is(TopLevel)">
 			<Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
 		</Style>-->
