@@ -170,7 +170,7 @@ jobs:
           name: 'Nightly Build'
           prerelease: true
           body: |
-            Nightly Build - Commit `${{ env.COMMIT_HASH_SHORT }}`
+            Nightly Build - Commit `${{ github.sha }}`
             - ${{ github.event.head_commit.message }}
             
             #### **macOS で `"naget.app" は壊れているため開けません。` という旨の警告が表示されて起動できない場合**
