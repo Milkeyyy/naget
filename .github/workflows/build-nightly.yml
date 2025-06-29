@@ -53,6 +53,7 @@ jobs:
         echo "APP_RELEASE_NUMBER=$($buildInfo.release_number)" >> $env:GITHUB_ENV
         python -c 'print("COMMIT_HASH_SHORT=" + ("${{ github.sha }}"[0:7]))' >> $env:GITHUB_ENV
 
+
     # ビルド (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
       name: Build
@@ -61,13 +62,6 @@ jobs:
     - if: ${{ startsWith(env.rid, 'win') }}
       name: Build Installer
       run: ./build.cmd buildinstaller --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
-
-    - if: ${{ startsWith(env.rid, 'win') }}
-      name: Generate App Cast (Windows)
-      shell: pwsh
-      run: |
-        dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e exe --output-file-name appcast_nightly_${{ env.rid }} --file-version ${{ env.APP_VERSION }} --channel nightly
 
     # ビルド (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
@@ -101,22 +95,47 @@ jobs:
         "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg" \
         "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/"
 
-    # - if: ${{ startsWith(env.rid, 'osx') }}
-    #   name: Create DMG
-    #   run: |
-    #     npm install --global create-dmg
-    #     create-dmg '${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget.app' ${{ env.OUTPUT_DIR }}/${{ env.rid }} || true
-
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Rename DMG
       run: mv ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget*.dmg ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg
+
+
+    - name: Load Full Version
+      shell: pwsh
+      run: |
+        $buildInfo = (Get-Content "./SearchLightER/build.json" | ConvertFrom-Json)
+        echo "APP_FULL_VERSION=$($buildInfo.full_version)" >> $env:GITHUB_ENV
+
+
+    # App Cast の生成
+    - if: ${{ startsWith(env.rid, 'win') }}
+      name: Generate App Cast (Windows)
+      shell: pwsh
+      run: |
+        dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e exe --output-file-name appcast_nightly_${{ env.rid }} --output-type json --channel nightly
 
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Generate App Cast (macOS)
       shell: pwsh
       run: |
         dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e dmg --output-file-name appcast_nightly_${{ env.rid }} --file-version ${{ env.APP_VERSION }} --channel nightly
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e dmg --output-file-name appcast_nightly_${{ env.rid }} --output-type json --channel nightly
+
+    - name: Update App Cast Value (title)
+      uses: jossef/action-set-json-field@v2.1
+      with:
+        file: ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.json
+        field: items.title
+        value: naget ${{ env.APP_FULL_VERSION }}
+
+    - name: Update App Cast Value (version)
+      uses: jossef/action-set-json-field@v2.1
+      with:
+        file: ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.json
+        field: items.version
+        value: ${{ env.APP_FULL_VERSION }}
+
 
     # アップロード (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
@@ -126,7 +145,7 @@ jobs:
         name: build-${{ env.rid }}
         path: |
           ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_Setup_${{ env.rid }}.exe
-          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.xml*
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.json*
 
     # アップロード (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
@@ -136,7 +155,8 @@ jobs:
         name: build-${{ env.rid }}
         path: |
           ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg
-          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.xml*
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.json*
+
 
   update-nightly-releases:
     name: Update Nightly Releases
@@ -185,7 +205,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: Nightly Build - ${{ github.sha }}
-          file_pattern: ./appcast_*.xml
+          file_pattern: ./appcast_*.json
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5

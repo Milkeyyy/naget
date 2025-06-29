@@ -26,13 +26,14 @@ public class Updater : SparkleUpdater
 	TaskDialogProgressState downloadProgressState;
 
 	public Updater() : base(
-		"https://update-naget.milkeyyy.com/appcast_" + App.ProductReleaseChannel +  "_" + RuntimeInformation.RuntimeIdentifier + ".xml",
+		"https://update-naget.milkeyyy.com/appcast_" + App.ProductReleaseChannel +  "_" + RuntimeInformation.RuntimeIdentifier + ".json",
 		new Ed25519Checker(
 			SecurityMode.OnlyVerifySoftwareDownloads,
 			"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
 		)
 	)
 	{
+		AppCastGenerator = new JsonAppCastGenerator(LogWriter);
 		AppCastHelper.AppCastFilter = new CustomAppCastFilter();
 		RelaunchAfterUpdate = true;
 		UseNotificationToast = false;
