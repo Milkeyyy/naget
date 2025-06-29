@@ -8,6 +8,7 @@ using naget.Views.Settings;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace naget.ViewModels.Settings;
@@ -192,12 +193,13 @@ public class SearchEngineViewModel
 		}
 	}
 
+	private static readonly CompositeFormat deleteDialogContentDesc = CompositeFormat.Parse(Resources.Settings_Search_SearchEngine_Dialog_Delete_Description);
 	public async Task ShowDeleteDialogAsync()
 	{
 		var dialog = new ContentDialog
 		{
 			// 説明
-			Content = string.Format(Resources.Settings_Search_SearchEngine_Dialog_Delete_Description, Name),
+			Content = string.Format(null, deleteDialogContentDesc, Name),
 
 			// タイトル
 			Title = Resources.Settings_Search_SearchEngine_Dialog_Delete_Title,

@@ -257,10 +257,11 @@ public class Updater : SparkleUpdater
 		else if(info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
 		{
 			Debug.WriteLine("Show Update not available dialog");
+			CompositeFormat desc = CompositeFormat.Parse(Resources.Updater_Dialog_UpdateNotAvailable_Description);
 			await SuperDialog.Info(
 				App.SettingsWindow,
 				Resources.Updater_Dialog_UpdateNotAvailable_Title,
-				string.Format(Resources.Updater_Dialog_UpdateNotAvailable_Description, App.ProductFullVersion)
+				string.Format(null, desc, App.ProductFullVersion)
 			);
 			return;
 		}
@@ -268,12 +269,13 @@ public class Updater : SparkleUpdater
 
 	public async Task ShowDialogAsync(AppCastItem info)
 	{
+		CompositeFormat desc = CompositeFormat.Parse(Resources.Updater_Dialog_UpdateAvailable_VersionInfo);
 		TaskDialog dialog = new()
 		{
 			Title = Resources.Updater_Dialog_UpdateAvailable_Title + " - " + App.ProductName,
 			Header = Resources.Updater_Dialog_UpdateAvailable_Title,
 			SubHeader = Resources.Updater_Dialog_UpdateAvailable_Description,
-			Content = string.Format(Resources.Updater_Dialog_UpdateAvailable_VersionInfo, App.ProductFullVersion, info.Version),
+			Content = string.Format(null, desc, App.ProductFullVersion, info.Version),
 			Buttons = {
 				new TaskDialogButton(Resources.Dialog_Button_Yes, TaskDialogStandardResult.Yes),
 				new TaskDialogButton(Resources.Dialog_Button_No, TaskDialogStandardResult.No)
