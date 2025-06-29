@@ -1,0 +1,22 @@
+{
+  "title": "naget",
+  "language": "en",
+  "description": "Most recent changes with links to updates",
+  "link": "",
+  "items": [
+    {
+      "title": "naget 1.0.0-nightly+cd1dd2b",
+      "version": "1.0.0-nightly+cd1dd2b",
+      "short_version": "1.0.0",
+      "description": "",
+      "url": "https://github.com/Milkeyyy/naget/releases/download/nightly/naget_Setup_win-arm64.exe",
+      "signature": "CAUy7Cz3HVvpL1s9Q65h8Wo6K7rMhoWpgEcCuwQ+eyjS55XV1xwzGXtSUpU7zyEgOVrXE24SD6zhPnsZouB7AQ==",
+      "publication_date": "2025-06-29T11:53:59.6577331Z",
+      "is_critical": false,
+      "size": 186450220,
+      "os": "windows-arm64",
+      "channel": "nightly",
+      "type": "application/x-msdos-program"
+    }
+  ]
+}
