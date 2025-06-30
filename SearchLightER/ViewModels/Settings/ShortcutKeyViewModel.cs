@@ -6,12 +6,13 @@ using naget.Helpers;
 using naget.Models.Config;
 using naget.Models.Config.HotKey;
 using naget.Models.SearchEngine;
-using naget.Views;
+using naget.Views.Dialog;
 using naget.Views.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace naget.ViewModels.Settings;
@@ -46,6 +47,14 @@ public class ShortcutKeyViewModel
 	/// プリセット作成コマンド
 	/// </summary>
 	public Command PresetCreateCommand { get; }
+	/// <summary>
+	/// プリセット名称変更コマンド
+	/// </summary>
+	public Command PresetRenameCommand { get; }
+	/// <summary>
+	/// プリセット削除コマンド
+	/// </summary>
+	public Command PresetDeleteCommand { get; }
 	#endregion
 
 	#region キー登録
@@ -173,6 +182,20 @@ public class ShortcutKeyViewModel
 			await ShowInputDialogAsync();
 		});
 
+		// プリセット名称変更コマンド
+		PresetRenameCommand = Command.Factory.Create(async () =>
+		{
+			Debug.WriteLine("Execute SelectedPresetItem");
+			await ShowPresetRenameDialogAsync();
+		});
+
+		// プリセット削除コマンド
+		PresetDeleteCommand = Command.Factory.Create(async () =>
+		{
+			Debug.WriteLine("Execute PresetDeleteCommand");
+			await ShowPresetDeleteDialogAsync();
+		});
+
 		// キー登録コマンド
 		KeyRegisterCommand = Command.Factory.Create(async () =>
 		{
@@ -247,8 +270,6 @@ public class ShortcutKeyViewModel
 
 		// プリセットの一覧を取得
 		HotKeyPresetList = ConfigManager.HotKeyManager.List;
-
-		if (HotKeyPresetList.Count == 0) return;
 
 		HotKeyPresetListLoaded = true;
 
@@ -493,6 +514,67 @@ public class ShortcutKeyViewModel
 		else
 		{
 			Debug.WriteLine("HotKey Preset Create Dialog - User clicked Cancel");
+		}
+	}
+
+	public async Task ShowPresetRenameDialogAsync()
+	{
+		if (SelectedPresetItem == null) return;
+
+		string? result = await SuperDialog.Input(Resources.Settings_ShortcutKey_Preset_Dialog_Rename_Title, Resources.Settings_ShortcutKey_Preset_Dialog_Rename_InputTitle);
+
+		// キャンセルボタンが押された場合
+		if (result == null) return;
+
+		// 名前が入力されていない場合
+		if (string.IsNullOrWhiteSpace(result))
+		{
+			await SuperDialog.Info(App.SettingsWindow, Resources.Settings_ShortcutKey_Preset_Dialog_Rename_Title, Resources.Settings_ShortcutKey_Preset_Dialog_Rename_NameIsEmpty);
+			await ShowPresetRenameDialogAsync();
+			return;
+		}
+
+		// 名称変更
+		ConfigManager.HotKeyManager.RenameGroup(SelectedPresetItem.Id, result);
+		// プリセットの一覧を更新
+		LoadPresetList();
+	}
+
+	private static readonly CompositeFormat deleteDialogContentDesc = CompositeFormat.Parse(Resources.Settings_ShortcutKey_Preset_Dialog_Delete_Description);
+	public async Task ShowPresetDeleteDialogAsync()
+	{
+		if (SelectedPresetItem == null) return;
+
+		var dialog = new ContentDialog
+		{
+			// 説明
+			Content = string.Format(null, deleteDialogContentDesc, SelectedPresetItem.Name),
+
+			// タイトル
+			Title = Resources.Settings_ShortcutKey_Preset_Dialog_Delete_Title,
+
+			// ボタンのテキスト
+			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
+			PrimaryButtonText = Resources.Settings_ShortcutKey_Preset_Dialog_Delete_Confirm,
+			CloseButtonText = Resources.Strings_Cancel,
+		};
+
+		// ダイアログを表示する
+		var result = await dialog.ShowAsync();
+
+		if (result == ContentDialogResult.Primary)
+		{
+			Debug.WriteLine("Preset Delete Dialog - User clicked Delete");
+
+			// プリセットを削除する
+			ConfigManager.HotKeyManager.DeleteGroup(SelectedPresetItem.Id);
+
+			// プリセットを読み込み直す
+			LoadPresetList();
+		}
+		else
+		{
+			Debug.WriteLine("Preset Delete Dialog - User clicked Cancel");
 		}
 	}
 }

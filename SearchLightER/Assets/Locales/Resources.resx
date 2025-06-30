@@ -371,4 +371,22 @@ Latest Version: {1}</value>
   <data name="Settings.About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Title" xml:space="preserve">
+    <value>Delete Preset</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Description" xml:space="preserve">
+    <value>Do you want to delete preset "{0}"?</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Confirm" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.Title" xml:space="preserve">
+    <value>Rename Preset</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.InputTitle" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.NameIsEmpty" xml:space="preserve">
+    <value>Name is Empty.</value>
+  </data>
 </root>

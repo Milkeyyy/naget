@@ -371,4 +371,22 @@
   <data name="Settings.About" xml:space="preserve">
     <value>このアプリについて</value>
   </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Title" xml:space="preserve">
+    <value>プリセットを削除</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Description" xml:space="preserve">
+    <value>プリセット「{0}」を削除しますか？</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Confirm" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.Title" xml:space="preserve">
+    <value>プリセットの名前を変更</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.InputTitle" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.NameIsEmpty" xml:space="preserve">
+    <value>名前を入力してください。</value>
+  </data>
 </root>

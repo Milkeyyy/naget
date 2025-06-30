@@ -52,9 +52,18 @@ public class HotKeyManager
 	/// 指定されたIDのグループを削除する
 	/// </summary>
 	/// <param name="id">削除する対象のID</param>
-	public void DeleteGroup(string id)
+	public bool DeleteGroup(string id)
 	{
-		Groups.RemoveAll(x => x.Id == id);
+		int result = Groups.RemoveAll(x => x.Id == id);
+		return result > 0;
+	}
+
+	public bool RenameGroup(string id, string name)
+	{
+		HotKeyGroup? g = GetHotKeyGroupFromKey(id);
+		if (g == null) return false;
+		g.Name = name;
+		return true;
 	}
 
 	private HotKeyGroup? _GetHotKeyGroupFromKey(string id)

@@ -2,7 +2,7 @@
 using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
 using naget.Common;
-using naget.Views;
+using naget.Views.Dialog;
 using NetSparkleUpdater;
 using NetSparkleUpdater.AppCastHandlers;
 using NetSparkleUpdater.Enums;

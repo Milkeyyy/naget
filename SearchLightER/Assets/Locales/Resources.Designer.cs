@@ -394,6 +394,60 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Delete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Delete_Confirm {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Delete.Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Do you want to delete preset &quot;{0}&quot;? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Delete_Description {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Delete.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Delete Preset に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Delete_Title {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Delete.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Name に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Rename_InputTitle {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Rename.InputTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Name is Empty. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Rename_NameIsEmpty {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Rename.NameIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Rename Preset に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Rename_Title {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Rename.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Name is Empty. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_ShortcutKey_Preset_NameIsEmpty {

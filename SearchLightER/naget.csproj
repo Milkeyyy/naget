@@ -99,6 +99,9 @@
 		<Compile Update="Views\AboutWindow.axaml.cs">
 		  <DependentUpon>AboutWindow.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\Dialog\InputDialogContent.axaml.cs">
+		  <DependentUpon>InputDialogContent.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\Settings\AppSettingsView.axaml.cs">
 		  <DependentUpon>AppSettingsView.axaml</DependentUpon>
 		</Compile>

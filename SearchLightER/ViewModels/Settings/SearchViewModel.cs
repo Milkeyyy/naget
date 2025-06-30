@@ -3,7 +3,7 @@ using Epoxy;
 using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
 using naget.Models.SearchEngine;
-using naget.Views;
+using naget.Views.Dialog;
 using naget.Views.Settings;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
