@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Epoxy;
-using naget.Helpers;
 using naget.Models.Config;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
