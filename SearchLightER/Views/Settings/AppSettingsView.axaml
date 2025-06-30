@@ -42,7 +42,7 @@
 			</ui:InfoBar>
 
 			<!--テーマ-->
-			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" IconSource="{ic:SymbolIconSource Symbol=ColorFill}">
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" IconSource="{ic:SymbolIconSource Symbol=ColorFill}" Foreground="{DynamicResource ThemeForegroundBrush}">
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--テーマ選択リスト-->
