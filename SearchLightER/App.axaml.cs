@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
@@ -21,6 +22,8 @@ namespace naget;
 
 public class App : Application
 {
+	public static string[] CmdArgs { get; private set; } = [];
+
 	private static string _name = string.Empty;
 	public static string ProductName => _name;
 
@@ -58,6 +61,7 @@ public class App : Application
 	public static Updater Updater { get; private set; }
 
 	public static Window? AboutWindow { get; private set; }
+	public static Window? UpdateCompleteWindow { get; private set; }
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
 	public static Window? BrowserWindow { get; private set; }
@@ -69,7 +73,7 @@ public class App : Application
 		if (asm.GetName().Name != null) _name = asm.GetName().Name ?? "naget";
 
 		// バージョン情報を読み込む
-		var info = string.Empty;
+		string info;
 		using var stream = asm.GetManifestResourceStream("naget.build.json");
 		if (stream != null)
 		{
@@ -99,6 +103,7 @@ public class App : Application
 		Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
 		Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
 
+		// 初期化
 		AvaloniaXamlLoader.Load(this);
 	}
 
@@ -179,24 +184,35 @@ public class App : Application
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
 			desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-			// テーマを適用
-			ChangeTheme(ConfigManager.Config.Theme);
+			CmdArgs = desktop.Args ?? [];
+			
+			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
 
+			// 各ウィンドウ
 			AboutWindow = new AboutWindow();
+			UpdateCompleteWindow = new UpdateCompleteWindow();
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();
 			BrowserWindow = new BrowserWindow();
 
+			// テーマを適用
+			ChangeTheme(ConfigManager.Config.Theme);
+
 			// ホットキーの登録
-			//ConfigManager.HotKeyManager.Run();
 			HotKeyHelper.Run();
 
 			// ループの開始
 			Updater = new();
 			Updater.Start();
+
+			// アップデート完了引数が渡された場合はアップデート完了ダイアログを表示する
+			if (CmdArgs.Contains("/UpdateComplete"))
+			{
+				SettingsWindow.Show();
+				UpdateCompleteWindow.ShowDialog(SettingsWindow);
+			}
 		}
 
 		base.OnFrameworkInitializationCompleted();

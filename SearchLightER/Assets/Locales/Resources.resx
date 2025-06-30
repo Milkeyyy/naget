@@ -371,6 +371,12 @@ Latest Version: {1}</value>
   <data name="Settings.About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Updater.Dialog.Complete.Title" xml:space="preserve">
+    <value>Update Completed</value>
+  </data>
+  <data name="Updater.Dialog.Complete.Description" xml:space="preserve">
+    <value>naget has been updated to v{0}.</value>
+  </data>
   <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Title" xml:space="preserve">
     <value>Delete Preset</value>
   </data>

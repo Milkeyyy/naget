@@ -655,6 +655,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   naget has been updated to v{0}. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Complete_Description {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Complete.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Update Completed に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Complete_Title {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Complete.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Progress - {0} % に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Updater_Dialog_Download_Downloading_Description {

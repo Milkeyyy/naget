@@ -371,6 +371,12 @@
   <data name="Settings.About" xml:space="preserve">
     <value>このアプリについて</value>
   </data>
+  <data name="Updater.Dialog.Complete.Title" xml:space="preserve">
+    <value>アップデート完了</value>
+  </data>
+  <data name="Updater.Dialog.Complete.Description" xml:space="preserve">
+    <value>naget は v{0} へアップデートされました。</value>
+  </data>
   <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Title" xml:space="preserve">
     <value>プリセットを削除</value>
   </data>

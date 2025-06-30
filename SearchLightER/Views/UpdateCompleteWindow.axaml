@@ -1,0 +1,35 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+		xmlns:vm="using:naget.ViewModels"
+		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+		mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+		x:Class="naget.Views.UpdateCompleteWindow"
+		x:DataType="vm:UpdateCompleteWindowViewModel"
+		WindowStartupLocation="CenterScreen"
+		ShowActivated="True"
+		CanResize="False"
+		SizeToContent="WidthAndHeight"
+		Icon="/Assets/Icon.ico"
+		Title="{Binding WindowTitle}"
+>
+
+	<Design.DataContext>
+		<vm:UpdateCompleteWindowViewModel />
+	</Design.DataContext>
+
+	<StackPanel Margin="20 40 20 40" Spacing="0" VerticalAlignment="Center">
+		<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+			<!--ロゴ-->
+			<Image Source="/Assets/Logo/naget_Symbol_1-1.png" Width="48" VerticalAlignment="Center" Margin="0 0 0 10"/>
+			<!--アプリ名 & バージョン-->
+			<StackPanel Orientation="Vertical" Margin="0 0 0 0">
+				<TextBlock Text="{Binding TitleText}" FontSize="18" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<TextBlock Text="{Binding DescriptionText}" FontSize="16" FontWeight="Medium" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			</StackPanel>
+			<Button Content="OK" HorizontalAlignment="Center" Margin="0 20 0 0" Command="{Binding CloseCommand}"/>
+		</StackPanel>
+	</StackPanel>
+</Window>

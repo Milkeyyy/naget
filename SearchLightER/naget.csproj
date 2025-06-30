@@ -93,6 +93,9 @@
 			<AutoGen>True</AutoGen>
 			<DependentUpon>Resources.resx</DependentUpon>
 		</Compile>
+		<Compile Update="Views\UpdateCompleteWindow.axaml.cs">
+		  <DependentUpon>UpdateCompleteWindow.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\BrowserWindow.axaml.cs">
 			<DependentUpon>BrowserWindow.axaml</DependentUpon>
 		</Compile>
