@@ -10,9 +10,11 @@
 			 Name="naget"
 >
 
-	<!--<Application.Resources>
-		<FontFamily x:Key="DefaultFont">avares://naget/Assets/Fonts#Noto Sans JP</FontFamily>
-	</Application.Resources>-->
+	<Application.Resources>
+		<ResourceDictionary>
+			<FontFamily x:Key="DefaultFont">avares://naget/Assets/Fonts#Noto Sans JP</FontFamily>
+		</ResourceDictionary>
+	</Application.Resources>
 	
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
