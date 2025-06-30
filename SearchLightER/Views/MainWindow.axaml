@@ -27,7 +27,7 @@
 	</Design.DataContext>
 
 	<Panel>
-		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+		<!--<ExperimentalAcrylicBorder IsHitTestVisible="False">
 			<ExperimentalAcrylicBorder.Material>
 				<ExperimentalAcrylicMaterial
 					BackgroundSource="Digger"
@@ -37,7 +37,7 @@
 					MaterialOpacity="0.65"
 				/>
 			</ExperimentalAcrylicBorder.Material>
-		</ExperimentalAcrylicBorder>
+		</ExperimentalAcrylicBorder>-->
 
 		<Grid
 			Margin="10 0 10 0"
