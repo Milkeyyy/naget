@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 
 namespace naget.Models.Config.HotKey;
@@ -17,8 +16,6 @@ public class HotKeyManager
 	/// ホットキーの一覧
 	/// </summary>
 	public ReadOnlyCollection<HotKeyGroup> List => new(Groups);
-
-	public Point MousePointerCoordinates { get; private set; } = new(0, 0);
 
 	public HotKeyManager()
 	{

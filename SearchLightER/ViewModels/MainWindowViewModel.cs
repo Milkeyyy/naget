@@ -1,6 +1,6 @@
 ﻿using Avalonia.Platform;
 using Epoxy;
-using naget.Models.Config;
+using naget.Helpers;
 using naget.Models.SearchEngine;
 using System.Globalization;
 
@@ -66,8 +66,8 @@ public class MainWindowViewModel
 		// 取得できた場合はウィンドウの位置をディスプレイの中央にする
 		Screen? screen = App.MainWindow.Screens.ScreenFromPoint(
 			new(
-				ConfigManager.HotKeyManager.MousePointerCoordinates.X,
-				ConfigManager.HotKeyManager.MousePointerCoordinates.Y
+				HotKeyHelper.MousePointerCoordinates.X,
+				HotKeyHelper.MousePointerCoordinates.Y
 			)
 		);
 		if (screen != null)

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -46,14 +47,21 @@ public static class HotKeyHelper
 	private static HashSet<KeyCode> registrationQueuedKeys;
 	private static readonly object registrationQueuedKeysLock;
 
+	// 検索ウィンドウをマウスカーソルがあるウィンドウへ表示するためにマウスカーソルの座標を取得
+	/// <summary>
+	/// マウスカーソルの座標
+	/// </summary>
+	public static Point MousePointerCoordinates { get; private set; } = new(0, 0);
+
 	static HotKeyHelper()
 	{
 		hook = new TaskPoolGlobalHook(
-			globalHookType: GlobalHookType.Keyboard, // グローバルフックのタイプをキーボードに設定
+			globalHookType: GlobalHookType.All, // グローバルフックのタイプをキーボード+マウスに設定
 			runAsyncOnBackgroundThread: true // バックグラウンドスレッドで実行する
 		);
 		hook.KeyPressed += Hook_KeyPressed;
 		hook.KeyReleased += Hook_KeyReleased;
+		hook.MouseMoved += Hook_MouseMoved;
 
 		pressedKeys = [];
 		pressedKeysLock = new();
@@ -118,12 +126,18 @@ public static class HotKeyHelper
 		{
 			if (group?.Keys != null)
 			{
-				if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
+				if (group.Keys.SetEquals(pressedKeys))
 				{
 					e.SuppressEvent = true;
 					group.Action.Action();
 					Debug.WriteLine("HotKey pressed: " + group.Name);
 				}
+				//if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
+				//{
+				//	e.SuppressEvent = true;
+				//	group.Action.Action();
+				//	Debug.WriteLine("HotKey pressed: " + group.Name);
+				//}
 			}
 		}
 	}
@@ -140,6 +154,18 @@ public static class HotKeyHelper
 			//Debug.WriteLine("Key released: " + e.Data.KeyCode);
 			pressedKeys.Remove(e.Data.KeyCode);
 		}
+	}
+
+	/// <summary>
+	/// マウスが動いた時のイベント
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	/// <exception cref="NotImplementedException"></exception>
+	private static void Hook_MouseMoved(object? sender, MouseHookEventArgs e)
+	{
+		// マウスポインターの座標を更新
+		MousePointerCoordinates = new(e.Data.X, e.Data.Y);
 	}
 
 	public static async Task<bool> StartKeyRegistrationAsync(string groupId, IProgress<string>? progress = null)
