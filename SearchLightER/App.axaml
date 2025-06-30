@@ -17,9 +17,9 @@
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
 		<sty:FluentAvaloniaTheme CustomAccentColor="#e62152" />
-		<!--<Style Selector=":is(TopLevel)">
+		<Style Selector=":is(TemplatedControl)">
 			<Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
-		</Style>-->
+		</Style>
 	</Application.Styles>
 
 	<!--ネイティブメニュー (macOS/Linux)-->
