@@ -5,15 +5,15 @@
   "link": "",
   "items": [
     {
-      "title": "naget 1.0.0-nightly+e610929",
-      "version": "1.0.0-nightly+e610929",
+      "title": "naget 1.0.0-nightly+1579ef1",
+      "version": "1.0.0-nightly+1579ef1",
       "short_version": "1.0.0",
       "description": "",
       "url": "https://github.com/Milkeyyy/naget/releases/download/nightly/naget_osx-arm64.dmg",
-      "signature": "tTR0o+qCI0hC0IT4V1fNKRz2ht9Q6zx2lz2Dx4SnBP1SxIvSWT1D2S5D2mZXgLyMA93ddME/bASfCJULDIOiDQ==",
-      "publication_date": "2025-06-30T06:26:24.3665455Z",
+      "signature": "3h2jjlp+mpUtGa1uC6uQawXxHLvyfScQf7E4By1lOrd2xwSLv5joD9gYklp9gC1lDuT48aJv+T2S1516xIqWBw==",
+      "publication_date": "2025-06-30T07:38:15.8906074Z",
       "is_critical": false,
-      "size": 187353558,
+      "size": 187279159,
       "os": "mac-arm64",
       "channel": "nightly",
       "type": "application/octet-stream"
