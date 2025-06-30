@@ -59,8 +59,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="11.3.2" />
-		<PackageReference Include="Avalonia.Desktop" Version="11.3.2" />
+		<PackageReference Include="Avalonia" Version="11.2.8" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.2.8" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<!--<PackageReference Include="Avalonia.Diagnostics" Version="11.0.13">
 			<IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
@@ -68,7 +68,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>none</IncludeAssets>
 		</PackageReference>-->
-		<PackageReference Include="Avalonia.Diagnostics" Version="11.3.2" Condition="'$(Configuration)' == 'Debug'" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.2.8" Condition="'$(Configuration)' == 'Debug'" />
 		<PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
 		<PackageReference Include="Epoxy.Avalonia11" Version="1.16.0" />
 		<PackageReference Include="FluentAvaloniaUI" Version="2.3.0" />
