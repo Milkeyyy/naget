@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Epoxy;
 using naget.Assets.Locales;
+using naget.Helpers;
 using naget.Models.Config;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -40,7 +41,6 @@ public class BrowserWindowViewModel
 
 	private WebView WebViewCtrl;
 
-	private string address = string.Empty;
 	private string beforeAddress = string.Empty;
 	public bool WebViewCanGoBack { get; private set; }
 	public bool WebViewCanGoForward { get; private set; }
@@ -83,6 +83,9 @@ public class BrowserWindowViewModel
 			Height = ConfigManager.Config.BrowserWindow.Height;
 			if (ConfigManager.Config.BrowserWindow.State == WindowState.Minimized) WindowState = WindowState.Normal;
 			else WindowState = ConfigManager.Config.BrowserWindow.State;
+
+			// ウィンドウをマウスカーソルが存在するディスプレイの中央へ移動する
+			App.BrowserWindow.Position = HotKeyHelper.GetCenterScreen(App.BrowserWindow) ?? new(0,0);
 
 			WindowOpened = true;
 
