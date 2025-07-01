@@ -1,9 +1,6 @@
-﻿using Avalonia.Platform;
-using Epoxy;
+﻿using Epoxy;
 using naget.Helpers;
 using naget.Models.SearchEngine;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace naget.ViewModels;
 
@@ -36,8 +33,7 @@ public class MainWindowViewModel
 		// ブラウザーを表示
 		App.BrowserWindow.Show();
 		// ブラウザーで検索結果を開く
-		//(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = "https://www.google.com/search?q=" + SearchWord;
-		(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = string.Format(CultureInfo.GetCultureInfo("en-US"), _currentSearchEngine.Uri, SearchWord);
+		(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = string.Format(_currentSearchEngine.Uri, SearchWord);
 		// 検索画面を閉じる
 		App.MainWindow.Hide();
 	}
@@ -63,31 +59,14 @@ public class MainWindowViewModel
 		// 検索テキストの内容を消す
 		SearchWord = string.Empty;
 
-		// マウスカーソルがあるディスプレイの中央位置を取得
-		// 取得できた場合はウィンドウの位置をディスプレイの中央にする
-		Screen? screen = App.MainWindow.Screens.ScreenFromPoint(
-			new(
-				HotKeyHelper.MousePointerCoordinates.X,
-				HotKeyHelper.MousePointerCoordinates.Y
-			)
-		);
-
-		Debug.WriteLine($"MainWindow Pos: {App.MainWindow.Position}");
-		Debug.WriteLine($"MainWindow Size: {App.MainWindow.Width},{App.MainWindow.Height}");
-
 		// ウィンドウを表示
-		App.MainWindow.Show();
-		
-		// ディスプレイを取得できている場合はウィンドウの位置をその中央へ移動する
-		if (screen != null)
-		{
-			var screenCenterPos = screen.WorkingArea.Center;
-			App.MainWindow.Position = new(
-				(int)(screenCenterPos.X - (App.MainWindow.Width / 2)),
-				(int)(screenCenterPos.Y - (App.MainWindow.Height / 2))
-			);
-			Debug.WriteLine($"Screen Center Pos: {screenCenterPos.X},{screenCenterPos.Y}");
-		}
+		App.MainWindow.Show();	
+
+		// マウスカーソルがあるディスプレイの中央位置を取得
+		var centerPos = HotKeyHelper.GetCenterScreen(App.MainWindow);
+
+		// 中央位置を取得できた場合はウィンドウの位置をその中央へ移動する
+		App.MainWindow.Position = centerPos ?? new(0,0);
 
 		// ウィンドウをアクティブにする
 		App.MainWindow.Activate();
