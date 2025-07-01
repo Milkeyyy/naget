@@ -1,4 +1,7 @@
-﻿using naget.Assets.Locales;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Platform;
+using naget.Assets.Locales;
 using naget.Models.Config;
 using naget.Models.Config.HotKey;
 using SharpHook;
@@ -51,7 +54,7 @@ public static class HotKeyHelper
 	/// <summary>
 	/// マウスカーソルの座標
 	/// </summary>
-	public static Point MousePointerCoordinates { get; private set; } = new(0, 0);
+	public static System.Drawing.Point MousePointerCoordinates { get; private set; } = new(0, 0);
 
 	static HotKeyHelper()
 	{
@@ -238,6 +241,45 @@ public static class HotKeyHelper
 		Debug.WriteLine("Key registration canceled");
 		registrationMode = HotKeyRegistrationMode.Canceled;
 		return true;
+	}
+
+	/// <summary>
+	/// 指定したウィンドウの大きさを元にマウスカーソルが存在するディスプレイの中央の座標を計算して返す
+	/// </summary>
+	/// <param name="window"></param>
+	/// <returns></returns>
+	public static PixelPoint? GetCenterScreen(Window window)
+	{
+		Debug.WriteLine($"GetCenterScreen ({window})");
+
+		// ウィンドウのサイズが設定されていない場合は null を返す
+		if (double.IsNaN(window.Width) || double.IsNaN(window.Height))
+		{
+			return null;
+		}
+
+		// マウスカーソルの座標からディスプレイを取得
+		Screen? screen = window.Screens.ScreenFromPoint(
+			new(
+				MousePointerCoordinates.X,
+				MousePointerCoordinates.Y
+			)
+		);
+
+		Debug.WriteLine($"-  Pos: {window.Position}");
+		Debug.WriteLine($"- Size: {window.Width},{window.Height}");
+
+		// ディスプレイを取得できた場合は中央の位置を計算して返す
+		if (screen != null)
+		{
+			var screenCenterPos = screen.WorkingArea.Center;
+			Debug.WriteLine($"Center Pos: {screenCenterPos.X},{screenCenterPos.Y}");
+			return new(
+				(int)(screenCenterPos.X - (window.Width / 2)),
+				(int)(screenCenterPos.Y - (window.Height / 2))
+			);
+		}
+		return null;
 	}
 }
 
