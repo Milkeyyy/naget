@@ -2,6 +2,7 @@
 using Epoxy;
 using naget.Helpers;
 using naget.Models.SearchEngine;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace naget.ViewModels;
@@ -70,6 +71,14 @@ public class MainWindowViewModel
 				HotKeyHelper.MousePointerCoordinates.Y
 			)
 		);
+
+		Debug.WriteLine($"MainWindow Pos: {App.MainWindow.Position}");
+		Debug.WriteLine($"MainWindow Size: {App.MainWindow.Width},{App.MainWindow.Height}");
+
+		// ウィンドウを表示
+		App.MainWindow.Show();
+		
+		// ディスプレイを取得できている場合はウィンドウの位置をその中央へ移動する
 		if (screen != null)
 		{
 			var screenCenterPos = screen.WorkingArea.Center;
@@ -77,11 +86,9 @@ public class MainWindowViewModel
 				(int)(screenCenterPos.X - (App.MainWindow.Width / 2)),
 				(int)(screenCenterPos.Y - (App.MainWindow.Height / 2))
 			);
+			Debug.WriteLine($"Screen Center Pos: {screenCenterPos.X},{screenCenterPos.Y}");
 		}
 
-		// ウィンドウを表示
-		App.MainWindow.ShowActivated = true;
-		App.MainWindow.Show();
 		// ウィンドウをアクティブにする
 		App.MainWindow.Activate();
 		App.MainWindow.Focus();

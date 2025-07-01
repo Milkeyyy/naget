@@ -9,16 +9,16 @@
 		x:DataType="vm:MainWindowViewModel"
 		Icon="/Assets/Icon.ico"
 		Title="naget"
-		TransparencyLevelHint="AcrylicBlur"
-		Background="Transparent"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaChromeHints="NoChrome"
 		ShowInTaskbar="False"
 		ShowActivated="True"
+		WindowStartupLocation="CenterScreen"
 		CanResize="False"
 		Topmost="True"
-		Width="800"
-		Height="60">
+		SizeToContent="WidthAndHeight"
+		MinWidth="800"
+		MinHeight="20">
 
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -26,44 +26,33 @@
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
 
-	<Panel>
-		<!--<ExperimentalAcrylicBorder IsHitTestVisible="False">
-			<ExperimentalAcrylicBorder.Material>
-				<ExperimentalAcrylicMaterial
-					BackgroundSource="Digger"
-					TintColor="{DynamicResource SystemAltHighColor}"
-					TintOpacity="1"
-					FallbackColor="Black"
-					MaterialOpacity="0.65"
-				/>
-			</ExperimentalAcrylicBorder.Material>
-		</ExperimentalAcrylicBorder>-->
-
+	<Panel Margin="15">
 		<Grid
-			Margin="10 0 10 0"
 			HorizontalAlignment="Stretch"
 			VerticalAlignment="Center"
-			ColumnDefinitions="Auto, *, Auto"
+			ColumnDefinitions="Auto, *"
 			RowDefinitions="*"
+			ColumnSpacing="10"
 		>
 			<TextBlock
 				Grid.Column="0"
 				Grid.Row="0"
-				Margin="0 0 0 0"
 				HorizontalAlignment="Center"
 				VerticalAlignment="Center"
 				Text="{Binding CurrentSearchEngineName}"
 				FontSize="14"
 				FontWeight="Medium"
+				MaxWidth="200"
+				TextTrimming="CharacterEllipsis"
 			/>
 
 			<TextBox
 				x:Name="searchtextbox"
 				Grid.Column="1"
 				Grid.Row="0"
-				Margin="10 0 10 0"
 				Text="{Binding SearchWord}"
 				FontSize="20"
+				FontWeight="Medium"
 				Background="Transparent"
 				BorderThickness="1"
 			>
