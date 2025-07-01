@@ -1,7 +1,5 @@
 ﻿using Avalonia.Controls;
 using Epoxy;
-using naget.Models.SearchEngine;
-using naget.Views;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
