@@ -60,7 +60,7 @@ public class MainWindowViewModel
 		SearchWord = string.Empty;
 
 		// ウィンドウを表示
-		App.MainWindow.Show();	
+		App.MainWindow.Show();
 
 		// マウスカーソルがあるディスプレイの中央位置を取得
 		var centerPos = HotKeyHelper.GetCenterScreen(App.MainWindow);
