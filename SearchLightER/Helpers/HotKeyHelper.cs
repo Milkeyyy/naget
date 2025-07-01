@@ -18,7 +18,7 @@ public static class HotKeyHelper
 	/// <summary>
 	/// キーのグローバルフック
 	/// </summary>
-	private static readonly TaskPoolGlobalHook hook;
+	private static readonly SimpleGlobalHook hook;
 	private static readonly object pressedKeysLock;
 	/// <summary>
 	/// 押されているキーの一覧
@@ -55,7 +55,7 @@ public static class HotKeyHelper
 
 	static HotKeyHelper()
 	{
-		hook = new TaskPoolGlobalHook(
+		hook = new SimpleGlobalHook(
 			globalHookType: GlobalHookType.All, // グローバルフックのタイプをキーボード+マウスに設定
 			runAsyncOnBackgroundThread: true // バックグラウンドスレッドで実行する
 		);
