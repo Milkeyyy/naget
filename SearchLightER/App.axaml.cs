@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace naget;
 
@@ -34,7 +35,7 @@ public class App : Application
 
 	private static string _releaseChannel = string.Empty;
 	public static string ProductReleaseChannel => _releaseChannel;
-	
+
 	private static string _releaseNumber = string.Empty;
 	public static string ProductReleaseNumber => _releaseNumber;
 
@@ -52,6 +53,8 @@ public class App : Application
 
 	private static string _copyright = string.Empty;
 	public static string ProductCopyright => _copyright;
+
+	private static List<Dictionary<string, object>> Libraries = [];
 
 	/// <summary>
 	/// コンフィグ等のファイルを保存するフォルダー
@@ -74,12 +77,11 @@ public class App : Application
 
 		// バージョン情報を読み込む
 		string info;
-		using var stream = asm.GetManifestResourceStream("naget.build.json");
-		if (stream != null)
+		using var verStream = asm.GetManifestResourceStream("naget.build.json");
+		if (verStream != null)
 		{
-			using var reader = new StreamReader(stream);
+			using var reader = new StreamReader(verStream);
 			info = reader.ReadToEnd();
-
 			var infoDict = JsonSerializer.Deserialize<Dictionary<string, string>>(info);
 			if (infoDict != null)
 			{
@@ -87,6 +89,16 @@ public class App : Application
 				_releaseChannel = infoDict.GetValueOrDefault("release_channel", "unknown");
 				_releaseNumber = infoDict.GetValueOrDefault("release_number", "0");
 			}
+		}
+
+		// ライブラリー一覧を読み込む
+		string libs;
+		using var libsStream = asm.GetManifestResourceStream("naget.library.json");
+		if (libsStream != null)
+		{
+			using var reader = new StreamReader(libsStream);
+			libs = reader.ReadToEnd();
+			Libraries = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(libs) ?? [];
 		}
 
 		// フォルダーを作成する
@@ -147,6 +159,16 @@ public class App : Application
 
 		// 3. 現在のプロセスを終了する
 		Exit();
+	}
+
+	/// <summary>
+	/// ライブラリーの情報を取得する
+	/// </summary>
+	/// <param name="id"></param>
+	/// <returns></returns>
+	public static Dictionary<string, object>? GetLibraryInfo(string id)
+	{
+		return Libraries.FirstOrDefault(d => d.ContainsKey("PackageId") && d["PackageId"].ToString() == id);
 	}
 
 	/// <summary>

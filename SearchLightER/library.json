@@ -1,0 +1,148 @@
+﻿[
+	{
+		"PackageId": "Avalonia",
+		"PackageVersion": "11.3.2",
+		"PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget\u0026utm_medium=referral\u0026utm_content=project_homepage_link",
+		"Copyright": "Copyright 2013-2025 \u00A9 The AvaloniaUI Project",
+		"Authors": "Avalonia Team",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "Avalonia.Desktop",
+		"PackageVersion": "11.3.2",
+		"PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget\u0026utm_medium=referral\u0026utm_content=project_homepage_link",
+		"Copyright": "Copyright 2013-2025 \u00A9 The AvaloniaUI Project",
+		"Authors": "Avalonia Team",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "Avalonia.Diagnostics",
+		"PackageVersion": "11.3.2",
+		"PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget\u0026utm_medium=referral\u0026utm_content=project_homepage_link",
+		"Copyright": "Copyright 2013-2025 \u00A9 The AvaloniaUI Project",
+		"Authors": "Avalonia Team",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "Epoxy.Avalonia11",
+		"PackageVersion": "1.16.0",
+		"PackageProjectUrl": "https://github.com/kekyo/Epoxy.git",
+		"Copyright": "Copyright (c) Kouji Matsui",
+		"Authors": "Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)",
+		"License": "Apache-2.0",
+		"LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "FluentAvaloniaUI",
+		"PackageVersion": "2.3.0",
+		"Authors": "FluentAvalonia",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "FluentIcons.Avalonia.Fluent",
+		"PackageVersion": "1.1.303",
+		"Authors": "davidxuang",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "Microsoft.Extensions.Configuration",
+		"PackageVersion": "9.0.6",
+		"PackageProjectUrl": "https://dot.net/",
+		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+		"Authors": "Microsoft",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "Microsoft.Extensions.Configuration.Binder",
+		"PackageVersion": "9.0.6",
+		"PackageProjectUrl": "https://dot.net/",
+		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+		"Authors": "Microsoft",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "Microsoft.Extensions.Configuration.Json",
+		"PackageVersion": "9.0.6",
+		"PackageProjectUrl": "https://dot.net/",
+		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+		"Authors": "Microsoft",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "NetSparkleUpdater.UI.Avalonia",
+		"PackageVersion": "3.0.2",
+		"PackageProjectUrl": "https://github.com/NetSparkleUpdater/NetSparkle",
+		"Copyright": "Copyright \u00A9 2025",
+		"Authors": "Deadpikle",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "Nuke.Common",
+		"PackageVersion": "9.0.4",
+		"PackageProjectUrl": "https://nuke.build/",
+		"Copyright": "Copyright 2025 Maintainers of NUKE",
+		"Authors": "Matthias Koch and contributors",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "SharpHook",
+		"PackageVersion": "6.1.2",
+		"PackageProjectUrl": "https://sharphook.tolik.io/",
+		"Copyright": "(c) 2021 Anatoliy Pylypchuk",
+		"Authors": "Tolik Pylypchuk",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "System.Text.Json",
+		"PackageVersion": "9.0.6",
+		"PackageProjectUrl": "https://dot.net/",
+		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+		"Authors": "Microsoft",
+		"License": "MIT",
+		"LicenseUrl": "https://licenses.nuget.org/MIT",
+		"LicenseInformationOrigin": 0
+	},
+	{
+		"PackageId": "WebViewControl-Avalonia",
+		"PackageVersion": "3.120.10",
+		"PackageProjectUrl": "https://github.com/OutSystems/WebView",
+		"Copyright": "Copyright \u00A9 OutSystems 2023",
+		"Authors": "OutSystems",
+		"License": "Apache-2.0",
+		"LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+		"LicenseInformationOrigin": 2
+	},
+	{
+		"PackageId": "WebViewControl-Avalonia-ARM64",
+		"PackageVersion": "3.120.10",
+		"PackageProjectUrl": "https://github.com/OutSystems/WebView",
+		"Copyright": "Copyright \u00A9 OutSystems 2023",
+		"Authors": "OutSystems",
+		"License": "Apache-2.0",
+		"LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+		"LicenseInformationOrigin": 2
+	}
+]
