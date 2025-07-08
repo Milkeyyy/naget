@@ -27,6 +27,12 @@ public static class HotKeyHelper
 	/// </summary>
 	private static readonly HashSet<KeyCode> pressedKeys;
 	/// <summary>
+	/// 無視するキーの一覧
+	/// </summary>
+	private static readonly HashSet<KeyCode> ignoreKeys = [
+		KeyCode.VcUndefined
+	];
+	/// <summary>
 	/// ホットキーの一覧 (内部)
 	/// </summary>
 	public static List<HotKeyGroup> Groups => ConfigManager.HotKeyManager.Groups;
@@ -91,6 +97,8 @@ public static class HotKeyHelper
 	/// <param name="e"></param>
 	private static void Hook_KeyPressed(object? sender, KeyboardHookEventArgs e)
 	{
+		if (ignoreKeys.Contains(e.Data.KeyCode)) return;
+
 		int beforePressedKeysCount = pressedKeys.Count;
 
 		lock (pressedKeysLock)
