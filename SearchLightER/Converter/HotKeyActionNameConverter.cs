@@ -13,7 +13,7 @@ public class HotKeyActionNameConverter : IValueConverter
 
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		Debug.WriteLine($"Convert HotKey Action Name: {value}");
+		App.Logger.Debug($"Convert HotKey Action Name: {value}");
 		if (value is string actionName)
 		{
 			return Resources.ResourceManager.GetString("Settings.ShortcutKey.Action." + actionName, new CultureInfo(ConfigManager.Config.Language)) ?? actionName;

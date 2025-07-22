@@ -6,7 +6,6 @@ using naget.Models.SearchEngine;
 using naget.Views.Dialog;
 using naget.Views.Settings;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,8 +29,7 @@ public class SearchViewModel
 		// ビューがロードされた時の処理
 		ViewWell.Add(Control.LoadedEvent, () =>
 		{
-			Debug.WriteLine("SearchView Loaded");
-			Debug.WriteLine(SearchEngineList);
+			App.Logger.Debug("SearchView Loaded");
 			LoadSearchEngineList();
 			return default;
 		});
@@ -45,7 +43,7 @@ public class SearchViewModel
 		// 検索エンジンの削除コマンド
 		ReloadSearchEngineCommand = Command.Factory.Create(() =>
 		{
-			Debug.WriteLine("Delete Search Engine Command");
+			App.Logger.Debug("Delete Search Engine Command");
 			LoadSearchEngineList();
 			return default;
 		});
@@ -53,7 +51,7 @@ public class SearchViewModel
 
 	public void LoadSearchEngineList()
 	{
-		Debug.WriteLine("Load Search Engine List");
+		App.Logger.Debug("Load Search Engine List");
 		// 検索エンジンのリストを初期化する
 		SearchEngineList = new(SearchEngineManager.EngineList.Select(v => new SearchEngineViewModel(v, ReloadSearchEngineCommand)).ToList());
 	}
@@ -61,7 +59,7 @@ public class SearchViewModel
 	[PropertyChanged(nameof(SearchEngineList))]
 	private ValueTask SearchEngineListChangedAsync(ReadOnlyCollection<SearchEngineClass> value)
 	{
-	 	Debug.WriteLine("Search Engine List Changed");
+	 	App.Logger.Debug("Search Engine List Changed");
 		// 検索エンジン一覧を読み込み直す
 		LoadSearchEngineList();
 		return default;
@@ -90,10 +88,10 @@ public class SearchViewModel
 
 		if (result == ContentDialogResult.Primary)
 		{
-			Debug.WriteLine("Search Engine Create Dialog - User clicked Create");
+			App.Logger.Debug("Search Engine Create Dialog - User clicked Create");
 			if (string.IsNullOrWhiteSpace(vm.Name) || string.IsNullOrWhiteSpace(vm.Url))
 			{
-				Debug.WriteLine("Search Engine Create Dialog - Preset Name or URL is empty");
+				App.Logger.Debug("Search Engine Create Dialog - Preset Name or URL is empty");
 				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_Search_SearchEngine_Dialog_Add, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
 				await ShowInputDialogAsync();
 				return;
@@ -106,7 +104,7 @@ public class SearchViewModel
 		}
 		else
 		{
-			Debug.WriteLine("Search Engine Create Dialog - User clicked Cancel");
+			App.Logger.Debug("Search Engine Create Dialog - User clicked Cancel");
 		}
 	}
 }
@@ -132,14 +130,14 @@ public class SearchEngineViewModel
 		// 検索エンジンの編集コマンド
 		EditSearchEngineCommand = Command.Factory.Create(async () =>
 		{
-			Debug.WriteLine($"Edit Search Engine: {Name} ({Id})");
+			App.Logger.Debug($"Edit Search Engine: {Name} ({Id})");
 			await ShowEditDialogAsync();
 		});
 
 		// 検索エンジンの削除コマンド
 		DeleteSearchEngineCommand = Command.Factory.Create(async () =>
 		{
-			Debug.WriteLine($"Delete Search Engine: {Name} ({Id})");
+			App.Logger.Debug($"Delete Search Engine: {Name} ({Id})");
 			await ShowDeleteDialogAsync();
 		});
 	}
@@ -171,10 +169,10 @@ public class SearchEngineViewModel
 
 		if (result == ContentDialogResult.Primary)
 		{
-			Debug.WriteLine("Search Engine Create Dialog - User clicked Create");
+			App.Logger.Debug("Search Engine Create Dialog - User clicked Create");
 			if (string.IsNullOrWhiteSpace(vm.Name) || string.IsNullOrWhiteSpace(vm.Url))
 			{
-				Debug.WriteLine("Search Engine Create Dialog - Preset Name or URL is empty");
+				App.Logger.Debug("Search Engine Create Dialog - Preset Name or URL is empty");
 				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_Search_SearchEngine_Dialog_Edit, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
 				await ShowEditDialogAsync();
 				return;
@@ -189,7 +187,7 @@ public class SearchEngineViewModel
 		}
 		else
 		{
-			Debug.WriteLine("Search Engine Create Dialog - User clicked Cancel");
+			App.Logger.Debug("Search Engine Create Dialog - User clicked Cancel");
 		}
 	}
 
@@ -215,7 +213,7 @@ public class SearchEngineViewModel
 
 		if (result == ContentDialogResult.Primary)
 		{
-			Debug.WriteLine("Search Engine Delete Dialog - User clicked Delete");
+			App.Logger.Debug("Search Engine Delete Dialog - User clicked Delete");
 
 			// 検索エンジンを削除する
 			var r = SearchEngineManager.Delete(Id);
@@ -236,7 +234,7 @@ public class SearchEngineViewModel
 		}
 		else
 		{
-			Debug.WriteLine("Search Engine Delete Dialog - User clicked Cancel");
+			App.Logger.Debug("Search Engine Delete Dialog - User clicked Cancel");
 		}
 	}
 }

@@ -146,7 +146,7 @@ public class ShortcutKeyViewModel
 		// ビューがロードされた時の処理
 		ShortcutKeyWell.Add(Control.LoadedEvent, () =>
 		{
-			Debug.WriteLine("ShortcutKeyView Loaded");
+			App.Logger.Debug("ShortcutKeyView Loaded");
 
 			RegisteredKeysText = string.Empty;
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
@@ -167,7 +167,7 @@ public class ShortcutKeyViewModel
 		// ビューがアンロードされた時の処理
 		ShortcutKeyWell.Add(Control.UnloadedEvent, () =>
 		{
-			Debug.WriteLine("ShortcutKeyView Unloaded");
+			App.Logger.Debug("ShortcutKeyView Unloaded");
 
 			// キーの登録をキャンセルする
 			HotKeyHelper.CancelKeyRegistration();
@@ -178,32 +178,32 @@ public class ShortcutKeyViewModel
 		// プリセット作成コマンド
 		PresetCreateCommand = Command.Factory.Create(async () =>
 		{
-			Debug.WriteLine("Execute PresetCreateCommand");
+			App.Logger.Debug("Execute PresetCreateCommand");
 			await ShowInputDialogAsync();
 		});
 
 		// プリセット名称変更コマンド
 		PresetRenameCommand = Command.Factory.Create(async () =>
 		{
-			Debug.WriteLine("Execute SelectedPresetItem");
+			App.Logger.Debug("Execute SelectedPresetItem");
 			await ShowPresetRenameDialogAsync();
 		});
 
 		// プリセット削除コマンド
 		PresetDeleteCommand = Command.Factory.Create(async () =>
 		{
-			Debug.WriteLine("Execute PresetDeleteCommand");
+			App.Logger.Debug("Execute PresetDeleteCommand");
 			await ShowPresetDeleteDialogAsync();
 		});
 
 		// キー登録コマンド
 		KeyRegisterCommand = Command.Factory.Create(async () =>
 		{
-			Debug.WriteLine("Execute KeyRegisterCommand");
-			Debug.WriteLine("- KeyRegistrationMode: " + KeyRegistrationMode);
+			App.Logger.Debug("Execute KeyRegisterCommand");
+			App.Logger.Debug("- KeyRegistrationMode: " + KeyRegistrationMode);
 			if (KeyRegistrationMode)
 			{
-				Debug.WriteLine("End Key Registration");
+				App.Logger.Debug("End Key Registration");
 				// キー登録モードを終了する
 				var result = HotKeyHelper.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
@@ -211,7 +211,7 @@ public class ShortcutKeyViewModel
 			}
 			else
 			{
-				Debug.WriteLine("Start Key Registration");
+				App.Logger.Debug("Start Key Registration");
 				// キー登録モードに入る
 				KeyRegistrationMode = true;
 				// キーが押されるたびに押された(登録される)キーを表示する
@@ -228,11 +228,11 @@ public class ShortcutKeyViewModel
 		// キー登録終了コマンド
 		KeyRegisterEndCommand = Command.Factory.Create(() =>
 		{
-			Debug.WriteLine("Execute KeyRegisterEndCommand");
-			Debug.WriteLine("- KeyRegistrationMode: " + KeyRegistrationMode);
+			App.Logger.Debug("Execute KeyRegisterEndCommand");
+			App.Logger.Debug("- KeyRegistrationMode: " + KeyRegistrationMode);
 			if (KeyRegistrationMode)
 			{
-				Debug.WriteLine("End Key Registraion");
+				App.Logger.Debug("End Key Registraion");
 				var result = HotKeyHelper.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
 				KeyRegisterButtonIcon = "PlayFilled";
@@ -243,11 +243,11 @@ public class ShortcutKeyViewModel
 		// キー登録キャンセルコマンド
 		KeyRegisterCancelCommand = Command.Factory.Create(() =>
 		{
-			Debug.WriteLine("Execute KeyRegisterCancelCommand");
-			Debug.WriteLine("- KeyRegistrationMode: " + KeyRegistrationMode);
+			App.Logger.Debug("Execute KeyRegisterCancelCommand");
+			App.Logger.Debug("- KeyRegistrationMode: " + KeyRegistrationMode);
 			if (KeyRegistrationMode)
 			{
-				Debug.WriteLine("Cancel Key Registraion");
+				App.Logger.Debug("Cancel Key Registraion");
 				var result = HotKeyHelper.CancelKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
 				KeyRegisterButtonIcon = "PlayFilled";
@@ -266,7 +266,7 @@ public class ShortcutKeyViewModel
 
 	private void LoadPresetList()
 	{
-		Debug.WriteLine("Load Preset List");
+		App.Logger.Debug("Load Preset List");
 
 		// プリセットの一覧を取得
 		HotKeyPresetList = ConfigManager.HotKeyManager.List;
@@ -290,7 +290,7 @@ public class ShortcutKeyViewModel
 
 	private void SaveValue()
 	{
-		Debug.WriteLine("Save Value");
+		App.Logger.Debug("Save Value");
 
 		if (HotKeyPresetList.Count == 0 || SelectedPresetIndex == -1) return;
 
@@ -309,7 +309,7 @@ public class ShortcutKeyViewModel
 	{
 		if (SelectedPresetItem == null) return;
 
-		Debug.WriteLine("Load Search Engine");
+		App.Logger.Debug("Load Search Engine");
 		
 		// 検索エンジンを読み込む
 		string eid = SelectedPresetItem.Action.Property.GetValueOrDefault(
@@ -317,17 +317,17 @@ public class ShortcutKeyViewModel
 			SearchEngineManager.GetDefaultEngine().Id
 		);
 		
-		Debug.WriteLine(" - SearchEngineId: " + eid);
+		App.Logger.Debug(" - SearchEngineId: " + eid);
 		
 		var se = SearchEngineManager.Get(eid);
 		if (se != null)
 		{
-			Debug.WriteLine(" - SearchEngine is not null");
+			App.Logger.Debug(" - SearchEngine is not null");
 			SelectedSearchEngineItem = se;
 		}
 		else
 		{
-			Debug.WriteLine(" - SearchEngine is null");
+			App.Logger.Debug(" - SearchEngine is null");
 			SelectedSearchEngineItem = SearchEngineList[0];
 		}
 	}
@@ -340,7 +340,7 @@ public class ShortcutKeyViewModel
 	[PropertyChanged(nameof(KeyRegistrationMode))]
 	private ValueTask KeyRegistrationModeChanged(bool value)
 	{
-		Debug.WriteLine("KeyRegistrationMode Changed: " + KeyRegistrationMode);
+		App.Logger.Debug("KeyRegistrationMode Changed: " + KeyRegistrationMode);
 		// キー登録モードが有効になった場合はキー登録ボタンのテキストを変更する
 		if (value)
 		{
@@ -365,13 +365,13 @@ public class ShortcutKeyViewModel
 	[PropertyChanged(nameof(SelectedPresetItem))]
 	private ValueTask SelectedPresetItemChanged(HotKeyGroup? value)
 	{
-		Debug.WriteLine("SelectedPresetItem Changed: " + SelectedPresetName);
+		App.Logger.Debug("SelectedPresetItem Changed: " + SelectedPresetName);
 
 		KeyRegisterCancelCommand.Execute(null);
 
 		if (value == null)
 		{
-			Debug.WriteLine("SelectedPresetItem is null");
+			App.Logger.Debug("SelectedPresetItem is null");
 			return default;
 		}
 
@@ -382,7 +382,7 @@ public class ShortcutKeyViewModel
 		// 選択されたプリセットに登録されているキーを表示する
 		RegisteredKeysText = value?.ToString() ?? Resources.Settings_ShortcutKey_Preset_NotSet;
 
-		Debug.WriteLine("- Execute");
+		App.Logger.Debug("- Execute");
 
 		// アクションの選択リストをプリセットのアクションにする
 		if (value.Action == null) SelectedActionType = HotKeyActionList[0].ActionType;
@@ -394,7 +394,7 @@ public class ShortcutKeyViewModel
 		// アクションがウェブ検索の場合は検索エンジンを設定されているものにする
 		if (value.ActionType == HotKeyActionType.WebSearch)
 		{
-			Debug.WriteLine(" - WebSearch");
+			App.Logger.Debug(" - WebSearch");
 			LoadSearchEngine();
 		}
 
@@ -413,7 +413,7 @@ public class ShortcutKeyViewModel
 	[PropertyChanged(nameof(SelectedActionItem))]
 	private ValueTask SelectedActionItemChanged(HotKeyAction? value)
 	{
-		Debug.WriteLine("SelectedActionItem Changed: " + value?.Name);
+		App.Logger.Debug("SelectedActionItem Changed: " + value?.Name);
 
 		if (!ViewIsLoaded || !HotKeyPresetListLoaded || value == null) return default;
 
@@ -421,7 +421,7 @@ public class ShortcutKeyViewModel
 
 		if (HotKeyPresetList?.Count != 0 && SelectedPresetItem != null && SearchEngineList != null)
 		{
-			Debug.WriteLine("- Execute");
+			App.Logger.Debug("- Execute");
 
 			// 選択されたアクションをプリセットに設定する
 			SelectedPresetItem.ActionType = value.ActionType;
@@ -432,7 +432,7 @@ public class ShortcutKeyViewModel
 			// アクションがウェブ検索の場合
 			if (value.ActionType == HotKeyActionType.WebSearch)
 			{
-				Debug.WriteLine("- WebSearch");
+				App.Logger.Debug("- WebSearch");
 				LoadSearchEngine();
 			}
 
@@ -445,7 +445,7 @@ public class ShortcutKeyViewModel
 	[PropertyChanged(nameof(SearchEngineListIsVisible))]
 	private ValueTask SearchEngineListIsVisibleChanged(bool value)
 	{
-		Debug.WriteLine("SearchEngineListIsVisible Changed: " + value);
+		App.Logger.Debug("SearchEngineListIsVisible Changed: " + value);
 		HotKeyActionSearchEngineLoaded = false;
 		return default;
 	}
@@ -456,7 +456,7 @@ public class ShortcutKeyViewModel
 	[PropertyChanged(nameof(SelectedSearchEngineItem))]
 	private ValueTask SelectedSearchEngineItemChanged(SearchEngineClass value)
 	{
-		Debug.WriteLine("SelectedSearchEngineItem Changed: " + value?.Id);
+		App.Logger.Debug("SelectedSearchEngineItem Changed: " + value?.Id);
 
 		if (!ViewIsLoaded || !HotKeyPresetListLoaded || value == null) return default;
 
@@ -498,10 +498,10 @@ public class ShortcutKeyViewModel
 
 		if (result == ContentDialogResult.Primary)
 		{
-			Debug.WriteLine("HotKey Preset Create Dialog - User clicked Create");
+			App.Logger.Debug("HotKey Preset Create Dialog - User clicked Create");
 			if (string.IsNullOrWhiteSpace(vm.PresetName))
 			{
-				Debug.WriteLine("HotKey Preset Create Dialog - Preset Name is empty");
+				App.Logger.Debug("HotKey Preset Create Dialog - Preset Name is empty");
 				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_ShortcutKey_Preset_CreateNewPreset, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
 				await ShowInputDialogAsync();
 				return;
@@ -513,7 +513,7 @@ public class ShortcutKeyViewModel
 		}
 		else
 		{
-			Debug.WriteLine("HotKey Preset Create Dialog - User clicked Cancel");
+			App.Logger.Debug("HotKey Preset Create Dialog - User clicked Cancel");
 		}
 	}
 
@@ -564,7 +564,7 @@ public class ShortcutKeyViewModel
 
 		if (result == ContentDialogResult.Primary)
 		{
-			Debug.WriteLine("Preset Delete Dialog - User clicked Delete");
+			App.Logger.Debug("Preset Delete Dialog - User clicked Delete");
 
 			// プリセットを削除する
 			ConfigManager.HotKeyManager.DeleteGroup(SelectedPresetItem.Id);
@@ -574,7 +574,7 @@ public class ShortcutKeyViewModel
 		}
 		else
 		{
-			Debug.WriteLine("Preset Delete Dialog - User clicked Cancel");
+			App.Logger.Debug("Preset Delete Dialog - User clicked Cancel");
 		}
 	}
 }

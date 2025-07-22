@@ -83,7 +83,7 @@ public class HotKeyAction
 
 	static HotKeyAction()
 	{
-		Debug.WriteLine("HotKeyAction static constructor");
+		App.Logger.Debug("HotKeyAction static constructor");
 		// 各アクションのプロパティを明示的に渡すことで、通常のコンストラクターを経由しない
 		/*var noneAction = new HotKeyAction(
 			HotKeyActionType.None,
@@ -124,7 +124,7 @@ public class HotKeyAction
 	// 以降は従来のメソッド・プロパティ定義を維持
 	public static HotKeyAction GetActionByType(HotKeyActionType type)
 	{
-		Debug.WriteLine("GetActionByType");
+		App.Logger.Debug("GetActionByType");
 		foreach (var action in ActionList)
 		{
 			if (action.ActionType == type)
@@ -137,7 +137,7 @@ public class HotKeyAction
 
 	private static HotKeyAction GetActionCloneByType(HotKeyActionType type)
 	{
-		Debug.WriteLine("GetActionCloneByType");
+		App.Logger.Debug("GetActionCloneByType");
 		return (HotKeyAction)GetActionByType(type).MemberwiseClone();
 	}
 

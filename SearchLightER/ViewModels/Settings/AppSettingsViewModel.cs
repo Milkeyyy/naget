@@ -39,7 +39,7 @@ public class AppSettingsViewModel
 		// ビューがロードされた時の処理
 		ViewWell.Add(Control.LoadedEvent, () =>
 		{
-			Debug.WriteLine("AppSettingsView Loaded");
+			App.Logger.Debug("AppSettingsView Loaded");
 
 			// テーマ
 			// コンフィグのテーマ設定から該当するテーマを取得して選択中テーマに設定する
@@ -58,7 +58,7 @@ public class AppSettingsViewModel
 		// アプリケーション再起動コマンド
 		RestartAppCommand = Command.Factory.Create(() =>
 		{
-			Debug.WriteLine("Execute Restart App Command");
+			App.Logger.Debug("Execute Restart App Command");
 			App.RestartApplication();
 			return default;
 		});
@@ -66,7 +66,7 @@ public class AppSettingsViewModel
 		// アップデートチェックコマンド
 		CheckUpdateCommand = Command.Factory.Create(async () =>
 		{
-			Debug.WriteLine("Execute Check Update Command");
+			App.Logger.Debug("Execute Check Update Command");
 			await App.Updater.ManualCheck(true);
 		});
 
@@ -87,7 +87,7 @@ public class AppSettingsViewModel
 	private ValueTask SelectedThemeChanged(string value)
 	{
 		if (!ViewIsLoaded) return default; // ビューがロードされていない場合は処理をスキップ
-		Debug.WriteLine($"Selected Theme Changed: {value}");
+		App.Logger.Debug($"Selected Theme Changed: {value}");
 		// アプリ全体のテーマを変更
 		App.ChangeTheme(value);
 		// コンフィグのテーマ設定を更新
@@ -104,7 +104,7 @@ public class AppSettingsViewModel
 	private ValueTask SelectedLanguageChanged(Language value)
 	{
 		if (!ViewIsLoaded) return default; // ビューがロードされていない場合は処理をスキップ
-		Debug.WriteLine($"Selected Language Changed: {value.DisplayName} ({value.Code})");
+		App.Logger.Debug($"Selected Language Changed: {value.DisplayName} ({value.Code})");
 		// ローカライズ設定の言語と選択リストの言語が異なる場合は注意書きテキストを表示する
 		LanguageNoteTextIsVisible = value.Code != Assets.Locales.Resources.Culture.Name;
 		// コンフィグの言語設定を更新

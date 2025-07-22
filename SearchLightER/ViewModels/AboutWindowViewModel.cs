@@ -26,7 +26,7 @@ public class AboutWindowViewModel
 		// ウィンドウがロードされた時の処理
 		WindowWell.Add(Window.LoadedEvent, () =>
 		{
-			Debug.WriteLine("AboutWindow Loaded");
+			App.Logger.Debug("AboutWindow Loaded");
 			AvaloniaVersion = App.GetLibraryInfo("Avalonia")?["PackageVersion"].ToString() ?? "Unknown";
 			WebViewVersion = App.GetLibraryInfo("WebViewControl-Avalonia")?["PackageVersion"].ToString() ?? "Unknown";
 			return default;

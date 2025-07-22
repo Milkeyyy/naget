@@ -60,6 +60,8 @@ public class App : Application
 	/// </summary>
 	public static string ConfigFolder => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductName);
 
+	public static Logger Logger { get; private set; }
+
 	public static Updater Updater { get; private set; }
 
 	public static Window? AboutWindow { get; private set; }
@@ -100,8 +102,12 @@ public class App : Application
 			Libraries = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(libs) ?? [];
 		}
 
+		// ロガー
+		Logger = Logger.GetInstance();
+		Logger.Info("Application Starting...");
+
 		// フォルダーを作成する
-		Debug.WriteLine("Config Directory: " + ConfigFolder);
+		Logger.Debug("Config Directory: " + ConfigFolder);
 		Directory.CreateDirectory(ConfigFolder);
 
 		// コンフィグを読み込む
@@ -112,7 +118,7 @@ public class App : Application
 
 		// 言語設定を適用
 		Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
-		Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
+		Logger.Debug($"Language: {ConfigManager.Config.Language}");
 
 		// 初期化
 		AvaloniaXamlLoader.Load(this);
@@ -143,7 +149,7 @@ public class App : Application
 		
 		if (processPath != null)
 		{
-			Debug.WriteLine("アプリケーションを再起動します...");
+			App.Logger.Debug("アプリケーションを再起動します...");
 
 			// 2. 新しいプロセスを開始する
 			Process.Start(new ProcessStartInfo(processPath)
@@ -153,7 +159,7 @@ public class App : Application
 		}
 		else
 		{
-			Debug.WriteLine("再起動に失敗しました: 実行ファイルのパスを取得できませんでした。");
+			App.Logger.Debug("再起動に失敗しました: 実行ファイルのパスを取得できませんでした。");
 		}
 
 		// 3. 現在のプロセスを終了する
@@ -178,7 +184,7 @@ public class App : Application
 	{
 		if (Current == null)
 		{
-			Debug.WriteLine("Current Application is null, cannot change theme.");
+			App.Logger.Debug("Current Application is null, cannot change theme.");
 			return;
 		}
 
@@ -196,7 +202,7 @@ public class App : Application
 			default:
 				// 未知のテーマの場合はデフォルトに戻す
 				Current.RequestedThemeVariant = ThemeVariant.Default;
-				Debug.WriteLine($"Unknown theme selected: {name}");
+				App.Logger.Debug($"Unknown theme selected: {name}");
 				break;
 		}
 	}

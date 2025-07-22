@@ -24,14 +24,14 @@ public class HotKeyManager
 
 	public void LoadGroups(List<HotKeyGroup> groups)
 	{
-		Debug.WriteLine("Group loaded: " + groups.Count);
+		App.Logger.Debug("Group loaded: " + groups.Count);
 		Groups = groups;
 		/*foreach (var group in groups)
 		{
-			Debug.WriteLine(group.Id);
-			Debug.WriteLine("- " + group.Name);
-			Debug.WriteLine("- " + group.Action);
-			Debug.WriteLine("- " + group);
+			App.Logger.Debug(group.Id);
+			App.Logger.Debug("- " + group.Name);
+			App.Logger.Debug("- " + group.Action);
+			App.Logger.Debug("- " + group);
 		}*/
 	}
 
@@ -80,7 +80,7 @@ public class HotKeyManager
 		var g = _GetHotKeyGroupFromKey(groupId);
 		// 取得したグループのキーに渡されたキーを設定する
 		g.Keys = keys;
-		Debug.WriteLine($"Key registered: {groupId} | " + string.Join(", ", keys));
+		App.Logger.Debug($"Key registered: {groupId} | " + string.Join(", ", keys));
 		return g;
 	}
 
