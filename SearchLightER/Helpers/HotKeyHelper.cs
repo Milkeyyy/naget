@@ -97,58 +97,65 @@ public static class HotKeyHelper
 	/// <param name="e"></param>
 	private static void Hook_KeyPressed(object? sender, KeyboardHookEventArgs e)
 	{
-		if (ignoreKeys.Contains(e.Data.KeyCode)) return;
-
-		int beforePressedKeysCount = pressedKeys.Count;
-
-		lock (pressedKeysLock)
+		try
 		{
-			//Debug.WriteLine("Key pressed: " + e.Data.KeyCode);
-			pressedKeys.Add(e.Data.KeyCode);
-		}
-		
-		if (registrationMode == HotKeyRegistrationMode.Registering)
-		{
-			if (e.Data.KeyCode == KeyCode.VcEscape)
+			if (ignoreKeys.Contains(e.Data.KeyCode) || pressedKeys.Contains(e.Data.KeyCode)) return;
+
+			int beforePressedKeysCount = pressedKeys.Count;
+
+			lock (pressedKeysLock)
 			{
-				// クリアのみロック
-				lock (registrationQueuedKeysLock) { registrationQueuedKeys.Clear(); }
-				// ロック外でキャンセル
-				CancelKeyRegistration();
+				//App.Logger.Debug("Key pressed: " + e.Data.KeyCode);
+				pressedKeys.Add(e.Data.KeyCode);
+			}
+
+			if (registrationMode == HotKeyRegistrationMode.Registering)
+			{
+				if (e.Data.KeyCode == KeyCode.VcEscape)
+				{
+					// クリアのみロック
+					lock (registrationQueuedKeysLock) { registrationQueuedKeys.Clear(); }
+					// ロック外でキャンセル
+					CancelKeyRegistration();
+					return;
+				}
+				// 追加のみロック
+				lock (registrationQueuedKeysLock)
+				{
+					// キーが押されていない状態から新たに押された場合はリストをクリアする (新たに登録を開始する)
+					if (beforePressedKeysCount == 0)
+					{
+						App.Logger.Debug("Key registration started: " + registrationGroupId);
+						registrationQueuedKeys.Clear();
+					}
+					var r = registrationQueuedKeys.Add(e.Data.KeyCode);
+					App.Logger.Debug($"Key added: {e.Data.KeyCode} ({r})");
+				}
 				return;
 			}
-			// 追加のみロック
-			lock (registrationQueuedKeysLock)
-			{
-				// キーが押されていない状態から新たに押された場合はリストをクリアする (新たに登録を開始する)
-				if (beforePressedKeysCount == 0)
-				{
-					Debug.WriteLine("Key registration started: " + registrationGroupId);
-					registrationQueuedKeys.Clear();
-				}
-				var r = registrationQueuedKeys.Add(e.Data.KeyCode);
-				Debug.WriteLine($"Key added: {e.Data.KeyCode} ({r})");
-			}
-			return;
-		}
 
-		foreach (var group in Groups)
-		{
-			if (group?.Keys != null)
+			foreach (var group in Groups)
 			{
-				if (group.Keys.SetEquals(pressedKeys))
+				if (group?.Keys != null)
 				{
-					e.SuppressEvent = true;
-					group.Action.Action();
-					Debug.WriteLine("HotKey pressed: " + group.Name);
+					if (group.Keys.SetEquals(pressedKeys))
+					{
+						e.SuppressEvent = true;
+						group.Action.Action();
+						App.Logger.Debug("HotKey pressed: " + group.Name);
+					}
+					//if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
+					//{
+					//	e.SuppressEvent = true;
+					//	group.Action.Action();
+					//	App.Logger.Debug("HotKey pressed: " + group.Name);
+					//}
 				}
-				//if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
-				//{
-				//	e.SuppressEvent = true;
-				//	group.Action.Action();
-				//	Debug.WriteLine("HotKey pressed: " + group.Name);
-				//}
 			}
+		}
+		catch (Exception ex)
+		{
+			App.Logger.Error("HotKey Pressed Event Error: " + ex.Message);
 		}
 	}
 
@@ -159,10 +166,17 @@ public static class HotKeyHelper
 	/// <param name="e"></param>
 	private static void Hook_KeyReleased(object? sender, KeyboardHookEventArgs e)
 	{
-		lock (pressedKeysLock)
+		try
 		{
-			//Debug.WriteLine("Key released: " + e.Data.KeyCode);
-			pressedKeys.Remove(e.Data.KeyCode);
+			lock (pressedKeysLock)
+			{
+				//App.Logger.Debug("Key released: " + e.Data.KeyCode);
+				pressedKeys.Remove(e.Data.KeyCode);
+			}
+		}
+		catch (Exception ex)
+		{
+			App.Logger.Error("HotKey Released Event Error: " + ex.Message);
 		}
 	}
 
@@ -183,7 +197,7 @@ public static class HotKeyHelper
 		// キー登録が既に行われている場合は何もしない
 		if (registrationMode == HotKeyRegistrationMode.Registering) return false;
 
-		Debug.WriteLine($"Key registration started: {groupId}");
+		App.Logger.Debug($"Key registration started: {groupId}");
 
 		string regKeyText = string.Empty;
 
@@ -237,7 +251,7 @@ public static class HotKeyHelper
 	public static bool EndKeyRegistration()
 	{
 		if (registrationMode == HotKeyRegistrationMode.None || registrationMode == HotKeyRegistrationMode.Canceled) return false;
-		Debug.WriteLine("Key registration ended");
+		App.Logger.Debug("Key registration ended");
 		registrationMode = HotKeyRegistrationMode.None;
 		return true;
 	}
@@ -245,7 +259,7 @@ public static class HotKeyHelper
 	public static bool CancelKeyRegistration()
 	{
 		if (registrationMode == HotKeyRegistrationMode.None || registrationMode == HotKeyRegistrationMode.Canceled) return false;
-		Debug.WriteLine("Key registration canceled");
+		App.Logger.Debug("Key registration canceled");
 		registrationMode = HotKeyRegistrationMode.Canceled;
 		return true;
 	}
@@ -257,7 +271,7 @@ public static class HotKeyHelper
 	/// <returns></returns>
 	public static PixelPoint? GetCenterScreen(Window window)
 	{
-		Debug.WriteLine($"GetCenterScreen ({window})");
+		App.Logger.Debug($"GetCenterScreen ({window})");
 
 		// ウィンドウのサイズが設定されていない場合は null を返す
 		if (double.IsNaN(window.Width) || double.IsNaN(window.Height))
@@ -273,14 +287,14 @@ public static class HotKeyHelper
 			)
 		);
 
-		Debug.WriteLine($"-  Pos: {window.Position}");
-		Debug.WriteLine($"- Size: {window.Width},{window.Height}");
+		App.Logger.Debug($"-  Pos: {window.Position}");
+		App.Logger.Debug($"- Size: {window.Width},{window.Height}");
 
 		// ディスプレイを取得できた場合は中央の位置を計算して返す
 		if (screen != null)
 		{
 			var screenCenterPos = screen.WorkingArea.Center;
-			Debug.WriteLine($"Center Pos: {screenCenterPos.X},{screenCenterPos.Y}");
+			App.Logger.Debug($"Center Pos: {screenCenterPos.X},{screenCenterPos.Y}");
 			return new(
 				(int)(screenCenterPos.X - (window.Width / 2)),
 				(int)(screenCenterPos.Y - (window.Height / 2))
