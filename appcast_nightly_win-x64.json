@@ -5,15 +5,15 @@
   "link": "",
   "items": [
     {
-      "title": "naget 1.0.0-nightly+a483613",
-      "version": "1.0.0-nightly+a483613",
+      "title": "naget 1.0.0-nightly+121f8a7",
+      "version": "1.0.0-nightly+121f8a7",
       "short_version": "1.0.0",
       "description": "",
       "url": "https://github.com/Milkeyyy/naget/releases/download/nightly/naget_Setup_win-x64.exe",
-      "signature": "c5P+cUBVhW66KmvNRQMIfrkghkyaJWKF+JvflSzviuJ3qDXLx91pLhmGhYyo8l708MnMXhPZ3gXcKgf3xYthCA==",
-      "publication_date": "2025-07-22T14:18:54.7617016Z",
+      "signature": "7/HlX4hfIYQ5D0KA+ltwSK7sjna6Y1EUSy9KuySyZEzYpQd/DhljACdEsWZrG4mlWUYHomKULTkYa3KgdniVBQ==",
+      "publication_date": "2025-07-26T12:44:06.3905852Z",
       "is_critical": false,
-      "size": 196925426,
+      "size": 195986881,
       "os": "windows-x64",
       "channel": "nightly",
       "type": "application/x-msdos-program"
