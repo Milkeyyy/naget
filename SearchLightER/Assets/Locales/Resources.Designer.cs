@@ -79,6 +79,42 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Cancel に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Dialog_Button_Cancel {
+            get {
+                return ResourceManager.GetString("Dialog.Button.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Close に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Dialog_Button_Close {
+            get {
+                return ResourceManager.GetString("Dialog.Button.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   No に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Dialog_Button_No {
+            get {
+                return ResourceManager.GetString("Dialog.Button.No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Yes に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Dialog_Button_Yes {
+            get {
+                return ResourceManager.GetString("Dialog.Button.Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Search に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Search {
@@ -93,6 +129,15 @@ namespace naget.Assets.Locales {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   About に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_About {
+            get {
+                return ResourceManager.GetString("Settings.About", resourceCulture);
             }
         }
         
@@ -349,6 +394,60 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Delete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Delete_Confirm {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Delete.Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Do you want to delete preset &quot;{0}&quot;? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Delete_Description {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Delete.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Delete Preset に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Delete_Title {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Delete.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Name に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Rename_InputTitle {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Rename.InputTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Name is Empty. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Rename_NameIsEmpty {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Rename.NameIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Rename Preset に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_ShortcutKey_Preset_Dialog_Rename_Title {
+            get {
+                return ResourceManager.GetString("Settings.ShortcutKey.Preset.Dialog.Rename.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Name is Empty. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_ShortcutKey_Preset_NameIsEmpty {
@@ -552,6 +651,125 @@ namespace naget.Assets.Locales {
         public static string TrayMenu_Settings {
             get {
                 return ResourceManager.GetString("TrayMenu.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   naget has been updated to v{0}. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Complete_Description {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Complete.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Update Completed に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Complete_Title {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Complete.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Progress - {0} % に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Download_Downloading_Description {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Download.Downloading.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Downloading Update File... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Download_Downloading_Title {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Download.Downloading.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Failed to download update. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Download_Failed_Description {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Download.Failed.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Download Failed に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Download_Failed_Title {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Download.Failed.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Installation will begin in 5 seconds... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Download_Install_Description {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Download.Install.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Download Complete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_Download_Install_Title {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.Download.Install.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   A new version of naget has been released!
+        ///Would you like to update? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_UpdateAvailable_Description {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.UpdateAvailable.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Update Available! に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_UpdateAvailable_Title {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.UpdateAvailable.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Current Version: {0}
+        ///Latest Version: {1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_UpdateAvailable_VersionInfo {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.UpdateAvailable.VersionInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   The latest version ({0}) is already installed. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_UpdateNotAvailable_Description {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.UpdateNotAvailable.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Latest Version is Installed に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Updater_Dialog_UpdateNotAvailable_Title {
+            get {
+                return ResourceManager.GetString("Updater.Dialog.UpdateNotAvailable.Title", resourceCulture);
             }
         }
         

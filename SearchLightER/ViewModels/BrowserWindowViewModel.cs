@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Epoxy;
 using naget.Assets.Locales;
+using naget.Helpers;
 using naget.Models.Config;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -40,7 +41,6 @@ public class BrowserWindowViewModel
 
 	private WebView WebViewCtrl;
 
-	private string address = string.Empty;
 	private string beforeAddress = string.Empty;
 	public bool WebViewCanGoBack { get; private set; }
 	public bool WebViewCanGoForward { get; private set; }
@@ -76,13 +76,16 @@ public class BrowserWindowViewModel
 		// ウィンドウが開かれた時のイベント
 		BrowserWindowWell.Add(Window.WindowOpenedEvent, () =>
 		{
-			Debug.WriteLine("BrowserWindow Opened");
+			App.Logger.Debug("BrowserWindow Opened");
 			
 			// ウィンドウの設定を読み込む
 			Width = ConfigManager.Config.BrowserWindow.Width;
 			Height = ConfigManager.Config.BrowserWindow.Height;
 			if (ConfigManager.Config.BrowserWindow.State == WindowState.Minimized) WindowState = WindowState.Normal;
 			else WindowState = ConfigManager.Config.BrowserWindow.State;
+
+			// ウィンドウをマウスカーソルが存在するディスプレイの中央へ移動する
+			App.BrowserWindow.Position = HotKeyHelper.GetCenterScreen(App.BrowserWindow) ?? new(0,0);
 
 			WindowOpened = true;
 
@@ -92,7 +95,7 @@ public class BrowserWindowViewModel
 		// ウィンドウが閉じられた時のイベント
 		BrowserWindowWell.Add<WindowClosingEventArgs>("Closing", e =>
 		{
-			Debug.WriteLine("BrowserWindow Closed");
+			App.Logger.Debug("BrowserWindow Closed");
 
 			// ウィンドウの設定を保存する
 			if (WindowState == WindowState.Normal)
@@ -191,27 +194,27 @@ public class BrowserWindowViewModel
 	[PropertyChanged(nameof(WebViewCtrl.CanGoBack))]
 	private ValueTask WebViewCanGoBackChanged(bool value)
 	{
-		Debug.WriteLine("WebView CanGoBack Changed: " + value);
+		App.Logger.Debug("WebView CanGoBack Changed: " + value);
 		return default;
 	}
 
 	[PropertyChanged(nameof(WebViewCtrl.CanGoForward))]
 	private ValueTask WebViewCanGoForwardChanged(bool value)
 	{
-		Debug.WriteLine("WebView CanGoForward Changed: " + value);
+		App.Logger.Debug("WebView CanGoForward Changed: " + value);
 		return default;
 	}
 
 	[PropertyChanged(nameof(CurrentAddress))]
 	private ValueTask OnCurrentAddressChangedAsync(string value)
 	{
-		Debug.WriteLine("CurrentAddress Changed: " + value);
+		App.Logger.Debug("CurrentAddress Changed: " + value);
 
 		Address = value;
 
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
-		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 
 		// ウィンドウタイトルを更新する
 		WindowTitle = WebViewCtrl.Title;
@@ -221,11 +224,11 @@ public class BrowserWindowViewModel
 
 	private void WebViewOnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
 	{
-		Debug.WriteLine("WebView PropertyChanged: " + e.Property.Name);
+		App.Logger.Debug("WebView PropertyChanged: " + e.Property.Name);
 
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
-		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 
 		// ウィンドウタイトルを更新する
 		WindowTitle = WebViewCtrl.Title;
@@ -233,9 +236,9 @@ public class BrowserWindowViewModel
 
 	private void WebView_Navigated(string url, string frameName)
 	{
-		Debug.WriteLine("WebView Navigated: " + url + " | " + frameName);
-		//Debug.WriteLine("- Update Property");
-		//Debug.WriteLine($" - {webview.CanGoBack} {webview.CanGoForward}");
+		App.Logger.Debug("WebView Navigated: " + url + " | " + frameName);
+		//App.Logger.Debug("- Update Property");
+		//App.Logger.Debug($" - {webview.CanGoBack} {webview.CanGoForward}");
 
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
@@ -243,7 +246,7 @@ public class BrowserWindowViewModel
 		// ウィンドウタイトルを更新する
 		WindowTitle = WebViewCtrl.Title;
 
-		Debug.WriteLine($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 	}
 
 	private void WebView_GoBack()

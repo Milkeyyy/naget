@@ -20,7 +20,7 @@ public class InAppBrowserViewModel
 		// ビューがロードされた時の処理
 		ViewWell.Add(Control.LoadedEvent, () =>
 		{
-			Debug.WriteLine("InAppBrowserView Loaded");
+			App.Logger.Debug("InAppBrowserView Loaded");
 			// コンフィグのテーマ設定から該当するテーマを取得して選択中テーマに設定する
 			StartPageUrl = ConfigManager.Config.BrowserWindow.StartPage;
 			ViewIsLoaded = true;
@@ -32,7 +32,7 @@ public class InAppBrowserViewModel
 	private ValueTask StartPageUrlChangedAsync(string value)
 	{
 		if (!ViewIsLoaded) return default; // ビューがロードされていない場合は処理をスキップ
-		Debug.WriteLine($"Start Page Url Changed: {value}");
+		App.Logger.Debug($"Start Page Url Changed: {value}");
 		// コンフィグのテーマ設定を更新
 		ConfigManager.Config.BrowserWindow.StartPage = value;
 		return default;

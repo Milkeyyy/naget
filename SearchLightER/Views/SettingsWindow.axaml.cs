@@ -39,7 +39,7 @@ public partial class SettingsWindow : AppWindow
 		{
 			if (nvi.Tag == null) return; // タグがnullの場合は何もしない
 
-			Debug.WriteLine($"Navigation Selected: {nvi.Tag}");
+			App.Logger.Debug($"Navigation Selected: {nvi.Tag}");
 
 			/*// 設定が選択された場合はアプリケーション設定のページを表示する
 			if ((string)nvi.Tag == "Settings") { smpPage = "naget.Views.Settings.AppSettingsView"; }
@@ -48,7 +48,7 @@ public partial class SettingsWindow : AppWindow
 
 			smpPage = $"naget.Views.Settings.{nvi.Tag}";
 
-			Debug.WriteLine($"- Page: {smpPage}");
+			App.Logger.Debug($"- Page: {smpPage}");
 
 			pg = Activator.CreateInstance(Type.GetType(smpPage));
 			(sender as NavigationView).Content = pg;

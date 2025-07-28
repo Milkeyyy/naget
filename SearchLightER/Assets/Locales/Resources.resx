@@ -321,4 +321,78 @@
   <data name="Settings.Search.SearchEngine.Dialog.Delete.CannotDelete.Title" xml:space="preserve">
     <value>This search engine cannot be deleted</value>
   </data>
+  <data name="Updater.Dialog.UpdateAvailable.Title" xml:space="preserve">
+    <value>Update Available!</value>
+  </data>
+  <data name="Updater.Dialog.UpdateAvailable.Description" xml:space="preserve">
+    <value>A new version of naget has been released!
+Would you like to update?</value>
+  </data>
+  <data name="Updater.Dialog.UpdateAvailable.VersionInfo" xml:space="preserve">
+    <value>Current Version: {0}
+Latest Version: {1}</value>
+  </data>
+  <data name="Dialog.Button.Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Dialog.Button.No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Updater.Dialog.Download.Downloading.Title" xml:space="preserve">
+    <value>Downloading Update File...</value>
+  </data>
+  <data name="Updater.Dialog.Download.Downloading.Description" xml:space="preserve">
+    <value>Progress - {0} %</value>
+  </data>
+  <data name="Dialog.Button.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Updater.Dialog.Download.Failed.Title" xml:space="preserve">
+    <value>Download Failed</value>
+  </data>
+  <data name="Updater.Dialog.Download.Failed.Description" xml:space="preserve">
+    <value>Failed to download update.</value>
+  </data>
+  <data name="Dialog.Button.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Updater.Dialog.Download.Install.Title" xml:space="preserve">
+    <value>Download Complete</value>
+  </data>
+  <data name="Updater.Dialog.Download.Install.Description" xml:space="preserve">
+    <value>Installation will begin in 5 seconds...</value>
+  </data>
+  <data name="Updater.Dialog.UpdateNotAvailable.Title" xml:space="preserve">
+    <value>Latest Version is Installed</value>
+  </data>
+  <data name="Updater.Dialog.UpdateNotAvailable.Description" xml:space="preserve">
+    <value>The latest version ({0}) is already installed.</value>
+  </data>
+  <data name="Settings.About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Updater.Dialog.Complete.Title" xml:space="preserve">
+    <value>Update Completed</value>
+  </data>
+  <data name="Updater.Dialog.Complete.Description" xml:space="preserve">
+    <value>naget has been updated to v{0}.</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Title" xml:space="preserve">
+    <value>Delete Preset</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Description" xml:space="preserve">
+    <value>Do you want to delete preset "{0}"?</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Delete.Confirm" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.Title" xml:space="preserve">
+    <value>Rename Preset</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.InputTitle" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Settings.ShortcutKey.Preset.Dialog.Rename.NameIsEmpty" xml:space="preserve">
+    <value>Name is Empty.</value>
+  </data>
 </root>

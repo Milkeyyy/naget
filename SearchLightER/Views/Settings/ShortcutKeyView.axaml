@@ -31,6 +31,15 @@
 				
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
+						<!--プリセット作成ボタン-->
+						<Button Classes="accent" IsEnabled="" Margin="0 0 5 0" Command="{Binding PresetCreateCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<ic:SymbolIcon Symbol="Add" FontSize="15"/>
+									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
 						<!--プリセット選択リスト-->
 						<ComboBox IsVisible="{Binding HotKeyPresetList.Count}" MinWidth="200" SelectedIndex="{Binding SelectedPresetIndex}" ItemsSource="{Binding HotKeyPresetList}" SelectedItem="{Binding SelectedPresetItem}">
 							<ComboBox.ItemTemplate>
@@ -39,12 +48,21 @@
 								</DataTemplate>
 							</ComboBox.ItemTemplate>
 						</ComboBox>
-						<!--プリセット作成ボタン-->
-						<Button Classes="accent" IsEnabled="" Margin="10 0 0 0" Command="{Binding PresetCreateCommand}">
+						<!--プリセット名称変更ボタン-->
+						<Button IsEnabled="{Binding HotKeyPresetList.Count}" Margin="5 0 0 0" Command="{Binding PresetRenameCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<ic:SymbolIcon Symbol="Add" FontSize="15"/>
-									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0"/>
+									<ic:SymbolIcon Symbol="Edit" FontSize="15"/>
+									<TextBlock Foreground="White" Text="" Margin="0 0 0 0"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+						<!--プリセット削除ボタン-->
+						<Button IsEnabled="{Binding HotKeyPresetList.Count}" Margin="5 0 0 0" Command="{Binding PresetDeleteCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<ic:SymbolIcon Symbol="Delete" FontSize="15"/>
+									<TextBlock Foreground="White" Text="" Margin="0 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
 						</Button>
@@ -88,9 +106,10 @@
 						</StackPanel>
 					</ui:SettingsExpander.Footer>
 
+					<!--検索エンジン選択リスト-->
 					<ui:SettingsExpanderItem IsVisible="{Binding SearchEngineListIsVisible}" Content="{x:Static lang:Resources.Settings_ShortcutKey_Action_WebSearch_SearchEngine}">
 						<ui:SettingsExpanderItem.Footer>
-							<ComboBox MinWidth="200" IsEnabled="{Binding SearchEngineList, Converter={x:Static ObjectConverters.IsNotNull}}" SelectedIndex="{Binding SearchEngineListSelectedIndex}" ItemsSource="{Binding SearchEngineList}" SelectedItem="{Binding SelectedSearchEngineItem}">
+							<ComboBox MinWidth="200" IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" SelectedIndex="{Binding SearchEngineListSelectedIndex}" ItemsSource="{Binding SearchEngineList}" SelectedItem="{Binding SelectedSearchEngineItem}">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">

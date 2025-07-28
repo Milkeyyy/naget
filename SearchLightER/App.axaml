@@ -10,16 +10,18 @@
 			 Name="naget"
 >
 
-	<!--<Application.Resources>
-		<FontFamily x:Key="DefaultFont">avares://naget/Assets/Fonts#Noto Sans JP</FontFamily>
-	</Application.Resources>-->
+	<Application.Resources>
+		<ResourceDictionary>
+			<FontFamily x:Key="DefaultFont">avares://naget/Assets/Fonts#Noto Sans JP</FontFamily>
+		</ResourceDictionary>
+	</Application.Resources>
 	
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
-		<sty:FluentAvaloniaTheme CustomAccentColor="#e61953" />
-		<!--<Style Selector=":is(TopLevel)">
+		<sty:FluentAvaloniaTheme CustomAccentColor="#e62152" />
+		<Style Selector=":is(TemplatedControl)">
 			<Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
-		</Style>-->
+		</Style>
 	</Application.Styles>
 
 	<!--ネイティブメニュー (macOS/Linux)-->
@@ -43,7 +45,7 @@
 			<TrayIcon Icon="/Assets/Icon.ico" ToolTipText="{x:Static lang:Resources.App_Name}">
 				<TrayIcon.Menu>
 					<NativeMenu>
-						<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" />
+						<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" Command="{Binding OpenAboutCommand}" />
 						<NativeMenuItemSeparator />
 						<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_InAppBrowser}" Command="{Binding OpenInAppBrowserWindowCommand}" />
 						<NativeMenuItemSeparator />

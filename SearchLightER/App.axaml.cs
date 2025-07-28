@@ -2,52 +2,112 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Platform;
 using Avalonia.Styling;
+using naget.Common;
 using naget.Helpers;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
 using naget.Views;
-using NetSparkleUpdater;
-using NetSparkleUpdater.Enums;
-using NetSparkleUpdater.SignatureVerifiers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace naget;
 
 public class App : Application
 {
+	public static string[] CmdArgs { get; private set; } = [];
+
 	private static string _name = string.Empty;
 	public static string ProductName => _name;
 
 	private static string _version = string.Empty;
 	public static string ProductVersion => _version;
 
+	public static int ProductInternalVersion { get { return Utils.ConvertToInt(_version.Replace(".", string.Empty), 0); } }
+
+	private static string _releaseChannel = string.Empty;
+	public static string ProductReleaseChannel => _releaseChannel;
+
+	private static string _releaseNumber = string.Empty;
+	public static string ProductReleaseNumber => _releaseNumber;
+
+	public static string ProductFullVersion
+	{
+		get
+		{
+			string st = ".";
+			// リリース番号が数字でない場合は . ではなく + で区切る
+			var rn = Utils.ConvertToInt(ProductReleaseNumber, -1);
+			if (rn == -1) st = "+";
+			return $"{ProductVersion}-{ProductReleaseChannel}{st}{ProductReleaseNumber}";
+		}
+	}
+
+	private static string _copyright = string.Empty;
+	public static string ProductCopyright => _copyright;
+
+	private static List<Dictionary<string, object>> Libraries = [];
+
 	/// <summary>
 	/// コンフィグ等のファイルを保存するフォルダー
 	/// </summary>
 	public static string ConfigFolder => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductName);
 
-	private static SparkleUpdater _sparkle;
+	public static Logger Logger { get; private set; }
 
+	public static Updater Updater { get; private set; }
+
+	public static Window? AboutWindow { get; private set; }
+	public static Window? UpdateCompleteWindow { get; private set; }
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
 	public static Window? BrowserWindow { get; private set; }
 
 	public override void Initialize()
 	{
-		var a = Assembly.GetExecutingAssembly().GetName();
-		if (a.Name != null) _name = a.Name;
-		if (a.Version != null) _version = a.Version.ToString();
+		Assembly asm = Assembly.GetExecutingAssembly();
+
+		if (asm.GetName().Name != null) _name = asm.GetName().Name ?? "naget";
+
+		// バージョン情報を読み込む
+		string info;
+		using var verStream = asm.GetManifestResourceStream("naget.build.json");
+		if (verStream != null)
+		{
+			using var reader = new StreamReader(verStream);
+			info = reader.ReadToEnd();
+			var infoDict = JsonSerializer.Deserialize<Dictionary<string, string>>(info);
+			if (infoDict != null)
+			{
+				_version = infoDict.GetValueOrDefault("version", asm.GetName().Version?.ToString() ?? "0.0.0");
+				_releaseChannel = infoDict.GetValueOrDefault("release_channel", "unknown");
+				_releaseNumber = infoDict.GetValueOrDefault("release_number", "0");
+			}
+		}
+
+		// ライブラリー一覧を読み込む
+		string libs;
+		using var libsStream = asm.GetManifestResourceStream("naget.library.json");
+		if (libsStream != null)
+		{
+			using var reader = new StreamReader(libsStream);
+			libs = reader.ReadToEnd();
+			Libraries = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(libs) ?? [];
+		}
+
+		// ロガー
+		Logger = Logger.GetInstance();
+		Logger.Info("Application Starting...");
 
 		// フォルダーを作成する
-		Debug.WriteLine("Config Directory: " + ConfigFolder);
+		Logger.Debug("Config Directory: " + ConfigFolder);
 		Directory.CreateDirectory(ConfigFolder);
 
 		// コンフィグを読み込む
@@ -58,21 +118,26 @@ public class App : Application
 
 		// 言語設定を適用
 		Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);
-		Debug.WriteLine($"Language: {ConfigManager.Config.Language}");
+		Logger.Debug($"Language: {ConfigManager.Config.Language}");
 
+		// 初期化
 		AvaloniaXamlLoader.Load(this);
 	}
 
-	public static void Exit()
+	public static void Save()
 	{
-		// Sparkle のループを停止
-		_sparkle.Dispose();
 		// SharpHook を停止
 		HotKeyHelper.Stop();
 		// コンフィグを保存
 		ConfigManager.Save();
 		// 検索エンジンデータを保存
 		SearchEngineManager.Save();
+	}
+
+	public static void Exit()
+	{
+		// ホットキーヘルパーの停止とコンフィグ等の保存
+		Save();
 		// 終了
 		Environment.Exit(0);
 	}
@@ -84,7 +149,7 @@ public class App : Application
 		
 		if (processPath != null)
 		{
-			Debug.WriteLine("アプリケーションを再起動します...");
+			App.Logger.Debug("アプリケーションを再起動します...");
 
 			// 2. 新しいプロセスを開始する
 			Process.Start(new ProcessStartInfo(processPath)
@@ -94,11 +159,21 @@ public class App : Application
 		}
 		else
 		{
-			Debug.WriteLine("再起動に失敗しました: 実行ファイルのパスを取得できませんでした。");
+			App.Logger.Debug("再起動に失敗しました: 実行ファイルのパスを取得できませんでした。");
 		}
 
 		// 3. 現在のプロセスを終了する
 		Exit();
+	}
+
+	/// <summary>
+	/// ライブラリーの情報を取得する
+	/// </summary>
+	/// <param name="id"></param>
+	/// <returns></returns>
+	public static Dictionary<string, object>? GetLibraryInfo(string id)
+	{
+		return Libraries.FirstOrDefault(d => d.ContainsKey("PackageId") && d["PackageId"].ToString() == id);
 	}
 
 	/// <summary>
@@ -109,7 +184,7 @@ public class App : Application
 	{
 		if (Current == null)
 		{
-			Debug.WriteLine("Current Application is null, cannot change theme.");
+			App.Logger.Debug("Current Application is null, cannot change theme.");
 			return;
 		}
 
@@ -127,67 +202,44 @@ public class App : Application
 			default:
 				// 未知のテーマの場合はデフォルトに戻す
 				Current.RequestedThemeVariant = ThemeVariant.Default;
-				Debug.WriteLine($"Unknown theme selected: {name}");
+				App.Logger.Debug($"Unknown theme selected: {name}");
 				break;
 		}
-	}
-
-	private static async void StartSparkle()
-	{
-		await _sparkle.StartLoop(true);
-		// 手動アップデートチェック
-		//await ManualUpdateCheck();
-	}
-
-	public static async Task ManualUpdateCheck()
-	{
-		await _sparkle.CheckForUpdatesAtUserRequest();
 	}
 
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
 			desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-			// テーマを適用
-			ChangeTheme(ConfigManager.Config.Theme);
+			CmdArgs = desktop.Args ?? [];
+			
+			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
 
+			// 各ウィンドウ
+			AboutWindow = new AboutWindow();
+			UpdateCompleteWindow = new UpdateCompleteWindow();
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();
 			BrowserWindow = new BrowserWindow();
 
+			// テーマを適用
+			ChangeTheme(ConfigManager.Config.Theme);
+
 			// ホットキーの登録
-			//ConfigManager.HotKeyManager.Run();
 			HotKeyHelper.Run();
 
-			// Sparkle の初期化
-			_sparkle = new(
-				"https://naget.milkeyyy.com/appcast.xml",
-				new Ed25519Checker(
-					SecurityMode.OnlyVerifySoftwareDownloads,
-					"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
-				)
-			)
-			{
-				UIFactory = new NetSparkleUpdater.UI.Avalonia.UIFactory(new WindowIcon(AssetLoader.Open(new Uri("avares://naget/Assets/Icon.ico")))),
-				RelaunchAfterUpdate = false,
-				UseNotificationToast = true,
-				CustomInstallerArguments = "/SILENT"
-			};
-			
-			_sparkle.PreparingToExit += (sender, e) =>
-			{
-				Exit();
-				// アプリケーション終了時に Sparkle のループを停止
-				//e.Cancel = true;
-				//_sparkle.StopLoop();
-				//Debug.WriteLine("Sparkle loop stopped.");
-			};
-
 			// ループの開始
-			StartSparkle();
+			Updater = new();
+			Updater.Start();
+
+			// アップデート完了引数が渡された場合はアップデート完了ダイアログを表示する
+			if (CmdArgs.Contains("/UpdateComplete"))
+			{
+				SettingsWindow.Show();
+				UpdateCompleteWindow.ShowDialog(SettingsWindow);
+			}
 		}
 
 		base.OnFrameworkInitializationCompleted();

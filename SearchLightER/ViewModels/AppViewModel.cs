@@ -6,6 +6,7 @@ namespace naget.ViewModels;
 [ViewModel]
 public class AppViewModel
 {
+	public Command OpenAboutCommand { get; }
 	public Command OpenInAppBrowserWindowCommand { get; }
 	public Command OpenSettingsWindowCommand { get; }
 	public Command CheckUpdateCommand { get; }
@@ -14,6 +15,12 @@ public class AppViewModel
 	public AppViewModel()
 	{
 		#region コンテキストメニューの各コマンド
+		// About
+		OpenAboutCommand = Command.Factory.Create(() =>
+		{
+			App.AboutWindow.Show();
+			return default;
+		});
 		// アプリ内ブラウザー
 		OpenInAppBrowserWindowCommand = Command.Factory.Create(() =>
 		{
@@ -40,7 +47,7 @@ public class AppViewModel
 		// アップデートチェック
 		CheckUpdateCommand = Command.Factory.Create(async () =>
 		{
-			await App.ManualUpdateCheck();
+			await App.Updater.ManualCheck();
 		});
 		// アプリケーション終了
 		ExitAppCommand = Command.Factory.Create(() =>

@@ -15,7 +15,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{49FA0AF3-DB16-481F-8A64-8A7F9C34ABF1}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}-{#MyAppReleaseChannel}.{#MyAppReleaseNumber}
+AppVersion={#MyAppFullVersion}
 AppVerName={#MyAppName}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -41,12 +41,12 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 OutputDir=..\..\_Pack
 OutputBaseFilename=naget_Setup
-SetupIconFile=..\Assets\Logo\naget.ico
+SetupIconFile=..\..\Logo\naget.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 DisableWelcomePage=no
 WizardImageStretch=yes
-WizardImageFile=..\Assets\Logo\Setup_Banner.bmp
-WizardSmallImageFile=..\Assets\Logo\Setup_Icon.bmp
+WizardImageFile=..\..\Logo\Setup_Banner.bmp
+WizardSmallImageFile=..\..\Logo\Setup_Icon.bmp
 Compression=zip
 SolidCompression=yes
 WizardStyle=modern
@@ -78,4 +78,4 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Messages]
-BeveledLabel={#MyAppName} Setup [Version: {#MyAppVersion}-{#MyAppReleaseChannel}.{#MyAppReleaseNumber}]
+BeveledLabel={#MyAppName} Setup [Version: {#MyAppFullVersion}]

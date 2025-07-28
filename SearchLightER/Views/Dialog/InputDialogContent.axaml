@@ -1,0 +1,24 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:naget.Views.Dialog"
+			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="naget.Views.Settings.InputDialogContent"
+			 x:DataType="vm:InputDialogViewModel"
+>
+	
+	<Design.DataContext>
+		<vm:InputDialogViewModel/>
+	</Design.DataContext>
+
+	<Grid RowDefinitions="Auto,Auto" >
+		<!--名前テキストボックス-->
+		<StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+			<TextBlock Text="{Binding InputTitle}" Margin="0 0 0 4" VerticalAlignment="Center"/>
+			<TextBox Text="{Binding InputValue}"/>
+		</StackPanel>
+	</Grid>
+
+</UserControl>

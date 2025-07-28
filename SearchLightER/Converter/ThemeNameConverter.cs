@@ -13,7 +13,7 @@ public class ThemeNameConverter : IValueConverter
 
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		Debug.WriteLine($"Convert Theme Name: {value}");
+		App.Logger.Debug($"Convert Theme Name: {value}");
 		if (value is string themeName)
 		{
 			return Resources.ResourceManager.GetString("Settings.Design.Theme.Name." + themeName, new CultureInfo(ConfigManager.Config.Language)) ?? themeName;

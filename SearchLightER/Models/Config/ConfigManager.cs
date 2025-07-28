@@ -44,13 +44,13 @@ public static class ConfigManager
 		// ホットキーを読み込む
 		Config.HotKeys = HotKeyManager.Groups;
 
-		Debug.WriteLine("Saving HotKeyGroup");
+		App.Logger.Debug("Saving HotKeyGroup");
 		foreach (var group in Config.HotKeys)
 		{
-			Debug.WriteLine(group.Id);
-			Debug.WriteLine("- " + group.Name);
-			Debug.WriteLine("- " + group.Action);
-			Debug.WriteLine("- " + group);
+			App.Logger.Debug(group.Id);
+			App.Logger.Debug("- " + group.Name);
+			App.Logger.Debug("- " + group.Action);
+			App.Logger.Debug("- " + group);
 		}
 
 		// ファイルへ保存
@@ -66,7 +66,7 @@ public static class ConfigManager
 		// ファイルが存在する場合はそのファイルから読み込む
 		if (File.Exists(FilePath))
 		{
-			Debug.WriteLine("Loading config from file");
+			App.Logger.Debug("Loading config from file");
 			//_config = _builder
 			//	.AddJsonFile(FilePath, false)
 			//	.Build();
@@ -76,7 +76,7 @@ public static class ConfigManager
 
 			if (_configBase.Config == null)
 			{
-				Debug.WriteLine("- Config is null, Creating new config");
+				App.Logger.Debug("- Config is null, Creating new config");
 				Create(); // null の場合は新規作成する
 				Save();
 			}
@@ -84,7 +84,7 @@ public static class ConfigManager
 		// 存在しない場合は新規作成する
 		else
 		{
-			Debug.WriteLine("Creating new config");
+			App.Logger.Debug("Creating new config");
 			Create();
 			Save();
 		}
@@ -109,7 +109,7 @@ public static class ConfigManager
 	/// <param name="code"></param>
 	public static void SetLanguage(string code)
 	{
- 		Debug.WriteLine("Setting language to: " + code);
+ 		App.Logger.Debug("Setting language to: " + code);
 		// 言語コードを設定する
 		Assets.Locales.Resources.Culture = new CultureInfo(Config.Language);
 	}

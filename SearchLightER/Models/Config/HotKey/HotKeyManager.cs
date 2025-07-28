@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 
 namespace naget.Models.Config.HotKey;
@@ -18,8 +17,6 @@ public class HotKeyManager
 	/// </summary>
 	public ReadOnlyCollection<HotKeyGroup> List => new(Groups);
 
-	public Point MousePointerCoordinates { get; private set; } = new(0, 0);
-
 	public HotKeyManager()
 	{
 		Groups = [];
@@ -27,14 +24,14 @@ public class HotKeyManager
 
 	public void LoadGroups(List<HotKeyGroup> groups)
 	{
-		Debug.WriteLine("Group loaded: " + groups.Count);
+		App.Logger.Debug("Group loaded: " + groups.Count);
 		Groups = groups;
 		/*foreach (var group in groups)
 		{
-			Debug.WriteLine(group.Id);
-			Debug.WriteLine("- " + group.Name);
-			Debug.WriteLine("- " + group.Action);
-			Debug.WriteLine("- " + group);
+			App.Logger.Debug(group.Id);
+			App.Logger.Debug("- " + group.Name);
+			App.Logger.Debug("- " + group.Action);
+			App.Logger.Debug("- " + group);
 		}*/
 	}
 
@@ -52,9 +49,18 @@ public class HotKeyManager
 	/// 指定されたIDのグループを削除する
 	/// </summary>
 	/// <param name="id">削除する対象のID</param>
-	public void DeleteGroup(string id)
+	public bool DeleteGroup(string id)
 	{
-		Groups.RemoveAll(x => x.Id == id);
+		int result = Groups.RemoveAll(x => x.Id == id);
+		return result > 0;
+	}
+
+	public bool RenameGroup(string id, string name)
+	{
+		HotKeyGroup? g = GetHotKeyGroupFromKey(id);
+		if (g == null) return false;
+		g.Name = name;
+		return true;
 	}
 
 	private HotKeyGroup? _GetHotKeyGroupFromKey(string id)
@@ -74,7 +80,7 @@ public class HotKeyManager
 		var g = _GetHotKeyGroupFromKey(groupId);
 		// 取得したグループのキーに渡されたキーを設定する
 		g.Keys = keys;
-		Debug.WriteLine($"Key registered: {groupId} | " + string.Join(", ", keys));
+		App.Logger.Debug($"Key registered: {groupId} | " + string.Join(", ", keys));
 		return g;
 	}
 

@@ -17,7 +17,7 @@ public class HotKeyGroup
 	/// <summary>
 	/// ホットキーの名前
 	/// </summary>
-	public string Name { get; init; }
+	public string Name { get; set; }
 
 	/// <summary>
 	/// キーの一覧
