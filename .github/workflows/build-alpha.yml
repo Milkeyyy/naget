@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "alpha" ]
 
+env:
+  RELEASE_CHANNEL: alpha
+
 jobs:
 
   build:
@@ -23,7 +26,6 @@ jobs:
     runs-on: ${{ matrix.runner }}
 
     env:
-      RELEASE_CHANNEL: alpha
       rid: ${{ matrix.os }}-${{ matrix.arch }}
       OUTPUT_DIR: ./_Pack
       APPCAST_DL_BASE_URL: https://github.com/Milkeyyy/naget/releases/download
@@ -206,7 +208,8 @@ jobs:
       - name: Create Release Draft
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ./naget*,appcast_*.json,appcast_*.json.signature
+          artifacts: ./naget*,appcast_${{ env.RELEASE_CHANNEL }}_*.json,appcast_${{ env.RELEASE_CHANNEL }}_*.json.signature
+          removeArtifacts: true
           draft: true
           tag: ${{ needs.build.outputs.APP_FULL_VERSION }}
           commit: ${{ needs.build.outputs.COMMIT_HASH }}
