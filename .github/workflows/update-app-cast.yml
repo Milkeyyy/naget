@@ -1,4 +1,4 @@
-name: Update Cast File
+name: Update App Cast
 
 on:
   release:
