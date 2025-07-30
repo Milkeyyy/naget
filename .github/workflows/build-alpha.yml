@@ -3,8 +3,11 @@ name: Build Alpha
 on:
   push:
     branches: [ "alpha" ]
-  # pull_request:
-  #   branches: [ "main" ]
+  pull_request:
+    branches: [ "alpha" ]
+
+env:
+  RELEASE_CHANNEL: alpha
 
 jobs:
 
@@ -23,7 +26,6 @@ jobs:
     runs-on: ${{ matrix.runner }}
 
     env:
-      RELEASE_CHANNEL: alpha
       rid: ${{ matrix.os }}-${{ matrix.arch }}
       OUTPUT_DIR: ./_Pack
       APPCAST_DL_BASE_URL: https://github.com/Milkeyyy/naget/releases/download
@@ -34,6 +36,7 @@ jobs:
       APP_VERSION: ${{ steps.load_build_info.outputs.app_version }}
       APP_RELEASE_CHANNEL: ${{ steps.load_build_info.outputs.app_release_channel }}
       APP_RELEASE_NUMBER: ${{ steps.load_build_info.outputs.app_release_number }}
+      COMMIT_HASH: ${{ steps.load_build_info.outputs.commit_hash }}
       COMMIT_HASH_SHORT: ${{ steps.load_build_info.outputs.commit_hash_short }}
       APP_FULL_VERSION: ${{ steps.load_full_version.outputs.app_full_version }}
 
@@ -61,12 +64,14 @@ jobs:
         echo "APP_VERSION=$($buildInfo.version)" >> $env:GITHUB_ENV
         echo "APP_RELEASE_CHANNEL=$($buildInfo.release_channel)" >> $env:GITHUB_ENV
         echo "APP_RELEASE_NUMBER=$($buildInfo.release_number)" >> $env:GITHUB_ENV
+        echo "COMMIT_HASH=${{ github.sha }}" >> $env:GITHUB_ENV
         python -c 'print("COMMIT_HASH_SHORT=" + ("${{ github.sha }}"[0:7]))' >> $env:GITHUB_ENV
 
-        echo "APP_VERSION=${{ env.APP_VERSION }}" >> $env:GITHUB_OUTPUT
-        echo "APP_RELEASE_CHANNEL=${{ env.APP_RELEASE_CHANNEL }}" >> $env:GITHUB_OUTPUT
-        echo "APP_RELEASE_NUMBER=${{ env.APP_RELEASE_NUMBER }}" >> $env:GITHUB_OUTPUT
-        echo "COMMIT_HASH_SHORT=${{ env.COMMIT_HASH_SHORT }}" >> $env:GITHUB_OUTPUT
+        echo "APP_VERSION=$($buildInfo.version)" >> $env:GITHUB_OUTPUT
+        echo "APP_RELEASE_CHANNEL=$($buildInfo.release_channel)" >> $env:GITHUB_OUTPUT
+        echo "APP_RELEASE_NUMBER=$($buildInfo.release_number)" >> $env:GITHUB_OUTPUT
+        echo "COMMIT_HASH=${{ github.sha }}" >> $env:GITHUB_OUTPUT
+        python -c 'print("COMMIT_HASH_SHORT=" + ("${{ github.sha }}"[0:7]))' >> $env:GITHUB_OUTPUT
 
 
     # ビルド (Windows)
@@ -123,7 +128,7 @@ jobs:
 
         echo "APP_FULL_VERSION=$($buildInfo.full_version)" >> $env:GITHUB_ENV
 
-        echo "APP_FULL_VERSION=${{ env.APP_FULL_VERSION }}" >> $env:GITHUB_OUTPUT
+        echo "APP_FULL_VERSION=$($buildInfo.full_version)" >> $env:GITHUB_OUTPUT
 
 
     # App Cast の生成
@@ -203,10 +208,11 @@ jobs:
       - name: Create Release Draft
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ./naget*,appcast_*.json
+          artifacts: ./naget*,appcast_${{ env.RELEASE_CHANNEL }}_*.json,appcast_${{ env.RELEASE_CHANNEL }}_*.json.signature
+          removeArtifacts: true
           draft: true
           tag: ${{ needs.build.outputs.APP_FULL_VERSION }}
-          commit: ${{ github.sha }}
+          commit: ${{ needs.build.outputs.COMMIT_HASH }}
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5

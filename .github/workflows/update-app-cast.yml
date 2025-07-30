@@ -1,4 +1,4 @@
-name: Update Cast File
+name: Update App Cast
 
 on:
   release:
@@ -21,7 +21,7 @@ jobs:
         uses: robinraju/release-downloader@v1
         with:
           tag: ${{ github.event.release.tag_name }}
-          fileName: appcast_*.json
+          fileName: appcast_*.json*
           out-file-path: ./
 
       - name: File List
@@ -31,4 +31,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: Alpha Build - ${{ github.event.release.tag_name }}
-          file_pattern: ./appcast_*.json
+          file_pattern: ./appcast_*.json appcast_*.json.signature
