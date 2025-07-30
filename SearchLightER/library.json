@@ -1,4 +1,4 @@
-﻿[
+[
 	{
 		"PackageId": "Avalonia",
 		"PackageVersion": "11.3.2",
@@ -41,7 +41,7 @@
 	},
 	{
 		"PackageId": "FluentAvaloniaUI",
-		"PackageVersion": "2.3.0",
+		"PackageVersion": "2.4.0",
 		"Authors": "FluentAvalonia",
 		"License": "MIT",
 		"LicenseUrl": "https://licenses.nuget.org/MIT",
@@ -57,7 +57,7 @@
 	},
 	{
 		"PackageId": "Microsoft.Extensions.Configuration",
-		"PackageVersion": "9.0.6",
+		"PackageVersion": "9.0.7",
 		"PackageProjectUrl": "https://dot.net/",
 		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
 		"Authors": "Microsoft",
@@ -67,7 +67,7 @@
 	},
 	{
 		"PackageId": "Microsoft.Extensions.Configuration.Binder",
-		"PackageVersion": "9.0.6",
+		"PackageVersion": "9.0.7",
 		"PackageProjectUrl": "https://dot.net/",
 		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
 		"Authors": "Microsoft",
@@ -77,7 +77,7 @@
 	},
 	{
 		"PackageId": "Microsoft.Extensions.Configuration.Json",
-		"PackageVersion": "9.0.6",
+		"PackageVersion": "9.0.7",
 		"PackageProjectUrl": "https://dot.net/",
 		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
 		"Authors": "Microsoft",
@@ -107,7 +107,7 @@
 	},
 	{
 		"PackageId": "SharpHook",
-		"PackageVersion": "6.1.2",
+		"PackageVersion": "6.2.0",
 		"PackageProjectUrl": "https://sharphook.tolik.io/",
 		"Copyright": "(c) 2021 Anatoliy Pylypchuk",
 		"Authors": "Tolik Pylypchuk",
@@ -117,7 +117,7 @@
 	},
 	{
 		"PackageId": "System.Text.Json",
-		"PackageVersion": "9.0.6",
+		"PackageVersion": "9.0.7",
 		"PackageProjectUrl": "https://dot.net/",
 		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
 		"Authors": "Microsoft",

@@ -1,0 +1,34 @@
+name: Update Cast File
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  update-cast-file:
+    name: Update Cast File
+    runs-on: ubuntu-latest
+    # Nightly は除外
+    if: ${{ github.event.release.tag_name != 'nightly' }}
+
+    steps:
+      - name: Checkout (gh-pages)
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+
+      - name: Download App Cast File
+        uses: robinraju/release-downloader@v1
+        with:
+          tag: ${{ github.event.release.tag_name }}
+          fileName: appcast_*.json
+          out-file-path: ./
+
+      - name: File List
+        run: ls ./
+
+      - name: Update App Cast
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: Alpha Build - ${{ github.event.release.tag_name }}
+          file_pattern: ./appcast_*.json

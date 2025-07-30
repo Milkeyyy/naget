@@ -1,0 +1,214 @@
+name: Build Alpha
+
+on:
+  push:
+    branches: [ "alpha" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+jobs:
+
+  build:
+    name: Build
+    strategy:
+      matrix:
+        os: [ 'win' ]
+        arch: [ 'x64', 'arm64' ]
+        runner: [ 'windows-latest' ]
+        include:
+          - os: osx
+            arch: arm64
+            runner: macos-latest
+
+    runs-on: ${{ matrix.runner }}
+
+    env:
+      RELEASE_CHANNEL: alpha
+      rid: ${{ matrix.os }}-${{ matrix.arch }}
+      OUTPUT_DIR: ./_Pack
+      APPCAST_DL_BASE_URL: https://github.com/Milkeyyy/naget/releases/download
+      SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+      SPARKLE_PUBLIC_KEY: ${{ secrets.SPARKLE_PUBLIC_KEY }}
+
+    outputs:
+      APP_VERSION: ${{ steps.load_build_info.outputs.app_version }}
+      APP_RELEASE_CHANNEL: ${{ steps.load_build_info.outputs.app_release_channel }}
+      APP_RELEASE_NUMBER: ${{ steps.load_build_info.outputs.app_release_number }}
+      COMMIT_HASH_SHORT: ${{ steps.load_build_info.outputs.commit_hash_short }}
+      APP_FULL_VERSION: ${{ steps.load_full_version.outputs.app_full_version }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Create Directory
+      shell: pwsh
+      run: New-Item -ItemType Directory -ErrorAction SilentlyContinue ${{ env.OUTPUT_DIR }}/${{ env.rid }}
+
+    - name: Load Build Info
+      id: load_build_info
+      shell: pwsh
+      run: |
+        $buildInfo = (Get-Content "./SearchLightER/build.json" | ConvertFrom-Json)
+
+        echo "APP_VERSION=$($buildInfo.version)" >> $env:GITHUB_ENV
+        echo "APP_RELEASE_CHANNEL=$($buildInfo.release_channel)" >> $env:GITHUB_ENV
+        echo "APP_RELEASE_NUMBER=$($buildInfo.release_number)" >> $env:GITHUB_ENV
+        python -c 'print("COMMIT_HASH_SHORT=" + ("${{ github.sha }}"[0:7]))' >> $env:GITHUB_ENV
+
+        echo "APP_VERSION=${{ env.APP_VERSION }}" >> $env:GITHUB_OUTPUT
+        echo "APP_RELEASE_CHANNEL=${{ env.APP_RELEASE_CHANNEL }}" >> $env:GITHUB_OUTPUT
+        echo "APP_RELEASE_NUMBER=${{ env.APP_RELEASE_NUMBER }}" >> $env:GITHUB_OUTPUT
+        echo "COMMIT_HASH_SHORT=${{ env.COMMIT_HASH_SHORT }}" >> $env:GITHUB_OUTPUT
+
+
+    # ビルド (Windows)
+    - if: ${{ startsWith(env.rid, 'win') }}
+      name: Build
+      run: ./build.cmd --runtime ${{ env.rid }} --releasechannel ${{ env.RELEASE_CHANNEL }}
+
+    - if: ${{ startsWith(env.rid, 'win') }}
+      name: Build Installer
+      run: ./build.cmd buildinstaller --runtime ${{ env.rid }} --releasechannel ${{ env.RELEASE_CHANNEL }}
+
+    # ビルド (macOS)
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Build and Bundle
+      run: ./build.sh bundleapp --runtime ${{ env.rid }} --releasechannel ${{ env.RELEASE_CHANNEL }}
+
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Create Folder
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -ErrorAction SilentlyContinue "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output"
+
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Move and Rename App
+      shell: pwsh
+      run: |
+        Move-Item -Path "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget.app" -Destination "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/naget.app"
+
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Create DMG
+      run: |
+        brew install create-dmg
+        create-dmg \
+        --volname "naget Installer" \
+        --volicon "./Logo/naget.icns" \
+        --window-size 800 400 \
+        --icon-size 100 \
+        --icon "naget.app" 200 190 \
+        --app-drop-link 600 185 \
+        --hide-extension "naget.app" \
+        "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg" \
+        "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/"
+
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Rename DMG
+      run: mv ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget*.dmg ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg
+
+
+    - name: Load Full Version
+      id: load_full_version
+      shell: pwsh
+      run: |
+        $buildInfo = (Get-Content "./SearchLightER/build.json" | ConvertFrom-Json)
+
+        echo "APP_FULL_VERSION=$($buildInfo.full_version)" >> $env:GITHUB_ENV
+
+        echo "APP_FULL_VERSION=${{ env.APP_FULL_VERSION }}" >> $env:GITHUB_OUTPUT
+
+
+    # App Cast の生成
+    - if: ${{ startsWith(env.rid, 'win') }}
+      name: Generate App Cast (Windows)
+      shell: pwsh
+      run: |
+        dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e exe --output-file-name appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }} --output-type json --file-version ${{ env.APP_FULL_VERSION }} --channel ${{ env.RELEASE_CHANNEL }}
+
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Generate App Cast (macOS)
+      shell: pwsh
+      run: |
+        dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e dmg --output-file-name appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }} --output-type json --file-version ${{ env.APP_FULL_VERSION }} --channel ${{ env.RELEASE_CHANNEL }}
+
+    - name: Update App Cast Value (title)
+      uses: jossef/action-set-json-field@v2.1
+      with:
+        file: ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }}.json
+        field: items.title
+        value: naget ${{ env.APP_FULL_VERSION }}
+
+    - name: Update App Cast Value (version)
+      uses: jossef/action-set-json-field@v2.1
+      with:
+        file: ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }}.json
+        field: items.version
+        value: ${{ env.APP_FULL_VERSION }}
+
+
+    # アップロード (Windows)
+    - if: ${{ startsWith(env.rid, 'win') }}
+      name: Upload Installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ env.rid }}
+        path: |
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_Setup_${{ env.rid }}.exe
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }}.json*
+
+    # アップロード (macOS)
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Upload Bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ env.rid }}
+        path: |
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }}.json*
+
+
+  create-release:
+    name: Create Alpha Releases
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout (gh-pages)
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-*
+          path: ./
+          merge-multiple: true
+
+      - name: File List
+        run: ls ./
+
+      - name: Create Release Draft
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ./naget*,appcast_*.json
+          draft: true
+          tag: ${{ needs.build.outputs.APP_FULL_VERSION }}
+          commit: ${{ github.sha }}
+
+      - name: Delete Build Artifact
+        uses: GeekyEggo/delete-artifact@v5
+        with:
+          name: build-*
