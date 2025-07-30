@@ -206,7 +206,7 @@ jobs:
           artifacts: ./naget*,appcast_*.json
           draft: true
           tag: ${{ needs.build.outputs.APP_FULL_VERSION }}
-          commit: ${{ github.sha }}
+          commit: ${{ needs.build.outputs.COMMIT_HASH_SHORT }}
 
       - name: Delete Build Artifact
         uses: GeekyEggo/delete-artifact@v5
