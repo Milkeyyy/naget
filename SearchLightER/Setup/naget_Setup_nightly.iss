@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "naget"
-#define MyAppInstallName "naget"
+#define MyAppInstallName "naget Nightly"
 #define MyAppPublisher "Milkeyyy"
 #define MyAppURL "https://milkeyyy.com/"
 #define MyAppExeName "naget.exe"
