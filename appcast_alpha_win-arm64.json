@@ -1,0 +1,22 @@
+{
+  "title": "naget",
+  "language": "en",
+  "description": "Most recent changes with links to updates",
+  "link": "",
+  "items": [
+    {
+      "title": "naget 1.0.0-alpha.1",
+      "version": "1.0.0-alpha.1",
+      "short_version": "1.0.0",
+      "description": "",
+      "url": "https://github.com/Milkeyyy/naget/releases/download/naget_Setup_win-arm64.exe",
+      "signature": "BB0wuyeNGhnqruPYz20kL5zRJ4G+XusNRyGeO1g5SUAXc5NVfCazEU7NVvT6eNx2Fe/RufQNK4myDT6eDynGBg==",
+      "publication_date": "2025-07-30T17:51:44.6969281Z",
+      "is_critical": false,
+      "size": 129866957,
+      "os": "windows-arm64",
+      "channel": "alpha",
+      "type": "application/x-msdos-program"
+    }
+  ]
+}

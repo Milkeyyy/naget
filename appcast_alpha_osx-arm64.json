@@ -1,0 +1,22 @@
+{
+  "title": "naget",
+  "language": "en",
+  "description": "Most recent changes with links to updates",
+  "link": "",
+  "items": [
+    {
+      "title": "naget 1.0.0-alpha.1",
+      "version": "1.0.0-alpha.1",
+      "short_version": "1.0.0",
+      "description": "",
+      "url": "https://github.com/Milkeyyy/naget/releases/download/naget_osx-arm64.dmg",
+      "signature": "+c714xlBahg+/xCiDN1n9tjZIrha8iDNyeKj6R63JrgEBQW3JxiLutIuVAU1R+W90QKatvUXs14IKzgHntKOAQ==",
+      "publication_date": "2025-07-30T17:51:03.2761757Z",
+      "is_critical": false,
+      "size": 186077900,
+      "os": "mac-arm64",
+      "channel": "alpha",
+      "type": "application/octet-stream"
+    }
+  ]
+}
