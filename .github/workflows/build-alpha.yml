@@ -203,7 +203,7 @@ jobs:
       - name: Create Release Draft
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ./naget*,appcast_*.json
+          artifacts: ./naget*,appcast_*.json,appcast_*.json.signature
           draft: true
           tag: ${{ needs.build.outputs.APP_FULL_VERSION }}
           commit: ${{ needs.build.outputs.COMMIT_HASH_SHORT }}
