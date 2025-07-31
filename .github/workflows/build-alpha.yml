@@ -211,7 +211,7 @@ jobs:
           artifacts: ./naget*,appcast_${{ env.RELEASE_CHANNEL }}_*.json,appcast_${{ env.RELEASE_CHANNEL }}_*.json.signature
           removeArtifacts: true
           draft: true
-          tag: ${{ needs.build.outputs.APP_FULL_VERSION }}
+          tag: v${{ needs.build.outputs.APP_FULL_VERSION }}
           commit: ${{ needs.build.outputs.COMMIT_HASH }}
 
       - name: Delete Build Artifact
