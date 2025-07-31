@@ -10,10 +10,10 @@
       "short_version": "1.0.0",
       "description": "",
       "url": "https://github.com/Milkeyyy/naget/releases/download/1.0.0-alpha.1/naget_osx-arm64.dmg",
-      "signature": "T0vqOlZINWlBEKR64UbtWK/1/blHxCyh2t3fnATedWA+gO+vflDYwYwP/QsGLwjgaEk1rgBccH0fuHZW0sHqDQ==",
-      "publication_date": "2025-07-30T18:02:30.8208199Z",
+      "signature": "9A9wwoG5TvFGIkVjo16SXoeIoXTPfWGYAHsfynee3eq+LyuxfGL4vZA8cjD4pPS+ugVVx1zjoJHFWPmifzYfAQ==",
+      "publication_date": "2025-07-31T16:04:35.9345686Z",
       "is_critical": false,
-      "size": 186077840,
+      "size": 186077874,
       "os": "mac-arm64",
       "channel": "alpha",
       "type": "application/octet-stream"

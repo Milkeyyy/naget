@@ -10,10 +10,10 @@
       "short_version": "1.0.0",
       "description": "",
       "url": "https://github.com/Milkeyyy/naget/releases/download/1.0.0-alpha.1/naget_Setup_win-arm64.exe",
-      "signature": "wAXb8OIfguBqwWCPdcrLbsrFmz08DjWHaXq3pGmEF8j572TLzAGHAdN7ytd6TmGRiBM7VNoURMO5p/wFLvbKBw==",
-      "publication_date": "2025-07-30T18:03:09.8124975Z",
+      "signature": "YVnctlQI12+NRC2YOk19SOIPvGKFbBpLSHTq1X09lCfpcufnLaKMKQM2XmxbjWsny5lJ/YECPAtfoAbsUYIuDA==",
+      "publication_date": "2025-07-31T16:05:50.2189482Z",
       "is_critical": false,
-      "size": 129866005,
+      "size": 129867865,
       "os": "windows-arm64",
       "channel": "alpha",
       "type": "application/x-msdos-program"

@@ -10,10 +10,10 @@
       "short_version": "1.0.0",
       "description": "",
       "url": "https://github.com/Milkeyyy/naget/releases/download/1.0.0-alpha.1/naget_Setup_win-x64.exe",
-      "signature": "ODYHs4ZlfTC9bAJ7ZVq/O/lFrPSKceaiwvcU4A7GHMBm7364HkA6N6JYuSvEDhD0R62jSRAaw8e/N/UEQ+TAAA==",
-      "publication_date": "2025-07-30T18:03:31.2984174Z",
+      "signature": "NI5kUCkAcVndmdJryFk9oK2LCq7t27IF7aiL2SZr73KX5/X/bC2sLgMEge1fxDLJ6lQNPn3WctzxvAbtTrSmDw==",
+      "publication_date": "2025-07-31T16:04:57.1474441Z",
       "is_critical": false,
-      "size": 144437420,
+      "size": 144434989,
       "os": "windows-x64",
       "channel": "alpha",
       "type": "application/x-msdos-program"
