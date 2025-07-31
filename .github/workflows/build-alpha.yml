@@ -137,14 +137,14 @@ jobs:
       shell: pwsh
       run: |
         dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }}/${{ env.APP_FULL_VERSION }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e exe --output-file-name appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }} --output-type json --file-version ${{ env.APP_FULL_VERSION }} --channel ${{ env.RELEASE_CHANNEL }}
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }}/v${{ env.APP_FULL_VERSION }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e exe --output-file-name appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }} --output-type json --file-version ${{ env.APP_FULL_VERSION }} --channel ${{ env.RELEASE_CHANNEL }}
 
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Generate App Cast (macOS)
       shell: pwsh
       run: |
         dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }}/${{ env.APP_FULL_VERSION }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e dmg --output-file-name appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }} --output-type json --file-version ${{ env.APP_FULL_VERSION }} --channel ${{ env.RELEASE_CHANNEL }}
+        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }}/v${{ env.APP_FULL_VERSION }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e dmg --output-file-name appcast_${{ env.RELEASE_CHANNEL }}_${{ env.rid }} --output-type json --file-version ${{ env.APP_FULL_VERSION }} --channel ${{ env.RELEASE_CHANNEL }}
 
     - name: Update App Cast Value (title)
       uses: jossef/action-set-json-field@v2.1
