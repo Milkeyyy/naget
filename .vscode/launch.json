@@ -9,7 +9,7 @@
 		"name": "C#: SearchLight Debug",
 		"type": "dotnet",
 		"request": "launch",
-		"projectPath": "${workspaceFolder}/SearchLightER/SearchLight.csproj"
+		"projectPath": "${workspaceFolder}/naget/SearchLight.csproj"
 	},
 	{
 		"name": ".NET Meteor Debugger",

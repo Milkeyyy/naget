@@ -47,7 +47,7 @@ jobs:
     - name: Load Build Info
       shell: pwsh
       run: |
-        $buildInfo = (Get-Content "./SearchLightER/build.json" | ConvertFrom-Json)
+        $buildInfo = (Get-Content "./naget/build.json" | ConvertFrom-Json)
         echo "APP_VERSION=$($buildInfo.version)" >> $env:GITHUB_ENV
         echo "APP_RELEASE_CHANNEL=$($buildInfo.release_channel)" >> $env:GITHUB_ENV
         echo "APP_RELEASE_NUMBER=$($buildInfo.release_number)" >> $env:GITHUB_ENV
@@ -103,7 +103,7 @@ jobs:
     - name: Load Full Version
       shell: pwsh
       run: |
-        $buildInfo = (Get-Content "./SearchLightER/build.json" | ConvertFrom-Json)
+        $buildInfo = (Get-Content "./naget/build.json" | ConvertFrom-Json)
         echo "APP_FULL_VERSION=$($buildInfo.full_version)" >> $env:GITHUB_ENV
 
 

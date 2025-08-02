@@ -31,7 +31,7 @@ class Build : NukeBuild
 	[Parameter]
 	string Platform => Runtime.Split("-")[1];
 
-	readonly static AbsolutePath ProjectFolder = RootDirectory / "SearchLightER";
+	readonly static AbsolutePath ProjectFolder = RootDirectory / "naget";
 	readonly static AbsolutePath ProjectFile = ProjectFolder / "naget.csproj";
 
 	private Dictionary<string, string> LoadAndSaveBuildInfo()

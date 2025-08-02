@@ -1,3 +1,3 @@
 @echo off
-nuget-license -i .\naget.sln --output json > .\SearchLightER\library.json
+nuget-license -i .\naget.sln --output json > .\naget\library.json
 pause
