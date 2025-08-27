@@ -1,6 +1,8 @@
 ﻿using Epoxy;
+using naget.Common;
 using naget.Helpers;
 using naget.Models.SearchEngine;
+using System;
 
 namespace naget.ViewModels;
 
@@ -69,6 +71,11 @@ public class MainWindowViewModel
 		App.MainWindow.Position = centerPos ?? new(0,0);
 
 		// ウィンドウをアクティブにする
+		var handle = App.MainWindow.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+		if (handle != IntPtr.Zero)
+		{
+			WindowUtils.ForceToForeground(handle);
+		}
 		App.MainWindow.Activate();
 		App.MainWindow.Focus();
 	}
