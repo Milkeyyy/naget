@@ -168,7 +168,7 @@ class Build : NukeBuild
 				.SetProperty("PublishDir", output)
 				.SetProperty("CFBundleVersion", buildInfo["full_version"])
 				.SetProperty("CFBundleShortVersionString", buildInfo["version"])
-				.SetProperty("CFBundleIconFile", ProjectFolder / "Assets" / "Logo" / "naget.icns")
+				.SetProperty("CFBundleIconFile", RootDirectory / "Logo" / "naget.icns")
 				.SetProperty("RuntimeIdentifier", Runtime)
 				.SetProperty("UseAppHost", true)
 				.SetProperty("SelfContained", false));
