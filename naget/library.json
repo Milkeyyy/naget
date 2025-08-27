@@ -1,7 +1,7 @@
 [
 	{
 		"PackageId": "Avalonia",
-		"PackageVersion": "11.3.2",
+		"PackageVersion": "11.3.4",
 		"PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget\u0026utm_medium=referral\u0026utm_content=project_homepage_link",
 		"Copyright": "Copyright 2013-2025 \u00A9 The AvaloniaUI Project",
 		"Authors": "Avalonia Team",
@@ -11,7 +11,7 @@
 	},
 	{
 		"PackageId": "Avalonia.Desktop",
-		"PackageVersion": "11.3.2",
+		"PackageVersion": "11.3.4",
 		"PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget\u0026utm_medium=referral\u0026utm_content=project_homepage_link",
 		"Copyright": "Copyright 2013-2025 \u00A9 The AvaloniaUI Project",
 		"Authors": "Avalonia Team",
@@ -21,7 +21,7 @@
 	},
 	{
 		"PackageId": "Avalonia.Diagnostics",
-		"PackageVersion": "11.3.2",
+		"PackageVersion": "11.3.4",
 		"PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget\u0026utm_medium=referral\u0026utm_content=project_homepage_link",
 		"Copyright": "Copyright 2013-2025 \u00A9 The AvaloniaUI Project",
 		"Authors": "Avalonia Team",
@@ -49,7 +49,7 @@
 	},
 	{
 		"PackageId": "FluentIcons.Avalonia.Fluent",
-		"PackageVersion": "1.1.303",
+		"PackageVersion": "1.1.308",
 		"Authors": "davidxuang",
 		"License": "MIT",
 		"LicenseUrl": "https://licenses.nuget.org/MIT",
@@ -57,7 +57,7 @@
 	},
 	{
 		"PackageId": "Microsoft.Extensions.Configuration",
-		"PackageVersion": "9.0.7",
+		"PackageVersion": "9.0.8",
 		"PackageProjectUrl": "https://dot.net/",
 		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
 		"Authors": "Microsoft",
@@ -67,7 +67,7 @@
 	},
 	{
 		"PackageId": "Microsoft.Extensions.Configuration.Binder",
-		"PackageVersion": "9.0.7",
+		"PackageVersion": "9.0.8",
 		"PackageProjectUrl": "https://dot.net/",
 		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
 		"Authors": "Microsoft",
@@ -77,7 +77,7 @@
 	},
 	{
 		"PackageId": "Microsoft.Extensions.Configuration.Json",
-		"PackageVersion": "9.0.7",
+		"PackageVersion": "9.0.8",
 		"PackageProjectUrl": "https://dot.net/",
 		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
 		"Authors": "Microsoft",
@@ -87,7 +87,7 @@
 	},
 	{
 		"PackageId": "NetSparkleUpdater.UI.Avalonia",
-		"PackageVersion": "3.0.2",
+		"PackageVersion": "3.0.3",
 		"PackageProjectUrl": "https://github.com/NetSparkleUpdater/NetSparkle",
 		"Copyright": "Copyright \u00A9 2025",
 		"Authors": "Deadpikle",
@@ -107,7 +107,7 @@
 	},
 	{
 		"PackageId": "SharpHook",
-		"PackageVersion": "6.2.0",
+		"PackageVersion": "7.0.1",
 		"PackageProjectUrl": "https://sharphook.tolik.io/",
 		"Copyright": "(c) 2021 Anatoliy Pylypchuk",
 		"Authors": "Tolik Pylypchuk",
@@ -117,7 +117,7 @@
 	},
 	{
 		"PackageId": "System.Text.Json",
-		"PackageVersion": "9.0.7",
+		"PackageVersion": "9.0.8",
 		"PackageProjectUrl": "https://dot.net/",
 		"Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
 		"Authors": "Microsoft",
