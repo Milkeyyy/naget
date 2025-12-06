@@ -20,7 +20,6 @@ namespace naget
 		public static AppBuilder BuildAvaloniaApp()
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
-				.UseSkia()
 				// フォントの設定
 				// .With(new FontManagerOptions
 				// {
