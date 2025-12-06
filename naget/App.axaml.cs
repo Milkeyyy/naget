@@ -124,6 +124,10 @@ public class App : Application
 
 		// 初期化
 		AvaloniaXamlLoader.Load(this);
+
+#if !RELEASE
+		this.AttachDevTools();
+#endif
 	}
 
 	public static void Save()
