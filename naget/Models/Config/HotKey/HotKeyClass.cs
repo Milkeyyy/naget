@@ -2,10 +2,19 @@
 using SharpHook.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace naget.Models.Config.HotKey;
+
+[Flags]
+public enum KeyModifiers
+{
+	None = 0,
+	Alt = 1,
+	Control = 2,
+	Shift = 4,
+	Meta = 8
+}
 
 public class HotKeyGroup
 {
@@ -20,9 +29,14 @@ public class HotKeyGroup
 	public string Name { get; set; }
 
 	/// <summary>
-	/// キーの一覧
+	/// キー
 	/// </summary>
-	public HashSet<KeyCode>? Keys { get; set; }
+	public KeyCode Key { get; set; }
+
+	/// <summary>
+	/// 修飾キー
+	/// </summary>
+	public KeyModifiers Modifiers { get; set; }
 
 	/// <summary>
 	/// アクションのクラス
@@ -41,11 +55,12 @@ public class HotKeyGroup
 	[JsonIgnore]
 	public Dictionary<string, string> ActionProperty => Action.Property;
 
-	public HotKeyGroup(string name, HashSet<KeyCode>? keys = null)
+	public HotKeyGroup(string name, KeyCode key = KeyCode.VcUndefined, KeyModifiers modifiers = KeyModifiers.None)
 	{
 		Id = Guid.NewGuid().ToString();
 		Name = name;
-		Keys = keys;
+		Key = key;
+		Modifiers = modifiers;
 		Action = new HotKeyAction(HotKeyActionType.None);
 	}
 
@@ -54,27 +69,39 @@ public class HotKeyGroup
 	/// </summary>
 	/// <param name="Id"></param>
 	/// <param name="Name"></param>
-	/// <param name="Keys"></param>
+	/// <param name="Key"></param>
+	/// <param name="Modifiers"></param>
 	/// <param name="Action"></param>
 	[JsonConstructor]
-	public HotKeyGroup(string Id, string Name, HashSet<KeyCode> Keys, HotKeyAction Action)
+	public HotKeyGroup(string Id, string Name, KeyCode Key, KeyModifiers Modifiers, HotKeyAction Action)
 	{
 		this.Id = Id;
 		this.Name = Name;
-		this.Keys = Keys;
+		this.Key = Key;
+		this.Modifiers = Modifiers;
 		this.Action = Action; //new(ActionDict.Id, ActionDict.Property);
 	}
 
 	public override string ToString()
 	{
-		if (Keys == null || Keys.Count == 0) return Resources.Settings_ShortcutKey_Preset_NotSet;
-		return string.Join(" + ", Keys.Select(k => KeyCodeName.Get(k)));
+		if (Key == KeyCode.VcUndefined) return Resources.Settings_ShortcutKey_Preset_NotSet;
+
+		var parts = new List<string>();
+		if (Modifiers.HasFlag(KeyModifiers.Control)) parts.Add("Ctrl");
+		if (Modifiers.HasFlag(KeyModifiers.Alt)) parts.Add("Alt");
+		if (Modifiers.HasFlag(KeyModifiers.Shift)) parts.Add("Shift");
+		if (Modifiers.HasFlag(KeyModifiers.Meta)) parts.Add("Meta");
+
+		parts.Add(KeyCodeName.Get(Key));
+
+		return string.Join(" + ", parts);
 	}
 }
 
 public static class KeyCodeName
 {
-	private static readonly Dictionary<KeyCode, List<string>> _keys = new() {
+	private static readonly Dictionary<KeyCode, List<string>> _keys = new()
+	{
 		{ KeyCode.VcUndefined, ["Undefined Key"] }, // Windows, Linux, macOS
 		{ KeyCode.VcEscape, ["Escape"] },
 		{ KeyCode.VcF1, ["F1"] },

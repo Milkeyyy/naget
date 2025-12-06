@@ -39,10 +39,11 @@ public class HotKeyManager
 	/// 新しいグループを作成する
 	/// </summary>
 	/// <param name="name">グループの名前</param>
-	/// <param name="keys">キーの一覧</param>
-	public void CreateGroup(string name, HashSet<KeyCode>? keys = null)
+	/// <param name="key"></param>
+	/// <param name="modifiers"></param>
+	public void CreateGroup(string name, KeyCode key = KeyCode.VcUndefined, KeyModifiers modifiers = KeyModifiers.None)
 	{
-		Groups.Add(new HotKeyGroup(name, keys));
+		Groups.Add(new HotKeyGroup(name, key, modifiers));
 	}
 
 	/// <summary>
@@ -72,15 +73,17 @@ public class HotKeyManager
 	/// 指定されたIDのグループにキーを登録する
 	/// </summary>
 	/// <param name="groupId"></param>
-	/// <param name="keys"></param>
+	/// <param name="key"></param>
+	/// <param name="modifiers"></param>
 	/// <returns></returns>
-	public HotKeyGroup RegisterKeys(string groupId, HashSet<KeyCode> keys)
+	public HotKeyGroup RegisterKeys(string groupId, KeyCode key, KeyModifiers modifiers)
 	{
 		// 渡されたIDからホットキーグループを取得する
 		var g = _GetHotKeyGroupFromKey(groupId);
 		// 取得したグループのキーに渡されたキーを設定する
-		g.Keys = keys;
-		App.Logger.Debug($"Key registered: {groupId} | " + string.Join(", ", keys));
+		g.Key = key;
+		g.Modifiers = modifiers;
+		App.Logger.Debug($"Key registered: {groupId} | " + g.ToString());
 		return g;
 	}
 

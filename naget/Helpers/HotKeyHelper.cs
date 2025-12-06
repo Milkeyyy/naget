@@ -22,16 +22,9 @@ public static class HotKeyHelper
 	/// </summary>
 	private static readonly SimpleGlobalHook hook;
 	private static readonly object pressedKeysLock;
-	/// <summary>
-	/// 押されているキーの一覧
-	/// </summary>
-	private static readonly HashSet<KeyCode> pressedKeys;
-	/// <summary>
-	/// 無視するキーの一覧
-	/// </summary>
-	private static readonly HashSet<KeyCode> ignoreKeys = [
-		KeyCode.VcUndefined
-	];
+
+	private static KeyModifiers currentModifiers;
+
 	/// <summary>
 	/// ホットキーの一覧 (内部)
 	/// </summary>
@@ -49,11 +42,6 @@ public static class HotKeyHelper
 	/// キーを登録する対象のグループのID
 	/// </summary>
 	private static string registrationGroupId;
-	/// <summary>
-	/// 登録候補のキーの一覧
-	/// </summary>
-	private static HashSet<KeyCode> registrationQueuedKeys;
-	private static readonly object registrationQueuedKeysLock;
 
 	// 検索ウィンドウをマウスカーソルがあるウィンドウへ表示するためにマウスカーソルの座標を取得
 	/// <summary>
@@ -71,13 +59,11 @@ public static class HotKeyHelper
 		hook.KeyReleased += Hook_KeyReleased;
 		hook.MouseMoved += Hook_MouseMoved;
 
-		pressedKeys = [];
 		pressedKeysLock = new();
+		currentModifiers = KeyModifiers.None;
 
 		registrationMode = HotKeyRegistrationMode.None;
 		registrationGroupId = string.Empty;
-		registrationQueuedKeys = [];
-		registrationQueuedKeysLock = new();
 	}
 
 	public static void Run()
@@ -99,57 +85,52 @@ public static class HotKeyHelper
 	{
 		try
 		{
-			if (ignoreKeys.Contains(e.Data.KeyCode) || pressedKeys.Contains(e.Data.KeyCode)) return;
-
-			int beforePressedKeysCount = pressedKeys.Count;
-
-			lock (pressedKeysLock)
+			// KeyCode to Modifiers
+			if (IsModifier(e.Data.KeyCode, out var modifier))
 			{
-				//App.Logger.Debug("Key pressed: " + e.Data.KeyCode);
-				pressedKeys.Add(e.Data.KeyCode);
+				currentModifiers |= modifier;
 			}
 
 			if (registrationMode == HotKeyRegistrationMode.Registering)
 			{
 				if (e.Data.KeyCode == KeyCode.VcEscape)
 				{
-					// クリアのみロック
-					lock (registrationQueuedKeysLock) { registrationQueuedKeys.Clear(); }
-					// ロック外でキャンセル
+					// キャンセル
 					CancelKeyRegistration();
 					return;
 				}
-				// 追加のみロック
-				lock (registrationQueuedKeysLock)
+
+				// 修飾キーのみの場合は無視して表示だけ更新する (後続処理で押されたキーとして扱わない)
+				if (IsModifier(e.Data.KeyCode, out _))
 				{
-					// キーが押されていない状態から新たに押された場合はリストをクリアする (新たに登録を開始する)
-					if (beforePressedKeysCount == 0)
-					{
-						App.Logger.Debug("Key registration started: " + registrationGroupId);
-						registrationQueuedKeys.Clear();
-					}
-					var r = registrationQueuedKeys.Add(e.Data.KeyCode);
-					App.Logger.Debug($"Key added: {e.Data.KeyCode} ({r})");
+					// UI更新はメインループ側で行われるため、ここでは状態更新のみ
+					return;
+				}
+
+				// 修飾キー以外のキーが押されたら登録完了
+				lock (pressedKeysLock)
+				{
+					App.Logger.Debug($"Key registered: {e.Data.KeyCode} + {currentModifiers}");
+
+					// 登録完了処理は非同期タスク側で検知させるか、ここで完了させる
+					// ここでは完了フラグを立てるのではなく、登録処理を呼び出す
+					// ただし StartKeyRegistrationAsync はループしているので、そこで状態を見る形にする
+					// ここでは何もしなくて良い、ループ側で状態を見るため
 				}
 				return;
 			}
 
+			// ホットキー判定
+			// 修飾キー単体の場合は発火させない
+			if (IsModifier(e.Data.KeyCode, out _)) return;
+
 			foreach (var group in Groups)
 			{
-				if (group?.Keys != null)
+				if (group.Key == e.Data.KeyCode && group.Modifiers == currentModifiers)
 				{
-					if (group.Keys.SetEquals(pressedKeys))
-					{
-						e.SuppressEvent = true;
-						group.Action.Action();
-						App.Logger.Debug("HotKey pressed: " + group.Name);
-					}
-					//if (group.Keys.All(y => pressedKeys.Any(l => l == y)) && pressedKeys.All(y => group.Keys.Any(l => l == y)))
-					//{
-					//	e.SuppressEvent = true;
-					//	group.Action.Action();
-					//	App.Logger.Debug("HotKey pressed: " + group.Name);
-					//}
+					e.SuppressEvent = true;
+					group.Action.Action();
+					App.Logger.Debug("HotKey pressed: " + group.Name);
 				}
 			}
 		}
@@ -168,16 +149,40 @@ public static class HotKeyHelper
 	{
 		try
 		{
-			lock (pressedKeysLock)
+			if (IsModifier(e.Data.KeyCode, out var modifier))
 			{
-				//App.Logger.Debug("Key released: " + e.Data.KeyCode);
-				pressedKeys.Remove(e.Data.KeyCode);
+				currentModifiers &= ~modifier;
 			}
 		}
 		catch (Exception ex)
 		{
 			App.Logger.Error("HotKey Released Event Error: " + ex.Message);
 		}
+	}
+
+	private static bool IsModifier(KeyCode key, out KeyModifiers modifier)
+	{
+		modifier = KeyModifiers.None;
+		switch (key)
+		{
+			case KeyCode.VcLeftControl:
+			case KeyCode.VcRightControl:
+				modifier = KeyModifiers.Control;
+				return true;
+			case KeyCode.VcLeftShift:
+			case KeyCode.VcRightShift:
+				modifier = KeyModifiers.Shift;
+				return true;
+			case KeyCode.VcLeftAlt:
+			case KeyCode.VcRightAlt:
+				modifier = KeyModifiers.Alt;
+				return true;
+			case KeyCode.VcLeftMeta:
+			case KeyCode.VcRightMeta:
+				modifier = KeyModifiers.Meta;
+				return true;
+		}
+		return false;
 	}
 
 	/// <summary>
@@ -199,51 +204,84 @@ public static class HotKeyHelper
 
 		App.Logger.Debug($"Key registration started: {groupId}");
 
-		string regKeyText = string.Empty;
-
 		registrationGroupId = groupId; // 登録する対象のグループのIDを設定
-		registrationQueuedKeys = []; // 登録候補のキーの一覧を初期化
 		registrationMode = HotKeyRegistrationMode.Registering;
+		currentModifiers = KeyModifiers.None; // 登録開始時に修飾キー状態をリセット (念のため) Or keep it? keeping it is better logic wise if user is already holding it. 
+											  // しかし GlobalHook なので状態は常に最新であるはず。
 
-		while (registrationMode == HotKeyRegistrationMode.Registering)
+		KeyCode pressedKey = KeyCode.VcUndefined;
+		KeyModifiers pressedModifiers = KeyModifiers.None;
+
+		// イベントハンドラを追加して、修飾キー以外のキーが押されるのを待つ
+		// Hook_KeyPressed で登録完了ロジックを書くのが難しいので、ここでループ検知するか、
+		// Hook_KeyPressed からイベントを飛ばすか。
+		// シンプルに、Hook_KeyPressed で「最後に押された非修飾キー」を記録し、それを拾う形にする。
+
+		KeyCode detectedKey = KeyCode.VcUndefined;
+
+		void OnKeyPressed(object? sender, KeyboardHookEventArgs e)
 		{
-			lock (registrationQueuedKeysLock)
+			if (registrationMode != HotKeyRegistrationMode.Registering) return;
+			if (e.Data.KeyCode == KeyCode.VcEscape) return; // Hook側で処理
+			if (!IsModifier(e.Data.KeyCode, out _))
 			{
-				// キーが何も押されていない場合は Esc を押してキャンセル という表示にする
-				if (registrationQueuedKeys.Count == 0)
+				detectedKey = e.Data.KeyCode;
+				pressedModifiers = currentModifiers;
+			}
+		}
+
+		hook.KeyPressed += OnKeyPressed;
+
+		try
+		{
+			while (registrationMode == HotKeyRegistrationMode.Registering)
+			{
+				// UI更新
+				var textParts = new List<string>();
+				if (currentModifiers.HasFlag(KeyModifiers.Control)) textParts.Add("Ctrl");
+				if (currentModifiers.HasFlag(KeyModifiers.Alt)) textParts.Add("Alt");
+				if (currentModifiers.HasFlag(KeyModifiers.Shift)) textParts.Add("Shift");
+				if (currentModifiers.HasFlag(KeyModifiers.Meta)) textParts.Add("Meta");
+
+				if (detectedKey != KeyCode.VcUndefined)
+				{
+					// キーが検知されたらループを抜ける
+					pressedKey = detectedKey;
+					break;
+				}
+
+				if (textParts.Count == 0)
 				{
 					progress?.Report(Resources.Settings_ShortcutKey_RegisterKeys_PressEscToCancel);
 				}
 				else
 				{
-					// キーが押されている場合は登録候補のキーをUIに表示する
-					regKeyText = string.Join(" + ", registrationQueuedKeys.Select(k => KeyCodeName.Get(k)));
-					progress?.Report(regKeyText);
+					progress?.Report(string.Join(" + ", textParts) + " + ...");
 				}
+
+				await Task.Delay(10);
 			}
-			await Task.Delay(10);
+		}
+		finally
+		{
+			hook.KeyPressed -= OnKeyPressed;
 		}
 
 		// キー登録がキャンセルされた場合
 		if (registrationMode == HotKeyRegistrationMode.Canceled)
 		{
 			EndKeyRegistration();
-
 			// キー登録モードをリセット
 			registrationMode = HotKeyRegistrationMode.None;
-
 			return false;
 		}
 
 		// 渡されたIDに該当するグループにキーを登録する
-		lock (registrationQueuedKeysLock)
-		{
-			var g = ConfigManager.HotKeyManager.RegisterKeys(registrationGroupId, registrationQueuedKeys);
-			// キーの登録を終了
-			var r = EndKeyRegistration();
-			// 新たに登録されたキーをUIに表示する
-			progress?.Report(g.ToString());
-		}
+		var g = ConfigManager.HotKeyManager.RegisterKeys(registrationGroupId, pressedKey, pressedModifiers);
+		// キーの登録を終了
+		EndKeyRegistration();
+		// 新たに登録されたキーをUIに表示する
+		progress?.Report(g.ToString());
 
 		return true;
 	}
