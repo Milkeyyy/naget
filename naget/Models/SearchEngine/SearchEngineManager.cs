@@ -51,7 +51,9 @@ public static class SearchEngineManager
 	public static void Save()
 	{
 		string data = JsonSerializer.Serialize(_engineList);
-		File.WriteAllText(FilePath, data);
+		string tempPath = FilePath + ".tmp";
+		File.WriteAllText(tempPath, data);
+		File.Move(tempPath, FilePath, true);
 	}
 
 	/// <summary>
@@ -64,14 +66,14 @@ public static class SearchEngineManager
 		{
 			// デシリアライズ
 			SearchEngineList data = JsonSerializer.Deserialize<SearchEngineList>(File.ReadAllText(FilePath)) ?? new SearchEngineList();
-			
-			if (data != null)
+
+			if (data != null && data.List != null && data.List.Count > 0)
 			{
 				_engineList = data;
 			}
 			else
 			{
-				CreateList(); // null の場合は新規作成する
+				CreateList(); // null または空の場合は新規作成する
 				Save();
 			}
 		}

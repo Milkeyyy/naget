@@ -26,7 +26,7 @@ public class Updater : SparkleUpdater
 	TaskDialogProgressState downloadProgressState;
 
 	public Updater() : base(
-		"https://update-naget.milkeyyy.com/appcast_" + App.ProductReleaseChannel +  "_" + RuntimeInformation.RuntimeIdentifier + ".json",
+		"https://update-naget.milkeyyy.com/appcast_" + App.ProductReleaseChannel + "_" + RuntimeInformation.RuntimeIdentifier + ".json",
 		new Ed25519Checker(
 			SecurityMode.OnlyVerifySoftwareDownloads,
 			"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
@@ -111,13 +111,16 @@ public class Updater : SparkleUpdater
 
 	private void Updater_DownloadCanceled(AppCastItem item, string path)
 	{
-		
+		App.Logger.Debug("Download canceled by user.");
 	}
 
 	private async void Updater_DownloadFinished(AppCastItem item, string path)
 	{
 		// キャンセルボタンを無効化する
-		downloadDialog.Buttons[0].IsEnabled = false;
+		if (downloadDialog.Buttons.Count > 0)
+		{
+			downloadDialog.Buttons[0].IsEnabled = false;
+		}
 		// プログレスバーの値を設定
 		downloadProgressValue = 100;
 		downloadProgressState = TaskDialogProgressState.Indeterminate;
@@ -174,13 +177,10 @@ public class Updater : SparkleUpdater
 	{
 		App.Logger.Debug("Start manual update check");
 		UpdateInfo info = await CheckForUpdatesQuietly();
-		
+
 		App.Logger.Debug($"- NetSparkle Status: {info.Status} / {info.Updates.Count}");
 
-		//string updVersion;
-		//int updInternalVersion;
-		//string updReleaseChannel;
-		//string updReleaseNumber;
+
 		//foreach (var u in info.Updates)
 		//{
 		//	if (u != null)
@@ -252,10 +252,10 @@ public class Updater : SparkleUpdater
 		{
 			// アップデート確認ダイアログを表示する
 			await ShowDialogAsync(info.Updates[0]);
-			
+
 		}
 		// 既に最新バージョンの場合
-		else if(info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
+		else if (info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
 		{
 			App.Logger.Debug("Show Update not available dialog");
 			CompositeFormat desc = CompositeFormat.Parse(Resources.Updater_Dialog_UpdateNotAvailable_Description);
