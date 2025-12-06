@@ -37,7 +37,17 @@ public class Updater : SparkleUpdater
 		AppCastHelper.AppCastFilter = new CustomAppCastFilter();
 		RelaunchAfterUpdate = true;
 		UseNotificationToast = false;
-		CustomInstallerArguments = "/SILENT";
+
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+		{
+			CustomInstallerArguments = "";
+			RestartExecutableName = "naget.app";
+		}
+		else
+		{
+			CustomInstallerArguments = "/SILENT";
+		}
+
 		// GitHub の Releases からダウンロードする際はこれを無効にする
 		// 参考: https://github.com/NetSparkleUpdater/NetSparkle/issues/546#issuecomment-1869321315
 		CheckServerFileName = false;
