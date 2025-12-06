@@ -6,6 +6,7 @@
 			 x:Class="naget.App"
 			 x:DataType="vm:AppViewModel"
 			 xmlns:local="using:naget"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 RequestedThemeVariant="Default"
 			 Name="naget"
 >
@@ -20,6 +21,18 @@
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
 		<sty:FluentAvaloniaTheme CustomAccentColor="#e62152" />
+		
+		<!-- Accent Button Global Style -->
+		<Style Selector="Button.accent">
+			<Setter Property="Foreground" Value="White" />
+		</Style>
+		<Style Selector="Button.accent PathIcon">
+			<Setter Property="Foreground" Value="White" />
+		</Style>
+		<Style Selector="Button.accent ui|SymbolIcon">
+			<Setter Property="Foreground" Value="White" />
+		</Style>
+
 		<!-- フォントの設定 -->
 		<!-- <Style Selector=":is(TemplatedControl)">
 			<Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />

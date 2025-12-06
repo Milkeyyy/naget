@@ -7,7 +7,6 @@
 			 xmlns:cv="clr-namespace:naget.Converter;assembly=naget"
 			 xmlns:vm="using:naget.ViewModels.Settings"
 			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
-			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="naget.Views.Settings.ShortcutKeyView"
 			 x:DataType="vm:ShortcutKeyViewModel"
@@ -27,7 +26,10 @@
 		<StackPanel>
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
-			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}" IconSource="{ic:SymbolIconSource Symbol=TextBulletListSquareSparkle}">
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}">
+				<ui:SettingsExpander.IconSource>
+					<ui:SymbolIconSource Symbol="List"/>
+				</ui:SettingsExpander.IconSource>
 				
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
@@ -35,7 +37,7 @@
 						<Button Classes="accent" IsEnabled="" Margin="0 0 5 0" Command="{Binding PresetCreateCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<ic:SymbolIcon Symbol="Add" FontSize="15"/>
+									<ui:SymbolIcon Symbol="Add" FontSize="15"/>
 									<TextBlock Foreground="White" Text="{x:Static lang:Resources.Settings_ShortcutKey_Preset_Create}" Margin="10 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
@@ -52,7 +54,7 @@
 						<Button IsEnabled="{Binding HotKeyPresetList.Count}" Margin="5 0 0 0" Command="{Binding PresetRenameCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<ic:SymbolIcon Symbol="Edit" FontSize="15"/>
+									<ui:SymbolIcon Symbol="Edit" FontSize="15"/>
 									<TextBlock Foreground="White" Text="" Margin="0 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
@@ -61,7 +63,7 @@
 						<Button IsEnabled="{Binding HotKeyPresetList.Count}" Margin="5 0 0 0" Command="{Binding PresetDeleteCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<ic:SymbolIcon Symbol="Delete" FontSize="15"/>
+									<ui:SymbolIcon Symbol="Delete" FontSize="15"/>
 									<TextBlock Foreground="White" Text="" Margin="0 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
@@ -69,7 +71,10 @@
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 
-				<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey}" IconSource="{ic:SymbolIconSource Symbol=Keyboard}">
+				<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_ShortcutKey}">
+					<ui:SettingsExpander.IconSource>
+						<ui:SymbolIconSource Symbol="Keyboard"/>
+					</ui:SettingsExpander.IconSource>
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
 							<!--登録キーテキスト-->
@@ -88,7 +93,10 @@
 
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}" IconSource="{ic:SymbolIconSource Symbol=ArrowUpRight}">
+				<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Action}">
+					<ui:SettingsExpander.IconSource>
+						<ui:SymbolIconSource Symbol="Open"/>
+					</ui:SettingsExpander.IconSource>
 
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal">
