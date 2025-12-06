@@ -9,6 +9,7 @@ using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
 using naget.Views;
+using naget.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -63,6 +64,7 @@ public class App : Application
 	public static Logger Logger { get; private set; }
 
 	public static Updater Updater { get; private set; }
+	public static WindowService WindowService { get; private set; } = new();
 
 	public static Window? AboutWindow { get; private set; }
 	public static Window? UpdateCompleteWindow { get; private set; }
@@ -146,7 +148,7 @@ public class App : Application
 	{
 		// 1. 新しいプロセスを起動するための情報を設定する
 		var processPath = Environment.ProcessPath;
-		
+
 		if (processPath != null)
 		{
 			App.Logger.Debug("アプリケーションを再起動します...");
@@ -214,7 +216,7 @@ public class App : Application
 			desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 			CmdArgs = desktop.Args ?? [];
-			
+
 			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
 
 			// 各ウィンドウ

@@ -62,7 +62,7 @@ public class Updater : SparkleUpdater
 		downloadDialog = new()
 		{
 			ShowProgressBar = true,
-			XamlRoot = App.SettingsWindow
+			XamlRoot = App.WindowService.GetSettingsWindow()
 		};
 
 		// ダウンロード処理ダイアログが閉じられる時のイベント
@@ -96,17 +96,24 @@ public class Updater : SparkleUpdater
 
 	private async void Updater_DownloadStarted(AppCastItem item, string path)
 	{
-		// ダウンロード処理実行済みフラグ
-		downloadStarted = true;
-		// ダイアログの初期化
-		InitDownloadDialog();
-		// プログレスバーの初期値を設定
-		downloadProgressValue = 0;
-		downloadProgressState = TaskDialogProgressState.Indeterminate;
-		downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
-		// ダイアログを表示する
-		((Window)downloadDialog.XamlRoot).Show();
-		await downloadDialog.ShowAsync();
+		try
+		{
+			// ダウンロード処理実行済みフラグ
+			downloadStarted = true;
+			// ダイアログの初期化
+			InitDownloadDialog();
+			// プログレスバーの初期値を設定
+			downloadProgressValue = 0;
+			downloadProgressState = TaskDialogProgressState.Indeterminate;
+			downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
+			// ダイアログを表示する
+			((Window)downloadDialog.XamlRoot).Show();
+			await downloadDialog.ShowAsync();
+		}
+		catch (Exception ex)
+		{
+			App.Logger.Error("Updater_DownloadStarted Error: " + ex.Message);
+		}
 	}
 
 	private void Updater_DownloadCanceled(AppCastItem item, string path)
@@ -116,32 +123,39 @@ public class Updater : SparkleUpdater
 
 	private async void Updater_DownloadFinished(AppCastItem item, string path)
 	{
-		// キャンセルボタンを無効化する
-		if (downloadDialog.Buttons.Count > 0)
+		try
 		{
-			downloadDialog.Buttons[0].IsEnabled = false;
-		}
-		// プログレスバーの値を設定
-		downloadProgressValue = 100;
-		downloadProgressState = TaskDialogProgressState.Indeterminate;
-		downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
-		// タイトル等を更新
-		downloadDialog.Title = Resources.Updater_Dialog_Download_Install_Title + " - " + App.ProductName;
-		downloadDialog.SubHeader = Resources.Updater_Dialog_Download_Install_Title;
-		downloadDialog.Content = Resources.Updater_Dialog_Download_Install_Description;
+			// キャンセルボタンを無効化する
+			if (downloadDialog.Buttons.Count > 0)
+			{
+				downloadDialog.Buttons[0].IsEnabled = false;
+			}
+			// プログレスバーの値を設定
+			downloadProgressValue = 100;
+			downloadProgressState = TaskDialogProgressState.Indeterminate;
+			downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
+			// タイトル等を更新
+			downloadDialog.Title = Resources.Updater_Dialog_Download_Install_Title + " - " + App.ProductName;
+			downloadDialog.SubHeader = Resources.Updater_Dialog_Download_Install_Title;
+			downloadDialog.Content = Resources.Updater_Dialog_Download_Install_Description;
 
-		// ダウンロードが実行されていない場合は新たにダイアログを表示する
-		if (!downloadStarted)
+			// ダウンロードが実行されていない場合は新たにダイアログを表示する
+			if (!downloadStarted)
+			{
+				((Window)downloadDialog.XamlRoot).Show();
+				var t = downloadDialog.ShowAsync();
+			}
+
+			// 5秒間待機
+			await Task.Delay(5000);
+
+			// アップデートのインストールを実行する
+			await InstallUpdate(item, path);
+		}
+		catch (Exception ex)
 		{
-			((Window)downloadDialog.XamlRoot).Show();
-			var t = downloadDialog.ShowAsync();
+			App.Logger.Error("Updater_DownloadFinished Error: " + ex.Message);
 		}
-
-		// 5秒間待機
-		await Task.Delay(5000);
-
-		// アップデートのインストールを実行する
-		await InstallUpdate(item, path);
 	}
 
 	private static readonly CompositeFormat CachedDownloadDescriptionFormat = CompositeFormat.Parse(Resources.Updater_Dialog_Download_Downloading_Description);
@@ -260,7 +274,7 @@ public class Updater : SparkleUpdater
 			App.Logger.Debug("Show Update not available dialog");
 			CompositeFormat desc = CompositeFormat.Parse(Resources.Updater_Dialog_UpdateNotAvailable_Description);
 			await SuperDialog.Info(
-				App.SettingsWindow,
+				App.WindowService.GetSettingsWindow()!,
 				Resources.Updater_Dialog_UpdateNotAvailable_Title,
 				string.Format(null, desc, App.ProductFullVersion)
 			);
@@ -281,7 +295,7 @@ public class Updater : SparkleUpdater
 				new TaskDialogButton(Resources.Dialog_Button_Yes, TaskDialogStandardResult.Yes),
 				new TaskDialogButton(Resources.Dialog_Button_No, TaskDialogStandardResult.No)
 			},
-			XamlRoot = App.SettingsWindow
+			XamlRoot = App.WindowService.GetSettingsWindow()
 		};
 
 		App.Logger.Debug("Show Dialog");
