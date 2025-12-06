@@ -71,7 +71,22 @@ public class App : Application
 	public static Window? UpdateCompleteWindow { get; private set; }
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
-	public static Window? BrowserWindow { get; private set; }
+
+	// BrowserWindow の遅延初期化 (Lazy Loading)
+	// アプリ起動時に WebView (CEF) を初期化すると macOS IME と競合してフリーズするため、
+	// 実際にアクセスされるまで作成を遅延させる。
+	private static Window? _browserWindow;
+	public static Window BrowserWindow
+	{
+		get
+		{
+			if (_browserWindow == null)
+			{
+				_browserWindow = new BrowserWindow();
+			}
+			return _browserWindow;
+		}
+	}
 
 	public override void Initialize()
 	{
@@ -229,7 +244,8 @@ public class App : Application
 			UpdateCompleteWindow = new UpdateCompleteWindow();
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();
-			BrowserWindow = new BrowserWindow();
+			// BrowserWindow は遅延初期化するためここでは作成しない
+			// BrowserWindow = new BrowserWindow();
 
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);
