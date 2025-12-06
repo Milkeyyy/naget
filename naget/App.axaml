@@ -16,7 +16,7 @@
 			<FontFamily x:Key="DefaultFont">avares://naget/Assets/Fonts#Noto Sans JP</FontFamily>
 		</ResourceDictionary>
 	</Application.Resources> -->
-	
+
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
 		<sty:FluentAvaloniaTheme CustomAccentColor="#e62152" />
