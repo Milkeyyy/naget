@@ -29,7 +29,11 @@ namespace naget
 				// 		new FontFallback { FontFamily = new FontFamily("avares://naget/Assets/Fonts#Noto Sans JP") }
 				// 	]
 				// })
-				.With(new MacOSPlatformOptions() { ShowInDock = false }) // (macOS) Dock に表示しない
+				.With(new MacOSPlatformOptions()
+				{
+					// (macOS) Dock に表示しない
+					ShowInDock = false,
+				})
 				.LogToTrace();
 	}
 }
