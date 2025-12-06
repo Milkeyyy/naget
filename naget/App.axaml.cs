@@ -250,22 +250,6 @@ public class App : Application
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);
 
-			// フォントの暖気運転 (macOSでの日本語入力フリーズ対策)
-			// アプリ起動時に日本語フォントを一度読み込んでおくことで、
-			// 最初のIME入力時のデッドロック/フリーズを回避する。
-			try
-			{
-				if (FontManager.Current != null)
-				{
-					// 日本語の文字を一つ解決させてフォントシステムを初期化する
-					FontManager.Current.TryMatchCharacter('あ', FontStyle.Normal, FontWeight.Normal, FontStretch.Normal, null, null, out _);
-				}
-			}
-			catch (Exception ex)
-			{
-				Logger.Error("Font warm-up failed: " + ex.Message);
-			}
-
 			// ホットキーの登録
 			HotKeyHelper.Run();
 
