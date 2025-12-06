@@ -10,18 +10,20 @@
 			 Name="naget"
 >
 
-	<Application.Resources>
+	<!-- フォントの定義 -->
+	<!-- <Application.Resources>
 		<ResourceDictionary>
 			<FontFamily x:Key="DefaultFont">avares://naget/Assets/Fonts#Noto Sans JP</FontFamily>
 		</ResourceDictionary>
-	</Application.Resources>
+	</Application.Resources> -->
 	
 	<Application.Styles>
 		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
 		<sty:FluentAvaloniaTheme CustomAccentColor="#e62152" />
-		<Style Selector=":is(TemplatedControl)">
+		<!-- フォントの設定 -->
+		<!-- <Style Selector=":is(TemplatedControl)">
 			<Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
-		</Style>
+		</Style> -->
 	</Application.Styles>
 
 	<!--ネイティブメニュー (macOS/Linux)-->
