@@ -20,16 +20,6 @@
         "LicenseInformationOrigin": 0
     },
     {
-        "PackageId": "Avalonia.Diagnostics",
-        "PackageVersion": "11.3.9",
-        "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
-        "Copyright": "Copyright 2013-2025 \u00a9 The AvaloniaUI Project",
-        "Authors": "Avalonia Team",
-        "License": "MIT",
-        "LicenseUrl": "https://licenses.nuget.org/MIT",
-        "LicenseInformationOrigin": 0
-    },
-    {
         "PackageId": "Epoxy.Avalonia11",
         "PackageVersion": "1.16.0",
         "PackageProjectUrl": "https://github.com/kekyo/Epoxy.git",
@@ -43,14 +33,6 @@
         "PackageId": "FluentAvaloniaUI",
         "PackageVersion": "2.4.1",
         "Authors": "FluentAvalonia",
-        "License": "MIT",
-        "LicenseUrl": "https://licenses.nuget.org/MIT",
-        "LicenseInformationOrigin": 0
-    },
-    {
-        "PackageId": "FluentIcons.Avalonia.Fluent",
-        "PackageVersion": "1.2.315",
-        "Authors": "davidxuang",
         "License": "MIT",
         "LicenseUrl": "https://licenses.nuget.org/MIT",
         "LicenseInformationOrigin": 0

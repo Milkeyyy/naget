@@ -1,4 +1,5 @@
 {
+	"AvaloniaUI.DiagnosticsSupport": null,
 	"WebViewControl-Avalonia": {
 		"PackageId": "WebViewControl-Avalonia",
 		"PackageVersion": "3.120.10",
