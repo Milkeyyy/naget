@@ -33,6 +33,9 @@ namespace naget
 					// (macOS) Dock に表示しない
 					ShowInDock = false,
 				})
+#if DEBUG
+				.WithDeveloperTools()
+#endif
 				.LogToTrace();
 	}
 }
