@@ -45,7 +45,7 @@ class Build : NukeBuild
 			}
 		);
 
-		if (ReleaseChannel != null)  { d["release_channel"] = ReleaseChannel; }
+		if (ReleaseChannel != null) { d["release_channel"] = ReleaseChannel; }
 		if (ReleaseNumber != null) { d["release_number"] = ReleaseNumber; }
 
 		int rn;
@@ -155,7 +155,7 @@ class Build : NukeBuild
 				.SetFileVersion(buildInfo["version"])
 				.SetAssemblyVersion(buildInfo["version"])
 			);
-			
+
 			DotNetTasks.DotNetMSBuild(s => s
 				.SetProcessWorkingDirectory(directory)
 				.SetTargets("BundleApp")
