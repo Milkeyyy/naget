@@ -26,13 +26,15 @@ public class Updater : SparkleUpdater
 	TaskDialogProgressState downloadProgressState;
 
 	public Updater() : base(
-		"https://update-naget.milkeyyy.com/appcast_" + App.ProductReleaseChannel + "_" + RuntimeInformation.RuntimeIdentifier + ".json",
+		GetUpdateUrl(),
 		new Ed25519Checker(
 			SecurityMode.OnlyVerifySoftwareDownloads,
 			"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
 		)
 	)
 	{
+
+
 		AppCastGenerator = new JsonAppCastGenerator(LogWriter);
 		AppCastHelper.AppCastFilter = new CustomAppCastFilter();
 		RelaunchAfterUpdate = true;
@@ -317,6 +319,26 @@ public class Updater : SparkleUpdater
 			// アップデート処理実行
 			await InitAndBeginDownload(info);
 		}
+	}
+
+	private static string GetUpdateUrl()
+	{
+		// 1. コマンドライン引数から URL を探す
+		for (int i = 0; i < App.CmdArgs.Length; i++)
+		{
+			if ((App.CmdArgs[i].Equals("/UpdateUrl", StringComparison.OrdinalIgnoreCase) ||
+				 App.CmdArgs[i].Equals("--update-url", StringComparison.OrdinalIgnoreCase)) &&
+				i + 1 < App.CmdArgs.Length)
+			{
+				string url = App.CmdArgs[i + 1];
+				// 引数の次の要素を URL として返す
+				App.Logger.Debug($"Using custom Update URL from args: {url}");
+				return url;
+			}
+		}
+
+		// 2. 指定されていない場合はデフォルトの URL を返す
+		return "https://update-naget.milkeyyy.com/appcast_" + App.ProductReleaseChannel + "_" + RuntimeInformation.RuntimeIdentifier + ".json";
 	}
 }
 
