@@ -43,6 +43,7 @@ public class Updater : SparkleUpdater
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 		{
 			CustomInstallerArguments = "";
+			RelaunchAfterUpdateCommandPrefix = "xattr -dr naget.app; open -n ";
 			RestartExecutableName = "naget.app";
 		}
 		else
