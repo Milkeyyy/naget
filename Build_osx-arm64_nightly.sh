@@ -30,7 +30,7 @@ CommitHash=$(git rev-parse --short HEAD)
 AppFullVersion="${AppVersion}-${ReleaseChannel}+${CommitHash}"
 
 echo "-         Runtime: ${Runtime}"
-echo "-         Version: ${AppFullVersion}"
+echo "-         Version: ${AppVersion}"
 echo "- Release Channel: ${ReleaseChannel}"
 echo "-     Commit Hash: ${CommitHash}"
 echo ""
