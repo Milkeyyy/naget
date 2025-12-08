@@ -17,9 +17,15 @@ echo naget - Build Start
 
 cd %~dp0
 
+call winget install jqlang.jq
+for /f "usebackq delims=" %%A in (`jq -r ".version" "./naget/build.json"`) do set AppVersion=%%A
+
 for /f "usebackq delims=" %%A in (`git rev-parse --short HEAD`) do set CommitHash=%%A
 
+set AppFullVersion=%AppVersion%-%ReleaseChannel%+%CommitHash%
+
 echo -         Runtime: %Runtime%
+echo -         Version: %AppVersion%
 echo - Release Channel: %ReleaseChannel%
 echo -     Commit Hash: %CommitHash%
 echo.
@@ -50,7 +56,7 @@ echo.
 echo Generate App Cast
 echo.
 call dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-call netsparkle-generate-appcast -n naget -u %AppCastBaseUrl% -o windows-%RuntimeArch% -a %OutputDir%/%Runtime% -b %OutputDir%/%Runtime% -e exe --output-file-name appcast_%ReleaseChannel%_%Runtime% --output-type json --channel %ReleaseChannel%
+call netsparkle-generate-appcast -n naget -u %AppCastBaseUrl% -o windows-%RuntimeArch% -a %OutputDir%/%Runtime% -b %OutputDir%/%Runtime% -e exe --output-file-name appcast_%ReleaseChannel%_%Runtime% --output-type json --file-version %AppFullVersion% --channel %ReleaseChannel%
 echo.
 
 echo Install AWS CLI

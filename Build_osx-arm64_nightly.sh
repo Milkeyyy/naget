@@ -22,9 +22,15 @@ echo ""
 
 cd "$(dirname "$0")"
 
+brew install jq
+AppVersion=$(jq -r ".version" "./naget/build.json")
+
 CommitHash=$(git rev-parse --short HEAD)
 
+AppFullVersion="${AppVersion}-${ReleaseChannel}+${CommitHash}"
+
 echo "-         Runtime: ${Runtime}"
+echo "-         Version: ${AppFullVersion}"
 echo "- Release Channel: ${ReleaseChannel}"
 echo "-     Commit Hash: ${CommitHash}"
 echo ""
@@ -67,7 +73,7 @@ echo ""
 echo "Generate App Cast"
 echo ""
 dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator || true
-netsparkle-generate-appcast -n naget -u "${AppCastBaseUrl}" -o "mac-${RuntimeArch}" -a "${OutputDir}/${Runtime}" -b "${OutputDir}/${Runtime}" -e zip --output-file-name "appcast_${ReleaseChannel}_${Runtime}" --output-type json --channel "${ReleaseChannel}"
+netsparkle-generate-appcast -n naget -u "${AppCastBaseUrl}" -o "mac-${RuntimeArch}" -a "${OutputDir}/${Runtime}" -b "${OutputDir}/${Runtime}" -e zip --output-file-name "appcast_${ReleaseChannel}_${Runtime}" --output-type json --file-version "${AppFullVersion}" --channel "${ReleaseChannel}"
 echo ""
 
 echo "Install AWS CLI"
