@@ -339,7 +339,7 @@ public class Updater : SparkleUpdater
 		}
 
 		// 2. 指定されていない場合はデフォルトの URL を返す
-		return "https://update-naget.milkeyyy.com/appcast_" + App.ProductReleaseChannel + "_" + RuntimeInformation.RuntimeIdentifier + ".json";
+		return "https://nagetupd.milkeyyy.com/appcast/appcast_" + App.ProductReleaseChannel + "_" + RuntimeInformation.RuntimeIdentifier + ".json";
 	}
 }
 
