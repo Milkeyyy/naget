@@ -57,10 +57,16 @@ class Build : NukeBuild
 		d["full_version"] = $"{d["version"]}-{d["release_channel"]}{st}{d["release_number"]}";
 
 		// 書き換えたビルド情報を上書き保存する
-		File.WriteAllText(ProjectFolder / "build.json", JsonSerializer.Serialize(d));
+		File.WriteAllText(ProjectFolder / "build.json", JsonSerializer.Serialize(d, options: new JsonSerializerOptions() { WriteIndented = true }));
 
 		return d;
 	}
+
+	Target LoadAndSaveBuildInfoJson => _ => _
+		.Executes(() =>
+		{
+			LoadAndSaveBuildInfo();
+		});
 
 	Target Clean => _ => _
 		.Before(Restore)

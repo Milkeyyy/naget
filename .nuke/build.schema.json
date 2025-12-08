@@ -28,6 +28,7 @@
         "BundleApp",
         "Clean",
         "Compile",
+        "LoadAndSaveBuildInfoJson",
         "Restore"
       ]
     },

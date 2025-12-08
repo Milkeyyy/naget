@@ -14,15 +14,18 @@ call ./scripts/load_env.bat ./Build_env.txt
 
 echo.
 echo naget - Build Start
+echo.
 
 cd %~dp0
 
+echo Load Build Info
+echo.
+call ./build.cmd loadandsavebuildinfojson --releasechannel %ReleaseChannel% --releasenumber %CommitHash%
 call winget install jqlang.jq
 for /f "usebackq delims=" %%A in (`jq -r ".version" "./naget/build.json"`) do set AppVersion=%%A
-
+for /f "usebackq delims=" %%A in (`jq -r ".full_version" "./naget/build.json"`) do set AppFullVersion=%%A
 for /f "usebackq delims=" %%A in (`git rev-parse --short HEAD`) do set CommitHash=%%A
-
-set AppFullVersion=%AppVersion%-%ReleaseChannel%+%CommitHash%
+echo.
 
 echo -         Runtime: %Runtime%
 echo -         Version: %AppVersion%
