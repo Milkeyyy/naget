@@ -5,7 +5,7 @@ set RuntimeOs=win
 set RuntimeArch=x64
 set Runtime=%RuntimeOs%-%RuntimeArch%
 set ReleaseChannel=nightly
-set AppCastBaseUrl=https://pub-c3f507b079e846ba847ffc7c2c2fa43b.r2.dev/%ReleaseChannel%/%Runtime%
+set AppCastBaseUrl=https://nagetupd.milkeyyy.com/%ReleaseChannel%/%Runtime%
 set OutputDir=./_Pack
 rem ------------------------------
 

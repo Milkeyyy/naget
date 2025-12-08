@@ -7,7 +7,7 @@ RuntimeOs="osx"
 RuntimeArch="arm64"
 Runtime="${RuntimeOs}-${RuntimeArch}"
 ReleaseChannel="nightly"
-AppCastBaseUrl="https://pub-c3f507b079e846ba847ffc7c2c2fa43b.r2.dev/${ReleaseChannel}/latest/${Runtime}"
+AppCastBaseUrl="https://nagetupd.milkeyyy.com/${ReleaseChannel}/latest/${Runtime}"
 OutputDir="./_Pack"
 # ------------------------------
 
