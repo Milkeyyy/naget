@@ -27,7 +27,7 @@ echo ""
 ./build.sh loadandsavebuildinfojson --releasechannel "${ReleaseChannel}" --releasenumber "${CommitHash}"
 brew install jq
 AppVersion=$(jq -r ".version" "./naget/build.json")
-AppVersion=$(jq -r ".full_version" "./naget/build.json")
+AppFullVersion=$(jq -r ".full_version" "./naget/build.json")
 CommitHash=$(git rev-parse --short HEAD)
 echo ""
 
