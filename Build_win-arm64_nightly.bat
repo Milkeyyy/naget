@@ -7,6 +7,7 @@ set Runtime=%RuntimeOs%-%RuntimeArch%
 set ReleaseChannel=nightly
 set AppCastBaseUrl=https://nagetupd.milkeyyy.com/%ReleaseChannel%/%Runtime%
 set OutputDir=./_Pack
+set VelopackChannel=%RuntimeOs%-%RuntimeArch%-%ReleaseChannel%
 rem ------------------------------
 
 rem Load env File
@@ -51,35 +52,36 @@ echo.
 call ./build.cmd --runtime %Runtime% --releasechannel %ReleaseChannel% --releasenumber %CommitHash%
 echo.
 
-echo Build Installer
+echo Build Installer and Upload (Velopack)
 echo.
-call ./build.cmd buildinstaller --runtime %Runtime% --releasechannel %ReleaseChannel% --releasenumber %CommitHash%
-echo.
+call dotnet tool install -g vpk
 
-echo Generate App Cast
-echo.
-call dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-call netsparkle-generate-appcast -n naget -u %AppCastBaseUrl% -o windows-%RuntimeArch% -a %OutputDir%/%Runtime% -b %OutputDir%/%Runtime% -e exe --output-file-name appcast_%ReleaseChannel%_%Runtime% --output-type json --file-version %AppFullVersion% --channel %ReleaseChannel%
-echo.
+pushd "%OutputDir%/%Runtime%"
 
-echo Install AWS CLI
-echo.
-call msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi /passive
-echo.
+echo Download Previous Release (Velopack)
+call vpk download s3 --bucket naget-update --endpoint "%R2_ENDPOINT%" --channel %VelopackChannel%
+if %ERRORLEVEL% neq 0 echo Warning: Failed to download previous release.
 
-echo Upload App Installer
-echo.
-rem App Installer
-call aws s3 cp "%OutputDir%/%Runtime%/naget_Setup_%Runtime%.exe" "s3://naget-update/%ReleaseChannel%/%Runtime%/naget_Setup_%Runtime%.exe" --endpoint-url "%R2_ENDPOINT%"
-echo.
+rem Clean up existing version to avoid overwrite prompt
+if exist "Releases" (
+    echo Cleaning up existing version %AppFullVersion%...
+    del /f /q "Releases\naget-%AppFullVersion%-win-%RuntimeArch%-full.nupkg" 2>nul
+    del /f /q "Releases\naget-%AppFullVersion%-win-%RuntimeArch%-delta.nupkg" 2>nul
+    del /f /q "Releases\naget-%AppFullVersion%-win-%RuntimeArch%-Setup.exe" 2>nul
+    
+    if exist "Releases\releases.%VelopackChannel%.json" (
+        jq "del(.Assets[] | select(.Version == \"%AppFullVersion%\"))" "Releases\releases.%VelopackChannel%.json" > "Releases\releases.tmp.json"
+        move /y "Releases\releases.tmp.json" "Releases\releases.%VelopackChannel%.json"
+    )
+)
 
-echo Upload App Cast
-echo.
-rem App Cast
-call aws s3 cp "%OutputDir%/%Runtime%/appcast_%ReleaseChannel%_%Runtime%.json" "s3://naget-update/appcast/appcast_%ReleaseChannel%_%Runtime%.json" --endpoint-url "%R2_ENDPOINT%"
-echo.
-rem App Cast Signature
-call aws s3 cp "%OutputDir%/%Runtime%/appcast_%ReleaseChannel%_%Runtime%.json.signature" "s3://naget-update/appcast/appcast_%ReleaseChannel%_%Runtime%.json.signature" --endpoint-url "%R2_ENDPOINT%"
+echo Build Installer (Velopack)
+call vpk pack -u naget -v %AppFullVersion% -p . -e naget.exe --channel %VelopackChannel% --packAuthors Milkeyyy -i ..\..\Logo\naget.ico --noPortable
+
+echo Upload (Velopack)
+call vpk upload s3 --bucket naget-update --endpoint "%R2_ENDPOINT%" --channel %VelopackChannel%
+
+popd
 echo.
 
 echo.
