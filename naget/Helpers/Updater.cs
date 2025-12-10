@@ -2,14 +2,13 @@
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
-using naget.Common;
 using naget.Views.Dialog;
 using System;
 using System.Text;
 using System.Threading.Tasks;
 using Velopack;
 using Velopack.Sources;
-using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace naget.Helpers;
 
@@ -48,9 +47,38 @@ public class Updater
 			var url = GetUpdateUrl();
 			App.Logger.Debug($"Update URL: {url}");
 
-			var mgr = new UpdateManager(new SimpleWebSource(url));
+			var source = new SimpleWebSource(url);
+			var mgr = new UpdateManager(source);
 
 			var newVersion = await mgr.CheckForUpdatesAsync();
+
+			// リリースチャンネルが nightly の場合はメタデータを比較して、メタデータが異なる場合はアップデートを実行する
+			if (newVersion == null && App.ProductReleaseChannel == "nightly")
+			{
+				try
+				{
+					// フィードを取得
+					var feed = await ((IUpdateSource)source).GetReleaseFeed(new VelopackLoggerAdapter(), App.ProductReleaseChannel, "naget", null, null);
+					if (feed != null && feed.Assets.Length > 0)
+					{
+						// 最新バージョンを取得
+						var latest = feed.Assets.OrderByDescending(x => x.Version).First();
+						var current = mgr.CurrentVersion;
+
+						// バージョンが一致しているが、メタデータが異なる場合はアップデートとみなす
+						if (current != null && latest.Version == current && latest.Version.Metadata != current.Metadata)
+						{
+							App.Logger.Debug($"Nightly update available (Metadata mismatch): {current.Metadata} -> {latest.Version.Metadata}");
+							newVersion = new UpdateInfo(latest, false);
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					App.Logger.Error($"Failed to check nightly metadata: {ex.Message}");
+				}
+			}
+
 			if (newVersion == null)
 			{
 				App.Logger.Debug("No updates available.");
@@ -194,5 +222,12 @@ public class Updater
 		// 2. 指定されていない場合はデフォルトの URL を返す
 		// Velopack はディレクトリの URL を期待する
 		return $"https://nagetupd.milkeyyy.com/";
+	}
+}
+internal class VelopackLoggerAdapter : Velopack.Logging.IVelopackLogger
+{
+	public void Log(Velopack.Logging.VelopackLogLevel level, string? message, Exception? exception = null)
+	{
+		App.Logger.Debug($"[Velopack] {level}: {message}");
 	}
 }
