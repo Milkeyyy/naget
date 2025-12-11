@@ -58,7 +58,7 @@ public class Updater
 				try
 				{
 					// フィードを取得
-					var feed = await ((IUpdateSource)source).GetReleaseFeed(new VelopackLoggerAdapter(), App.ProductReleaseChannel, "naget", null, null);
+					var feed = await ((IUpdateSource)source).GetReleaseFeed(new VelopackLoggerAdapter(), "naget", VelopackRuntimeInfo.SystemRid + "-" + App.ProductReleaseChannel, null, null);
 					if (feed != null && feed.Assets.Length > 0)
 					{
 						// 最新バージョンを取得
