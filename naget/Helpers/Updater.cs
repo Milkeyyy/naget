@@ -65,6 +65,9 @@ public class Updater
 						var latest = feed.Assets.OrderByDescending(x => x.Version).First();
 						var current = mgr.CurrentVersion;
 
+						App.Logger.Debug($" Latest Version: {latest.Version} (Metadata: {latest.Version.Metadata})");
+						App.Logger.Debug($"Current Version: {current} (Metadata: {current.Metadata})");
+
 						// バージョンが一致しているが、メタデータが異なる場合はアップデートとみなす
 						if (current != null && latest.Version == current && latest.Version.Metadata != current.Metadata)
 						{
@@ -179,7 +182,7 @@ public class Updater
 			Title = Resources.Updater_Dialog_UpdateAvailable_Title + " - " + App.ProductName,
 			Header = Resources.Updater_Dialog_UpdateAvailable_Title,
 			SubHeader = Resources.Updater_Dialog_UpdateAvailable_Description,
-			Content = string.Format(null, desc, App.ProductFullVersion, info.TargetFullRelease.Version), // Check version property
+			Content = string.Format(null, desc, App.ProductFullVersion, info.TargetFullRelease.Version.ToFullString()), // Check version property
 			Buttons = {
 				new TaskDialogButton(Resources.Dialog_Button_Yes, TaskDialogStandardResult.Yes),
 				new TaskDialogButton(Resources.Dialog_Button_No, TaskDialogStandardResult.No)
