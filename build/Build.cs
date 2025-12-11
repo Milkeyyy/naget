@@ -100,7 +100,7 @@ class Build : NukeBuild
 		.Executes(() =>
 		{
 			var buildInfo = LoadAndSaveBuildInfo();
-			AbsolutePath output = RootDirectory / "_Pack" / Runtime;
+			AbsolutePath output = RootDirectory / "_Pack" / Runtime / "Build";
 
 			DotNetTasks.DotNetPublish(_ => _
 				.SetProject(ProjectFile)
@@ -123,7 +123,7 @@ class Build : NukeBuild
 			var buildInfo = LoadAndSaveBuildInfo();
 
 			AbsolutePath directory = ProjectFolder;
-			AbsolutePath output = RootDirectory / "_Pack" / Runtime;
+			AbsolutePath output = RootDirectory / "_Pack" / Runtime / "Build";
 
 			DotNetTasks.DotNetMSBuild(s => s
 				.SetProcessWorkingDirectory(directory)

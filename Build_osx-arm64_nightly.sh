@@ -12,6 +12,14 @@ OutputDir="./_Pack"
 VelopackChannel="${RuntimeOs}-${RuntimeArch}-${ReleaseChannel}"
 # ------------------------------
 
+# 引数チェック: --skip-upload が含まれているかどうか
+SKIP_UPLOAD=0
+for arg in "$@"; do
+    if [ "$arg" = "--skip-upload" ]; then
+        SKIP_UPLOAD=1
+    fi
+done
+
 # Load env File
 set -o allexport
 source ./Build_env.txt
@@ -25,11 +33,11 @@ cd "$(dirname "$0")"
 
 echo "Load Build Info"
 echo ""
+CommitHash=$(git rev-parse --short HEAD)
 ./build.sh loadandsavebuildinfojson --releasechannel "${ReleaseChannel}" --releasenumber "${CommitHash}"
 brew install jq
 AppVersion=$(jq -r ".version" "./naget/build.json")
 AppFullVersion=$(jq -r ".full_version" "./naget/build.json")
-CommitHash=$(git rev-parse --short HEAD)
 echo ""
 
 echo "-         Runtime: ${Runtime}"
@@ -57,31 +65,23 @@ echo ""
 dotnet tool install -g vpk || true
 echo ""
 
-echo "Processing Releases (Velopack)"
+echo "Processing Releases - Velopack"
 echo ""
+
 cd "${OutputDir}/${Runtime}"
 
-echo "Download Previous Release"
-vpk download s3 --bucket naget-update --endpoint "${R2_ENDPOINT}" --channel "${VelopackChannel}" || echo "Warning: Failed to download previous release."
+echo "Download Previous Release - Velopack"
+vpk download s3 --bucket naget-update --endpoint "${R2_ENDPOINT}" --channel "${VelopackChannel}" -o "./Releases" || echo "Warning: Failed to download previous release."
 
-# Clean up existing version to avoid overwrite prompt
-if [ -d "Releases" ]; then
-    echo "Cleaning up existing version ${AppFullVersion}..."
-    rm -f "Releases/naget-${AppFullVersion}-osx-${RuntimeArch}-full.nupkg"
-    rm -f "Releases/naget-${AppFullVersion}-osx-${RuntimeArch}-delta.nupkg"
-    rm -f "Releases/naget-${AppFullVersion}-osx-${RuntimeArch}-Setup.pkg"
-    
-    if [ -f "Releases/releases.${VelopackChannel}.json" ]; then
-        jq "del(.Assets[] | select(.Version == \"${AppFullVersion}\"))" "Releases/releases.${VelopackChannel}.json" > "Releases/releases.tmp.json"
-        mv "Releases/releases.tmp.json" "Releases/releases.${VelopackChannel}.json"
-    fi
+echo "Build Installer - Velopack"
+vpk pack -xy -u naget -v "${AppFullVersion}" -p "./Build" -o "./Releases" -i "../../Logo/naget.icns" -e naget --channel "${VelopackChannel}" --packAuthors "Milkeyyy"
+
+if [ "$SKIP_UPLOAD" = "1" ]; then
+    echo "Upload SKIPPED"
+else
+    echo "Upload - Velopack"
+    vpk upload -xy s3 --bucket naget-update --endpoint "${R2_ENDPOINT}" --channel "${VelopackChannel}" -o "./Releases"
 fi
-
-echo "Build Installer"
-vpk pack -u naget -v "${AppFullVersion}" -p . -i "Logo/naget.icns" -e naget --channel "${VelopackChannel}" --packAuthors "Milkeyyy"
-
-echo "Upload"
-vpk upload s3 --bucket naget-update --endpoint "${R2_ENDPOINT}" --channel "${VelopackChannel}"
 
 echo ""
 
