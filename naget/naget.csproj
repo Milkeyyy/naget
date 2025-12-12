@@ -31,10 +31,6 @@
 
 	<!-- 単一ファイル化 & ファイルサイズ削減 & 圧縮 -->
 	<PropertyGroup>
-		<PublishSingleFile>true</PublishSingleFile>
-		<SelfContained>false</SelfContained>
-		<EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
-		<IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
 		<DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
 	</PropertyGroup>
 	<PropertyGroup Label="Avalonia">
