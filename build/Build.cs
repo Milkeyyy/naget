@@ -112,6 +112,8 @@ class Build : NukeBuild
 				.SetFileVersion(buildInfo["version"])
 				.SetAssemblyVersion(buildInfo["version"])
 				.SetOutput(output)
+				.DisableSelfContained()
+				.EnablePublishTrimmed()
 				.EnableNoRestore()
 			);
 		});
@@ -140,7 +142,8 @@ class Build : NukeBuild
 				.SetProperty("CFBundleIconFile", RootDirectory / "Logo" / "naget.icns")
 				.SetProperty("RuntimeIdentifier", Runtime)
 				.SetProperty("UseAppHost", true)
-				.SetProperty("SelfContained", false));
+				.SetProperty("SelfContained", false)
+				.EnablePublishTrimmed());
 		});
 
 	Target BuildPkg => _ => _
