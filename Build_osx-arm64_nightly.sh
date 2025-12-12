@@ -6,10 +6,10 @@ set -u
 RuntimeOs="osx"
 RuntimeArch="arm64"
 Runtime="${RuntimeOs}-${RuntimeArch}"
-ReleaseChannel="nightly"
-AppCastBaseUrl="https://nagetupd.milkeyyy.com/${ReleaseChannel}/${Runtime}"
+AppReleaseChannel="nightly"
+AppCastBaseUrl="https://nagetupd.milkeyyy.com/${AppReleaseChannel}/${Runtime}"
 OutputDir="./_Pack"
-VelopackChannel="${RuntimeOs}-${RuntimeArch}-${ReleaseChannel}"
+VelopackChannel="${RuntimeOs}-${RuntimeArch}-${AppReleaseChannel}"
 # ------------------------------
 
 # 引数チェック: --skip-upload が含まれているかどうか
@@ -34,7 +34,7 @@ cd "$(dirname "$0")"
 echo "Load Build Info"
 echo ""
 
-./build.sh loadandsavebuildinfojson --releasechannel "${ReleaseChannel}"
+./build.sh loadandsavebuildinfojson --releasechannel "${AppReleaseChannel}"
 
 brew install jq
 
@@ -47,8 +47,8 @@ echo ""
 echo "        Runtime: ${Runtime}"
 echo "   Full Version: ${AppFullVersion}"
 echo "-         Version: ${AppVersion}"
-echo "- Release Channel: ${ReleaseChannel}"
-echo "-  Release Number: ${CommitHash}"
+echo "- Release Channel: ${AppReleaseChannel}"
+echo "-  Release Number: ${AppReleaseNumber}"
 echo ""
 
 echo "Cleanup Output Directory"
@@ -62,7 +62,7 @@ echo ""
 
 echo "Compile"
 echo ""
-./build.sh --runtime "${Runtime}" --releasechannel "${ReleaseChannel}" --releasenumber "${AppReleaseNumber}"
+./build.sh --runtime "${Runtime}" --releasechannel "${AppReleaseChannel}" --releasenumber "${AppReleaseNumber}"
 echo ""
 
 echo "Install Velopack CLI"
