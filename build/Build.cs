@@ -1,4 +1,5 @@
-﻿using Nuke.Common;
+﻿using System;
+using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
@@ -47,19 +48,23 @@ class Build : NukeBuild
 			}
 		);
 
+		string commitHash = Repository.Commit[..7];
+		d["commit_hash"] = commitHash;
+
+		string buildDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+		d["build_date"] = buildDate;
+		d["release_number"] = buildDate;
+
 		if (ReleaseChannel != null) { d["release_channel"] = ReleaseChannel; }
 		if (ReleaseNumber != null) { d["release_number"] = ReleaseNumber; }
 
-		int rn;
+		//int rn;
 		string st = ".";
 		// リリース番号が数字でない場合は . ではなく + で区切る
-		try { rn = int.Parse(d["release_number"]); }
-		catch { rn = -1; }
-		if (rn == -1) st = "+";
+		// try { rn = int.Parse(d["release_number"]); }
+		// catch { rn = -1; }
+		// if (rn == -1) st = "+";
 		d["full_version"] = $"{d["version"]}-{d["release_channel"]}{st}{d["release_number"]}";
-
-		string commit_hash = Repository.Commit.Substring(0, 7);
-		d["commit_hash"] = commit_hash;
 
 		// 書き換えたビルド情報を上書き保存する
 		File.WriteAllText(ProjectFolder / "build.json", JsonSerializer.Serialize(d, options: new JsonSerializerOptions() { WriteIndented = true }));

@@ -52,36 +52,6 @@ public class Updater
 
 			var newVersion = await mgr.CheckForUpdatesAsync();
 
-			// リリースチャンネルが nightly の場合はメタデータを比較して、メタデータが異なる場合はアップデートを実行する
-			if (newVersion == null && App.ProductReleaseChannel == "nightly")
-			{
-				try
-				{
-					// フィードを取得
-					var feed = await ((IUpdateSource)source).GetReleaseFeed(new VelopackLoggerAdapter(), "naget", VelopackRuntimeInfo.SystemRid + "-" + App.ProductReleaseChannel, null, null);
-					if (feed != null && feed.Assets.Length > 0)
-					{
-						// 最新バージョンを取得
-						var latest = feed.Assets.OrderByDescending(x => x.Version).First();
-						var current = mgr.CurrentVersion;
-
-						App.Logger.Debug($" Latest Version: {latest.Version} (Metadata: {latest.Version.Metadata})");
-						App.Logger.Debug($"Current Version: {current} (Metadata: {current.Metadata})");
-
-						// バージョンが一致しているが、メタデータが異なる場合はアップデートとみなす
-						if (current != null && latest.Version == current && latest.Version.Metadata != current.Metadata)
-						{
-							App.Logger.Debug($"Nightly update available (Metadata mismatch): {current.Metadata} -> {latest.Version.Metadata}");
-							newVersion = new UpdateInfo(latest, false);
-						}
-					}
-				}
-				catch (Exception ex)
-				{
-					App.Logger.Error($"Failed to check nightly metadata: {ex.Message}");
-				}
-			}
-
 			if (newVersion == null)
 			{
 				App.Logger.Debug("No updates available.");

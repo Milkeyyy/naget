@@ -40,17 +40,8 @@ public class App : Application
 	private static string _releaseNumber = string.Empty;
 	public static string ProductReleaseNumber => _releaseNumber;
 
-	public static string ProductFullVersion
-	{
-		get
-		{
-			string st = ".";
-			// リリース番号が数字でない場合は . ではなく + で区切る
-			var rn = Utils.ConvertToInt(ProductReleaseNumber, -1);
-			if (rn == -1) st = "+";
-			return $"{ProductVersion}-{ProductReleaseChannel}{st}{ProductReleaseNumber}";
-		}
-	}
+	private static string _fullVersion = string.Empty;
+	public static string ProductFullVersion => _fullVersion;
 
 	private static string _copyright = string.Empty;
 	public static string ProductCopyright => _copyright;
@@ -107,6 +98,7 @@ public class App : Application
 				_version = infoDict.GetValueOrDefault("version", asm.GetName().Version?.ToString() ?? "0.0.0");
 				_releaseChannel = infoDict.GetValueOrDefault("release_channel", "unknown");
 				_releaseNumber = infoDict.GetValueOrDefault("release_number", "0");
+				_fullVersion = infoDict.GetValueOrDefault("full_version", "0.0.0-unknown.0");
 			}
 		}
 

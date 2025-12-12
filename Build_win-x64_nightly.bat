@@ -4,10 +4,10 @@ rem ------------------------------
 set RuntimeOs=win
 set RuntimeArch=x64
 set Runtime=%RuntimeOs%-%RuntimeArch%
-set ReleaseChannel=nightly
-set AppCastBaseUrl=https://nagetupd.milkeyyy.com/%ReleaseChannel%/%Runtime%
+set AppReleaseChannel=nightly
+set AppCastBaseUrl=https://nagetupd.milkeyyy.com/%AppReleaseChannel%/%Runtime%
 set OutputDir=./_Pack
-set VelopackChannel=%RuntimeOs%-%RuntimeArch%-%ReleaseChannel%
+set VelopackChannel=%RuntimeOs%-%RuntimeArch%-%AppReleaseChannel%
 rem ------------------------------
 
 rem 引数チェック: --skip-upload が含まれているかどうか
@@ -30,17 +30,22 @@ cd %~dp0
 
 echo Load Build Info
 echo.
-for /f "usebackq delims=" %%A in (`git rev-parse --short HEAD`) do set CommitHash=%%A
-call ./build.cmd loadandsavebuildinfojson --releasechannel %ReleaseChannel% --releasenumber %CommitHash%
+
+call ./build.cmd loadandsavebuildinfojson --releasechannel %AppReleaseChannel%
+
 call winget install jqlang.jq
+
 for /f "usebackq delims=" %%A in (`jq -r ".version" "./naget/build.json"`) do set AppVersion=%%A
 for /f "usebackq delims=" %%A in (`jq -r ".full_version" "./naget/build.json"`) do set AppFullVersion=%%A
+for /f "usebackq delims=" %%A in (`jq -r ".release_number" "./naget/build.json"`) do set AppReleaseNumber=%%A
+
 echo.
 
-echo -         Runtime: %Runtime%
+echo         Runtime: %Runtime%
+echo    Full Version: %AppFullVersion%
 echo -         Version: %AppVersion%
-echo - Release Channel: %ReleaseChannel%
-echo -     Commit Hash: %CommitHash%
+echo - Release Channel: %AppReleaseChannel%
+echo -  Release Number: %AppReleaseNumber%
 echo.
 
 echo Cleanup Output Directory
@@ -58,7 +63,7 @@ echo.
 
 echo Compile
 echo.
-call ./build.cmd --runtime %Runtime% --releasechannel %ReleaseChannel% --releasenumber %CommitHash%
+call ./build.cmd --runtime %Runtime% --releasechannel %AppReleaseChannel% --releasenumber %AppReleaseNumber%
 echo.
 
 echo Build Installer and Upload - Velopack

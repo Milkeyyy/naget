@@ -33,17 +33,22 @@ cd "$(dirname "$0")"
 
 echo "Load Build Info"
 echo ""
-CommitHash=$(git rev-parse --short HEAD)
-./build.sh loadandsavebuildinfojson --releasechannel "${ReleaseChannel}" --releasenumber "${CommitHash}"
+
+./build.sh loadandsavebuildinfojson --releasechannel "${ReleaseChannel}"
+
 brew install jq
+
 AppVersion=$(jq -r ".version" "./naget/build.json")
 AppFullVersion=$(jq -r ".full_version" "./naget/build.json")
+AppReleaseNumber=$(jq -r ".release_number" "./naget/build.json")
+
 echo ""
 
-echo "-         Runtime: ${Runtime}"
+echo "        Runtime: ${Runtime}"
+echo "   Full Version: ${AppFullVersion}"
 echo "-         Version: ${AppVersion}"
 echo "- Release Channel: ${ReleaseChannel}"
-echo "-     Commit Hash: ${CommitHash}"
+echo "-  Release Number: ${CommitHash}"
 echo ""
 
 echo "Cleanup Output Directory"
@@ -57,7 +62,7 @@ echo ""
 
 echo "Compile"
 echo ""
-./build.sh --runtime "${Runtime}" --releasechannel "${ReleaseChannel}" --releasenumber "${CommitHash}"
+./build.sh --runtime "${Runtime}" --releasechannel "${ReleaseChannel}" --releasenumber "${AppReleaseNumber}"
 echo ""
 
 echo "Install Velopack CLI"
