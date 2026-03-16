@@ -95,13 +95,13 @@ jobs:
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
       run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget --channel ${{ env.VelopackChannel }} --packAuthors Milkeyyy -i ../../Logo/naget.icns
 
-    - name: Delete Existing Release Assets
-      continue-on-error: true
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh release view nightly --repo https://github.com/Milkeyyy/naget --json assets --jq '.assets[] | select(.name | contains("${{ env.VelopackChannel }}")) | .name' | xargs -I {} gh release delete-asset nightly {} --repo https://github.com/Milkeyyy/naget --yes
-
     - name: Upload to GitHub
-      working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
-      run: vpk upload github --repoUrl https://github.com/Milkeyyy/naget --channel ${{ env.VelopackChannel }} --token ${{ secrets.GITHUB_TOKEN }} --tag nightly --targetCommitish ${{ github.sha }} --releaseName "Nightly Build - ${{ env.COMMIT_HASH_SHORT }}" --pre --merge --publish -o ./Releases
+      uses: andelf/nightly-release@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: nightly
+        name: "Nightly Build - `${{ env.COMMIT_HASH_SHORT }}`"
+        prerelease: true
+        files: |
+          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/Releases/*
