@@ -96,4 +96,4 @@ jobs:
 
     - name: Upload to GitHub
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
-      run: vpk upload github --repoUrl https://github.com/Milkeyyy/naget --channel ${{ env.VelopackChannel }} --token ${{ secrets.GITHUB_TOKEN }} --tag nightly --targetCommitish update --releaseName "Nightly Build" --pre --merge --publish -o ./Releases
+      run: vpk upload github --repoUrl https://github.com/Milkeyyy/naget --channel ${{ env.VelopackChannel }} --token ${{ secrets.GITHUB_TOKEN }} --tag nightly --targetCommitish ${{ github.sha }} --releaseName "Nightly Build - `${{ env.COMMIT_HASH_SHORT }}`" --pre --merge --publish -o ./Releases
