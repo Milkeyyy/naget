@@ -7,7 +7,7 @@ RuntimeOs="osx"
 RuntimeArch="arm64"
 Runtime="${RuntimeOs}-${RuntimeArch}"
 AppReleaseChannel="nightly"
-AppCastBaseUrl="https://nagetupd.milkeyyy.com/${AppReleaseChannel}/${Runtime}"
+# AppCastBaseUrl="https://nagetupd.milkeyyy.com/${AppReleaseChannel}/${Runtime}"
 OutputDir="./_Pack"
 VelopackChannel="${RuntimeOs}-${RuntimeArch}-${AppReleaseChannel}"
 # ------------------------------
@@ -76,7 +76,7 @@ echo ""
 cd "${OutputDir}/${Runtime}"
 
 echo "Download Previous Release - Velopack"
-vpk download s3 --bucket naget-update --endpoint "${R2_ENDPOINT}" --channel "${VelopackChannel}" -o "./Releases" || echo "Warning: Failed to download previous release."
+vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel "${VelopackChannel}" --token "${GITHUB_TOKEN}" --pre -o ./Releases || echo "Warning: Failed to download previous release."
 
 echo "Build Installer - Velopack"
 vpk pack -xy -u naget -v "${AppFullVersion}" -p "./Build" -o "./Releases" -i "../../Logo/naget.icns" -e naget --channel "${VelopackChannel}" --packAuthors "Milkeyyy"
@@ -85,7 +85,7 @@ if [ "$SKIP_UPLOAD" = "1" ]; then
     echo "Upload SKIPPED"
 else
     echo "Upload - Velopack"
-    vpk upload -xy s3 --bucket naget-update --endpoint "${R2_ENDPOINT}" --channel "${VelopackChannel}" -o "./Releases"
+    vpk upload github --repoUrl https://github.com/Milkeyyy/naget --channel "${VelopackChannel}" --token "${GITHUB_TOKEN}" --tag nightly --targetCommitish update --releaseName "Nightly Build" --pre --merge --publish -o ./Releases
 fi
 
 echo ""

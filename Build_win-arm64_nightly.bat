@@ -5,7 +5,7 @@ set RuntimeOs=win
 set RuntimeArch=arm64
 set Runtime=%RuntimeOs%-%RuntimeArch%
 set AppReleaseChannel=nightly
-set AppCastBaseUrl=https://nagetupd.milkeyyy.com/%AppReleaseChannel%/%Runtime%
+rem set AppCastBaseUrl=https://nagetupd.milkeyyy.com/%AppReleaseChannel%/%Runtime%
 set OutputDir=./_Pack
 set VelopackChannel=%RuntimeOs%-%RuntimeArch%-%AppReleaseChannel%
 rem ------------------------------
@@ -73,7 +73,7 @@ call dotnet tool install -g vpk
 pushd "%OutputDir%/%Runtime%"
 
 echo Download Previous Release - Velopack
-call vpk download s3 --bucket naget-update --endpoint "%R2_ENDPOINT%" --channel %VelopackChannel% -o ./Releases
+call vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel %VelopackChannel% --token %GITHUB_TOKEN% --pre -o ./Releases
 if %ERRORLEVEL% neq 0 echo Warning: Failed to download previous release.
 
 echo Build Installer - Velopack
@@ -83,7 +83,7 @@ if %SKIP_UPLOAD%==1 (
     echo Upload SKIPPED
 ) else (
     echo Upload - Velopack
-    call vpk upload -xy s3 --bucket naget-update --endpoint "%R2_ENDPOINT%" --channel %VelopackChannel% -o ./Releases
+    call vpk upload github --repoUrl https://github.com/Milkeyyy/naget --channel %VelopackChannel% --token %GITHUB_TOKEN% --tag nightly --targetCommitish update --releaseName "Nightly Build" --pre --merge --publish -o ./Releases
 )
 
 popd
