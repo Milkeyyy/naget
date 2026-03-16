@@ -70,8 +70,10 @@ jobs:
 
 
     - name: Install vpk
-      continue-on-error: true
       run: dotnet tool install -g vpk
+
+    - name: Add dotnet tools to PATH
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
     - name: Create Releases Directory
       shell: pwsh
