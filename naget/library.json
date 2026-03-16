@@ -1,9 +1,9 @@
 [
     {
         "PackageId": "Avalonia",
-        "PackageVersion": "11.3.9",
+        "PackageVersion": "11.3.12",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
-        "Copyright": "Copyright 2013-2025 \u00a9 The AvaloniaUI Project",
+        "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
         "License": "MIT",
         "LicenseUrl": "https://licenses.nuget.org/MIT",
@@ -11,9 +11,9 @@
     },
     {
         "PackageId": "Avalonia.Desktop",
-        "PackageVersion": "11.3.9",
+        "PackageVersion": "11.3.12",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
-        "Copyright": "Copyright 2013-2025 \u00a9 The AvaloniaUI Project",
+        "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
         "License": "MIT",
         "LicenseUrl": "https://licenses.nuget.org/MIT",
@@ -31,7 +31,7 @@
     },
     {
         "PackageId": "FluentAvaloniaUI",
-        "PackageVersion": "2.4.1",
+        "PackageVersion": "2.5.0",
         "Authors": "FluentAvalonia",
         "License": "MIT",
         "LicenseUrl": "https://licenses.nuget.org/MIT",
@@ -39,7 +39,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration",
-        "PackageVersion": "10.0.0",
+        "PackageVersion": "10.0.5",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -49,7 +49,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration.Binder",
-        "PackageVersion": "10.0.0",
+        "PackageVersion": "10.0.5",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -59,7 +59,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration.Json",
-        "PackageVersion": "10.0.0",
+        "PackageVersion": "10.0.5",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -68,18 +68,8 @@
         "LicenseInformationOrigin": 0
     },
     {
-        "PackageId": "NetSparkleUpdater.UI.Avalonia",
-        "PackageVersion": "3.0.4",
-        "PackageProjectUrl": "https://github.com/NetSparkleUpdater/NetSparkle",
-        "Copyright": "Copyright \u00a9 2025",
-        "Authors": "Deadpikle",
-        "License": "MIT",
-        "LicenseUrl": "https://licenses.nuget.org/MIT",
-        "LicenseInformationOrigin": 0
-    },
-    {
         "PackageId": "Nuke.Common",
-        "PackageVersion": "9.0.4",
+        "PackageVersion": "10.1.0",
         "PackageProjectUrl": "https://nuke.build/",
         "Copyright": "Copyright 2025 Maintainers of NUKE",
         "Authors": "Matthias Koch and contributors",
@@ -89,7 +79,7 @@
     },
     {
         "PackageId": "SharpHook",
-        "PackageVersion": "7.1.0",
+        "PackageVersion": "7.1.1",
         "PackageProjectUrl": "https://sharphook.tolik.io/",
         "Copyright": "(c) 2021 Anatoliy Pylypchuk",
         "Authors": "Tolik Pylypchuk",
@@ -99,10 +89,20 @@
     },
     {
         "PackageId": "System.Text.Json",
-        "PackageVersion": "10.0.0",
+        "PackageVersion": "10.0.5",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
+        "License": "MIT",
+        "LicenseUrl": "https://licenses.nuget.org/MIT",
+        "LicenseInformationOrigin": 0
+    },
+    {
+        "PackageId": "Velopack",
+        "PackageVersion": "0.0.1298",
+        "PackageProjectUrl": "https://github.com/velopack/velopack",
+        "Copyright": "Copyright \u00a9 Velopack Ltd. All rights reserved.",
+        "Authors": "Velopack Ltd,Caelan Sayler,Kevin Bost",
         "License": "MIT",
         "LicenseUrl": "https://licenses.nuget.org/MIT",
         "LicenseInformationOrigin": 0
