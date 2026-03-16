@@ -90,19 +90,19 @@
 			<DependentUpon>Resources.resx</DependentUpon>
 		</Compile>
 		<Compile Update="Views\UpdateCompleteWindow.axaml.cs">
-		  <DependentUpon>UpdateCompleteWindow.axaml</DependentUpon>
+			<DependentUpon>UpdateCompleteWindow.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\BrowserWindow.axaml.cs">
 			<DependentUpon>BrowserWindow.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\AboutWindow.axaml.cs">
-		  <DependentUpon>AboutWindow.axaml</DependentUpon>
+			<DependentUpon>AboutWindow.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Dialog\InputDialogContent.axaml.cs">
-		  <DependentUpon>InputDialogContent.axaml</DependentUpon>
+			<DependentUpon>InputDialogContent.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Settings\AppSettingsView.axaml.cs">
-		  <DependentUpon>AppSettingsView.axaml</DependentUpon>
+			<DependentUpon>AppSettingsView.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Settings\SearchEngineDialogContent.axaml.cs">
 			<DependentUpon>SearchEngineDialogContent.axaml</DependentUpon>
@@ -169,6 +169,6 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Assets\Fonts\" />
+		<Folder Include="Assets\Fonts\" />
 	</ItemGroup>
 </Project>
