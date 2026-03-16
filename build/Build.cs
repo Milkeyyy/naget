@@ -48,7 +48,7 @@ class Build : NukeBuild
 			}
 		);
 
-		string commitHash = Repository.Commit[..7];
+		string commitHash = Repository?.Commit?[..7] ?? "unknown";
 		d["commit_hash"] = commitHash;
 
 		string buildDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
