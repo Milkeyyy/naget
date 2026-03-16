@@ -109,7 +109,7 @@
     },
     {
         "PackageId": "WebViewControl-Avalonia",
-        "PackageVersion": "3.120.10",
+        "PackageVersion": "3.120.11",
         "PackageProjectUrl": "https://github.com/OutSystems/WebView",
         "Copyright": "Copyright \u00a9 OutSystems 2023",
         "Authors": "OutSystems",
@@ -119,7 +119,7 @@
     },
     {
         "PackageId": "WebViewControl-Avalonia-ARM64",
-        "PackageVersion": "3.120.10",
+        "PackageVersion": "3.120.11",
         "PackageProjectUrl": "https://github.com/OutSystems/WebView",
         "Copyright": "Copyright \u00a9 OutSystems 2023",
         "Authors": "OutSystems",
