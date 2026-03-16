@@ -31,12 +31,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
 
     - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.0.x
 
@@ -140,7 +140,7 @@ jobs:
     # アップロード (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
       name: Upload Installer
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: build-${{ env.rid }}
         path: |
@@ -150,7 +150,7 @@ jobs:
     # アップロード (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Upload Bundle
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: build-${{ env.rid }}
         path: |
@@ -167,12 +167,12 @@ jobs:
 
     steps:
       - name: Checkout (gh-pages)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
           ref: gh-pages
 
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: build-*
           path: ./
@@ -208,6 +208,6 @@ jobs:
           file_pattern: ./appcast_*.json
 
       - name: Delete Build Artifact
-        uses: GeekyEggo/delete-artifact@v5
+        uses: GeekyEggo/delete-artifact@v6
         with:
           name: build-*
