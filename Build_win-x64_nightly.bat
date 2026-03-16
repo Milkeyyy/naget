@@ -4,10 +4,20 @@ rem ------------------------------
 set RuntimeOs=win
 set RuntimeArch=x64
 set Runtime=%RuntimeOs%-%RuntimeArch%
-set ReleaseChannel=nightly
-set AppCastBaseUrl=https://nagetupd.milkeyyy.com/%ReleaseChannel%/%Runtime%
+set AppReleaseChannel=nightly
+rem set AppCastBaseUrl=https://nagetupd.milkeyyy.com/%AppReleaseChannel%/%Runtime%
 set OutputDir=./_Pack
+set VelopackChannel=%RuntimeOs%-%RuntimeArch%-%AppReleaseChannel%
 rem ------------------------------
+
+rem 引数チェック: --skip-upload が含まれているかどうか
+set SKIP_UPLOAD=0
+:parse_args
+if "%~1"=="" goto args_done
+if /i "%~1"=="--skip-upload" set SKIP_UPLOAD=1
+shift
+goto parse_args
+:args_done
 
 rem Load env File
 call ./scripts/load_env.bat ./Build_env.txt
@@ -20,17 +30,22 @@ cd %~dp0
 
 echo Load Build Info
 echo.
-call ./build.cmd loadandsavebuildinfojson --releasechannel %ReleaseChannel% --releasenumber %CommitHash%
+
+call ./build.cmd loadandsavebuildinfojson --releasechannel %AppReleaseChannel%
+
 call winget install jqlang.jq
+
 for /f "usebackq delims=" %%A in (`jq -r ".version" "./naget/build.json"`) do set AppVersion=%%A
 for /f "usebackq delims=" %%A in (`jq -r ".full_version" "./naget/build.json"`) do set AppFullVersion=%%A
-for /f "usebackq delims=" %%A in (`git rev-parse --short HEAD`) do set CommitHash=%%A
+for /f "usebackq delims=" %%A in (`jq -r ".release_number" "./naget/build.json"`) do set AppReleaseNumber=%%A
+
 echo.
 
-echo -         Runtime: %Runtime%
+echo         Runtime: %Runtime%
+echo    Full Version: %AppFullVersion%
 echo -         Version: %AppVersion%
-echo - Release Channel: %ReleaseChannel%
-echo -     Commit Hash: %CommitHash%
+echo - Release Channel: %AppReleaseChannel%
+echo -  Release Number: %AppReleaseNumber%
 echo.
 
 echo Cleanup Output Directory
@@ -48,38 +63,30 @@ echo.
 
 echo Compile
 echo.
-call ./build.cmd --runtime %Runtime% --releasechannel %ReleaseChannel% --releasenumber %CommitHash%
+call ./build.cmd --runtime %Runtime% --releasechannel %AppReleaseChannel% --releasenumber %AppReleaseNumber%
 echo.
 
-echo Build Installer
+echo Build Installer and Upload - Velopack
 echo.
-call ./build.cmd buildinstaller --runtime %Runtime% --releasechannel %ReleaseChannel% --releasenumber %CommitHash%
-echo.
+call dotnet tool install -g vpk
 
-echo Generate App Cast
-echo.
-call dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-call netsparkle-generate-appcast -n naget -u %AppCastBaseUrl% -o windows-%RuntimeArch% -a %OutputDir%/%Runtime% -b %OutputDir%/%Runtime% -e exe --output-file-name appcast_%ReleaseChannel%_%Runtime% --output-type json --file-version %AppFullVersion% --channel %ReleaseChannel%
-echo.
+pushd "%OutputDir%/%Runtime%"
 
-echo Install AWS CLI
-echo.
-call msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi /passive
-echo.
+echo Download Previous Release - Velopack
+call vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel %VelopackChannel% --token %GITHUB_TOKEN% --pre -o ./Releases
+if %ERRORLEVEL% neq 0 echo Warning: Failed to download previous release.
 
-echo Upload App Installer
-echo.
-rem App Installer
-call aws s3 cp "%OutputDir%/%Runtime%/naget_Setup_%Runtime%.exe" "s3://naget-update/%ReleaseChannel%/%Runtime%/naget_Setup_%Runtime%.exe" --endpoint-url "%R2_ENDPOINT%"
-echo.
+echo Build Installer - Velopack
+call vpk pack -xy -u naget -v %AppFullVersion% -p ./Build -o ./Releases -e naget.exe --channel %VelopackChannel% --packAuthors Milkeyyy -i ..\..\Logo\naget.ico --noPortable
 
-echo Upload App Cast
-echo.
-rem App Cast
-call aws s3 cp "%OutputDir%/%Runtime%/appcast_%ReleaseChannel%_%Runtime%.json" "s3://naget-update/appcast/appcast_%ReleaseChannel%_%Runtime%.json" --endpoint-url "%R2_ENDPOINT%"
-echo.
-rem App Cast Signature
-call aws s3 cp "%OutputDir%/%Runtime%/appcast_%ReleaseChannel%_%Runtime%.json.signature" "s3://naget-update/appcast/appcast_%ReleaseChannel%_%Runtime%.json.signature" --endpoint-url "%R2_ENDPOINT%"
+if %SKIP_UPLOAD%==1 (
+    echo Upload SKIPPED
+) else (
+    echo Upload - Velopack
+    call vpk upload github --repoUrl https://github.com/Milkeyyy/naget --channel %VelopackChannel% --token %GITHUB_TOKEN% --tag nightly --targetCommitish update --releaseName "Nightly Build" --pre --merge --publish -o ./Releases
+)
+
+popd
 echo.
 
 echo.

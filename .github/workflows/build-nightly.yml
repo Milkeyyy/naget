@@ -22,21 +22,22 @@ jobs:
 
     runs-on: ${{ matrix.runner }}
 
+    permissions:
+      contents: write
+
     env:
       rid: ${{ matrix.os }}-${{ matrix.arch }}
       OUTPUT_DIR: ./_Pack
-      APPCAST_DL_BASE_URL: https://github.com/Milkeyyy/naget/releases/download/nightly
-      SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
-      SPARKLE_PUBLIC_KEY: ${{ secrets.SPARKLE_PUBLIC_KEY }}
+      VelopackChannel: ${{ matrix.os }}-${{ matrix.arch }}-nightly
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
 
     - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.0.x
 
@@ -47,10 +48,6 @@ jobs:
     - name: Load Build Info
       shell: pwsh
       run: |
-        $buildInfo = (Get-Content "./naget/build.json" | ConvertFrom-Json)
-        echo "APP_VERSION=$($buildInfo.version)" >> $env:GITHUB_ENV
-        echo "APP_RELEASE_CHANNEL=$($buildInfo.release_channel)" >> $env:GITHUB_ENV
-        echo "APP_RELEASE_NUMBER=$($buildInfo.release_number)" >> $env:GITHUB_ENV
         python -c 'print("COMMIT_HASH_SHORT=" + ("${{ github.sha }}"[0:7]))' >> $env:GITHUB_ENV
 
 
@@ -59,45 +56,10 @@ jobs:
       name: Build
       run: ./build.cmd --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
 
-    - if: ${{ startsWith(env.rid, 'win') }}
-      name: Build Installer
-      run: ./build.cmd buildinstaller --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
-
     # ビルド (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
-      name: Build and Bundle
-      run: ./build.sh bundleapp --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
-
-    - if: ${{ startsWith(env.rid, 'osx') }}
-      name: Create Folder
-      shell: pwsh
-      run: |
-        New-Item -ItemType Directory -ErrorAction SilentlyContinue "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output"
-
-    - if: ${{ startsWith(env.rid, 'osx') }}
-      name: Move and Rename App
-      shell: pwsh
-      run: |
-        Move-Item -Path "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget.app" -Destination "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/naget.app"
-
-    - if: ${{ startsWith(env.rid, 'osx') }}
-      name: Create DMG
-      run: |
-        brew install create-dmg
-        create-dmg \
-        --volname "naget Installer" \
-        --volicon "./Logo/naget.icns" \
-        --window-size 800 400 \
-        --icon-size 100 \
-        --icon "naget.app" 200 190 \
-        --app-drop-link 600 185 \
-        --hide-extension "naget.app" \
-        "${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg" \
-        "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Output/"
-
-    - if: ${{ startsWith(env.rid, 'osx') }}
-      name: Rename DMG
-      run: mv ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget*.dmg ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg
+      name: Build
+      run: ./build.sh --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
 
 
     - name: Load Full Version
@@ -107,107 +69,31 @@ jobs:
         echo "APP_FULL_VERSION=$($buildInfo.full_version)" >> $env:GITHUB_ENV
 
 
-    # App Cast の生成
-    - if: ${{ startsWith(env.rid, 'win') }}
-      name: Generate App Cast (Windows)
+    - name: Install vpk
+      continue-on-error: true
+      run: dotnet tool install -g vpk
+
+    - name: Create Releases Directory
       shell: pwsh
-      run: |
-        dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o windows-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e exe --output-file-name appcast_nightly_${{ env.rid }} --output-type json --file-version ${{ env.APP_FULL_VERSION }} --channel nightly
+      run: New-Item -ItemType Directory -ErrorAction SilentlyContinue "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Releases"
 
-    - if: ${{ startsWith(env.rid, 'osx') }}
-      name: Generate App Cast (macOS)
-      shell: pwsh
-      run: |
-        dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator
-        netsparkle-generate-appcast -n naget -u ${{ env.APPCAST_DL_BASE_URL }} -o mac-${{ matrix.arch }} -a ${{ env.OUTPUT_DIR }}/${{ env.rid }} -b ${{ env.OUTPUT_DIR }}/${{ env.rid }} -e dmg --output-file-name appcast_nightly_${{ env.rid }} --output-type json --file-version ${{ env.APP_FULL_VERSION }} --channel nightly
+    - name: Download Previous Release
+      working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
+      continue-on-error: true
+      run: vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel ${{ env.VelopackChannel }} --token ${{ secrets.GITHUB_TOKEN }} --pre -o ./Releases
 
-    - name: Update App Cast Value (title)
-      uses: jossef/action-set-json-field@v2.1
-      with:
-        file: ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.json
-        field: items.title
-        value: naget ${{ env.APP_FULL_VERSION }}
-
-    - name: Update App Cast Value (version)
-      uses: jossef/action-set-json-field@v2.1
-      with:
-        file: ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.json
-        field: items.version
-        value: ${{ env.APP_FULL_VERSION }}
-
-
-    # アップロード (Windows)
+    # パック (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
-      name: Upload Installer
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-${{ env.rid }}
-        path: |
-          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_Setup_${{ env.rid }}.exe
-          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.json*
+      name: Pack
+      working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
+      run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget.exe --channel ${{ env.VelopackChannel }} --packAuthors Milkeyyy -i ../../Logo/naget.ico --noPortable
 
-    # アップロード (macOS)
+    # パック (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
-      name: Upload Bundle
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-${{ env.rid }}
-        path: |
-          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/naget_${{ env.rid }}.dmg
-          ${{ env.OUTPUT_DIR }}/${{ env.rid }}/appcast_nightly_${{ env.rid }}.json*
+      name: Pack
+      working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
+      run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget --channel ${{ env.VelopackChannel }} --packAuthors Milkeyyy -i ../../Logo/naget.icns
 
-
-  update-nightly-releases:
-    name: Update Nightly Releases
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout (gh-pages)
-        uses: actions/checkout@v2
-        with:
-          ref: gh-pages
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          pattern: build-*
-          path: ./
-          merge-multiple: true
-
-      - name: File List
-        run: ls ./
-
-      - name: Update Nightly Release
-        uses: andelf/nightly-release@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: nightly
-          name: 'Nightly Build'
-          prerelease: true
-          body: |
-            Nightly Build - Commit `${{ github.sha }}`
-            - ${{ github.event.head_commit.message }}
-            
-            #### **macOS で `"naget.app" は壊れているため開けません。` という旨の警告が表示されて起動できない場合**
-            ターミナルを起動し、以下のコマンドを実行してください。
-            ```sh
-            xattr -rc "/Applications/naget.app"
-            ```
-          files: |
-            ./naget*
-
-      - name: Push App Cast
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: Nightly Build - ${{ github.sha }}
-          file_pattern: ./appcast_*.json
-
-      - name: Delete Build Artifact
-        uses: GeekyEggo/delete-artifact@v5
-        with:
-          name: build-*
+    - name: Upload to GitHub
+      working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
+      run: vpk upload github --repoUrl https://github.com/Milkeyyy/naget --channel ${{ env.VelopackChannel }} --token ${{ secrets.GITHUB_TOKEN }} --tag nightly --targetCommitish update --releaseName "Nightly Build" --pre --merge --publish -o ./Releases

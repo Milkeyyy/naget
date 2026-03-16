@@ -360,7 +360,7 @@ Latest Version: {1}</value>
     <value>Download Complete</value>
   </data>
   <data name="Updater.Dialog.Download.Install.Description" xml:space="preserve">
-    <value>Installation will begin in 5 seconds...</value>
+    <value>Starting installation...</value>
   </data>
   <data name="Updater.Dialog.UpdateNotAvailable.Title" xml:space="preserve">
     <value>Latest Version is Installed</value>

@@ -24,7 +24,7 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
-        "BuildInstaller",
+        "BuildPkg",
         "BundleApp",
         "Clean",
         "Compile",

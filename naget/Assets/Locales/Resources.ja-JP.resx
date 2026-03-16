@@ -360,7 +360,7 @@
     <value>ダウンロード完了</value>
   </data>
   <data name="Updater.Dialog.Download.Install.Description" xml:space="preserve">
-    <value>5秒後にインストールを開始します...</value>
+    <value>インストールを開始します...</value>
   </data>
   <data name="Updater.Dialog.UpdateNotAvailable.Title" xml:space="preserve">
     <value>お使いのバージョンは最新です</value>

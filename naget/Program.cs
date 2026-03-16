@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 using System;
+using Velopack;
 
 namespace naget
 {
@@ -12,6 +13,8 @@ namespace naget
 		[STAThread]
 		public static void Main(string[] args)
 		{
+			VelopackApp.Build().Run();
+
 			BuildAvaloniaApp()
 				.StartWithClassicDesktopLifetime(args);
 		}

@@ -6,10 +6,19 @@ set -u
 RuntimeOs="osx"
 RuntimeArch="arm64"
 Runtime="${RuntimeOs}-${RuntimeArch}"
-ReleaseChannel="nightly"
-AppCastBaseUrl="https://nagetupd.milkeyyy.com/${ReleaseChannel}/${Runtime}"
+AppReleaseChannel="nightly"
+# AppCastBaseUrl="https://nagetupd.milkeyyy.com/${AppReleaseChannel}/${Runtime}"
 OutputDir="./_Pack"
+VelopackChannel="${RuntimeOs}-${RuntimeArch}-${AppReleaseChannel}"
 # ------------------------------
+
+# 引数チェック: --skip-upload が含まれているかどうか
+SKIP_UPLOAD=0
+for arg in "$@"; do
+    if [ "$arg" = "--skip-upload" ]; then
+        SKIP_UPLOAD=1
+    fi
+done
 
 # Load env File
 set -o allexport
@@ -24,17 +33,22 @@ cd "$(dirname "$0")"
 
 echo "Load Build Info"
 echo ""
-./build.sh loadandsavebuildinfojson --releasechannel "${ReleaseChannel}" --releasenumber "${CommitHash}"
+
+./build.sh loadandsavebuildinfojson --releasechannel "${AppReleaseChannel}"
+
 brew install jq
+
 AppVersion=$(jq -r ".version" "./naget/build.json")
 AppFullVersion=$(jq -r ".full_version" "./naget/build.json")
-CommitHash=$(git rev-parse --short HEAD)
+AppReleaseNumber=$(jq -r ".release_number" "./naget/build.json")
+
 echo ""
 
-echo "-         Runtime: ${Runtime}"
+echo "        Runtime: ${Runtime}"
+echo "   Full Version: ${AppFullVersion}"
 echo "-         Version: ${AppVersion}"
-echo "- Release Channel: ${ReleaseChannel}"
-echo "-     Commit Hash: ${CommitHash}"
+echo "- Release Channel: ${AppReleaseChannel}"
+echo "-  Release Number: ${AppReleaseNumber}"
 echo ""
 
 echo "Cleanup Output Directory"
@@ -48,53 +62,32 @@ echo ""
 
 echo "Compile"
 echo ""
-./build.sh bundleapp --runtime "${Runtime}" --releasechannel "${ReleaseChannel}" --releasenumber "${CommitHash}"
+./build.sh --runtime "${Runtime}" --releasechannel "${AppReleaseChannel}" --releasenumber "${AppReleaseNumber}"
 echo ""
 
-echo "Create Zip"
+echo "Install Velopack CLI"
 echo ""
-zip -r "${OutputDir}/${Runtime}/naget.zip" "${OutputDir}/${Runtime}/naget.app"
-echo ""
-
-echo "Build Installer (DMG)"
-echo ""
-brew install create-dmg
-create-dmg \
---volname "naget Installer" \
---volicon "./Logo/naget.icns" \
---window-size 800 400 \
---icon-size 100 \
---icon "naget.app" 200 190 \
---app-drop-link 600 185 \
---hide-extension "naget.app" \
-"${OutputDir}/${Runtime}/naget_${Runtime}.dmg" \
-"${OutputDir}/${Runtime}/"
-
+dotnet tool install -g vpk || true
 echo ""
 
-echo "Generate App Cast"
-echo ""
-dotnet tool install --global NetSparkleUpdater.Tools.AppCastGenerator || true
-netsparkle-generate-appcast -n naget -u "${AppCastBaseUrl}" -o "mac-${RuntimeArch}" -a "${OutputDir}/${Runtime}" -b "${OutputDir}/${Runtime}" -e zip --output-file-name "appcast_${ReleaseChannel}_${Runtime}" --output-type json --file-version "${AppFullVersion}" --channel "${ReleaseChannel}"
+echo "Processing Releases - Velopack"
 echo ""
 
-echo "Install AWS CLI"
-echo ""
-brew install awscli
+cd "${OutputDir}/${Runtime}"
 
-echo "Upload App Package"
-echo ""
-# App Package (zip)
-aws s3 cp "${OutputDir}/${Runtime}/naget.zip" "s3://naget-update/${ReleaseChannel}/${Runtime}/naget.zip" --endpoint-url "${R2_ENDPOINT}"
-echo ""
+echo "Download Previous Release - Velopack"
+vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel "${VelopackChannel}" --token "${GITHUB_TOKEN}" --pre -o ./Releases || echo "Warning: Failed to download previous release."
 
-echo "Upload App Cast"
-echo ""
-# App Cast
-aws s3 cp "${OutputDir}/${Runtime}/appcast_${ReleaseChannel}_${Runtime}.json" "s3://naget-update/appcast/appcast_${ReleaseChannel}_${Runtime}.json" --endpoint-url "${R2_ENDPOINT}"
-echo ""
-# App Cast Signature
-aws s3 cp "${OutputDir}/${Runtime}/appcast_${ReleaseChannel}_${Runtime}.json.signature" "s3://naget-update/appcast/appcast_${ReleaseChannel}_${Runtime}.json.signature" --endpoint-url "${R2_ENDPOINT}"
+echo "Build Installer - Velopack"
+vpk pack -xy -u naget -v "${AppFullVersion}" -p "./Build" -o "./Releases" -i "../../Logo/naget.icns" -e naget --channel "${VelopackChannel}" --packAuthors "Milkeyyy"
+
+if [ "$SKIP_UPLOAD" = "1" ]; then
+    echo "Upload SKIPPED"
+else
+    echo "Upload - Velopack"
+    vpk upload github --repoUrl https://github.com/Milkeyyy/naget --channel "${VelopackChannel}" --token "${GITHUB_TOKEN}" --tag nightly --targetCommitish update --releaseName "Nightly Build" --pre --merge --publish -o ./Releases
+fi
+
 echo ""
 
 echo ""
