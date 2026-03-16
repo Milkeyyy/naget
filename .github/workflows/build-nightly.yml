@@ -50,16 +50,15 @@ jobs:
       run: |
         python -c 'print("COMMIT_HASH_SHORT=" + ("${{ github.sha }}"[0:7]))' >> $env:GITHUB_ENV
 
-
     # ビルド (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
       name: Build
-      run: ./build.cmd --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
+      run: ./build.cmd --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.run_number }}
 
     # ビルド (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Build
-      run: ./build.sh --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ env.COMMIT_HASH_SHORT }}
+      run: ./build.sh --runtime ${{ env.rid }} --releasechannel nightly --releasenumber ${{ github.run_number }}
 
 
     - name: Load Full Version
