@@ -32,12 +32,10 @@ public class MainWindowViewModel
 	/// </summary>
 	private void DoSearch()
 	{
-		// ブラウザーを表示
-		App.BrowserWindow.Show();
-		// ブラウザーで検索結果を開く
-		(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = string.Format(_currentSearchEngine.Uri, SearchWord);
+		// ブラウザーを表示して検索結果を開く
+		App.WindowService.ShowBrowser(string.Format(_currentSearchEngine.Uri, SearchWord));
 		// 検索画面を閉じる
-		App.MainWindow.Hide();
+		App.WindowService.HideMainWindow();
 	}
 
 	/// <summary>
@@ -61,23 +59,11 @@ public class MainWindowViewModel
 		// 検索テキストの内容を消す
 		SearchWord = string.Empty;
 
-		// ウィンドウを表示
-		App.MainWindow.Show();
+		// ウィンドウを表示してアクティブにする
+		App.WindowService.ShowMainWindow();
 
-		// マウスカーソルがあるディスプレイの中央位置を取得
-		var centerPos = HotKeyHelper.GetCenterScreen(App.MainWindow);
-
-		// 中央位置を取得できた場合はウィンドウの位置をその中央へ移動する
-		App.MainWindow.Position = centerPos ?? new(0,0);
-
-		// ウィンドウをアクティブにする
-		var handle = App.MainWindow.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
-		if (handle != IntPtr.Zero)
-		{
-			WindowUtils.ForceToForeground(handle);
-		}
-		App.MainWindow.Activate();
-		App.MainWindow.Focus();
+		// ウィンドウを中央に移動する
+		App.WindowService.CenterMainWindow();
 	}
 
 	public MainWindowViewModel()

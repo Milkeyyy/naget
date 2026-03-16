@@ -20,15 +20,22 @@ namespace naget
 		public static AppBuilder BuildAvaloniaApp()
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
-				.UseSkia()
-				.With(new FontManagerOptions
+				// フォントの設定
+				// .With(new FontManagerOptions
+				// {
+				// 	DefaultFamilyName = "avares://naget/Assets/Fonts#Noto Sans JP",
+				// 	FontFallbacks = [
+				// 		new FontFallback { FontFamily = new FontFamily("avares://naget/Assets/Fonts#Noto Sans JP") }
+				// 	]
+				// })
+				.With(new MacOSPlatformOptions()
 				{
-					DefaultFamilyName = "avares://naget/Assets/Fonts#Noto Sans JP",
-					FontFallbacks = [
-						new FontFallback { FontFamily = new FontFamily("avares://naget/Assets/Fonts#Noto Sans JP") }
-					]
+					// (macOS) Dock に表示しない
+					ShowInDock = false,
 				})
-				.With(new MacOSPlatformOptions() { ShowInDock = false }) // (macOS) Dock に表示しない
+#if DEBUG
+				.WithDeveloperTools()
+#endif
 				.LogToTrace();
 	}
 }

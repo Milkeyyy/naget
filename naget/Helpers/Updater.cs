@@ -26,18 +26,31 @@ public class Updater : SparkleUpdater
 	TaskDialogProgressState downloadProgressState;
 
 	public Updater() : base(
-		"https://update-naget.milkeyyy.com/appcast_" + App.ProductReleaseChannel +  "_" + RuntimeInformation.RuntimeIdentifier + ".json",
+		GetUpdateUrl(),
 		new Ed25519Checker(
 			SecurityMode.OnlyVerifySoftwareDownloads,
 			"xtbwCBV7esFcqM9thhlze+82NosbQqsT1inUwWurRZE="
 		)
 	)
 	{
+
+
 		AppCastGenerator = new JsonAppCastGenerator(LogWriter);
 		AppCastHelper.AppCastFilter = new CustomAppCastFilter();
 		RelaunchAfterUpdate = true;
 		UseNotificationToast = false;
-		CustomInstallerArguments = "/SILENT";
+
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+		{
+			CustomInstallerArguments = "";
+			RelaunchAfterUpdateCommandPrefix = "xattr -dr naget.app; open -n ";
+			RestartExecutableName = "naget.app";
+		}
+		else
+		{
+			CustomInstallerArguments = "/SILENT";
+		}
+
 		// GitHub の Releases からダウンロードする際はこれを無効にする
 		// 参考: https://github.com/NetSparkleUpdater/NetSparkle/issues/546#issuecomment-1869321315
 		CheckServerFileName = false;
@@ -62,7 +75,7 @@ public class Updater : SparkleUpdater
 		downloadDialog = new()
 		{
 			ShowProgressBar = true,
-			XamlRoot = App.SettingsWindow
+			XamlRoot = App.WindowService.GetSettingsWindow()
 		};
 
 		// ダウンロード処理ダイアログが閉じられる時のイベント
@@ -96,49 +109,66 @@ public class Updater : SparkleUpdater
 
 	private async void Updater_DownloadStarted(AppCastItem item, string path)
 	{
-		// ダウンロード処理実行済みフラグ
-		downloadStarted = true;
-		// ダイアログの初期化
-		InitDownloadDialog();
-		// プログレスバーの初期値を設定
-		downloadProgressValue = 0;
-		downloadProgressState = TaskDialogProgressState.Indeterminate;
-		downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
-		// ダイアログを表示する
-		((Window)downloadDialog.XamlRoot).Show();
-		await downloadDialog.ShowAsync();
+		try
+		{
+			// ダウンロード処理実行済みフラグ
+			downloadStarted = true;
+			// ダイアログの初期化
+			InitDownloadDialog();
+			// プログレスバーの初期値を設定
+			downloadProgressValue = 0;
+			downloadProgressState = TaskDialogProgressState.Indeterminate;
+			downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
+			// ダイアログを表示する
+			((Window)downloadDialog.XamlRoot).Show();
+			await downloadDialog.ShowAsync();
+		}
+		catch (Exception ex)
+		{
+			App.Logger.Error("Updater_DownloadStarted Error: " + ex.Message);
+		}
 	}
 
 	private void Updater_DownloadCanceled(AppCastItem item, string path)
 	{
-		
+		App.Logger.Debug("Download canceled by user.");
 	}
 
 	private async void Updater_DownloadFinished(AppCastItem item, string path)
 	{
-		// キャンセルボタンを無効化する
-		downloadDialog.Buttons[0].IsEnabled = false;
-		// プログレスバーの値を設定
-		downloadProgressValue = 100;
-		downloadProgressState = TaskDialogProgressState.Indeterminate;
-		downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
-		// タイトル等を更新
-		downloadDialog.Title = Resources.Updater_Dialog_Download_Install_Title + " - " + App.ProductName;
-		downloadDialog.SubHeader = Resources.Updater_Dialog_Download_Install_Title;
-		downloadDialog.Content = Resources.Updater_Dialog_Download_Install_Description;
-
-		// ダウンロードが実行されていない場合は新たにダイアログを表示する
-		if (!downloadStarted)
+		try
 		{
-			((Window)downloadDialog.XamlRoot).Show();
-			var t = downloadDialog.ShowAsync();
+			// キャンセルボタンを無効化する
+			if (downloadDialog.Buttons.Count > 0)
+			{
+				downloadDialog.Buttons[0].IsEnabled = false;
+			}
+			// プログレスバーの値を設定
+			downloadProgressValue = 100;
+			downloadProgressState = TaskDialogProgressState.Indeterminate;
+			downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
+			// タイトル等を更新
+			downloadDialog.Title = Resources.Updater_Dialog_Download_Install_Title + " - " + App.ProductName;
+			downloadDialog.SubHeader = Resources.Updater_Dialog_Download_Install_Title;
+			downloadDialog.Content = Resources.Updater_Dialog_Download_Install_Description;
+
+			// ダウンロードが実行されていない場合は新たにダイアログを表示する
+			if (!downloadStarted)
+			{
+				((Window)downloadDialog.XamlRoot).Show();
+				var t = downloadDialog.ShowAsync();
+			}
+
+			// 5秒間待機
+			await Task.Delay(5000);
+
+			// アップデートのインストールを実行する
+			await InstallUpdate(item, path);
 		}
-
-		// 5秒間待機
-		await Task.Delay(5000);
-
-		// アップデートのインストールを実行する
-		await InstallUpdate(item, path);
+		catch (Exception ex)
+		{
+			App.Logger.Error("Updater_DownloadFinished Error: " + ex.Message);
+		}
 	}
 
 	private static readonly CompositeFormat CachedDownloadDescriptionFormat = CompositeFormat.Parse(Resources.Updater_Dialog_Download_Downloading_Description);
@@ -174,13 +204,10 @@ public class Updater : SparkleUpdater
 	{
 		App.Logger.Debug("Start manual update check");
 		UpdateInfo info = await CheckForUpdatesQuietly();
-		
+
 		App.Logger.Debug($"- NetSparkle Status: {info.Status} / {info.Updates.Count}");
 
-		//string updVersion;
-		//int updInternalVersion;
-		//string updReleaseChannel;
-		//string updReleaseNumber;
+
 		//foreach (var u in info.Updates)
 		//{
 		//	if (u != null)
@@ -252,15 +279,15 @@ public class Updater : SparkleUpdater
 		{
 			// アップデート確認ダイアログを表示する
 			await ShowDialogAsync(info.Updates[0]);
-			
+
 		}
 		// 既に最新バージョンの場合
-		else if(info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
+		else if (info.Status == UpdateStatus.UpdateNotAvailable && showDialog)
 		{
 			App.Logger.Debug("Show Update not available dialog");
 			CompositeFormat desc = CompositeFormat.Parse(Resources.Updater_Dialog_UpdateNotAvailable_Description);
 			await SuperDialog.Info(
-				App.SettingsWindow,
+				App.WindowService.GetSettingsWindow()!,
 				Resources.Updater_Dialog_UpdateNotAvailable_Title,
 				string.Format(null, desc, App.ProductFullVersion)
 			);
@@ -281,7 +308,7 @@ public class Updater : SparkleUpdater
 				new TaskDialogButton(Resources.Dialog_Button_Yes, TaskDialogStandardResult.Yes),
 				new TaskDialogButton(Resources.Dialog_Button_No, TaskDialogStandardResult.No)
 			},
-			XamlRoot = App.SettingsWindow
+			XamlRoot = App.WindowService.GetSettingsWindow()
 		};
 
 		App.Logger.Debug("Show Dialog");
@@ -293,6 +320,26 @@ public class Updater : SparkleUpdater
 			// アップデート処理実行
 			await InitAndBeginDownload(info);
 		}
+	}
+
+	private static string GetUpdateUrl()
+	{
+		// 1. コマンドライン引数から URL を探す
+		for (int i = 0; i < App.CmdArgs.Length; i++)
+		{
+			if ((App.CmdArgs[i].Equals("/UpdateUrl", StringComparison.OrdinalIgnoreCase) ||
+				 App.CmdArgs[i].Equals("--update-url", StringComparison.OrdinalIgnoreCase)) &&
+				i + 1 < App.CmdArgs.Length)
+			{
+				string url = App.CmdArgs[i + 1];
+				// 引数の次の要素を URL として返す
+				App.Logger.Debug($"Using custom Update URL from args: {url}");
+				return url;
+			}
+		}
+
+		// 2. 指定されていない場合はデフォルトの URL を返す
+		return "https://nagetupd.milkeyyy.com/appcast/appcast_" + App.ProductReleaseChannel + "_" + RuntimeInformation.RuntimeIdentifier + ".json";
 	}
 }
 

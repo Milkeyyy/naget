@@ -7,7 +7,6 @@
 			 xmlns:cv="clr-namespace:naget.Converter;assembly=naget"
 			 xmlns:vm="using:naget.ViewModels.Settings"
 			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
-			 xmlns:ic="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="naget.Views.Settings.AppSettingsView"
 			 x:DataType="vm:AppSettingsViewModel"
@@ -42,7 +41,10 @@
 			</ui:InfoBar>
 
 			<!--テーマ-->
-			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" IconSource="{ic:SymbolIconSource Symbol=ColorFill}" Foreground="{DynamicResource ThemeForegroundBrush}">
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" Foreground="{DynamicResource ThemeForegroundBrush}">
+				<ui:SettingsExpander.IconSource>
+					<ui:SymbolIconSource Symbol="ColorFill"/>
+				</ui:SettingsExpander.IconSource>
 				<ui:SettingsExpander.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--テーマ選択リスト-->
@@ -59,7 +61,10 @@
 			</ui:SettingsExpander>
 
 			<!--言語-->
-			<ui:SettingsExpander IsExpanded="True" IconSource="{ic:SymbolIconSource Symbol=Earth}">
+			<ui:SettingsExpander IsExpanded="True">
+				<ui:SettingsExpander.IconSource>
+					<ui:SymbolIconSource Symbol="Earth"/>
+				</ui:SettingsExpander.IconSource>
 				<!--ヘッダー&注意書きテキスト-->
 				<ui:SettingsExpander.Header>
 					<StackPanel>
@@ -83,7 +88,10 @@
 			</ui:SettingsExpander>
 
 			<!--アップデート-->
-			<ui:SettingsExpander IsExpanded="True" IconSource="{ic:FluentIconSource Icon=ArrowSync}" >
+			<ui:SettingsExpander IsExpanded="True">
+				<ui:SettingsExpander.IconSource>
+					<ui:SymbolIconSource Symbol="Sync"/>
+				</ui:SettingsExpander.IconSource>
 				<!--ヘッダー&注意書きテキスト-->
 				<ui:SettingsExpander.Header>
 					<StackPanel>
@@ -107,7 +115,13 @@
 			</ui:SettingsExpander>
 
 			<!--このアプリについて-->
-			<ui:SettingsExpander IsExpanded="True" IsClickEnabled="True" IconSource="{ic:FluentIconSource Icon=Info}" ActionIconSource="{ic:FluentIconSource Icon=Open}" Command="{Binding AboutClickCommand}">
+			<ui:SettingsExpander IsExpanded="True" IsClickEnabled="True" Command="{Binding AboutClickCommand}">
+				<ui:SettingsExpander.IconSource>
+					<ui:SymbolIconSource Symbol="Help"/> <!--なんで Info アイコンがないの？？？？？-->
+				</ui:SettingsExpander.IconSource>
+				<ui:SettingsExpander.ActionIconSource>
+					<ui:SymbolIconSource Symbol="Open"/>
+				</ui:SettingsExpander.ActionIconSource>
 				<!--ヘッダー&注意書きテキスト-->
 				<ui:SettingsExpander.Header>
 					<StackPanel>

@@ -22,7 +22,7 @@ public static class ConfigManager
 	/// </summary>
 	public static HotKey.HotKeyManager HotKeyManager { get; } = new();
 
-	private static readonly JsonSerializerOptions jsOptions = new()/* { IgnoreReadOnlyFields = true }*/;
+	private static readonly JsonSerializerOptions jsOptions = new();
 
 	/// <summary>
 	/// コンフィグを新規作成する
@@ -53,9 +53,11 @@ public static class ConfigManager
 			App.Logger.Debug("- " + group);
 		}
 
-		// ファイルへ保存
+		// ファイルへ保存 (アトミック書き込み)
 		string data = JsonSerializer.Serialize(_configBase, jsOptions);
-		File.WriteAllText(FilePath, data);
+		string tempPath = FilePath + ".tmp";
+		File.WriteAllText(tempPath, data);
+		File.Move(tempPath, FilePath, true);
 	}
 
 	/// <summary>
@@ -67,9 +69,6 @@ public static class ConfigManager
 		if (File.Exists(FilePath))
 		{
 			App.Logger.Debug("Loading config from file");
-			//_config = _builder
-			//	.AddJsonFile(FilePath, false)
-			//	.Build();
 
 			// ファイルから読み込んだデータをデシリアライズ (デシリアライズに失敗した場合は新規作成)
 			_configBase = JsonSerializer.Deserialize<ConfigBaseClass>(File.ReadAllText(FilePath)) ?? new ConfigBaseClass();
@@ -92,13 +91,6 @@ public static class ConfigManager
 		// コンフィグからホットキーマネージャーへプリセット一覧を読み込む
 		if (Config.HotKeys != null)
 		{
-			foreach (var group in Config.HotKeys)
-			{
-				// キーからホットキーアクションを取得
-				//var action = HotKeyAction.(group.Action.Id);
-				//action.Property = group.Action.Property;
-				//group.Action.Property
-			}
 			HotKeyManager.LoadGroups(Config.HotKeys);
 		}
 	}
@@ -109,7 +101,7 @@ public static class ConfigManager
 	/// <param name="code"></param>
 	public static void SetLanguage(string code)
 	{
- 		App.Logger.Debug("Setting language to: " + code);
+		App.Logger.Debug("Setting language to: " + code);
 		// 言語コードを設定する
 		Assets.Locales.Resources.Culture = new CultureInfo(Config.Language);
 	}

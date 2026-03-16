@@ -4,12 +4,11 @@
 	// 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
-		
 	{
 		"name": "C#: SearchLight Debug",
 		"type": "dotnet",
 		"request": "launch",
-		"projectPath": "${workspaceFolder}/naget/SearchLight.csproj"
+		"projectPath": "${workspaceFolder}/naget/naget.csproj"
 	},
 	{
 		"name": ".NET Meteor Debugger",

@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
@@ -9,6 +10,7 @@ using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
 using naget.Views;
+using naget.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -63,12 +65,28 @@ public class App : Application
 	public static Logger Logger { get; private set; }
 
 	public static Updater Updater { get; private set; }
+	public static WindowService WindowService { get; private set; } = new();
 
 	public static Window? AboutWindow { get; private set; }
 	public static Window? UpdateCompleteWindow { get; private set; }
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
-	public static Window? BrowserWindow { get; private set; }
+
+	// BrowserWindow の遅延初期化 (Lazy Loading)
+	// アプリ起動時に WebView (CEF) を初期化すると macOS IME と競合してフリーズするため、
+	// 実際にアクセスされるまで作成を遅延させる。
+	private static Window? _browserWindow;
+	public static Window BrowserWindow
+	{
+		get
+		{
+			if (_browserWindow == null)
+			{
+				_browserWindow = new BrowserWindow();
+			}
+			return _browserWindow;
+		}
+	}
 
 	public override void Initialize()
 	{
@@ -146,7 +164,7 @@ public class App : Application
 	{
 		// 1. 新しいプロセスを起動するための情報を設定する
 		var processPath = Environment.ProcessPath;
-		
+
 		if (processPath != null)
 		{
 			App.Logger.Debug("アプリケーションを再起動します...");
@@ -214,7 +232,7 @@ public class App : Application
 			desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 			CmdArgs = desktop.Args ?? [];
-			
+
 			DataContext = new AppViewModel(); // 通知領域メニューのためのビューモデル
 
 			// 各ウィンドウ
@@ -222,7 +240,8 @@ public class App : Application
 			UpdateCompleteWindow = new UpdateCompleteWindow();
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();
-			BrowserWindow = new BrowserWindow();
+			// BrowserWindow は遅延初期化するためここでは作成しない
+			// BrowserWindow = new BrowserWindow();
 
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);

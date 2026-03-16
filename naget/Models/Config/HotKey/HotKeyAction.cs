@@ -182,10 +182,11 @@ public class HotKeyAction
 
 	public Dictionary<string, object> ToDictionary()
 	{
-		return new() {
-				{ "Id", Id },
-				{ "Property", Property }
-			};
+		return new()
+		{
+			{ "Id", Id },
+			{ "Property", Property }
+		};
 	}
 
 	public void Action()
@@ -193,7 +194,7 @@ public class HotKeyAction
 		switch (ActionType)
 		{
 			case HotKeyActionType.WebSearch:
-				Dispatcher.UIThread.Invoke(() => (App.MainWindow.DataContext as MainWindowViewModel).Search(Property["SearchEngineId"]));
+				Dispatcher.UIThread.Invoke(() => App.WindowService.TriggerSearch(Property["SearchEngineId"]));
 				break;
 		}
 	}
