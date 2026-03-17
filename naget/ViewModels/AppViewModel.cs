@@ -1,5 +1,6 @@
 ﻿using Epoxy;
 using naget.Models.Config;
+using System;
 
 namespace naget.ViewModels;
 
@@ -34,7 +35,15 @@ public class AppViewModel
 				return default;
 			}
 			// スタートページを開いてウィンドウを表示する
-			(App.BrowserWindow.DataContext as BrowserWindowViewModel).CurrentAddress = ConfigManager.Config.BrowserWindow.StartPage;
+			var bvm = App.BrowserWindow.DataContext as BrowserWindowViewModel;
+			if (bvm != null)
+			{
+				if (Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out var uri))
+				{
+					bvm.CurrentSource = uri;
+				}
+				bvm.Address = ConfigManager.Config.BrowserWindow.StartPage;
+			}
 			App.BrowserWindow.Show();
 			return default;
 		});

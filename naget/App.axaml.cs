@@ -64,8 +64,7 @@ public class App : Application
 	public static Window? SettingsWindow { get; private set; }
 
 	// BrowserWindow の遅延初期化 (Lazy Loading)
-	// アプリ起動時に WebView (CEF) を初期化すると macOS IME と競合してフリーズするため、
-	// 実際にアクセスされるまで作成を遅延させる。
+	// 実際にアクセスされるまでウィンドウと NativeWebView の作成を遅延させる。
 	private static Window? _browserWindow;
 	public static Window BrowserWindow
 	{

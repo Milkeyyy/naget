@@ -56,6 +56,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.3.12" />
+		<PackageReference Include="Avalonia.Controls.WebView" Version="11.3.16" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.3.12" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<!--<PackageReference Include="Avalonia.Diagnostics" Version="11.0.13">
@@ -79,8 +80,6 @@
 		</PackageReference>
 		<PackageReference Include="SharpHook" Version="7.1.1" />
 		<PackageReference Include="System.Text.Json" Version="10.0.5" />
-		<PackageReference Include="WebViewControl-Avalonia" Version="3.120.11" Condition="$(Platform.EndsWith('x64')) Or $(RuntimeIdentifier.EndsWith('x64'))" />
-		<PackageReference Include="WebViewControl-Avalonia-ARM64" Version="3.120.11" Condition="$(Platform.EndsWith('arm64')) Or $(RuntimeIdentifier.EndsWith('arm64'))" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -125,49 +124,6 @@
 		</EmbeddedResource>
 	</ItemGroup>
 
-	<!-- CEFのリソース(locales)がコピーされない問題の対策-->
-	<!--Windows-->
-	<ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-		<!--x64-->
-		<None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(Platform)' == 'x64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>runtimes\win-x64\native\locales\%(Filename)%(Extension)</Link>
-		</None>
-		<None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(RuntimeIdentifier)' == 'win-x64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>locales\%(Filename)%(Extension)</Link>
-		</None>
-		<!--arm64-->
-		<None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(Platform)' == 'arm64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>runtimes\win-arm64\native\locales\%(Filename)%(Extension)</Link>
-		</None>
-		<None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(RuntimeIdentifier)' == 'win-arm64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>locales\%(Filename)%(Extension)</Link>
-		</None>
-	</ItemGroup>
-	<!--macOS-->
-	<ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-		<!--x64-->
-		<None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(Platform)' == 'x64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>runtimes\osx-x64\native\locales\%(Filename)%(Extension)</Link>
-		</None>
-		<None Update="CEF_Resources\win-x64\locales\*.pak" Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>locales\%(Filename)%(Extension)</Link>
-		</None>
-		<!--arm64-->
-		<None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(Platform)' == 'arm64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>runtimes\osx-arm64\native\locales\%(Filename)%(Extension)</Link>
-		</None>
-		<None Update="CEF_Resources\win-arm64\locales\*.pak" Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>locales\%(Filename)%(Extension)</Link>
-		</None>
-	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Assets\Fonts\" />
 	</ItemGroup>

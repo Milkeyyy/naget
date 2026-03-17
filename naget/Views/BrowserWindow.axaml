@@ -6,8 +6,7 @@
 		xmlns:epoxy="https://github.com/kekyo/Epoxy"
 		xmlns:local="clr-namespace:naget;assembly=naget"
 		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
-		xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
-		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="naget.Views.BrowserWindow"
 		x:DataType="vm:BrowserWindowViewModel"
 		epoxy:Fountain.Well="{Binding BrowserWindowWell}"
@@ -56,7 +55,6 @@
 			<DockPanel DockPanel.Dock="Top" Margin="10 10 10 10">
 				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
 				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
-				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding ShowDevToolsCommand}">DevTools</Button>
 				<TextBox Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
 					<TextBox.KeyBindings>
 						<KeyBinding Gesture="Enter" Command="{Binding NavigateCommand}" />
@@ -64,9 +62,7 @@
 				</TextBox>
 			</DockPanel>
 
-			<webview:WebView x:Name="webview" Focusable="True" Address="{Binding CurrentAddress}">
-				
-			</webview:WebView>
+			<NativeWebView x:Name="webview" Focusable="True" Source="{Binding CurrentSource}" />
 		</DockPanel>
 	</Panel>
 </Window>

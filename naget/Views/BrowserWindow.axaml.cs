@@ -1,6 +1,5 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using naget.ViewModels;
-using WebViewControl;
 
 namespace naget.Views;
 
@@ -10,7 +9,8 @@ public partial class BrowserWindow : Window
 	{
 		InitializeComponent();
 
-		DataContext = new BrowserWindowViewModel(this.FindControl<WebView>("webview"));
+		var webview = this.FindControl<NativeWebView>("webview");
+		DataContext = new BrowserWindowViewModel(webview);
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
 		Closing += (s, e) =>

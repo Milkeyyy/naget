@@ -108,23 +108,13 @@
         "LicenseInformationOrigin": 0
     },
     {
-        "PackageId": "WebViewControl-Avalonia",
-        "PackageVersion": "3.120.11",
-        "PackageProjectUrl": "https://github.com/OutSystems/WebView",
-        "Copyright": "Copyright \u00a9 OutSystems 2023",
-        "Authors": "OutSystems",
-        "License": "Apache-2.0",
-        "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
-        "LicenseInformationOrigin": 2
-    },
-    {
-        "PackageId": "WebViewControl-Avalonia-ARM64",
-        "PackageVersion": "3.120.11",
-        "PackageProjectUrl": "https://github.com/OutSystems/WebView",
-        "Copyright": "Copyright \u00a9 OutSystems 2023",
-        "Authors": "OutSystems",
-        "License": "Apache-2.0",
-        "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
-        "LicenseInformationOrigin": 2
+        "PackageId": "Avalonia.Controls.WebView",
+        "PackageVersion": "11.3.16",
+        "PackageProjectUrl": "https://github.com/AvaloniaUI/Avalonia.Controls.WebView",
+        "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
+        "Authors": "Avalonia Team",
+        "License": "MIT",
+        "LicenseUrl": "https://licenses.nuget.org/MIT",
+        "LicenseInformationOrigin": 0
     }
 ]
