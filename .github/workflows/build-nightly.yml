@@ -28,7 +28,7 @@ jobs:
     env:
       rid: ${{ matrix.os }}-${{ matrix.arch }}
       OUTPUT_DIR: ./_Pack
-      VelopackChannel: ${{ matrix.os }}-${{ matrix.arch }}-nightly
+      VELOPACK_CHANNEL: ${{ matrix.os }}-${{ matrix.arch }}-nightly
 
     steps:
     - name: Checkout
@@ -81,27 +81,61 @@ jobs:
     - name: Download Previous Release
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
       continue-on-error: true
-      run: vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel ${{ env.VelopackChannel }} --token ${{ secrets.GITHUB_TOKEN }} --pre -o ./Releases
+      run: vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel ${{ env.VELOPACK_CHANNEL }} --token ${{ secrets.GITHUB_TOKEN }} --pre -o ./Releases
 
     # パック (Windows)
     - if: ${{ startsWith(env.rid, 'win') }}
       name: Pack
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
-      run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget.exe --channel ${{ env.VelopackChannel }} --packAuthors Milkeyyy -i ../../Logo/naget.ico --noPortable
+      run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget.exe --channel ${{ env.VELOPACK_CHANNEL }} --packAuthors Milkeyyy -i ../../Logo/naget.ico --noPortable
 
     # パック (macOS)
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Pack
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
-      run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget --channel ${{ env.VelopackChannel }} --packAuthors Milkeyyy -i ../../Logo/naget.icns
+      run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget --channel ${{ env.VELOPACK_CHANNEL }} --packAuthors Milkeyyy -i ../../Logo/naget.icns
 
-    - name: Upload to GitHub
-      uses: andelf/nightly-release@main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # アップロード
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v6
       with:
-        tag_name: nightly
-        name: "Nightly Build - `${{ env.COMMIT_HASH_SHORT }}`"
-        prerelease: true
-        files: |
+        name: build-${{ env.rid }}
+        path: |
           ${{ env.OUTPUT_DIR }}/${{ env.rid }}/Releases/*
+
+  update-nightly-release:
+    name: Update Nightly Release
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v8
+        with:
+          pattern: build-*
+          path: ./
+          merge-multiple: true
+
+      - name: Update Nightly Release
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: nightly
+          prerelease: true
+          name: "Nightly Build"
+          body: |
+            Nightly Build - Commit `${{ github.sha }}`
+            - ${{ github.event.head_commit.message }}
+          files: |
+            ./*
+
+      - name: Delete Build Artifact
+        uses: GeekyEggo/delete-artifact@v6
+        with:
+          name: build-*
