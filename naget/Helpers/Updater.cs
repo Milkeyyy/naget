@@ -1,6 +1,5 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
 using naget.Views.Dialog;
 using System;
@@ -14,9 +13,9 @@ namespace naget.Helpers;
 
 public class Updater
 {
-	private TaskDialog downloadDialog;
+	private ProgressDialogWindow downloadDialog;
 	private int downloadProgressValue;
-	private TaskDialogProgressState downloadProgressState;
+	private ProgressState downloadProgressState;
 	private bool downloadStarted;
 
 	public Updater()
@@ -25,7 +24,6 @@ public class Updater
 		downloadDialog = new()
 		{
 			ShowProgressBar = true,
-			XamlRoot = App.WindowService.GetSettingsWindow()
 		};
 	}
 
@@ -85,11 +83,11 @@ public class Updater
 		try
 		{
 			InitDownloadDialog();
-			var window = (Window)downloadDialog.XamlRoot;
-			if (window != null)
+			var owner = App.WindowService.GetSettingsWindow();
+			if (owner != null)
 			{
-				window.Show();
-				var dialogTask = downloadDialog.ShowAsync();
+				owner.Show();
+				var dialogTask = downloadDialog.ShowAsync(owner);
 
 				await mgr.DownloadUpdatesAsync(info, (progress) =>
 				{
@@ -97,17 +95,17 @@ public class Updater
 					Dispatcher.UIThread.Post(() =>
 					{
 						downloadProgressValue = progress;
-						downloadDialog.SetProgressBarState(downloadProgressValue, TaskDialogProgressState.Normal);
-						downloadDialog.Content = string.Format(null, CompositeFormat.Parse(Resources.Updater_Dialog_Download_Downloading_Description), downloadProgressValue);
+						downloadDialog.SetProgressBarState(downloadProgressValue, ProgressState.Normal);
+						downloadDialog.DialogContent = string.Format(null, CompositeFormat.Parse(Resources.Updater_Dialog_Download_Downloading_Description), downloadProgressValue);
 					});
 				});
 
 				// インストール中
 				Dispatcher.UIThread.Post(() =>
 				{
-					downloadDialog.Title = Resources.Updater_Dialog_Download_Install_Title + " - " + App.ProductName;
+					downloadDialog.DialogTitle = Resources.Updater_Dialog_Download_Install_Title + " - " + App.ProductName;
 					downloadDialog.SubHeader = Resources.Updater_Dialog_Download_Install_Title;
-					downloadDialog.Content = Resources.Updater_Dialog_Download_Install_Description;
+					downloadDialog.DialogContent = Resources.Updater_Dialog_Download_Install_Description;
 					if (downloadDialog.Buttons.Count > 0) downloadDialog.Buttons[0].IsEnabled = false; // Disable cancel
 				});
 
@@ -122,49 +120,50 @@ public class Updater
 			App.Logger.Error($"Update installation failed: {ex.Message}");
 			Dispatcher.UIThread.Post(() =>
 			{
-				downloadProgressState = TaskDialogProgressState.Error;
+				downloadProgressState = ProgressState.Error;
 				downloadDialog.SetProgressBarState(downloadProgressValue, downloadProgressState);
-				downloadDialog.Content = Resources.Updater_Dialog_Download_Failed_Description;
+				downloadDialog.DialogContent = Resources.Updater_Dialog_Download_Failed_Description;
 				downloadDialog.Buttons.Clear();
-				downloadDialog.Buttons.Add(new TaskDialogButton(Resources.Dialog_Button_Close, TaskDialogStandardResult.Close));
+				downloadDialog.Buttons.Add(new ProgressDialogButton(Resources.Dialog_Button_Close, ProgressDialogResult.Close));
 			});
 		}
 	}
 
 	private void InitDownloadDialog()
 	{
-		downloadDialog.Title = Resources.Updater_Dialog_Download_Downloading_Title + " - " + App.ProductName;
+		downloadDialog = new ProgressDialogWindow();
+		downloadDialog.DialogTitle = Resources.Updater_Dialog_Download_Downloading_Title + " - " + App.ProductName;
 		downloadDialog.SubHeader = Resources.Updater_Dialog_Download_Downloading_Title;
-		downloadDialog.Content = string.Empty;
+		downloadDialog.DialogContent = string.Empty;
+		downloadDialog.ShowProgressBar = true;
 		downloadDialog.Buttons.Clear();
-		downloadDialog.Buttons.Add(new TaskDialogButton(Resources.Dialog_Button_Cancel, TaskDialogStandardResult.Cancel));
-		downloadDialog.XamlRoot = App.WindowService.GetSettingsWindow();
+		downloadDialog.Buttons.Add(new ProgressDialogButton(Resources.Dialog_Button_Cancel, ProgressDialogResult.Cancel));
 		downloadProgressValue = 0;
-		downloadProgressState = TaskDialogProgressState.Normal;
-		downloadDialog.SetProgressBarState(0, TaskDialogProgressState.Normal);
+		downloadProgressState = ProgressState.Normal;
+		downloadDialog.SetProgressBarState(0, ProgressState.Normal);
 	}
 
 	private async Task<bool> ShowUpdateAvailableDialog(UpdateInfo info)
 	{
 		CompositeFormat desc = CompositeFormat.Parse(Resources.Updater_Dialog_UpdateAvailable_VersionInfo);
-		TaskDialog dialog = new()
+		var dialog = new ProgressDialogWindow
 		{
-			Title = Resources.Updater_Dialog_UpdateAvailable_Title + " - " + App.ProductName,
-			Header = Resources.Updater_Dialog_UpdateAvailable_Title,
+			DialogTitle = Resources.Updater_Dialog_UpdateAvailable_Title + " - " + App.ProductName,
 			SubHeader = Resources.Updater_Dialog_UpdateAvailable_Description,
-			Content = string.Format(null, desc, App.ProductFullVersion, info.TargetFullRelease.Version.ToFullString()), // Check version property
-			Buttons = {
-				new TaskDialogButton(Resources.Dialog_Button_Yes, TaskDialogStandardResult.Yes),
-				new TaskDialogButton(Resources.Dialog_Button_No, TaskDialogStandardResult.No)
-			},
-			XamlRoot = App.WindowService.GetSettingsWindow()
+			DialogContent = string.Format(null, desc, App.ProductFullVersion, info.TargetFullRelease.Version.ToFullString()),
+			ShowProgressBar = false,
 		};
+		dialog.Buttons.Add(new ProgressDialogButton(Resources.Dialog_Button_Yes, ProgressDialogResult.Yes));
+		dialog.Buttons.Add(new ProgressDialogButton(Resources.Dialog_Button_No, ProgressDialogResult.No));
 
-		var window = (Window)dialog.XamlRoot;
-		if (window != null) window.Show();
-		TaskDialogStandardResult dialogResult = (TaskDialogStandardResult)await dialog.ShowAsync();
-
-		return dialogResult == TaskDialogStandardResult.Yes;
+		var owner = App.WindowService.GetSettingsWindow();
+		if (owner != null)
+		{
+			owner.Show();
+			var dialogResult = await dialog.ShowAsync(owner);
+			return dialogResult == ProgressDialogResult.Yes;
+		}
+		return false;
 	}
 
 	private async Task ShowNoUpdateDialog()

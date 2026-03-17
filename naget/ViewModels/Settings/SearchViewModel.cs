@@ -1,6 +1,5 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Epoxy;
-using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
 using naget.Models.SearchEngine;
 using naget.Views.Dialog;
@@ -68,25 +67,24 @@ public class SearchViewModel
 	public async Task ShowInputDialogAsync()
 	{
 		var vm = new SearchEngineDialogContentViewModel();
-		var dialog = new ContentDialog
+		var dialog = new DialogWindow
 		{
 			// 作成画面
-			Content = new SearchEngineDialogContent
+			DialogContent = new SearchEngineDialogContent
 			{ DataContext = vm },
 
 			// タイトル
-			Title = Resources.Settings_Search_SearchEngine_Dialog_Add,
+			DialogTitle = Resources.Settings_Search_SearchEngine_Dialog_Add,
 
 			// ボタンのテキスト
-			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
 			PrimaryButtonText = Resources.Strings_Ok,
 			CloseButtonText = Resources.Strings_Cancel,
 		};
 
 		// ダイアログを表示する
-		var result = await dialog.ShowAsync();
+		var result = await dialog.ShowAsync(App.SettingsWindow);
 
-		if (result == ContentDialogResult.Primary)
+		if (result == DialogResult.Primary)
 		{
 			App.Logger.Debug("Search Engine Create Dialog - User clicked Create");
 			if (string.IsNullOrWhiteSpace(vm.Name) || string.IsNullOrWhiteSpace(vm.Url))
@@ -145,17 +143,16 @@ public class SearchEngineViewModel
 	public async Task ShowEditDialogAsync()
 	{
 		var vm = new SearchEngineDialogContentViewModel();
-		var dialog = new ContentDialog
+		var dialog = new DialogWindow
 		{
 			// 作成画面
-			Content = new SearchEngineDialogContent
+			DialogContent = new SearchEngineDialogContent
 			{ DataContext = vm },
 
 			// タイトル
-			Title = Resources.Settings_Search_SearchEngine_Dialog_Edit,
+			DialogTitle = Resources.Settings_Search_SearchEngine_Dialog_Edit,
 
 			// ボタンのテキスト
-			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
 			PrimaryButtonText = Resources.Strings_Ok,
 			CloseButtonText = Resources.Strings_Cancel,
 		};
@@ -165,9 +162,9 @@ public class SearchEngineViewModel
 		vm.Url = Uri;
 
 		// ダイアログを表示する
-		var result = await dialog.ShowAsync();
+		var result = await dialog.ShowAsync(App.SettingsWindow);
 
-		if (result == ContentDialogResult.Primary)
+		if (result == DialogResult.Primary)
 		{
 			App.Logger.Debug("Search Engine Create Dialog - User clicked Create");
 			if (string.IsNullOrWhiteSpace(vm.Name) || string.IsNullOrWhiteSpace(vm.Url))
@@ -194,24 +191,23 @@ public class SearchEngineViewModel
 	private static readonly CompositeFormat deleteDialogContentDesc = CompositeFormat.Parse(Resources.Settings_Search_SearchEngine_Dialog_Delete_Description);
 	public async Task ShowDeleteDialogAsync()
 	{
-		var dialog = new ContentDialog
+		var dialog = new DialogWindow
 		{
 			// 説明
-			Content = string.Format(null, deleteDialogContentDesc, Name),
+			DialogContent = string.Format(null, deleteDialogContentDesc, Name),
 
 			// タイトル
-			Title = Resources.Settings_Search_SearchEngine_Dialog_Delete_Title,
+			DialogTitle = Resources.Settings_Search_SearchEngine_Dialog_Delete_Title,
 
 			// ボタンのテキスト
-			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
 			PrimaryButtonText = Resources.Settings_Search_SearchEngine_Dialog_Delete_Confirm,
 			CloseButtonText = Resources.Strings_Cancel,
 		};
 
 		// ダイアログを表示する
-		var result = await dialog.ShowAsync();
+		var result = await dialog.ShowAsync(App.SettingsWindow);
 
-		if (result == ContentDialogResult.Primary)
+		if (result == DialogResult.Primary)
 		{
 			App.Logger.Debug("Search Engine Delete Dialog - User clicked Delete");
 

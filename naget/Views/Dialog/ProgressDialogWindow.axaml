@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="using:naget.Views.Dialog"
+		mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="250"
+		x:Class="naget.Views.Dialog.ProgressDialogWindow"
+		x:DataType="local:ProgressDialogWindow"
+		SizeToContent="Height"
+		Width="450"
+		WindowStartupLocation="CenterOwner"
+		CanResize="False"
+		ShowInTaskbar="False"
+		Title="{Binding DialogTitle, RelativeSource={RelativeSource Self}}"
+		x:Name="self"
+>
+	<Border Padding="24">
+		<StackPanel Spacing="12" MinWidth="350">
+			<!-- SubHeader -->
+			<TextBlock x:Name="SubHeaderText"
+					   Text="{Binding #self.SubHeader}"
+					   FontSize="18"
+					   FontWeight="SemiBold"
+					   TextWrapping="Wrap"
+					   IsVisible="{Binding #self.SubHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+			<!-- Content -->
+			<ContentPresenter x:Name="ContentPresenter"
+							  Content="{Binding #self.DialogContent}" />
+
+			<!-- Progress Bar -->
+			<ProgressBar x:Name="ProgressBarControl"
+						 Minimum="0"
+						 Maximum="100"
+						 Value="{Binding #self.ProgressValue}"
+						 IsVisible="{Binding #self.ShowProgressBar}" />
+
+			<!-- Buttons -->
+			<ItemsControl x:Name="ButtonsPanel" ItemsSource="{Binding #self.Buttons}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate x:DataType="local:ProgressDialogButton">
+						<Button Content="{Binding Text}"
+								IsEnabled="{Binding IsEnabled}"
+								Command="{Binding ClickCommand}"
+								MinWidth="80" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</StackPanel>
+	</Border>
+</Window>

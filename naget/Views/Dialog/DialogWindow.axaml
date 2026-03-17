@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="using:naget.Views.Dialog"
+		mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+		x:Class="naget.Views.Dialog.DialogWindow"
+		x:DataType="local:DialogWindow"
+		SizeToContent="WidthAndHeight"
+		WindowStartupLocation="CenterOwner"
+		CanResize="False"
+		ShowInTaskbar="False"
+		MinWidth="350"
+		MaxWidth="600"
+		Title="{Binding DialogTitle, RelativeSource={RelativeSource Self}}"
+		x:Name="self"
+>
+	<Border Padding="24">
+		<StackPanel Spacing="16" MinWidth="300">
+			<!-- Title -->
+			<TextBlock x:Name="TitleText"
+					   Text="{Binding #self.DialogTitle}"
+					   FontSize="18"
+					   FontWeight="SemiBold"
+					   TextWrapping="Wrap" />
+
+			<!-- Content -->
+			<ContentPresenter x:Name="DialogContentPresenter"
+							  Content="{Binding #self.DialogContent}" />
+
+			<!-- Buttons -->
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,0">
+				<Button x:Name="PrimaryButton"
+						Classes="accent"
+						Content="{Binding #self.PrimaryButtonText}"
+						IsVisible="{Binding #self.PrimaryButtonText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+						Click="OnPrimaryButtonClick"
+						MinWidth="80" />
+				<Button x:Name="SecondaryButton"
+						Content="{Binding #self.SecondaryButtonText}"
+						IsVisible="{Binding #self.IsSecondaryButtonVisible}"
+						Click="OnSecondaryButtonClick"
+						MinWidth="80" />
+				<Button x:Name="CloseButton"
+						Content="{Binding #self.CloseButtonText}"
+						IsVisible="{Binding #self.CloseButtonText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+						Click="OnCloseButtonClick"
+						MinWidth="80" />
+			</StackPanel>
+		</StackPanel>
+	</Border>
+</Window>

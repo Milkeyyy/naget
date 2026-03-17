@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Epoxy;
-using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
 using naget.Helpers;
 using naget.Models.Config;
@@ -69,7 +68,7 @@ public class ShortcutKeyViewModel
 	/// <summary>
 	/// キー登録ボタンのアイコン
 	/// </summary>
-	public string KeyRegisterButtonIcon { get; private set; } = "PlayFilled";
+	public string KeyRegisterButtonIcon { get; private set; } = "\u25B6";
 	/// <summary>
 	/// キー登録モードかどうか
 	/// </summary>
@@ -150,7 +149,7 @@ public class ShortcutKeyViewModel
 
 			RegisteredKeysText = string.Empty;
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
-			KeyRegisterButtonIcon = "PlayFilled";
+			KeyRegisterButtonIcon = "\u25B6";
 
 			ViewIsLoaded = true;
 
@@ -207,7 +206,7 @@ public class ShortcutKeyViewModel
 				// キー登録モードを終了する
 				var result = HotKeyHelper.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
-				KeyRegisterButtonIcon = "PlayFilled";
+				KeyRegisterButtonIcon = "\u25B6";
 			}
 			else
 			{
@@ -235,7 +234,7 @@ public class ShortcutKeyViewModel
 				App.Logger.Debug("End Key Registraion");
 				var result = HotKeyHelper.EndKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
-				KeyRegisterButtonIcon = "PlayFilled";
+				KeyRegisterButtonIcon = "\u25B6";
 			}
 			return default;
 		});
@@ -250,7 +249,7 @@ public class ShortcutKeyViewModel
 				App.Logger.Debug("Cancel Key Registraion");
 				var result = HotKeyHelper.CancelKeyRegistration();
 				KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
-				KeyRegisterButtonIcon = "PlayFilled";
+				KeyRegisterButtonIcon = "\u25B6";
 				// 現在登録されているキーを表示し直す
 				RegisteredKeysText = SelectedPresetItem?.ToString() ?? Resources.Settings_ShortcutKey_Preset_NotSet;
 			}
@@ -345,12 +344,12 @@ public class ShortcutKeyViewModel
 		if (value)
 		{
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Done;
-			KeyRegisterButtonIcon = "Accept";
+			KeyRegisterButtonIcon = "\u2714";
 		}
 		else
 		{
 			KeyRegisterButtonText = Resources.Settings_ShortcutKey_RegisterKeys_Register;
-			KeyRegisterButtonIcon = "PlayFilled";
+			KeyRegisterButtonIcon = "\u25B6";
 		}
 		// 登録されているホットキーを更新する
 		if (HotKeyPresetList != null) RegisteredKeysText = HotKeyPresetList[SelectedPresetIndex].ToString();
@@ -476,27 +475,23 @@ public class ShortcutKeyViewModel
 	public async Task ShowInputDialogAsync()
 	{
 		var vm = new ShortcutKeyPresetCreatorViewModel();
-		var dialog = new ContentDialog
+		var dialog = new DialogWindow
 		{
 			// 作成画面
-			Content = new ShortcutKeyPresetCreator
+			DialogContent = new ShortcutKeyPresetCreator
 			{ DataContext = vm },
 
 			// タイトル
-			Title = Resources.Settings_ShortcutKey_Preset_CreateNewPreset,
+			DialogTitle = Resources.Settings_ShortcutKey_Preset_CreateNewPreset,
 
 			// ボタンのテキスト
-			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
 			PrimaryButtonText = Resources.Strings_Ok,
 			CloseButtonText = Resources.Strings_Cancel,
-			
-			// 作成ボタンが押された時の処理
-			//PrimaryButtonCommand = command
 		};
 
-		var result = await dialog.ShowAsync();
+		var result = await dialog.ShowAsync(App.SettingsWindow);
 
-		if (result == ContentDialogResult.Primary)
+		if (result == DialogResult.Primary)
 		{
 			App.Logger.Debug("HotKey Preset Create Dialog - User clicked Create");
 			if (string.IsNullOrWhiteSpace(vm.PresetName))
@@ -545,24 +540,23 @@ public class ShortcutKeyViewModel
 	{
 		if (SelectedPresetItem == null) return;
 
-		var dialog = new ContentDialog
+		var dialog = new DialogWindow
 		{
 			// 説明
-			Content = string.Format(null, deleteDialogContentDesc, SelectedPresetItem.Name),
+			DialogContent = string.Format(null, deleteDialogContentDesc, SelectedPresetItem.Name),
 
 			// タイトル
-			Title = Resources.Settings_ShortcutKey_Preset_Dialog_Delete_Title,
+			DialogTitle = Resources.Settings_ShortcutKey_Preset_Dialog_Delete_Title,
 
 			// ボタンのテキスト
-			IsSecondaryButtonEnabled = false, // 第二ボタンを無効化
 			PrimaryButtonText = Resources.Settings_ShortcutKey_Preset_Dialog_Delete_Confirm,
 			CloseButtonText = Resources.Strings_Cancel,
 		};
 
 		// ダイアログを表示する
-		var result = await dialog.ShowAsync();
+		var result = await dialog.ShowAsync(App.SettingsWindow);
 
-		if (result == ContentDialogResult.Primary)
+		if (result == DialogResult.Primary)
 		{
 			App.Logger.Debug("Preset Delete Dialog - User clicked Delete");
 

@@ -1,22 +1,17 @@
-﻿using Avalonia.Controls;
-using FluentAvalonia.Core;
-using FluentAvalonia.UI.Controls;
-using FluentAvalonia.UI.Windowing;
+using Avalonia.Controls;
 using naget.ViewModels;
 using System;
 using System.Diagnostics;
 
 namespace naget.Views;
 
-public partial class SettingsWindow : AppWindow
+public partial class SettingsWindow : Window
 {
 	public SettingsWindow()
 	{
 		InitializeComponent();
 
 		DataContext = new SettingsWindowViewModel();
-
-		TitleBar.ExtendsContentIntoTitleBar = true;
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
 		Closing += (s, e) =>
@@ -25,33 +20,28 @@ public partial class SettingsWindow : AppWindow
 			e.Cancel = true;
 		};
 
-		var nv = this.FindControl<NavigationView>("navigationMenu");
-		nv.SelectionChanged += OnNavigationMenuSelectionChanged;
-		nv.SelectedItem = nv.MenuItems.ElementAt(0);
+		var listBox = this.FindControl<ListBox>("navigationMenu");
+		listBox.SelectionChanged += OnNavigationMenuSelectionChanged;
+		listBox.SelectedIndex = 0;
 	}
 
-	private void OnNavigationMenuSelectionChanged(object sender, NavigationViewSelectionChangedEventArgs e)
+	private void OnNavigationMenuSelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
-		string smpPage;
-		object pg;
+		if (sender is not ListBox listBox) return;
+		if (listBox.SelectedItem is not ListBoxItem item) return;
+		if (item.Tag == null) return;
 
-		if (e.SelectedItem is NavigationViewItem nvi)
+		string tag = item.Tag.ToString()!;
+		App.Logger.Debug($"Navigation Selected: {tag}");
+
+		string smpPage = $"naget.Views.Settings.{tag}";
+		App.Logger.Debug($"- Page: {smpPage}");
+
+		var pg = Activator.CreateInstance(Type.GetType(smpPage)!);
+		var contentArea = this.FindControl<ContentControl>("contentArea");
+		if (contentArea != null)
 		{
-			if (nvi.Tag == null) return; // タグがnullの場合は何もしない
-
-			App.Logger.Debug($"Navigation Selected: {nvi.Tag}");
-
-			/*// 設定が選択された場合はアプリケーション設定のページを表示する
-			if ((string)nvi.Tag == "Settings") { smpPage = "naget.Views.Settings.AppSettingsView"; }
-			// それ以外は指定されたタグに基づいてページを表示する
-			else { smpPage = $"naget.Views.Settings.{nvi.Tag}"; }*/
-
-			smpPage = $"naget.Views.Settings.{nvi.Tag}";
-
-			App.Logger.Debug($"- Page: {smpPage}");
-
-			pg = Activator.CreateInstance(Type.GetType(smpPage));
-			(sender as NavigationView).Content = pg;
+			contentArea.Content = pg;
 		}
 	}
 }

@@ -1,9 +1,7 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:sty="using:FluentAvalonia.Styling"
-		xmlns:ui="using:FluentAvalonia.UI.Controls"
 		xmlns:vm="using:naget.ViewModels"
 		xmlns:local="clr-namespace:naget;assembly=naget"
 		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
@@ -11,6 +9,7 @@
 		x:Class="naget.Views.SettingsWindow"
 		x:DataType="vm:SettingsWindowViewModel"
 		WindowStartupLocation="CenterScreen"
+		ExtendClientAreaToDecorationsHint="True"
 		Icon="/Assets/Icon.ico"
 		Title="{Binding WindowTitle}"
 >
@@ -20,19 +19,40 @@
 	</Design.DataContext>
 
 	<Panel Margin="0 48 0 0">
-		<ui:NavigationView x:Name="navigationMenu" Height="NaN" PaneDisplayMode="Auto" IsSettingsVisible="False">
-			<ui:NavigationView.MenuItems>
-				<!--検索-->
-				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_Search}" Tag="SearchView" IconSource="Zoom" />
-				<!--ショートカットキー-->
-				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" Tag="ShortcutKeyView" IconSource="Keyboard" />
-				<!--アプリ内ブラウザー-->
-				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_InAppBrowser}" Tag="InAppBrowserView" IconSource="Globe" />
-			</ui:NavigationView.MenuItems>
-			<ui:NavigationView.FooterMenuItems>
-				<!--アプリケーション設定-->
-				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_AppSettings}" Tag="AppSettingsView" IconSource="Settings" />
-			</ui:NavigationView.FooterMenuItems>
-		</ui:NavigationView>
+		<SplitView DisplayMode="Inline" IsPaneOpen="True" OpenPaneLength="220">
+			<SplitView.Pane>
+				<ListBox x:Name="navigationMenu" SelectionMode="Single" Margin="0,4,0,0">
+					<!--検索-->
+					<ListBoxItem Tag="SearchView">
+						<StackPanel Orientation="Horizontal" Spacing="8">
+							<TextBlock Text="&#x1F50D;" FontSize="16" VerticalAlignment="Center" />
+							<TextBlock Text="{x:Static lang:Resources.Settings_Tab_Search}" VerticalAlignment="Center" />
+						</StackPanel>
+					</ListBoxItem>
+					<!--ショートカットキー-->
+					<ListBoxItem Tag="ShortcutKeyView">
+						<StackPanel Orientation="Horizontal" Spacing="8">
+							<TextBlock Text="&#x2328;" FontSize="16" VerticalAlignment="Center" />
+							<TextBlock Text="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" VerticalAlignment="Center" />
+						</StackPanel>
+					</ListBoxItem>
+					<!--アプリ内ブラウザー-->
+					<ListBoxItem Tag="InAppBrowserView">
+						<StackPanel Orientation="Horizontal" Spacing="8">
+							<TextBlock Text="&#x1F310;" FontSize="16" VerticalAlignment="Center" />
+							<TextBlock Text="{x:Static lang:Resources.Settings_Tab_InAppBrowser}" VerticalAlignment="Center" />
+						</StackPanel>
+					</ListBoxItem>
+					<!--アプリケーション設定-->
+					<ListBoxItem Tag="AppSettingsView">
+						<StackPanel Orientation="Horizontal" Spacing="8">
+							<TextBlock Text="&#x2699;" FontSize="16" VerticalAlignment="Center" />
+							<TextBlock Text="{x:Static lang:Resources.Settings_Tab_AppSettings}" VerticalAlignment="Center" />
+						</StackPanel>
+					</ListBoxItem>
+				</ListBox>
+			</SplitView.Pane>
+			<ContentControl x:Name="contentArea" />
+		</SplitView>
 	</Panel>
 </Window>

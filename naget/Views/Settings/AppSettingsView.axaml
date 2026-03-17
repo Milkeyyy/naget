@@ -1,9 +1,9 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
-			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:ctrl="using:naget.Controls"
 			 xmlns:cv="clr-namespace:naget.Converter;assembly=naget"
 			 xmlns:vm="using:naget.ViewModels.Settings"
 			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
@@ -27,25 +27,26 @@
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_AppSettings}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
 			<!--設定の適用にはアプリの再起動が必要ですよ表示-->
-			<ui:InfoBar Title="{x:Static lang:Resources.Settings_System_Language_RequiredRestart}" Severity="Warning" IsOpen="{Binding LanguageNoteTextIsVisible}" IsClosable="False" Margin="0 0 0 10">
-				<ui:InfoBar.ActionButton>
+			<Border Background="#FFF3CD" CornerRadius="4" Padding="12" Margin="0 0 0 10"
+					IsVisible="{Binding LanguageNoteTextIsVisible}">
+				<Grid ColumnDefinitions="Auto,*,Auto">
+					<TextBlock Grid.Column="0" Text="&#x26A0;" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0"/>
+					<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.Settings_System_Language_RequiredRestart}"
+							   VerticalAlignment="Center" TextWrapping="Wrap" Foreground="#856404"/>
 					<!--アプリケーション再起動ボタン-->
-					<Button Classes="accent" HorizontalAlignment="Right" Margin="0 0 0 0" Command="{Binding RestartAppCommand}">
+					<Button Grid.Column="2" Classes="accent" HorizontalAlignment="Right" Margin="8 0 0 0" Command="{Binding RestartAppCommand}">
 						<Button.Content>
 							<StackPanel Orientation="Horizontal">
-								<TextBlock Foreground="WhiteSmoke" Text="{x:Static lang:Resources.Settings_System_Language_RestartApplication}" Margin="0 0 0 0"/>
+								<TextBlock Text="{x:Static lang:Resources.Settings_System_Language_RestartApplication}" Margin="0 0 0 0"/>
 							</StackPanel>
 						</Button.Content>
 					</Button>
-				</ui:InfoBar.ActionButton>
-			</ui:InfoBar>
+				</Grid>
+			</Border>
 
 			<!--テーマ-->
-			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" Foreground="{DynamicResource ThemeForegroundBrush}">
-				<ui:SettingsExpander.IconSource>
-					<ui:SymbolIconSource Symbol="ColorFill"/>
-				</ui:SettingsExpander.IconSource>
-				<ui:SettingsExpander.Footer>
+			<ctrl:SettingsCard IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" Icon="&#x1F3A8;">
+				<ctrl:SettingsCard.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--テーマ選択リスト-->
 						<ComboBox MinWidth="200" ItemsSource="{Binding ThemeList}" SelectedItem="{Binding SelectedTheme}">
@@ -57,23 +58,20 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 					</StackPanel>
-				</ui:SettingsExpander.Footer>
-			</ui:SettingsExpander>
+				</ctrl:SettingsCard.Footer>
+			</ctrl:SettingsCard>
 
 			<!--言語-->
-			<ui:SettingsExpander IsExpanded="True">
-				<ui:SettingsExpander.IconSource>
-					<ui:SymbolIconSource Symbol="Earth"/>
-				</ui:SettingsExpander.IconSource>
+			<ctrl:SettingsCard IsExpanded="True" Icon="&#x1F310;">
 				<!--ヘッダー&注意書きテキスト-->
-				<ui:SettingsExpander.Header>
+				<ctrl:SettingsCard.Header>
 					<StackPanel>
 						<!--ヘッダーテキスト-->
 						<TextBlock Text="{x:Static lang:Resources.Settings_System_Language}" VerticalAlignment="Center"/>
 					</StackPanel>
-				</ui:SettingsExpander.Header>
+				</ctrl:SettingsCard.Header>
 
-				<ui:SettingsExpander.Footer>
+				<ctrl:SettingsCard.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--言語選択リスト-->
 						<ComboBox MinWidth="200" ItemsSource="{Binding LanguageList}" SelectedItem="{Binding SelectedLanguage}">
@@ -84,23 +82,20 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 					</StackPanel>
-				</ui:SettingsExpander.Footer>
-			</ui:SettingsExpander>
+				</ctrl:SettingsCard.Footer>
+			</ctrl:SettingsCard>
 
 			<!--アップデート-->
-			<ui:SettingsExpander IsExpanded="True">
-				<ui:SettingsExpander.IconSource>
-					<ui:SymbolIconSource Symbol="Sync"/>
-				</ui:SettingsExpander.IconSource>
+			<ctrl:SettingsCard IsExpanded="True" Icon="&#x1F504;">
 				<!--ヘッダー&注意書きテキスト-->
-				<ui:SettingsExpander.Header>
+				<ctrl:SettingsCard.Header>
 					<StackPanel>
 						<!--ヘッダーテキスト-->
 						<TextBlock Text="{x:Static lang:Resources.Settings_Update_Check}" VerticalAlignment="Center"/>
 					</StackPanel>
-				</ui:SettingsExpander.Header>
+				</ctrl:SettingsCard.Header>
 
-				<ui:SettingsExpander.Footer>
+				<ctrl:SettingsCard.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--アップデートチェックボタン-->
 						<Button Margin="10 0 0 0" Command="{Binding CheckUpdateCommand}">
@@ -111,25 +106,19 @@
 							</Button.Content>
 						</Button>
 					</StackPanel>
-				</ui:SettingsExpander.Footer>
-			</ui:SettingsExpander>
+				</ctrl:SettingsCard.Footer>
+			</ctrl:SettingsCard>
 
 			<!--このアプリについて-->
-			<ui:SettingsExpander IsExpanded="True" IsClickEnabled="True" Command="{Binding AboutClickCommand}">
-				<ui:SettingsExpander.IconSource>
-					<ui:SymbolIconSource Symbol="Help"/> <!--なんで Info アイコンがないの？？？？？-->
-				</ui:SettingsExpander.IconSource>
-				<ui:SettingsExpander.ActionIconSource>
-					<ui:SymbolIconSource Symbol="Open"/>
-				</ui:SettingsExpander.ActionIconSource>
+			<ctrl:SettingsCard IsExpanded="True" IsClickEnabled="True" Command="{Binding AboutClickCommand}" Icon="&#x2753;" ActionIcon="&#x1F4C2;">
 				<!--ヘッダー&注意書きテキスト-->
-				<ui:SettingsExpander.Header>
+				<ctrl:SettingsCard.Header>
 					<StackPanel>
 						<!--ヘッダーテキスト-->
 						<TextBlock Text="{x:Static lang:Resources.Settings_About}" VerticalAlignment="Center"/>
 					</StackPanel>
-				</ui:SettingsExpander.Header>
-			</ui:SettingsExpander>
+				</ctrl:SettingsCard.Header>
+			</ctrl:SettingsCard>
 		</StackPanel>
 	</Panel>
 </UserControl>

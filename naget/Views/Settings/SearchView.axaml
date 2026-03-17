@@ -1,9 +1,9 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:epoxy="https://github.com/kekyo/Epoxy"
-			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:ctrl="using:naget.Controls"
 			 xmlns:vm="using:naget.ViewModels.Settings"
 			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -11,7 +11,7 @@
 			 x:DataType="vm:SearchViewModel"
 			 epoxy:Fountain.Well="{Binding ViewWell}"
 >
-	
+
 	<Design.DataContext>
 		<vm:SearchViewModel/>
 	</Design.DataContext>
@@ -21,44 +21,41 @@
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_Search}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
 			<TextBlock Text="{x:Static lang:Resources.Settings_Search_SearchEngine}" Margin="0 0 0 8" FontSize="16" FontWeight="Bold"/>
-			<ui:SettingsExpander Header="{x:Static lang:Resources.Settings_Search_SearchEngine}">
-				<ui:SettingsExpander.IconSource>
-					<ui:SymbolIconSource Symbol="Find"/>
-				</ui:SettingsExpander.IconSource>
-				<ui:SettingsExpander.Footer>
+			<ctrl:SettingsCard Header="{x:Static lang:Resources.Settings_Search_SearchEngine}" Icon="&#x1F50D;">
+				<ctrl:SettingsCard.Footer>
 					<StackPanel Orientation="Horizontal">
 						<!--検索エンジン新規作成ボタン-->
 						<Button Classes="accent" IsEnabled="" Margin="10 0 0 0" Command="{Binding CreateSearchEngineCommand}">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<ui:SymbolIcon Symbol="Add" FontSize="15"/>
-									<TextBlock Text="{x:Static lang:Resources.Settings_Search_Add}" Foreground="White" Margin="10 0 0 0"/>
+									<TextBlock Text="+" FontSize="15"/>
+									<TextBlock Text="{x:Static lang:Resources.Settings_Search_Add}" Margin="10 0 0 0"/>
 								</StackPanel>
 							</Button.Content>
 						</Button>
 					</StackPanel>
-				</ui:SettingsExpander.Footer>
-			</ui:SettingsExpander>
-			
+				</ctrl:SettingsCard.Footer>
+			</ctrl:SettingsCard>
+
 			<!--各検索エンジンのコントロールを動的に生成する-->
 			<ItemsControl ItemsSource="{Binding SearchEngineList}" Margin="0 2 0 20">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Grid Margin="0 1">
-							<ui:SettingsExpander IconSource="　">
-								<ui:SettingsExpander.Header>
+							<ctrl:SettingsCard Icon="　">
+								<ctrl:SettingsCard.Header>
 									<StackPanel>
 										<TextBlock Text="{Binding Name}" FontWeight="DemiBold" VerticalAlignment="Center"/>
 										<SelectableTextBlock Text="{Binding Uri}" VerticalAlignment="Center"/>
 									</StackPanel>
-								</ui:SettingsExpander.Header>
-								<ui:SettingsExpander.Footer>
+								</ctrl:SettingsCard.Header>
+								<ctrl:SettingsCard.Footer>
 									<StackPanel Orientation="Horizontal">
 										<!--編集ボタン-->
 										<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding EditSearchEngineCommand}">
 											<Button.Content>
 												<StackPanel Orientation="Horizontal">
-													<ui:SymbolIcon Symbol="Edit" FontSize="15"/>
+													<TextBlock Text="&#x270F;" FontSize="15"/>
 													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Edit}" Margin="10 0 0 0"/>
 												</StackPanel>
 											</Button.Content>
@@ -67,16 +64,14 @@
 										<Button IsEnabled="" Margin="10 0 0 0" Command="{Binding DeleteSearchEngineCommand}">
 											<Button.Content>
 												<StackPanel Orientation="Horizontal">
-													<ui:SymbolIcon Symbol="Delete" FontSize="15"/>
+													<TextBlock Text="&#x1F5D1;" FontSize="15"/>
 													<TextBlock Text="{x:Static lang:Resources.Settings_Search_Delete}" Margin="10 0 0 0"/>
 												</StackPanel>
 											</Button.Content>
 										</Button>
 									</StackPanel>
-								</ui:SettingsExpander.Footer>
-							</ui:SettingsExpander>
-							<!--<Button Content="{x:Static lang:Resources.Settings_Search_Edit}" Command="{Binding EditCommand}" Margin="0 0 5 0"/>
-							<Button Content="{x:Static lang:Resources.Settings_Search_Delete}" Command="{Binding DeleteCommand}"/>-->
+								</ctrl:SettingsCard.Footer>
+							</ctrl:SettingsCard>
 						</Grid>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>

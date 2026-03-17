@@ -1,0 +1,79 @@
+<Styles xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:ctrl="using:naget.Controls">
+
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<ctrl:SettingsCard Header="Sample Setting" Icon="⚙" Description="Description text">
+				<ctrl:SettingsCard.Footer>
+					<ToggleSwitch />
+				</ctrl:SettingsCard.Footer>
+			</ctrl:SettingsCard>
+		</Border>
+	</Design.PreviewWith>
+
+	<Style Selector="ctrl|SettingsCard">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+						BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+						BorderThickness="1"
+						CornerRadius="4"
+						Padding="16,12"
+						Margin="0,1,0,0">
+					<StackPanel>
+						<!-- Header Row -->
+						<Button x:Name="PART_HeaderButton"
+								Background="Transparent"
+								BorderThickness="0"
+								Padding="0"
+								HorizontalAlignment="Stretch"
+								HorizontalContentAlignment="Stretch"
+								Cursor="Hand">
+							<Grid ColumnDefinitions="Auto,*,Auto,Auto">
+								<!-- Icon -->
+								<TextBlock Grid.Column="0"
+										   Text="{TemplateBinding Icon}"
+										   FontSize="20"
+										   VerticalAlignment="Center"
+										   Margin="0,0,12,0"
+										   IsVisible="{TemplateBinding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+								<!-- Header + Description -->
+								<StackPanel Grid.Column="1" VerticalAlignment="Center">
+									<ContentPresenter Content="{TemplateBinding Header}"
+													  IsVisible="{TemplateBinding Header, Converter={x:Static ObjectConverters.IsNotNull}}" />
+									<TextBlock Text="{TemplateBinding Description}"
+											   Opacity="0.6"
+											   FontSize="12"
+											   IsVisible="{TemplateBinding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+								</StackPanel>
+
+								<!-- Footer -->
+								<ContentPresenter Grid.Column="2"
+												  Content="{TemplateBinding Footer}"
+												  VerticalAlignment="Center"
+												  Margin="12,0,0,0"
+												  IsVisible="{TemplateBinding Footer, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+								<!-- Action Icon -->
+								<TextBlock Grid.Column="3"
+										   Text="{TemplateBinding ActionIcon}"
+										   FontSize="16"
+										   VerticalAlignment="Center"
+										   Margin="8,0,0,0"
+										   Opacity="0.6"
+										   IsVisible="{TemplateBinding ActionIcon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+							</Grid>
+						</Button>
+
+						<!-- Body (expandable content) -->
+						<ContentPresenter Content="{TemplateBinding Body}"
+										  Margin="0,8,0,0"
+										  IsVisible="{TemplateBinding IsExpanded}" />
+					</StackPanel>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>

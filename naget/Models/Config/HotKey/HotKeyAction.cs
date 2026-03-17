@@ -1,5 +1,4 @@
 ﻿using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
@@ -18,12 +17,12 @@ namespace naget.Models.Config.HotKey;
 	public static ReadOnlyCollection<HotKeyAction> Actions { get; } = new([
 		new( // なし
 			Resources.Settings_ShortcutKey_Action_None,
-			Symbol.Cancel,
+			"\u274C",
 			"None"
 		),
 		new( // ウェブ検索
 			Resources.Settings_ShortcutKey_Action_WebSearch,
-			Symbol.Find,
+			"\uD83D\uDD0D",
 			"WebSearch",
 			new Dictionary<string, string>()
 			{
@@ -73,7 +72,7 @@ public class HotKeyAction
 	public readonly static ReadOnlyCollection<HotKeyAction> Actions;
 
 	// 静的コンストラクターで直接インスタンスを作成するための内部コンストラクター
-	private HotKeyAction(HotKeyActionType type, string name, Symbol icon, Dictionary<string, string> property)
+	private HotKeyAction(HotKeyActionType type, string name, string icon, Dictionary<string, string> property)
 	{
 		ActionType = type;
 		Name = name;
@@ -88,7 +87,7 @@ public class HotKeyAction
 		/*var noneAction = new HotKeyAction(
 			HotKeyActionType.None,
 			Resources.Settings_ShortcutKey_Action_None,
-			Symbol.Cancel,
+			"\u274C",
 			new Dictionary<string, string>()
 		);
 		var webSearchProps = new Dictionary<string, string>()
@@ -98,20 +97,20 @@ public class HotKeyAction
 		var webSearchAction = new HotKeyAction(
 			HotKeyActionType.WebSearch,
 			Resources.Settings_ShortcutKey_Action_WebSearch,
-			Symbol.Find,
+			"\uD83D\uDD0D",
 			webSearchProps
 		);*/
 		ActionList = new([
 			new HotKeyAction(
 				HotKeyActionType.None,
 				Resources.Settings_ShortcutKey_Action_None,
-				Symbol.Cancel,
+				"\u274C",
 				[]
 			),
 			new HotKeyAction(
 				HotKeyActionType.WebSearch,
 				Resources.Settings_ShortcutKey_Action_WebSearch,
-				Symbol.Find,
+				"\uD83D\uDD0D",
 				new Dictionary<string, string>()
 				{
 					{ "SearchEngineId", SearchEngineManager.EngineList[0].Id }
@@ -144,7 +143,7 @@ public class HotKeyAction
 	[JsonIgnore]
 	public string Name { get; init; }
 	[JsonIgnore]
-	public Symbol Icon { get; init; }
+	public string Icon { get; init; }
 	public HotKeyActionType ActionType { get; init; }
 	[JsonIgnore]
 	public string Id { get { return ActionType.ToString(); } }

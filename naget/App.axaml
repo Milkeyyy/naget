@@ -1,27 +1,24 @@
-﻿<Application xmlns="https://github.com/avaloniaui"
+<Application xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:vm="using:naget.ViewModels"
-			 xmlns:sty="using:FluentAvalonia.Styling"
 			 xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 			 x:Class="naget.App"
 			 x:DataType="vm:AppViewModel"
 			 xmlns:local="using:naget"
-			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:ctrl="using:naget.Controls"
 			 RequestedThemeVariant="Default"
 			 Name="naget"
 >
 
-	<!-- フォントの定義 -->
-	<!-- <Application.Resources>
-		<ResourceDictionary>
-			<FontFamily x:Key="DefaultFont">avares://naget/Assets/Fonts#Noto Sans JP</FontFamily>
-		</ResourceDictionary>
-	</Application.Resources> -->
-
 	<Application.Styles>
-		<!--アクセントカラー (CustomAccentColor) をピンクにする-->
-		<sty:FluentAvaloniaTheme CustomAccentColor="#e62152" />
-		
+		<FluentTheme>
+			<FluentTheme.Palettes>
+				<ColorPaletteResources x:Key="Light" Accent="#e62152" />
+				<ColorPaletteResources x:Key="Dark" Accent="#e62152" />
+			</FluentTheme.Palettes>
+		</FluentTheme>
+		<StyleInclude Source="avares://naget/Controls/SettingsCard.axaml" />
+
 		<!-- Accent Button Global Style -->
 		<Style Selector="Button.accent">
 			<Setter Property="Foreground" Value="White" />
@@ -29,7 +26,7 @@
 		<Style Selector="Button.accent PathIcon">
 			<Setter Property="Foreground" Value="White" />
 		</Style>
-		<Style Selector="Button.accent ui|SymbolIcon">
+		<Style Selector="Button.accent TextBlock">
 			<Setter Property="Foreground" Value="White" />
 		</Style>
 
