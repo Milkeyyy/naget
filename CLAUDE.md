@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+
+## Context7 の使用
+コード生成、セットアップや設定手順、ライブラリ/APIドキュメントが必要な場合は、常にContext7を使用してください。つまり、私が明示的に指示しなくても、Context7 MCPツールを使ってライブラリIDを解決し、ライブラリドキュメントを取得できるようにしてください。
+
+
 ## プロジェクト概要
 
 **naget** は Avalonia 11 ベースのクロスプラットフォーム検索ランチャーアプリケーション。
