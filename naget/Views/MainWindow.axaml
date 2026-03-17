@@ -10,7 +10,7 @@
 		Icon="/Assets/Icon.ico"
 		Title="naget"
 		ExtendClientAreaToDecorationsHint="True"
-		ExtendClientAreaChromeHints="NoChrome"
+		WindowDecorations="None"
 		ShowInTaskbar="False"
 		ShowActivated="True"
 		WindowStartupLocation="CenterScreen"
