@@ -1,7 +1,7 @@
 [
     {
         "PackageId": "Avalonia",
-        "PackageVersion": "12.0.0-preview2",
+        "PackageVersion": "11.3.17",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
         "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
@@ -11,33 +11,17 @@
     },
     {
         "PackageId": "Avalonia.Controls.WebView",
-        "PackageVersion": "12.0.0-preview2",
+        "PackageVersion": "11.4.0",
         "PackageProjectUrl": "https://avaloniaui.net/",
         "Copyright": "Copyright 2019-2026 \u00a9 AvaloniaUI O\u00dc",
         "Authors": "AvaloniaUI O\u00dc",
-        "ValidationErrors": [
-            {
-                "Error": "No license information found",
-                "Context": "V:\\naget\\naget\\naget.csproj"
-            },
-            {
-                "Error": "No license information found",
-                "Context": "V:\\naget\\naget\\naget.csproj"
-            },
-            {
-                "Error": "No license information found",
-                "Context": "V:\\naget\\naget\\naget.csproj"
-            },
-            {
-                "Error": "No license information found",
-                "Context": "V:\\naget\\naget\\naget.csproj"
-            }
-        ],
-        "LicenseInformationOrigin": 2
+        "License": "MIT",
+        "LicenseUrl": "https://licenses.nuget.org/MIT",
+        "LicenseInformationOrigin": 0
     },
     {
         "PackageId": "Avalonia.Desktop",
-        "PackageVersion": "12.0.0-preview2",
+        "PackageVersion": "11.3.17",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
         "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
@@ -57,7 +41,7 @@
     },
     {
         "PackageId": "FluentAvaloniaUI",
-        "PackageVersion": "2.5.0",
+        "PackageVersion": "2.5.1",
         "Authors": "FluentAvalonia",
         "License": "MIT",
         "LicenseUrl": "https://licenses.nuget.org/MIT",
@@ -65,7 +49,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration",
-        "PackageVersion": "10.0.5",
+        "PackageVersion": "10.0.8",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -75,7 +59,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration.Binder",
-        "PackageVersion": "10.0.5",
+        "PackageVersion": "10.0.8",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -85,7 +69,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration.Json",
-        "PackageVersion": "10.0.5",
+        "PackageVersion": "10.0.8",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -105,7 +89,7 @@
     },
     {
         "PackageId": "SharpHook",
-        "PackageVersion": "7.1.1",
+        "PackageVersion": "7.1.2",
         "PackageProjectUrl": "https://sharphook.tolik.io/",
         "Copyright": "(c) 2021 Anatoliy Pylypchuk",
         "Authors": "Tolik Pylypchuk",
@@ -115,7 +99,7 @@
     },
     {
         "PackageId": "System.Text.Json",
-        "PackageVersion": "10.0.5",
+        "PackageVersion": "10.0.8",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -125,7 +109,7 @@
     },
     {
         "PackageId": "Velopack",
-        "PackageVersion": "0.0.1298",
+        "PackageVersion": "1.2.0",
         "PackageProjectUrl": "https://github.com/velopack/velopack",
         "Copyright": "Copyright \u00a9 Velopack Ltd. All rights reserved.",
         "Authors": "Velopack Ltd,Caelan Sayler,Kevin Bost",

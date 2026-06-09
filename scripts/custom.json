@@ -1,3 +1,5 @@
 {
-	"AvaloniaUI.DiagnosticsSupport": null
+	"AvaloniaUI.DiagnosticsSupport": null,
+	"NuGet.Packaging": null,
+	"System.Security.Cryptography.Xml": null
 }
