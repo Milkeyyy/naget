@@ -1,12 +1,11 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Epoxy;
 using naget.Assets.Locales;
 using naget.Helpers;
 using naget.Models.Config;
-using System.Diagnostics;
+using System;
 using System.Threading.Tasks;
-using WebViewControl;
 
 namespace naget.ViewModels;
 
@@ -39,19 +38,19 @@ public class BrowserWindowViewModel
 
 	public bool WindowOpened { get; set; }
 
-	private WebView WebViewCtrl;
+	private NativeWebView WebViewCtrl;
 
 	private string beforeAddress = string.Empty;
 	public bool WebViewCanGoBack { get; private set; }
 	public bool WebViewCanGoForward { get; private set; }
 
+	// アドレスバー用 (string)
 	public string Address { get; set; }
 
-	public string CurrentAddress { get; set; }
+	// NativeWebView の Source バインディング用 (Uri)
+	public Uri? CurrentSource { get; set; }
 
 	public Command NavigateCommand { get; }
-
-	public Command ShowDevToolsCommand { get; }
 
 	public Command CutCommand { get; }
 
@@ -71,13 +70,13 @@ public class BrowserWindowViewModel
 
 	public Command ForwardCommand { get; }
 
-	public BrowserWindowViewModel(WebView wb)
+	public BrowserWindowViewModel(NativeWebView wb)
 	{
 		// ウィンドウが開かれた時のイベント
 		BrowserWindowWell.Add(Window.WindowOpenedEvent, () =>
 		{
 			App.Logger.Debug("BrowserWindow Opened");
-			
+
 			// ウィンドウの設定を読み込む
 			Width = ConfigManager.Config.BrowserWindow.Width;
 			Height = ConfigManager.Config.BrowserWindow.Height;
@@ -106,118 +105,99 @@ public class BrowserWindowViewModel
 			ConfigManager.Config.BrowserWindow.State = WindowState;
 
 			// 開いているページのURLをリセット
-			CurrentAddress = "about:blank";
+			CurrentSource = new Uri("about:blank");
 
 			return default;
 		});
 
 		WebViewCtrl = wb;
-		WebViewCtrl.Navigated += WebView_Navigated;
+
+		// NativeWebView のイベント購読
+		WebViewCtrl.NavigationCompleted += WebView_NavigationCompleted;
 		WebViewCtrl.PropertyChanged += WebViewOnPropertyChanged;
-		Address = CurrentAddress;
+
+#if DEBUG
+		WebViewCtrl.EnvironmentRequested += (sender, e) =>
+		{
+			e.EnableDevTools = true;
+		};
+#endif
+
+		Address = CurrentSource?.ToString() ?? string.Empty;
 
 		NavigateCommand = Command.Factory.Create(() =>
 		{
-			CurrentAddress = Address;
-			return default;
-		});
-
-		ShowDevToolsCommand = Command.Factory.Create(() =>
-		{
-			WebViewCtrl.ShowDeveloperTools();
+			if (Uri.TryCreate(Address, UriKind.Absolute, out var uri))
+			{
+				CurrentSource = uri;
+			}
 			return default;
 		});
 
 		CutCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.EditCommands.Cut();
+			WebViewCtrl.TryGetCommandManager()?.Cut();
 			return default;
 		});
 
 		CopyCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.EditCommands.Copy();
+			WebViewCtrl.TryGetCommandManager()?.Copy();
 			return default;
 		});
 
 		PasteCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.EditCommands.Paste();
+			WebViewCtrl.TryGetCommandManager()?.Paste();
 			return default;
 		});
 
 		UndoCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.EditCommands.Undo();
+			WebViewCtrl.TryGetCommandManager()?.Undo();
 			return default;
 		});
 
 		RedoCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.EditCommands.Redo();
+			WebViewCtrl.TryGetCommandManager()?.Redo();
 			return default;
 		});
 
 		SelectAllCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.EditCommands.SelectAll();
+			WebViewCtrl.TryGetCommandManager()?.SelectAll();
 			return default;
 		});
 
-		DeleteCommand = Command.Factory.Create(() =>
+		DeleteCommand = Command.Factory.Create(async () =>
 		{
-			WebViewCtrl.EditCommands.Delete();
-			return default;
+			await WebViewCtrl.InvokeScript("document.execCommand('delete')");
 		});
 
 		BackCommand = Command.Factory.Create(() =>
 		{
 			WebView_GoBack();
 			return default;
-			/*,
-			this.WhenAnyValue(
-				x => x.WebViewCanGoBack
-			)*/
 		});
 
 		ForwardCommand = Command.Factory.Create(() =>
 		{
 			WebView_GoForward();
 			return default;
-			/*,
-			this.WhenAnyValue(
-				x => x.WebViewCanGoForward
-			)*/
 		});
 	}
 
-	[PropertyChanged(nameof(WebViewCtrl.CanGoBack))]
-	private ValueTask WebViewCanGoBackChanged(bool value)
+	[PropertyChanged(nameof(CurrentSource))]
+	private ValueTask OnCurrentSourceChangedAsync(Uri? value)
 	{
-		App.Logger.Debug("WebView CanGoBack Changed: " + value);
-		return default;
-	}
+		App.Logger.Debug("CurrentSource Changed: " + value);
 
-	[PropertyChanged(nameof(WebViewCtrl.CanGoForward))]
-	private ValueTask WebViewCanGoForwardChanged(bool value)
-	{
-		App.Logger.Debug("WebView CanGoForward Changed: " + value);
-		return default;
-	}
-
-	[PropertyChanged(nameof(CurrentAddress))]
-	private ValueTask OnCurrentAddressChangedAsync(string value)
-	{
-		App.Logger.Debug("CurrentAddress Changed: " + value);
-
-		Address = value;
+		Address = value?.ToString() ?? string.Empty;
 
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
-
-		// ウィンドウタイトルを更新する
-		WindowTitle = WebViewCtrl.Title;
 
 		return default;
 	}
@@ -229,29 +209,35 @@ public class BrowserWindowViewModel
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
-
-		// ウィンドウタイトルを更新する
-		WindowTitle = WebViewCtrl.Title;
 	}
 
-	private void WebView_Navigated(string url, string frameName)
+	private async void WebView_NavigationCompleted(object? sender, WebViewNavigationCompletedEventArgs e)
 	{
-		App.Logger.Debug("WebView Navigated: " + url + " | " + frameName);
-		//App.Logger.Debug("- Update Property");
-		//App.Logger.Debug($" - {webview.CanGoBack} {webview.CanGoForward}");
+		App.Logger.Debug("WebView NavigationCompleted: " + WebViewCtrl.Source);
 
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 
-		// ウィンドウタイトルを更新する
-		WindowTitle = WebViewCtrl.Title;
+		// アドレスバーを更新
+		Address = WebViewCtrl.Source?.ToString() ?? string.Empty;
+
+		// ウィンドウタイトルを更新する (NativeWebView には Title プロパティがないため JS で取得)
+		try
+		{
+			var title = await WebViewCtrl.InvokeScript("document.title");
+			WindowTitle = title ?? string.Empty;
+		}
+		catch
+		{
+			WindowTitle = string.Empty;
+		}
 
 		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 	}
 
 	private void WebView_GoBack()
 	{
-		beforeAddress = WebViewCtrl.Address;
+		beforeAddress = WebViewCtrl.Source?.ToString() ?? string.Empty;
 		WebViewCtrl.GoBack();
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
@@ -264,16 +250,4 @@ public class BrowserWindowViewModel
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 	}
-
-	/*public bool WebViewCanGoBack
-	{
-		get => webviewCanGoBack;
-		set => this.RaiseAndSetIfChanged(ref webviewCanGoBack, value);
-	}
-
-	public bool WebViewCanGoForward
-	{
-		get => webviewCanGoForward;
-		set => this.RaiseAndSetIfChanged(ref webviewCanGoForward, value);
-	}*/
 }

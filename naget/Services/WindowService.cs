@@ -41,7 +41,11 @@ public class WindowService
 			App.BrowserWindow.Show();
 			if (App.BrowserWindow.DataContext is BrowserWindowViewModel vm)
 			{
-				vm.CurrentAddress = url;
+				if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
+				{
+					vm.CurrentSource = uri;
+				}
+				vm.Address = url;
 			}
 		}
 	}

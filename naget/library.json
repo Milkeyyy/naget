@@ -1,7 +1,7 @@
 [
     {
         "PackageId": "Avalonia",
-        "PackageVersion": "11.3.12",
+        "PackageVersion": "12.0.0-preview2",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
         "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
@@ -10,8 +10,34 @@
         "LicenseInformationOrigin": 0
     },
     {
+        "PackageId": "Avalonia.Controls.WebView",
+        "PackageVersion": "12.0.0-preview2",
+        "PackageProjectUrl": "https://avaloniaui.net/",
+        "Copyright": "Copyright 2019-2026 \u00a9 AvaloniaUI O\u00dc",
+        "Authors": "AvaloniaUI O\u00dc",
+        "ValidationErrors": [
+            {
+                "Error": "No license information found",
+                "Context": "V:\\naget\\naget\\naget.csproj"
+            },
+            {
+                "Error": "No license information found",
+                "Context": "V:\\naget\\naget\\naget.csproj"
+            },
+            {
+                "Error": "No license information found",
+                "Context": "V:\\naget\\naget\\naget.csproj"
+            },
+            {
+                "Error": "No license information found",
+                "Context": "V:\\naget\\naget\\naget.csproj"
+            }
+        ],
+        "LicenseInformationOrigin": 2
+    },
+    {
         "PackageId": "Avalonia.Desktop",
-        "PackageVersion": "11.3.12",
+        "PackageVersion": "12.0.0-preview2",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
         "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
@@ -106,25 +132,5 @@
         "License": "MIT",
         "LicenseUrl": "https://licenses.nuget.org/MIT",
         "LicenseInformationOrigin": 0
-    },
-    {
-        "PackageId": "WebViewControl-Avalonia",
-        "PackageVersion": "3.120.11",
-        "PackageProjectUrl": "https://github.com/OutSystems/WebView",
-        "Copyright": "Copyright \u00a9 OutSystems 2023",
-        "Authors": "OutSystems",
-        "License": "Apache-2.0",
-        "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
-        "LicenseInformationOrigin": 2
-    },
-    {
-        "PackageId": "WebViewControl-Avalonia-ARM64",
-        "PackageVersion": "3.120.11",
-        "PackageProjectUrl": "https://github.com/OutSystems/WebView",
-        "Copyright": "Copyright \u00a9 OutSystems 2023",
-        "Authors": "OutSystems",
-        "License": "Apache-2.0",
-        "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
-        "LicenseInformationOrigin": 2
     }
 ]

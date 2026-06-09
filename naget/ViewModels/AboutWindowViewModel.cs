@@ -28,7 +28,7 @@ public class AboutWindowViewModel
 		{
 			App.Logger.Debug("AboutWindow Loaded");
 			AvaloniaVersion = App.GetLibraryInfo("Avalonia")?["PackageVersion"].ToString() ?? "Unknown";
-			WebViewVersion = App.GetLibraryInfo("WebViewControl-Avalonia")?["PackageVersion"].ToString() ?? "Unknown";
+			WebViewVersion = App.GetLibraryInfo("Avalonia.Controls.WebView")?["PackageVersion"].ToString() ?? "Unknown";
 			return default;
 		});
 	}
