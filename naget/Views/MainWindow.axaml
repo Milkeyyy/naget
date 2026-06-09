@@ -10,7 +10,7 @@
 		Icon="/Assets/Icon.ico"
 		Title="naget"
 		ExtendClientAreaToDecorationsHint="True"
-		WindowDecorations="None"
+		SystemDecorations="None"
 		ShowInTaskbar="False"
 		ShowActivated="True"
 		WindowStartupLocation="CenterScreen"
