@@ -1,7 +1,7 @@
 [
     {
         "PackageId": "Avalonia",
-        "PackageVersion": "11.3.17",
+        "PackageVersion": "11.3.21",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
         "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
@@ -11,7 +11,7 @@
     },
     {
         "PackageId": "Avalonia.Controls.WebView",
-        "PackageVersion": "11.4.0",
+        "PackageVersion": "11.4.1",
         "PackageProjectUrl": "https://avaloniaui.net/",
         "Copyright": "Copyright 2019-2026 \u00a9 AvaloniaUI O\u00dc",
         "Authors": "AvaloniaUI O\u00dc",
@@ -21,7 +21,7 @@
     },
     {
         "PackageId": "Avalonia.Desktop",
-        "PackageVersion": "11.3.17",
+        "PackageVersion": "11.3.21",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
         "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
@@ -49,7 +49,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration",
-        "PackageVersion": "10.0.8",
+        "PackageVersion": "10.0.12",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -59,7 +59,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration.Binder",
-        "PackageVersion": "10.0.8",
+        "PackageVersion": "10.0.12",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -69,7 +69,7 @@
     },
     {
         "PackageId": "Microsoft.Extensions.Configuration.Json",
-        "PackageVersion": "10.0.8",
+        "PackageVersion": "10.0.12",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
@@ -89,7 +89,7 @@
     },
     {
         "PackageId": "SharpHook",
-        "PackageVersion": "7.1.2",
+        "PackageVersion": "8.0.0",
         "PackageProjectUrl": "https://sharphook.tolik.io/",
         "Copyright": "(c) 2021 Anatoliy Pylypchuk",
         "Authors": "Tolik Pylypchuk",
@@ -99,7 +99,7 @@
     },
     {
         "PackageId": "System.Text.Json",
-        "PackageVersion": "10.0.8",
+        "PackageVersion": "10.0.12",
         "PackageProjectUrl": "https://dot.net/",
         "Copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
         "Authors": "Microsoft",
