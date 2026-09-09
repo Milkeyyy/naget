@@ -5,6 +5,7 @@ using naget.Assets.Locales;
 using naget.Helpers;
 using naget.Models.Config;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace naget.ViewModels;
@@ -13,6 +14,41 @@ namespace naget.ViewModels;
 public class BrowserWindowViewModel
 {
 	public Well<Window> BrowserWindowWell { get; } = Well.Factory.Create<Window>();
+
+	private const string SpaHookScript = """
+		(function() {
+			if (window.__nagetSpaHook) return;
+			window.__nagetSpaHook = true;
+			var post = function() {
+				try {
+					invokeCSharpAction(JSON.stringify({ url: location.href, title: document.title }));
+				} catch (e) {}
+			};
+			['pushState', 'replaceState'].forEach(function(name) {
+				var original = history[name];
+				history[name] = function() {
+					var result = original.apply(this, arguments);
+					post();
+					return result;
+				};
+			});
+			window.addEventListener('popstate', post);
+			window.addEventListener('hashchange', post);
+			var lastTitle = document.title;
+			var observer = new MutationObserver(function() {
+				if (document.title !== lastTitle) {
+					lastTitle = document.title;
+					post();
+				}
+			});
+			var titleElement = document.querySelector('title');
+			if (titleElement) {
+				observer.observe(titleElement, { childList: true, characterData: true, subtree: true });
+			} else {
+				observer.observe(document.documentElement, { childList: true, subtree: true });
+			}
+		})();
+		""";
 
 	public string WindowTitleText { get; private set; } = Resources.Window_InAppBrowser;
 	public string WindowTitle
@@ -38,9 +74,12 @@ public class BrowserWindowViewModel
 
 	public bool WindowOpened { get; set; }
 
+	public bool AddressBoxFocused { get; set; }
+
 	private NativeWebView WebViewCtrl;
 
 	private string beforeAddress = string.Empty;
+	private string lastPageUrl = string.Empty;
 	public bool WebViewCanGoBack { get; private set; }
 	public bool WebViewCanGoForward { get; private set; }
 
@@ -114,6 +153,7 @@ public class BrowserWindowViewModel
 
 		// NativeWebView のイベント購読
 		WebViewCtrl.NavigationCompleted += WebView_NavigationCompleted;
+		WebViewCtrl.WebMessageReceived += WebView_WebMessageReceived;
 		WebViewCtrl.PropertyChanged += WebViewOnPropertyChanged;
 
 #if DEBUG
@@ -124,6 +164,7 @@ public class BrowserWindowViewModel
 #endif
 
 		Address = CurrentSource?.ToString() ?? string.Empty;
+		lastPageUrl = Address;
 
 		NavigateCommand = Command.Factory.Create(() =>
 		{
@@ -193,7 +234,8 @@ public class BrowserWindowViewModel
 	{
 		App.Logger.Debug("CurrentSource Changed: " + value);
 
-		Address = value?.ToString() ?? string.Empty;
+		lastPageUrl = value?.ToString() ?? lastPageUrl;
+		if (!AddressBoxFocused) Address = value?.ToString() ?? string.Empty;
 
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
@@ -218,8 +260,19 @@ public class BrowserWindowViewModel
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 
+		// SPA 遷移を検出するための JS フックを注入する
+		try
+		{
+			await WebViewCtrl.InvokeScript(SpaHookScript);
+		}
+		catch (Exception ex)
+		{
+			App.Logger.Debug("SPA hook injection failed: " + ex.Message);
+		}
+
 		// アドレスバーを更新
-		Address = WebViewCtrl.Source?.ToString() ?? string.Empty;
+		lastPageUrl = WebViewCtrl.Source?.ToString() ?? lastPageUrl;
+		if (!AddressBoxFocused) Address = WebViewCtrl.Source?.ToString() ?? string.Empty;
 
 		// ウィンドウタイトルを更新する (NativeWebView には Title プロパティがないため JS で取得)
 		try
@@ -233,6 +286,42 @@ public class BrowserWindowViewModel
 		}
 
 		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+	}
+
+	// アドレスバーのフォーカスが外れたら、入力内容を正規のページURLに戻す
+	[PropertyChanged(nameof(AddressBoxFocused))]
+	private ValueTask OnAddressBoxFocusedChangedAsync(bool value)
+	{
+		if (!value) Address = lastPageUrl;
+		return default;
+	}
+
+	private void WebView_WebMessageReceived(object? sender, WebMessageReceivedEventArgs e)
+	{
+		if (string.IsNullOrEmpty(e.Body)) return;
+		try
+		{
+			using JsonDocument document = JsonDocument.Parse(e.Body);
+			JsonElement root = document.RootElement;
+			if (root.ValueKind != JsonValueKind.Object) return;
+			if (!root.TryGetProperty("url", out JsonElement urlElement) || urlElement.ValueKind != JsonValueKind.String) return;
+			if (!root.TryGetProperty("title", out JsonElement titleElement) || titleElement.ValueKind != JsonValueKind.String) return;
+
+			string url = urlElement.GetString() ?? string.Empty;
+			string title = titleElement.GetString() ?? string.Empty;
+
+			App.Logger.Debug("WebView WebMessage: " + url + " / " + title);
+
+			lastPageUrl = url;
+			if (!AddressBoxFocused) Address = url;
+			WindowTitle = title;
+
+			WebViewCanGoBack = WebViewCtrl.CanGoBack;
+			WebViewCanGoForward = WebViewCtrl.CanGoForward;
+		}
+		catch (JsonException)
+		{
+		}
 	}
 
 	private void WebView_GoBack()

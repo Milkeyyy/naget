@@ -10,7 +10,12 @@ public partial class BrowserWindow : Window
 		InitializeComponent();
 
 		var webview = this.FindControl<NativeWebView>("webview");
-		DataContext = new BrowserWindowViewModel(webview);
+		var vm = new BrowserWindowViewModel(webview);
+		DataContext = vm;
+
+		var addressBox = this.FindControl<TextBox>("AddressBox");
+		addressBox!.GotFocus += (s, e) => vm.AddressBoxFocused = true;
+		addressBox!.LostFocus += (s, e) => vm.AddressBoxFocused = false;
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
 		Closing += (s, e) =>

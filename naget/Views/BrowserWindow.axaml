@@ -55,7 +55,7 @@ mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			<DockPanel DockPanel.Dock="Top" Margin="10 10 10 10">
 				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
 				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
-				<TextBox Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
+				<TextBox x:Name="AddressBox" Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
 					<TextBox.KeyBindings>
 						<KeyBinding Gesture="Enter" Command="{Binding NavigateCommand}" />
 					</TextBox.KeyBindings>
