@@ -900,6 +900,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Reload に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_Navigation_Reload {
+            get {
+                return ResourceManager.GetString("WebBrowser.Navigation.Reload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Open in Default Browser に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_Navigation_OpenInDefaultBrowser {
+            get {
+                return ResourceManager.GetString("WebBrowser.Navigation.OpenInDefaultBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Browser に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Window_InAppBrowser {

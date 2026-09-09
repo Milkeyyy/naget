@@ -4,6 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:epoxy="https://github.com/kekyo/Epoxy"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
 		xmlns:local="clr-namespace:naget;assembly=naget"
 		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -43,6 +44,7 @@ mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 					<NativeMenu>
 						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Back}" Command="{Binding BackCommand}"/>
 						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Forward}" Command="{Binding ForwardCommand}" />
+						<NativeMenuItem Header="{x:Static lang:Resources.WebBrowser_Navigation_Reload}" Command="{Binding ReloadCommand}"/>
 					</NativeMenu>
 				</NativeMenuItem.Menu>
 			</NativeMenuItem>
@@ -53,8 +55,18 @@ mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		<DockPanel>
 			
 			<DockPanel DockPanel.Dock="Top" Margin="10 10 10 10">
-				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Back}"></Button>
-				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" Content="{x:Static lang:Resources.WebBrowser_Navigation_Forward}"></Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" IsEnabled="{Binding WebViewCanGoBack}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Back}">
+					<ui:SymbolIcon Symbol="Back" FontSize="15"/>
+				</Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" IsEnabled="{Binding WebViewCanGoForward}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Forward}">
+					<ui:SymbolIcon Symbol="Forward" FontSize="15"/>
+				</Button>
+				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ReloadCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Reload}">
+					<ui:SymbolIcon Symbol="Refresh" FontSize="15"/>
+				</Button>
+				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding OpenInDefaultBrowserCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_OpenInDefaultBrowser}">
+					<ui:SymbolIcon Symbol="NewWindow" FontSize="15"/>
+				</Button>
 				<TextBox x:Name="AddressBox" Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
 					<TextBox.KeyBindings>
 						<KeyBinding Gesture="Enter" Command="{Binding NavigateCommand}" />

@@ -5,6 +5,7 @@ using naget.Assets.Locales;
 using naget.Helpers;
 using naget.Models.Config;
 using System;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -108,6 +109,10 @@ public class BrowserWindowViewModel
 	public Command BackCommand { get; }
 
 	public Command ForwardCommand { get; }
+
+	public Command ReloadCommand { get; }
+
+	public Command OpenInDefaultBrowserCommand { get; }
 
 	public BrowserWindowViewModel(NativeWebView wb)
 	{
@@ -234,6 +239,31 @@ public class BrowserWindowViewModel
 		ForwardCommand = Command.Factory.Create(() =>
 		{
 			WebView_GoForward();
+			return default;
+		});
+
+		ReloadCommand = Command.Factory.Create(() =>
+		{
+			WebViewCtrl.Refresh();
+			return default;
+		});
+
+		// 既定のブラウザーで開く (信頼境界のため http/https のみ許可)
+		OpenInDefaultBrowserCommand = Command.Factory.Create(() =>
+		{
+			if (Uri.TryCreate(lastPageUrl, UriKind.Absolute, out Uri? uri) &&
+				(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+			{
+				App.Logger.Debug("Open in default browser: " + uri);
+				Process.Start(new ProcessStartInfo(uri.ToString())
+				{
+					UseShellExecute = true
+				});
+			}
+			else
+			{
+				App.Logger.Debug("Open in default browser: Invalid URL: " + lastPageUrl);
+			}
 			return default;
 		});
 	}

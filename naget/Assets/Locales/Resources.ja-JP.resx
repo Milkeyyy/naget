@@ -147,6 +147,12 @@
   <data name="WebBrowser.Navigation.Forward" xml:space="preserve">
     <value>進む</value>
   </data>
+  <data name="WebBrowser.Navigation.Reload" xml:space="preserve">
+    <value>再読み込み</value>
+  </data>
+  <data name="WebBrowser.Navigation.OpenInDefaultBrowser" xml:space="preserve">
+    <value>既定のブラウザーで開く</value>
+  </data>
   <data name="WebBrowser.ContextMenu.Copy" xml:space="preserve">
     <value>コピー</value>
   </data>

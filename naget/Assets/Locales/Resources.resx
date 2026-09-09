@@ -147,6 +147,12 @@
   <data name="WebBrowser.Navigation.Forward" xml:space="preserve">
     <value>Forward</value>
   </data>
+  <data name="WebBrowser.Navigation.Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="WebBrowser.Navigation.OpenInDefaultBrowser" xml:space="preserve">
+    <value>Open in Default Browser</value>
+  </data>
   <data name="WebBrowser.ContextMenu.Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
