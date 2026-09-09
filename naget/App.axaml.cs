@@ -53,6 +53,27 @@ public class App : Application
 	/// </summary>
 	public static string ConfigFolder => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductName);
 
+	/// <summary>
+	/// アプリ内ブラウザーの閲覧データ保存先を取得する (設定が空欄の場合はコンフィグフォルダー配下の WebView フォルダー)
+	/// </summary>
+	public static string GetBrowserDataFolder()
+	{
+		string defaultFolder = Path.Join(ConfigFolder, "WebView");
+		string configured = ConfigManager.Config.BrowserWindow.DataFolder?.Trim() ?? string.Empty;
+		if (string.IsNullOrEmpty(configured)) return defaultFolder;
+
+		try
+		{
+			return Path.GetFullPath(configured);
+		}
+		catch (Exception ex)
+		{
+			// 無効なパスが設定されていた場合は既定にフォールバックする
+			Logger.Warn($"Invalid browsing data folder: {configured} ({ex.Message})");
+			return defaultFolder;
+		}
+	}
+
 	public static Logger Logger { get; private set; }
 
 	public static Updater Updater { get; private set; }

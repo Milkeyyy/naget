@@ -187,6 +187,33 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Browsing Data Folder に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_InAppBrowser_BrowseDataFolder {
+            get {
+                return ResourceManager.GetString("Settings.InAppBrowser.BrowseDataFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Browse... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_InAppBrowser_BrowseDataFolder_Browse {
+            get {
+                return ResourceManager.GetString("Settings.InAppBrowser.BrowseDataFolder.Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Reset to Default に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_InAppBrowser_BrowseDataFolder_Reset {
+            get {
+                return ResourceManager.GetString("Settings.InAppBrowser.BrowseDataFolder.Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Add に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_Search_Add {

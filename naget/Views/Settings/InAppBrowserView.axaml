@@ -31,6 +31,48 @@
 					</StackPanel>
 				</ui:SettingsExpander.Footer>
 			</ui:SettingsExpander>
+
+			<!--閲覧データの保存先 (WebView2 環境のみ表示)-->
+			<ui:InfoBar Title="{x:Static lang:Resources.Settings_System_Language_RequiredRestart}" Severity="Warning" IsOpen="{Binding DataFolderNoteTextIsVisible}" IsClosable="False" Margin="0 0 0 10">
+				<ui:InfoBar.ActionButton>
+					<!--アプリケーション再起動ボタン-->
+					<Button Classes="accent" HorizontalAlignment="Right" Command="{Binding RestartAppCommand}">
+						<Button.Content>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Foreground="WhiteSmoke" Text="{x:Static lang:Resources.Settings_System_Language_RestartApplication}"/>
+							</StackPanel>
+						</Button.Content>
+					</Button>
+				</ui:InfoBar.ActionButton>
+			</ui:InfoBar>
+
+			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_InAppBrowser_BrowseDataFolder}" IsVisible="{Binding IsDataFolderSettingVisible}">
+				<ui:SettingsExpander.IconSource>
+					<ui:SymbolIconSource Symbol="Save"/>
+				</ui:SettingsExpander.IconSource>
+				<ui:SettingsExpander.Footer>
+					<StackPanel Orientation="Horizontal">
+						<!--閲覧データ保存先パステキストボックス-->
+						<TextBox Text="{Binding DataFolderPath}" HorizontalContentAlignment="Left" MinWidth="250"/>
+						<!--フォルダー参照ボタン-->
+						<Button Margin="10 0 0 0" Command="{Binding BrowseDataFolderCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{x:Static lang:Resources.Settings_InAppBrowser_BrowseDataFolder_Browse}"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+						<!--既定に戻すボタン-->
+						<Button Margin="10 0 0 0" Command="{Binding ResetDataFolderCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{x:Static lang:Resources.Settings_InAppBrowser_BrowseDataFolder_Reset}"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
 		</StackPanel>
 	</Panel>
 </UserControl>

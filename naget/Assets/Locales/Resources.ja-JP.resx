@@ -288,6 +288,15 @@
   <data name="Settings.InAppBrowser.StartPage" xml:space="preserve">
     <value>スタートページ</value>
   </data>
+  <data name="Settings.InAppBrowser.BrowseDataFolder" xml:space="preserve">
+    <value>閲覧データの保存先</value>
+  </data>
+  <data name="Settings.InAppBrowser.BrowseDataFolder.Browse" xml:space="preserve">
+    <value>参照...</value>
+  </data>
+  <data name="Settings.InAppBrowser.BrowseDataFolder.Reset" xml:space="preserve">
+    <value>既定に戻す</value>
+  </data>
   <data name="Window.Settings" xml:space="preserve">
     <value>設定</value>
   </data>

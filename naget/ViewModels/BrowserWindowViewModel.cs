@@ -156,6 +156,15 @@ public class BrowserWindowViewModel
 		WebViewCtrl.WebMessageReceived += WebView_WebMessageReceived;
 		WebViewCtrl.PropertyChanged += WebViewOnPropertyChanged;
 
+		// 閲覧データの保存先を設定する (コンフィグの設定が空欄の場合はコンフィグフォルダー配下)
+		WebViewCtrl.EnvironmentRequested += (sender, e) =>
+		{
+			if (e is Avalonia.Platform.WindowsWebView2EnvironmentRequestedEventArgs webView2)
+			{
+				webView2.UserDataFolder = App.GetBrowserDataFolder();
+			}
+		};
+
 #if DEBUG
 		WebViewCtrl.EnvironmentRequested += (sender, e) =>
 		{

@@ -92,19 +92,22 @@ public class WindowConfig
 public class BrowserWindowConfig : WindowConfig
 {
 	public string StartPage { get; set; }
+	public string DataFolder { get; set; } // アプリ内ブラウザーの閲覧データ保存先 (空欄の場合はコンフィグフォルダー配下を使用)
 
 	public BrowserWindowConfig()
 	{
 		StartPage = "https://www.google.com/";
+		DataFolder = string.Empty;
 	}
 
 	[JsonConstructor]
-	public BrowserWindowConfig(WindowState state, double width, double height, string startPage)
+	public BrowserWindowConfig(WindowState state, double width, double height, string startPage, string dataFolder)
 	{
 		State = state;
 		Width = width;
 		Height = height;
 		StartPage = startPage;
+		DataFolder = dataFolder ?? string.Empty;
 	}
 }
 
