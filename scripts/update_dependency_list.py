@@ -16,9 +16,9 @@ try:
 	for lib in lib_list:
 		if lib["PackageId"] in custom_list: # カスタム
 			if custom_list[lib["PackageId"]] is None: # None (null) の場合は除外
-				print(f"- 除外: {lib["PackageId"]}")
+				print(f"- 除外: {lib['PackageId']}")
 			else:
-				print(f"- カスタム: {lib["PackageId"]}")
+				print(f"- カスタム: {lib['PackageId']}")
 				custom_lib_list.append(custom_list[lib["PackageId"]])
 			# 既に追加したので削除
 			custom_list.pop(lib["PackageId"])
@@ -27,7 +27,7 @@ try:
 
 	# 残ったライブラリー (元の一覧には存在しないもの) を追加
 	for c_lib in custom_list.values():
-		print(f"- カスタム: {c_lib["PackageId"]}")
+		print(f"- カスタム: {c_lib['PackageId']}")
 		custom_lib_list.append(c_lib)
 
 	custom_lib_list.sort(key=lambda x: x["PackageId"])
