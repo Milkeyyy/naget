@@ -31,6 +31,7 @@ public class HotKeyGroup
 	/// <summary>
 	/// キー
 	/// </summary>
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public KeyCode Key { get; set; }
 
 	/// <summary>
@@ -179,7 +180,7 @@ public static class KeyCodeName
 		{ KeyCode.VcPeriod, ["."] },
 		{ KeyCode.VcSlash, ["/"] },
 		{ KeyCode.VcSpace, ["Space"] },
-		{ KeyCode.Vc102, ["<>/\\/|", "<>/\\/|", "§"] },
+		{ KeyCode.VcSection, ["<>/\\/|", "<>/\\/|", "§"] },
 		{ KeyCode.VcMisc, ["OEM-specific Key"] },
 		{ KeyCode.VcPrintScreen, ["Print Screen", "Print Screen", string.Empty] },
 		{ KeyCode.VcScrollLock, ["Scroll Lock", "Scroll Lock", string.Empty] },
@@ -256,8 +257,6 @@ public static class KeyCodeName
 		{ KeyCode.VcKatakana, [string.Empty, "IME Katakana Mode", string.Empty] },
 		{ KeyCode.VcHiragana, [string.Empty, "IME Hiragana Mode", string.Empty] },
 		{ KeyCode.VcKana, ["IME Kana Mode", string.Empty, "IME Kana Mode"] },
-		{ KeyCode.VcKanji, ["IME Kanji Mode", string.Empty, string.Empty] },
-		{ KeyCode.VcHangul, ["IME Hangul Mode", string.Empty, string.Empty] },
 		{ KeyCode.VcJunja, ["IME Junja Mode", string.Empty, string.Empty] },
 		{ KeyCode.VcFinal, ["IME Final Mode", string.Empty, string.Empty] },
 		{ KeyCode.VcHanja, ["IME Hanja Mode", "IME Hanja Mode", string.Empty] },

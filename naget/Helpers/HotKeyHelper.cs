@@ -51,10 +51,7 @@ public static class HotKeyHelper
 
 	static HotKeyHelper()
 	{
-		hook = new SimpleGlobalHook(
-			globalHookType: GlobalHookType.All, // グローバルフックのタイプをキーボード+マウスに設定
-			runAsyncOnBackgroundThread: true // バックグラウンドスレッドで実行する
-		);
+		hook = new SimpleGlobalHook();
 		hook.KeyPressed += Hook_KeyPressed;
 		hook.KeyReleased += Hook_KeyReleased;
 		hook.MouseMoved += Hook_MouseMoved;
@@ -68,7 +65,8 @@ public static class HotKeyHelper
 
 	public static void Run()
 	{
-		var t = hook.RunAsync();
+		// グローバルフックのタイプをキーボード+マウスに設定し、バックグラウンドスレッドで実行する
+		var t = hook.RunAsync(GlobalHookType.All, useBackgroundThread: true);
 	}
 
 	public static void Stop()
