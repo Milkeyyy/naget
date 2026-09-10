@@ -57,16 +57,16 @@ mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			
 			<DockPanel DockPanel.Dock="Top" Margin="10 10 10 10">
 				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" IsEnabled="{Binding WebViewCanGoBack}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Back}">
-					<ui:SymbolIcon Symbol="Back" FontSize="15"/>
+					<ui:FontIcon Glyph="&#xE112;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 				</Button>
 				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" IsEnabled="{Binding WebViewCanGoForward}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Forward}">
-					<ui:SymbolIcon Symbol="Forward" FontSize="15"/>
+					<ui:FontIcon Glyph="&#xE111;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 				</Button>
 				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ReloadCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Reload}">
-					<ui:SymbolIcon Symbol="Refresh" FontSize="15"/>
+					<ui:FontIcon Glyph="&#xE149;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 				</Button>
 				<Button DockPanel.Dock="Right" Background="Transparent" x:Name="HistoryButton" Margin="10 0 0 0" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_History}">
-					<ui:SymbolIcon Symbol="Clock" FontSize="15"/>
+					<ui:FontIcon Glyph="&#xE121;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 					<Button.Flyout>
 						<Flyout Placement="BottomEdgeAlignedRight" Opened="HistoryFlyout_Opened">
 							<Grid Width="400" RowDefinitions="Auto,Auto,*">
@@ -98,7 +98,7 @@ mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 					</Button.Flyout>
 				</Button>
 				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding OpenInDefaultBrowserCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_OpenInDefaultBrowser}">
-					<ui:SymbolIcon Symbol="NewWindow" FontSize="15"/>
+					<ui:FontIcon Glyph="&#xE17C;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 				</Button>
 				<TextBox x:Name="AddressBox" Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
 					<TextBox.KeyBindings>
