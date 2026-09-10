@@ -361,7 +361,15 @@ public class BrowserWindowViewModel
 		// ウィンドウタイトルを更新する (NativeWebView には Title プロパティがないため JS で取得)
 		try
 		{
-			var title = await WebViewCtrl.InvokeScript("document.title");
+			string? title = await WebViewCtrl.InvokeScript("document.title");
+			// WebView2 の InvokeScript は JSON エンコードされた結果を返すためデコードする (macOS は生の文字列)
+			try
+			{
+				title = JsonSerializer.Deserialize<string>(title ?? string.Empty);
+			}
+			catch (JsonException)
+			{
+			}
 			WindowTitle = title ?? string.Empty;
 		}
 		catch
