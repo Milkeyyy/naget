@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using naget.Common;
 using naget.Helpers;
+using naget.Models.BrowserHistory;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
 using naget.ViewModels;
@@ -145,6 +146,8 @@ public class App : Application
 
 		// 検索エンジンのリストを読み込む
 		SearchEngineManager.Load();
+
+		BrowserHistoryManager.Load();
 
 		// 言語設定を適用
 		Assets.Locales.Resources.Culture = new CultureInfo(ConfigManager.Config.Language);

@@ -3,9 +3,13 @@ using Avalonia.Controls;
 using Epoxy;
 using naget.Assets.Locales;
 using naget.Helpers;
+using naget.Models.BrowserHistory;
 using naget.Models.Config;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -90,6 +94,18 @@ public class BrowserWindowViewModel
 	// NativeWebView の Source バインディング用 (Uri)
 	public Uri? CurrentSource { get; set; }
 
+	public ObservableCollection<BrowserHistoryEntry> HistoryEntries { get; } = [];
+
+	public string HistoryFilter { get; set; } = string.Empty;
+
+	public bool HasHistoryEntries { get; private set; }
+
+	public bool IsHistoryListEmpty { get; private set; } = true;
+
+	public bool IsHistoryClearButtonVisible { get; private set; } = true;
+
+	public bool IsClearHistoryConfirmVisible { get; private set; }
+
 	public Command NavigateCommand { get; }
 
 	public Command CutCommand { get; }
@@ -113,6 +129,12 @@ public class BrowserWindowViewModel
 	public Command ReloadCommand { get; }
 
 	public Command OpenInDefaultBrowserCommand { get; }
+
+	public Command ShowClearHistoryConfirmCommand { get; }
+
+	public Command CancelClearHistoryCommand { get; }
+
+	public Command ClearHistoryCommand { get; }
 
 	public BrowserWindowViewModel(NativeWebView wb)
 	{
@@ -266,6 +288,28 @@ public class BrowserWindowViewModel
 			}
 			return default;
 		});
+
+		ShowClearHistoryConfirmCommand = Command.Factory.Create(() =>
+		{
+			IsClearHistoryConfirmVisible = true;
+			IsHistoryClearButtonVisible = false;
+			return default;
+		});
+
+		CancelClearHistoryCommand = Command.Factory.Create(() =>
+		{
+			IsClearHistoryConfirmVisible = false;
+			IsHistoryClearButtonVisible = true;
+			return default;
+		});
+
+		ClearHistoryCommand = Command.Factory.Create(() =>
+		{
+			App.Logger.Debug("Clear Browser History");
+			BrowserHistoryManager.Clear();
+			RefreshHistoryList();
+			return default;
+		});
 	}
 
 	[PropertyChanged(nameof(CurrentSource))]
@@ -312,6 +356,7 @@ public class BrowserWindowViewModel
 		// アドレスバーを更新
 		lastPageUrl = WebViewCtrl.Source?.ToString() ?? lastPageUrl;
 		if (!AddressBoxFocused) Address = WebViewCtrl.Source?.ToString() ?? string.Empty;
+		if (WebViewCtrl.Source != null) CurrentSource = WebViewCtrl.Source;
 
 		// ウィンドウタイトルを更新する (NativeWebView には Title プロパティがないため JS で取得)
 		try
@@ -323,6 +368,8 @@ public class BrowserWindowViewModel
 		{
 			WindowTitle = string.Empty;
 		}
+
+		BrowserHistoryManager.Add(lastPageUrl, WindowTitleText);
 
 		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
 	}
@@ -357,6 +404,8 @@ public class BrowserWindowViewModel
 
 			WebViewCanGoBack = WebViewCtrl.CanGoBack;
 			WebViewCanGoForward = WebViewCtrl.CanGoForward;
+
+			BrowserHistoryManager.Add(url, title);
 		}
 		catch (JsonException)
 		{
@@ -377,5 +426,44 @@ public class BrowserWindowViewModel
 		WebViewCtrl.GoForward();
 		WebViewCanGoBack = WebViewCtrl.CanGoBack;
 		WebViewCanGoForward = WebViewCtrl.CanGoForward;
+	}
+
+	public void RefreshHistoryList()
+	{
+		HistoryEntries.Clear();
+
+		IEnumerable<BrowserHistoryEntry> query = BrowserHistoryManager.Entries;
+		if (!string.IsNullOrWhiteSpace(HistoryFilter))
+		{
+			query = query.Where(e =>
+				e.Url.Contains(HistoryFilter, StringComparison.OrdinalIgnoreCase) ||
+				e.Title.Contains(HistoryFilter, StringComparison.OrdinalIgnoreCase));
+		}
+
+		foreach (BrowserHistoryEntry entry in query)
+		{
+			HistoryEntries.Add(entry);
+		}
+
+		HasHistoryEntries = HistoryEntries.Count > 0;
+		IsHistoryListEmpty = !HasHistoryEntries;
+		IsClearHistoryConfirmVisible = false;
+		IsHistoryClearButtonVisible = true;
+	}
+
+	public void OpenHistoryEntry(BrowserHistoryEntry entry)
+	{
+		if (Uri.TryCreate(entry.Url, UriKind.Absolute, out Uri? uri))
+		{
+			App.Logger.Debug("Open History Entry: " + entry.Url);
+			WebViewCtrl.Navigate(uri);
+		}
+	}
+
+	[PropertyChanged(nameof(HistoryFilter))]
+	private ValueTask OnHistoryFilterChangedAsync(string value)
+	{
+		RefreshHistoryList();
+		return default;
 	}
 }

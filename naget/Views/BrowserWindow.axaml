@@ -6,6 +6,7 @@
 		xmlns:epoxy="https://github.com/kekyo/Epoxy"
 		xmlns:ui="using:FluentAvalonia.UI.Controls"
 		xmlns:local="clr-namespace:naget;assembly=naget"
+		xmlns:models="using:naget.Models.BrowserHistory"
 		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="naget.Views.BrowserWindow"
@@ -63,6 +64,38 @@ mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 				</Button>
 				<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ReloadCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Reload}">
 					<ui:SymbolIcon Symbol="Refresh" FontSize="15"/>
+				</Button>
+				<Button DockPanel.Dock="Right" Background="Transparent" x:Name="HistoryButton" Margin="10 0 0 0" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_History}">
+					<ui:SymbolIcon Symbol="Clock" FontSize="15"/>
+					<Button.Flyout>
+						<Flyout Placement="BottomEdgeAlignedRight" Opened="HistoryFlyout_Opened">
+							<Grid Width="400" RowDefinitions="Auto,Auto,*">
+								<TextBox Grid.Row="0" Margin="0 0 0 8" Text="{Binding HistoryFilter}" Watermark="{x:Static lang:Resources.WebBrowser_History_Search}"/>
+								<Grid Grid.Row="1" Margin="0 0 0 8">
+									<Button HorizontalAlignment="Right" IsVisible="{Binding IsHistoryClearButtonVisible}" Command="{Binding ShowClearHistoryConfirmCommand}" Content="{x:Static lang:Resources.WebBrowser_History_Clear}"/>
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" IsVisible="{Binding IsClearHistoryConfirmVisible}">
+										<TextBlock VerticalAlignment="Center" Text="{x:Static lang:Resources.WebBrowser_History_ClearConfirm}"/>
+										<Button Command="{Binding ClearHistoryCommand}" Content="{x:Static lang:Resources.WebBrowser_History_ClearConfirm_Yes}"/>
+										<Button Command="{Binding CancelClearHistoryCommand}" Content="{x:Static lang:Resources.Strings_Cancel}"/>
+									</StackPanel>
+								</Grid>
+								<TextBlock Grid.Row="2" HorizontalAlignment="Center" Margin="0 20 0 20" IsVisible="{Binding IsHistoryListEmpty}" Text="{x:Static lang:Resources.WebBrowser_History_Empty}"/>
+								<ListBox Grid.Row="2" x:Name="HistoryList" MaxHeight="400" IsVisible="{Binding HasHistoryEntries}" ItemsSource="{Binding HistoryEntries}">
+									<ListBox.ItemTemplate>
+										<DataTemplate x:DataType="models:BrowserHistoryEntry">
+											<Grid ColumnDefinitions="*,Auto" ToolTip.Tip="{Binding Url}">
+												<StackPanel Grid.Column="0">
+													<TextBlock Text="{Binding DisplayTitle}" TextTrimming="CharacterEllipsis"/>
+													<TextBlock Text="{Binding Url}" FontSize="11" Opacity="0.7" TextTrimming="CharacterEllipsis"/>
+												</StackPanel>
+												<TextBlock Grid.Column="1" Margin="8 0 0 0" VerticalAlignment="Top" FontSize="11" Opacity="0.7" Text="{Binding VisitedAtText}"/>
+											</Grid>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+							</Grid>
+						</Flyout>
+					</Button.Flyout>
 				</Button>
 				<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding OpenInDefaultBrowserCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_OpenInDefaultBrowser}">
 					<ui:SymbolIcon Symbol="NewWindow" FontSize="15"/>

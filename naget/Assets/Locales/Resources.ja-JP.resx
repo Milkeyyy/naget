@@ -174,6 +174,24 @@
   <data name="WebBrowser.ContextMenu.SelectAll" xml:space="preserve">
     <value>全て選択</value>
   </data>
+  <data name="WebBrowser.History" xml:space="preserve">
+    <value>閲覧履歴</value>
+  </data>
+  <data name="WebBrowser.History.Search" xml:space="preserve">
+    <value>履歴を検索</value>
+  </data>
+  <data name="WebBrowser.History.Empty" xml:space="preserve">
+    <value>履歴はありません</value>
+  </data>
+  <data name="WebBrowser.History.Clear" xml:space="preserve">
+    <value>履歴を消去</value>
+  </data>
+  <data name="WebBrowser.History.ClearConfirm" xml:space="preserve">
+    <value>すべての履歴を消去しますか？</value>
+  </data>
+  <data name="WebBrowser.History.ClearConfirm.Yes" xml:space="preserve">
+    <value>消去</value>
+  </data>
   <data name="TrayMenu.Settings" xml:space="preserve">
     <value>設定</value>
   </data>

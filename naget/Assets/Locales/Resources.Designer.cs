@@ -864,6 +864,60 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   History に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_History {
+            get {
+                return ResourceManager.GetString("WebBrowser.History", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Clear history に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_History_Clear {
+            get {
+                return ResourceManager.GetString("WebBrowser.History.Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Clear all history? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_History_ClearConfirm {
+            get {
+                return ResourceManager.GetString("WebBrowser.History.ClearConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Clear に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_History_ClearConfirm_Yes {
+            get {
+                return ResourceManager.GetString("WebBrowser.History.ClearConfirm.Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   No history に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_History_Empty {
+            get {
+                return ResourceManager.GetString("WebBrowser.History.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Search history に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_History_Search {
+            get {
+                return ResourceManager.GetString("WebBrowser.History.Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Edit に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string WebBrowser_NativeMenu_Edit {
