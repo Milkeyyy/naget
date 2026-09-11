@@ -1,7 +1,7 @@
 [
     {
         "PackageId": "Avalonia",
-        "PackageVersion": "11.3.21",
+        "PackageVersion": "11.3.22",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
         "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
@@ -21,7 +21,7 @@
     },
     {
         "PackageId": "Avalonia.Desktop",
-        "PackageVersion": "11.3.21",
+        "PackageVersion": "11.3.22",
         "PackageProjectUrl": "https://avaloniaui.net/?utm_source=nuget&utm_medium=referral&utm_content=project_homepage_link",
         "Copyright": "Copyright 2013-2026 \u00a9 The AvaloniaUI Project",
         "Authors": "Avalonia Team",
