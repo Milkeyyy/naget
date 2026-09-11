@@ -9,6 +9,7 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 		<IncludeAvaloniaGenerators>true</IncludeAvaloniaGenerators>
+		<NeutralLanguage>en</NeutralLanguage>
 		<ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
 		<Version>1.0.0-nightly.0</Version>
 		<AssemblyVersion>1.0.0</AssemblyVersion>
@@ -79,7 +80,6 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="SharpHook" Version="8.0.0" />
-		<PackageReference Include="System.Text.Json" Version="10.0.12" />
 	</ItemGroup>
 
 	<ItemGroup>

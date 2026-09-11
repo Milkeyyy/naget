@@ -2,6 +2,7 @@
 using naget.Common;
 using naget.Helpers;
 using naget.Models.SearchEngine;
+using naget.Services;
 using System;
 
 namespace naget.ViewModels;
@@ -15,13 +16,6 @@ public class MainWindowViewModel
 
 	// 選択中の検索エンジン
 	private SearchEngineClass? _currentSearchEngine;
-	private string? _currentSearchEngineId;
-	public string? CurrentSearchEngineId // ID
-	{
-		get { return _currentSearchEngine?.Id; }
-		set { _currentSearchEngineId = value; }
-	}
-	private string? _currentSearchEngineName;
 	public string? CurrentSearchEngineName { get; set; }
 
 	// 検索実行コマンド
@@ -33,9 +27,9 @@ public class MainWindowViewModel
 	private void DoSearch()
 	{
 		// ブラウザーを表示して検索結果を開く
-		App.WindowService.ShowBrowser(string.Format(_currentSearchEngine.Uri, SearchWord));
+		WindowService.ShowBrowser(string.Format(_currentSearchEngine!.Uri, SearchWord));
 		// 検索画面を閉じる
-		App.WindowService.HideMainWindow();
+		WindowService.HideMainWindow();
 	}
 
 	/// <summary>
@@ -60,10 +54,10 @@ public class MainWindowViewModel
 		SearchWord = string.Empty;
 
 		// ウィンドウを表示してアクティブにする
-		App.WindowService.ShowMainWindow();
+		WindowService.ShowMainWindow();
 
 		// ウィンドウを中央に移動する
-		App.WindowService.CenterMainWindow();
+		WindowService.CenterMainWindow();
 	}
 
 	public MainWindowViewModel()

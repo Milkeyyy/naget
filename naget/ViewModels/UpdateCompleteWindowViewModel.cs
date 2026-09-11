@@ -18,7 +18,7 @@ public class UpdateCompleteWindowViewModel
 	{
 		CloseCommand = Command.Factory.Create(() =>
 		{
-			App.UpdateCompleteWindow.Hide();
+			App.UpdateCompleteWindow!.Hide();
 			return default;
 		});
 	}

@@ -44,9 +44,9 @@ public static class WindowUtils
 	}
 	public struct HWND
 	{
-		public IntPtr Handle;
+		public IntPtr Handle { get; set; }
 		public static implicit operator IntPtr(HWND hwnd) => hwnd.Handle;
-		public static implicit operator HWND(IntPtr ptr) => new HWND { Handle = ptr };
+		public static implicit operator HWND(IntPtr handle) => new HWND { Handle = handle };
 	}
 
 	/// <summary>
@@ -65,7 +65,7 @@ public static class WindowUtils
 		inputs[0].type = INPUT_MOUSE;
 
 		// 構造体の初期化が必要な場合は、inputs[0].mi = new MOUSEINPUT(); などを追加してください
-		SendInput(1, inputs, Marshal.SizeOf(typeof(INPUT)));
+		_ = SendInput(1, inputs, Marshal.SizeOf<INPUT>());
 
 		// Now SetForegroundWindow will work
 		SetForegroundWindow(hwnd);

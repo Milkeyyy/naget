@@ -20,7 +20,7 @@ public class AppSettingsViewModel
 
 	#region テーマ設定関連
 	public static ReadOnlyCollection<string> ThemeList => ConfigClass.ThemeList;
-	public string SelectedTheme { get; set; }
+	public string SelectedTheme { get; set; } = string.Empty;
 	#endregion
 
 	#region 言語設定関連
@@ -73,7 +73,7 @@ public class AppSettingsViewModel
 		// アプリケーション情報表示コマンド
 		AboutClickCommand = Command.Factory.Create(() =>
 		{
-			App.AboutWindow.ShowDialog(App.SettingsWindow);
+			App.AboutWindow!.ShowDialog(App.SettingsWindow!);
 			return default;
 		});
 	}

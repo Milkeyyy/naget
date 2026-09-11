@@ -12,9 +12,9 @@ public partial class MainWindow : Window
 		DataContext = new MainWindowViewModel();
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
-		Closing += (s, e) =>
+		Closing += (_, e) =>
 		{
-			((Window)s).Hide();
+			Hide();
 			e.Cancel = true;
 		};
 
@@ -22,7 +22,7 @@ public partial class MainWindow : Window
 		Opened += (s, e) =>
 		{
 			// 検索テキストにフォーカスする
-			this.FindControl<TextBox>("searchtextbox").Focus();
+			this.FindControl<TextBox>("searchtextbox")?.Focus();
 		};
 
 		// テキスト入力のフォーカスが失われたらウィンドウを隠す

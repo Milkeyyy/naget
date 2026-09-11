@@ -55,12 +55,12 @@ public class InAppBrowserViewModel
 		BrowseDataFolderCommand = Command.Factory.Create(async () =>
 		{
 			App.Logger.Debug("Execute Browse Data Folder Command");
-			IReadOnlyList<IStorageFolder> folders = await App.SettingsWindow.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+			IReadOnlyList<IStorageFolder> folders = await App.SettingsWindow!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
 			{
 				Title = Resources.Settings_InAppBrowser_BrowseDataFolder,
 				AllowMultiple = false
 			});
-			IStorageFolder? folder = folders.FirstOrDefault();
+			IStorageFolder? folder = folders.Count > 0 ? folders[0] : null;
 			if (folder != null)
 			{
 				DataFolderPath = folder.Path.LocalPath;

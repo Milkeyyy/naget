@@ -79,7 +79,7 @@ public class HotKeyManager
 	public HotKeyGroup RegisterKeys(string groupId, KeyCode key, KeyModifiers modifiers)
 	{
 		// 渡されたIDからホットキーグループを取得する
-		var g = _GetHotKeyGroupFromKey(groupId);
+		HotKeyGroup g = _GetHotKeyGroupFromKey(groupId)!;
 		// 取得したグループのキーに渡されたキーを設定する
 		g.Key = key;
 		g.Modifiers = modifiers;

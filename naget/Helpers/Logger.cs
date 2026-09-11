@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace naget.Helpers
 {
-	public sealed class Logger
+	public sealed class Logger : IDisposable
 	{
 		/// <summary>
 		/// ログレベル
@@ -69,7 +69,12 @@ namespace naget.Helpers
 			logFilePath = Path.Join(LogDirName, LogFileName + ".log");
 
 			// ログファイルを生成する
-			CreateLogfile(new FileInfo(logFilePath));
+			stream = CreateLogfile(new FileInfo(logFilePath));
+		}
+
+		public void Dispose()
+		{
+			stream.Dispose();
 		}
 
 		/// <summary>
@@ -169,16 +174,16 @@ namespace naget.Helpers
 		/// ログファイルを生成する
 		/// </summary>
 		/// <param name="logFile">ファイル情報</param>
-		private void CreateLogfile(FileInfo logFile)
+		private static StreamWriter CreateLogfile(FileInfo logFile)
 		{
 			System.Diagnostics.Debug.WriteLine(LogLevel.DEBUG, $"Log File Path: {logFile.FullName}");
 
 			if (!Directory.Exists(logFile.DirectoryName))
 			{
-				Directory.CreateDirectory(logFile.DirectoryName);
+				Directory.CreateDirectory(logFile.DirectoryName!);
 			}
 
-			stream = new StreamWriter(logFile.FullName, true, Encoding.UTF8)
+			return new StreamWriter(logFile.FullName, true, Encoding.UTF8)
 			{
 				AutoFlush = true
 			};
@@ -209,7 +214,7 @@ namespace naget.Helpers
 			outStream.Close();
 
 			File.Delete(oldFilePath + ".log");
-			CreateLogfile(new FileInfo(logFilePath));
+			stream = CreateLogfile(new FileInfo(logFilePath));
 		}
 
 		/// <summary>

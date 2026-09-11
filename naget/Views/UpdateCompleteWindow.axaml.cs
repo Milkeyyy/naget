@@ -12,9 +12,9 @@ public partial class UpdateCompleteWindow : Window
 		DataContext = new UpdateCompleteWindowViewModel();
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
-		Closing += (s, e) =>
+		Closing += (_, e) =>
 		{
-			((Window)s).Hide();
+			Hide();
 			e.Cancel = true;
 		};
 	}

@@ -7,9 +7,9 @@ using System;
 
 namespace naget.Services;
 
-public class WindowService
+public static class WindowService
 {
-	public void ShowMainWindow()
+	public static void ShowMainWindow()
 	{
 		if (App.MainWindow != null)
 		{
@@ -18,12 +18,12 @@ public class WindowService
 		}
 	}
 
-	public void HideMainWindow()
+	public static void HideMainWindow()
 	{
 		App.MainWindow?.Hide();
 	}
 
-	public void CenterMainWindow()
+	public static void CenterMainWindow()
 	{
 		if (App.MainWindow != null)
 		{
@@ -34,7 +34,7 @@ public class WindowService
 		}
 	}
 
-	public void ShowBrowser(string url)
+	public static void ShowBrowser(string url)
 	{
 		if (App.BrowserWindow != null)
 		{
@@ -50,7 +50,7 @@ public class WindowService
 		}
 	}
 
-	private void ActivateWindow(Window window)
+	private static void ActivateWindow(Window window)
 	{
 		var handle = window.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
 		if (handle != IntPtr.Zero)
@@ -61,7 +61,7 @@ public class WindowService
 		window.Focus();
 	}
 
-	public void TriggerSearch(string engineId)
+	public static void TriggerSearch(string engineId)
 	{
 		if (App.MainWindow?.DataContext is MainWindowViewModel vm)
 		{
@@ -69,7 +69,7 @@ public class WindowService
 		}
 	}
 
-	public Window? GetSettingsWindow()
+	public static Window? GetSettingsWindow()
 	{
 		return App.SettingsWindow;
 	}

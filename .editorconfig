@@ -81,6 +81,10 @@ csharp_style_prefer_top_level_statements = true:silent
 csharp_style_prefer_primary_constructors = true:suggestion
 csharp_prefer_system_threading_lock = true:suggestion
 
+# Epoxy の [ViewModel] としてインスタンス化されるため static クラスにはできない
+[naget/ViewModels/SettingsWindowViewModel.cs]
+dotnet_diagnostic.RCS1102.severity = none
+
 [*.vb]
 #### 命名スタイル ####
 

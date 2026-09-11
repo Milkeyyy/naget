@@ -19,21 +19,21 @@ public partial class SettingsWindow : AppWindow
 		TitleBar.ExtendsContentIntoTitleBar = true;
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
-		Closing += (s, e) =>
+		Closing += (_, e) =>
 		{
-			((Window)s).Hide();
+			Hide();
 			e.Cancel = true;
 		};
 
-		var nv = this.FindControl<NavigationView>("navigationMenu");
+		NavigationView nv = this.FindControl<NavigationView>("navigationMenu")!;
 		nv.SelectionChanged += OnNavigationMenuSelectionChanged;
 		nv.SelectedItem = nv.MenuItems.ElementAt(0);
 	}
 
-	private void OnNavigationMenuSelectionChanged(object sender, NavigationViewSelectionChangedEventArgs e)
+	private void OnNavigationMenuSelectionChanged(object? sender, NavigationViewSelectionChangedEventArgs e)
 	{
 		string smpPage;
-		object pg;
+		object? pg;
 
 		if (e.SelectedItem is NavigationViewItem nvi)
 		{
@@ -41,17 +41,15 @@ public partial class SettingsWindow : AppWindow
 
 			App.Logger.Debug($"Navigation Selected: {nvi.Tag}");
 
-			/*// 設定が選択された場合はアプリケーション設定のページを表示する
-			if ((string)nvi.Tag == "Settings") { smpPage = "naget.Views.Settings.AppSettingsView"; }
-			// それ以外は指定されたタグに基づいてページを表示する
-			else { smpPage = $"naget.Views.Settings.{nvi.Tag}"; }*/
-
 			smpPage = $"naget.Views.Settings.{nvi.Tag}";
 
 			App.Logger.Debug($"- Page: {smpPage}");
 
-			pg = Activator.CreateInstance(Type.GetType(smpPage));
-			(sender as NavigationView).Content = pg;
+			Type? pageType = Type.GetType(smpPage);
+			if (pageType == null) return;
+			pg = Activator.CreateInstance(pageType);
+			if (pg == null) return;
+			if (sender is NavigationView navigationView) navigationView.Content = pg;
 		}
 	}
 }

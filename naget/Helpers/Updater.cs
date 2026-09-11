@@ -2,6 +2,7 @@
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
+using naget.Services;
 using naget.Views.Dialog;
 using System;
 using System.Text;
@@ -17,7 +18,6 @@ public class Updater
 	private TaskDialog downloadDialog;
 	private int downloadProgressValue;
 	private TaskDialogProgressState downloadProgressState;
-	private bool downloadStarted;
 
 	public Updater()
 	{
@@ -25,7 +25,7 @@ public class Updater
 		downloadDialog = new()
 		{
 			ShowProgressBar = true,
-			XamlRoot = App.WindowService.GetSettingsWindow()
+			XamlRoot = WindowService.GetSettingsWindow()
 		};
 	}
 
@@ -85,7 +85,7 @@ public class Updater
 		try
 		{
 			InitDownloadDialog();
-			var window = (Window)downloadDialog.XamlRoot;
+			Window? window = downloadDialog.XamlRoot as Window;
 			if (window != null)
 			{
 				window.Show();
@@ -138,13 +138,13 @@ public class Updater
 		downloadDialog.Content = string.Empty;
 		downloadDialog.Buttons.Clear();
 		downloadDialog.Buttons.Add(new TaskDialogButton(Resources.Dialog_Button_Cancel, TaskDialogStandardResult.Cancel));
-		downloadDialog.XamlRoot = App.WindowService.GetSettingsWindow();
+		downloadDialog.XamlRoot = WindowService.GetSettingsWindow();
 		downloadProgressValue = 0;
 		downloadProgressState = TaskDialogProgressState.Normal;
 		downloadDialog.SetProgressBarState(0, TaskDialogProgressState.Normal);
 	}
 
-	private async Task<bool> ShowUpdateAvailableDialog(UpdateInfo info)
+	private static async Task<bool> ShowUpdateAvailableDialog(UpdateInfo info)
 	{
 		CompositeFormat desc = CompositeFormat.Parse(Resources.Updater_Dialog_UpdateAvailable_VersionInfo);
 		TaskDialog dialog = new()
@@ -157,21 +157,21 @@ public class Updater
 				new TaskDialogButton(Resources.Dialog_Button_Yes, TaskDialogStandardResult.Yes),
 				new TaskDialogButton(Resources.Dialog_Button_No, TaskDialogStandardResult.No)
 			},
-			XamlRoot = App.WindowService.GetSettingsWindow()
+			XamlRoot = WindowService.GetSettingsWindow()
 		};
 
-		var window = (Window)dialog.XamlRoot;
+		Window? window = dialog.XamlRoot as Window;
 		if (window != null) window.Show();
 		TaskDialogStandardResult dialogResult = (TaskDialogStandardResult)await dialog.ShowAsync();
 
 		return dialogResult == TaskDialogStandardResult.Yes;
 	}
 
-	private async Task ShowNoUpdateDialog()
+	private static async Task ShowNoUpdateDialog()
 	{
 		CompositeFormat desc = CompositeFormat.Parse(Resources.Updater_Dialog_UpdateNotAvailable_Description);
 		await SuperDialog.Info(
-			App.WindowService.GetSettingsWindow()!,
+			WindowService.GetSettingsWindow()!,
 			Resources.Updater_Dialog_UpdateNotAvailable_Title,
 			string.Format(null, desc, App.ProductFullVersion)
 		);
@@ -195,12 +195,5 @@ public class Updater
 		// 2. 指定されていない場合はデフォルトの URL を返す
 		// Velopack はディレクトリの URL を期待する
 		return $"https://nagetupd.milkeyyy.com/";
-	}
-}
-internal class VelopackLoggerAdapter : Velopack.Logging.IVelopackLogger
-{
-	public void Log(Velopack.Logging.VelopackLogLevel level, string? message, Exception? exception = null)
-	{
-		App.Logger.Debug($"[Velopack] {level}: {message}");
 	}
 }

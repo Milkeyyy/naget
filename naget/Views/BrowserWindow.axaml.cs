@@ -14,7 +14,7 @@ public partial class BrowserWindow : Window
 	{
 		InitializeComponent();
 
-		var webview = this.FindControl<NativeWebView>("webview");
+		NativeWebView webview = this.FindControl<NativeWebView>("webview")!;
 		var vm = new BrowserWindowViewModel(webview);
 		DataContext = vm;
 
@@ -27,9 +27,9 @@ public partial class BrowserWindow : Window
 		historyList!.AddHandler(InputElement.KeyDownEvent, HistoryList_KeyDown, RoutingStrategies.Bubble, handledEventsToo: true);
 
 		// ウィンドウが閉じられる時のイベントをキャンセルしてウィンドウを隠す
-		Closing += (s, e) =>
+		Closing += (_, e) =>
 		{
-			((Window)s).Hide();
+			Hide();
 			e.Cancel = true;
 		};
 	}

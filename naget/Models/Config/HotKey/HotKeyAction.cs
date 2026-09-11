@@ -2,6 +2,7 @@
 using FluentAvalonia.UI.Controls;
 using naget.Assets.Locales;
 using naget.Models.SearchEngine;
+using naget.Services;
 using naget.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -194,7 +195,7 @@ public class HotKeyAction
 		switch (ActionType)
 		{
 			case HotKeyActionType.WebSearch:
-				Dispatcher.UIThread.Invoke(() => App.WindowService.TriggerSearch(Property["SearchEngineId"]));
+				Dispatcher.UIThread.Invoke(() => WindowService.TriggerSearch(Property["SearchEngineId"]));
 				break;
 		}
 	}

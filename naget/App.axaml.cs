@@ -75,10 +75,9 @@ public class App : Application
 		}
 	}
 
-	public static Logger Logger { get; private set; }
+	public static Logger Logger { get; private set; } = null!;
 
-	public static Updater Updater { get; private set; }
-	public static WindowService WindowService { get; private set; } = new();
+	public static Updater Updater { get; private set; } = null!;
 
 	public static Window? AboutWindow { get; private set; }
 	public static Window? UpdateCompleteWindow { get; private set; }

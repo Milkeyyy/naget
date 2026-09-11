@@ -19,7 +19,7 @@ public class AppViewModel
 		// About
 		OpenAboutCommand = Command.Factory.Create(() =>
 		{
-			App.AboutWindow.Show();
+			App.AboutWindow!.Show();
 			return default;
 		});
 		// アプリ内ブラウザー
@@ -50,7 +50,7 @@ public class AppViewModel
 		// 設定画面
 		OpenSettingsWindowCommand = Command.Factory.Create(() =>
 		{
-			App.SettingsWindow.Show();
+			App.SettingsWindow!.Show();
 			return default;
 		});
 		// アップデートチェック

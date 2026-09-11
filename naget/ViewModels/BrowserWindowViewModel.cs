@@ -341,7 +341,7 @@ public class BrowserWindowViewModel
 		return default;
 	}
 
-	private void WebViewOnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+	private void WebViewOnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
 	{
 		App.Logger.Debug("WebView PropertyChanged: " + e.Property.Name);
 

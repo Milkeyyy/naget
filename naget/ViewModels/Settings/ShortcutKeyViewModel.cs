@@ -101,7 +101,7 @@ public class ShortcutKeyViewModel
 	/// 選択中のアクションのタイプ
 	/// </summary>
 	public HotKeyActionType SelectedActionType {
-		get { return SelectedActionItem.ActionType; }
+		get { return SelectedActionItem!.ActionType; }
 		set { SelectedActionItem = HotKeyAction.GetActionByType(value); } // アクションのタイプが変更されたら選択中のアクションのオブジェクトも変更する
 	}
 	/// <summary>
@@ -297,11 +297,11 @@ public class ShortcutKeyViewModel
 		var action = HotKeyPresetList[SelectedPresetIndex].Action;
 
 		// 選択されたプリセットのアクションを設定する
-		ConfigManager.HotKeyManager.List[SelectedPresetIndex].ActionType = SelectedActionItem.ActionType;
+		ConfigManager.HotKeyManager.List[SelectedPresetIndex].ActionType = SelectedActionItem!.ActionType;
 		// アクションがウェブ検索の場合は検索エンジンを設定されているものにする
 		if (action.ActionType == HotKeyActionType.WebSearch)
 		{
-			ConfigManager.HotKeyManager.List[SelectedPresetIndex].Action.Property["SearchEngineId"] = SelectedSearchEngineItem.Id;
+			ConfigManager.HotKeyManager.List[SelectedPresetIndex].Action.Property["SearchEngineId"] = SelectedSearchEngineItem!.Id;
 		}
 	}
 
@@ -385,7 +385,7 @@ public class ShortcutKeyViewModel
 		App.Logger.Debug("- Execute");
 
 		// アクションの選択リストをプリセットのアクションにする
-		if (value.Action == null) SelectedActionType = HotKeyActionList[0].ActionType;
+		if (value!.Action == null) SelectedActionType = HotKeyActionList[0].ActionType;
 		else SelectedActionType = value.ActionType;
 
 		// 選択されたアクションがウェブ検索の場合は検索エンジンのリストを表示する
@@ -502,7 +502,7 @@ public class ShortcutKeyViewModel
 			if (string.IsNullOrWhiteSpace(vm.PresetName))
 			{
 				App.Logger.Debug("HotKey Preset Create Dialog - Preset Name is empty");
-				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_ShortcutKey_Preset_CreateNewPreset, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
+				await SuperDialog.Info(App.SettingsWindow!, Resources.Settings_ShortcutKey_Preset_CreateNewPreset, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
 				await ShowInputDialogAsync();
 				return;
 			}
@@ -529,7 +529,7 @@ public class ShortcutKeyViewModel
 		// 名前が入力されていない場合
 		if (string.IsNullOrWhiteSpace(result))
 		{
-			await SuperDialog.Info(App.SettingsWindow, Resources.Settings_ShortcutKey_Preset_Dialog_Rename_Title, Resources.Settings_ShortcutKey_Preset_Dialog_Rename_NameIsEmpty);
+			await SuperDialog.Info(App.SettingsWindow!, Resources.Settings_ShortcutKey_Preset_Dialog_Rename_Title, Resources.Settings_ShortcutKey_Preset_Dialog_Rename_NameIsEmpty);
 			await ShowPresetRenameDialogAsync();
 			return;
 		}

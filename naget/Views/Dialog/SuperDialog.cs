@@ -41,10 +41,12 @@ public static class SuperDialog
 
 	public static async Task<string?> Input(string title, string inputTitle)
 	{
+		InputDialogContent content = new();
+
 		var dialog = new ContentDialog
 		{
 			// 作成画面
-			Content = new InputDialogContent(),
+			Content = content,
 
 			// タイトル
 			Title = title,
@@ -55,7 +57,7 @@ public static class SuperDialog
 			CloseButtonText = Resources.Strings_Cancel,
 		};
 
-		InputDialogViewModel vm = (InputDialogViewModel)(dialog.Content as InputDialogContent).DataContext;
+		InputDialogViewModel vm = (InputDialogViewModel)content.DataContext!;
 
 		// ダイアログのデータコンテキストに現在の検索エンジンの情報を設定する
 		vm.InputTitle = inputTitle;

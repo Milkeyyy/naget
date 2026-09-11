@@ -92,7 +92,7 @@ public class SearchViewModel
 			if (string.IsNullOrWhiteSpace(vm.Name) || string.IsNullOrWhiteSpace(vm.Url))
 			{
 				App.Logger.Debug("Search Engine Create Dialog - Preset Name or URL is empty");
-				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_Search_SearchEngine_Dialog_Add, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
+				await SuperDialog.Info(App.SettingsWindow!, Resources.Settings_Search_SearchEngine_Dialog_Add, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
 				await ShowInputDialogAsync();
 				return;
 			}
@@ -173,7 +173,7 @@ public class SearchEngineViewModel
 			if (string.IsNullOrWhiteSpace(vm.Name) || string.IsNullOrWhiteSpace(vm.Url))
 			{
 				App.Logger.Debug("Search Engine Create Dialog - Preset Name or URL is empty");
-				await SuperDialog.Info(App.SettingsWindow, Resources.Settings_Search_SearchEngine_Dialog_Edit, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
+				await SuperDialog.Info(App.SettingsWindow!, Resources.Settings_Search_SearchEngine_Dialog_Edit, Resources.Settings_ShortcutKey_Preset_NameIsEmpty);
 				await ShowEditDialogAsync();
 				return;
 			}
@@ -222,7 +222,7 @@ public class SearchEngineViewModel
 			if (!r)
 			{
 				await SuperDialog.Info(
-				App.SettingsWindow,
+				App.SettingsWindow!,
 				Resources.Settings_Search_SearchEngine_Dialog_Delete_CannotDelete_Title,
 				Resources.Settings_Search_SearchEngine_Dialog_Delete_CannotDelete_Description
 			);
