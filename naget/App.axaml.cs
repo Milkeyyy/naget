@@ -263,6 +263,8 @@ public class App : Application
 			// ホットキーの登録
 			HotKeyHelper.Run();
 
+			MacDockHelper.Initialize();
+
 			// ループの開始
 			Updater = new();
 			Updater.Start();
