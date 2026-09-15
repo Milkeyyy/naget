@@ -44,9 +44,9 @@
 		</StackPanel>
 		<StackPanel Orientation="Vertical">
 			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="*,*,*,*" ColumnSpacing="5" Margin="0 3 0 0">
-				<!--OS-->
+				<!--Platform-->
 				<TextBlock
-					Text="OS:"
+					Text="Platform:"
 					FontSize="13" FontWeight="Medium"
 					TextAlignment="Left" VerticalAlignment="Center" HorizontalAlignment="Right"
 					Grid.Row="0" Grid.Column="0"
