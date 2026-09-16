@@ -265,15 +265,22 @@ public class App : Application
 			MacDockHelper.Initialize();
 
 			// ホットキーの登録
-			HotKeyHelper.HookError += (_, _) => WindowService.ShowAccessibilityPermissionWindow();
-			if (HotKeyHelper.IsAccessibilityApiEnabled())
+			try
 			{
-				HotKeyHelper.Run();
+				HotKeyHelper.HookError += (_, _) => WindowService.ShowAccessibilityPermissionWindow();
+				if (HotKeyHelper.IsAccessibilityApiEnabled())
+				{
+					HotKeyHelper.Run();
+				}
+				else
+				{
+					Logger.Warn("Accessibility API access is disabled.");
+					WindowService.ShowAccessibilityPermissionWindow();
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				Logger.Warn("Accessibility API access is disabled.");
-				WindowService.ShowAccessibilityPermissionWindow();
+				Logger.Error(ex);
 			}
 
 			// ループの開始

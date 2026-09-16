@@ -55,6 +55,9 @@ public static class WindowUtils
 	/// <param name="hwnd">ウィンドウのハンドル</param>
 	public static void ForceToForeground(HWND hwnd)
 	{
+		// user32.dll は Windows 専用のため、それ以外のプラットフォームでは何もしない
+		if (!OperatingSystem.IsWindows()) return;
+
 		// Restore if minimized
 		if (IsIconic(hwnd))
 		{
