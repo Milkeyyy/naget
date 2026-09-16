@@ -26,6 +26,20 @@
 		<StackPanel>
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_ShortcutKey}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
+			<!--アクセシビリティ権限の注意書き-->
+			<ui:InfoBar Title="{x:Static lang:Resources.Accessibility_InfoBar_Title}" Message="{x:Static lang:Resources.Accessibility_InfoBar_Message}" Severity="Warning" IsOpen="{Binding AccessibilityWarningIsVisible}" IsClosable="False" Margin="0 0 0 10">
+				<ui:InfoBar.ActionButton>
+					<!--アクセシビリティ権限の設定画面を開くボタン-->
+					<Button Classes="accent" HorizontalAlignment="Right" Margin="0 0 0 0" Command="{Binding OpenAccessibilityPermissionDialogCommand}">
+						<Button.Content>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Foreground="WhiteSmoke" Text="{x:Static lang:Resources.Accessibility_Button_Grant}" Margin="0 0 0 0"/>
+							</StackPanel>
+						</Button.Content>
+					</Button>
+				</ui:InfoBar.ActionButton>
+			</ui:InfoBar>
+
 			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_ShortcutKey_Preset}">
 				<ui:SettingsExpander.IconSource>
 					<ui:SymbolIconSource Symbol="List"/>

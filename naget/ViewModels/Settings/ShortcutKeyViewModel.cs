@@ -6,6 +6,7 @@ using naget.Helpers;
 using naget.Models.Config;
 using naget.Models.Config.HotKey;
 using naget.Models.SearchEngine;
+using naget.Services;
 using naget.Views.Dialog;
 using naget.Views.Settings;
 using System;
@@ -139,7 +140,10 @@ public class ShortcutKeyViewModel
 	public bool HotKeyActionLoaded { get; set; }
 	public bool HotKeyActionSearchEngineLoaded { get; set; }
 
+	public bool AccessibilityWarningIsVisible { get; private set; }
+
 	public Command ExitCommand { get; }
+	public Command OpenAccessibilityPermissionDialogCommand { get; }
 
 	public ShortcutKeyViewModel()
 	{
@@ -153,6 +157,9 @@ public class ShortcutKeyViewModel
 			KeyRegisterButtonIcon = "PlayFilled";
 
 			ViewIsLoaded = true;
+
+			// アクセシビリティ権限が許可されていない場合は注意書きを表示する
+			AccessibilityWarningIsVisible = !HotKeyHelper.IsAccessibilityApiEnabled();
 
 			// プリセット等を読み込む 登録されているプリセットの個数が0の場合はnull
 			LoadPresetList();
@@ -254,6 +261,14 @@ public class ShortcutKeyViewModel
 				// 現在登録されているキーを表示し直す
 				RegisteredKeysText = SelectedPresetItem?.ToString() ?? Resources.Settings_ShortcutKey_Preset_NotSet;
 			}
+			return default;
+		});
+
+		// アクセシビリティ権限の設定画面を開くコマンド
+		OpenAccessibilityPermissionDialogCommand = Command.Factory.Create(() =>
+		{
+			App.Logger.Debug("Execute OpenAccessibilityPermissionDialogCommand");
+			WindowService.ShowAccessibilityPermissionWindow();
 			return default;
 		});
 

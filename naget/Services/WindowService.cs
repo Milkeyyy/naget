@@ -34,6 +34,16 @@ public static class WindowService
 		}
 	}
 
+	public static void ShowAccessibilityPermissionWindow()
+	{
+		if (App.AccessibilityPermissionWindow == null) return;
+
+		if (App.AccessibilityPermissionWindow.DataContext is AccessibilityPermissionWindowViewModel vm) vm.RefreshPermissionState();
+
+		if (!App.AccessibilityPermissionWindow.IsVisible) App.AccessibilityPermissionWindow.Show();
+		ActivateWindow(App.AccessibilityPermissionWindow);
+	}
+
 	public static void ShowBrowser(string url)
 	{
 		if (App.BrowserWindow != null)

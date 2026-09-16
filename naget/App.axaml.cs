@@ -83,6 +83,7 @@ public class App : Application
 	public static Window? UpdateCompleteWindow { get; private set; }
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
+	public static Window? AccessibilityPermissionWindow { get; private set; }
 
 	// BrowserWindow の遅延初期化 (Lazy Loading)
 	// 実際にアクセスされるまでウィンドウと NativeWebView の作成を遅延させる。
@@ -254,16 +255,26 @@ public class App : Application
 			UpdateCompleteWindow = new UpdateCompleteWindow();
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();
+			AccessibilityPermissionWindow = new AccessibilityPermissionWindow();
 			// BrowserWindow は遅延初期化するためここでは作成しない
 			// BrowserWindow = new BrowserWindow();
 
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);
 
-			// ホットキーの登録
-			HotKeyHelper.Run();
-
 			MacDockHelper.Initialize();
+
+			// ホットキーの登録
+			HotKeyHelper.HookError += (_, _) => WindowService.ShowAccessibilityPermissionWindow();
+			if (HotKeyHelper.IsAccessibilityApiEnabled())
+			{
+				HotKeyHelper.Run();
+			}
+			else
+			{
+				Logger.Warn("Accessibility API access is disabled.");
+				WindowService.ShowAccessibilityPermissionWindow();
+			}
 
 			// ループの開始
 			Updater = new();

@@ -428,4 +428,40 @@
   <data name="Settings.ShortcutKey.Preset.Dialog.Rename.NameIsEmpty" xml:space="preserve">
     <value>名前を入力してください。</value>
   </data>
+  <data name="Accessibility.Window.Title" xml:space="preserve">
+    <value>アクセシビリティの許可</value>
+  </data>
+  <data name="Accessibility.Dialog.Title" xml:space="preserve">
+    <value>アクセシビリティの許可が必要です</value>
+  </data>
+  <data name="Accessibility.Dialog.Description" xml:space="preserve">
+    <value>naget のショートカットキーを利用するには、macOS のアクセシビリティ API へのアクセス許可が必要です。</value>
+  </data>
+  <data name="Accessibility.Dialog.HowTo" xml:space="preserve">
+    <value>「アクセスを許可」をクリックし、表示されるダイアログで naget を許可してください。許可後もショートカットキーが動作しない場合は、アプリを再起動してください。</value>
+  </data>
+  <data name="Accessibility.Button.Grant" xml:space="preserve">
+    <value>アクセスを許可</value>
+  </data>
+  <data name="Accessibility.Button.OpenSystemSettings" xml:space="preserve">
+    <value>システム設定を開く</value>
+  </data>
+  <data name="Accessibility.Button.Recheck" xml:space="preserve">
+    <value>再確認</value>
+  </data>
+  <data name="Accessibility.Button.Later" xml:space="preserve">
+    <value>後で</value>
+  </data>
+  <data name="Accessibility.Status.Granted" xml:space="preserve">
+    <value>許可されています。</value>
+  </data>
+  <data name="Accessibility.Status.NotGranted" xml:space="preserve">
+    <value>許可されていません。</value>
+  </data>
+  <data name="Accessibility.InfoBar.Title" xml:space="preserve">
+    <value>アクセシビリティの許可が必要です</value>
+  </data>
+  <data name="Accessibility.InfoBar.Message" xml:space="preserve">
+    <value>アクセシビリティ API が許可されていないため、ショートカットキーを利用できません。</value>
+  </data>
 </root>

@@ -428,4 +428,40 @@ Latest Version: {1}</value>
   <data name="Settings.ShortcutKey.Preset.Dialog.Rename.NameIsEmpty" xml:space="preserve">
     <value>Name is Empty.</value>
   </data>
+  <data name="Accessibility.Window.Title" xml:space="preserve">
+    <value>Accessibility Permission</value>
+  </data>
+  <data name="Accessibility.Dialog.Title" xml:space="preserve">
+    <value>Accessibility Permission Required</value>
+  </data>
+  <data name="Accessibility.Dialog.Description" xml:space="preserve">
+    <value>naget needs access to the macOS Accessibility API to use shortcut keys.</value>
+  </data>
+  <data name="Accessibility.Dialog.HowTo" xml:space="preserve">
+    <value>Click "Grant Access" and allow naget in the dialog that appears. If shortcut keys still do not work after granting, restart the app.</value>
+  </data>
+  <data name="Accessibility.Button.Grant" xml:space="preserve">
+    <value>Grant Access</value>
+  </data>
+  <data name="Accessibility.Button.OpenSystemSettings" xml:space="preserve">
+    <value>Open System Settings</value>
+  </data>
+  <data name="Accessibility.Button.Recheck" xml:space="preserve">
+    <value>Check Again</value>
+  </data>
+  <data name="Accessibility.Button.Later" xml:space="preserve">
+    <value>Later</value>
+  </data>
+  <data name="Accessibility.Status.Granted" xml:space="preserve">
+    <value>Access is granted.</value>
+  </data>
+  <data name="Accessibility.Status.NotGranted" xml:space="preserve">
+    <value>Access is not granted.</value>
+  </data>
+  <data name="Accessibility.InfoBar.Title" xml:space="preserve">
+    <value>Accessibility Permission Required</value>
+  </data>
+  <data name="Accessibility.InfoBar.Message" xml:space="preserve">
+    <value>Shortcut keys are unavailable because naget is not allowed to use the Accessibility API.</value>
+  </data>
 </root>

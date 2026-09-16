@@ -61,6 +61,114 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Grant Access に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Button_Grant {
+            get {
+                return ResourceManager.GetString("Accessibility.Button.Grant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Later に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Button_Later {
+            get {
+                return ResourceManager.GetString("Accessibility.Button.Later", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Open System Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Button_OpenSystemSettings {
+            get {
+                return ResourceManager.GetString("Accessibility.Button.OpenSystemSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Check Again に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Button_Recheck {
+            get {
+                return ResourceManager.GetString("Accessibility.Button.Recheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   naget needs access to the macOS Accessibility API to use shortcut keys. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Dialog_Description {
+            get {
+                return ResourceManager.GetString("Accessibility.Dialog.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Click &quot;Grant Access&quot; and allow naget in the dialog that appears. If shortcut keys still do not work after granting, restart the app. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Dialog_HowTo {
+            get {
+                return ResourceManager.GetString("Accessibility.Dialog.HowTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Accessibility Permission Required に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Dialog_Title {
+            get {
+                return ResourceManager.GetString("Accessibility.Dialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Shortcut keys are unavailable because naget is not allowed to use the Accessibility API. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_InfoBar_Message {
+            get {
+                return ResourceManager.GetString("Accessibility.InfoBar.Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Accessibility Permission Required に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_InfoBar_Title {
+            get {
+                return ResourceManager.GetString("Accessibility.InfoBar.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Access is granted. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Status_Granted {
+            get {
+                return ResourceManager.GetString("Accessibility.Status.Granted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Access is not granted. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Status_NotGranted {
+            get {
+                return ResourceManager.GetString("Accessibility.Status.NotGranted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Accessibility Permission に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Window_Title {
+            get {
+                return ResourceManager.GetString("Accessibility.Window.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   naget に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string App_Name {

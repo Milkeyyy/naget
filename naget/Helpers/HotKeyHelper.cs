@@ -1,11 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using naget.Assets.Locales;
 using naget.Models.Config;
 using naget.Models.Config.HotKey;
 using SharpHook;
 using SharpHook.Data;
+using SharpHook.Providers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -63,10 +65,50 @@ public static class HotKeyHelper
 		registrationGroupId = string.Empty;
 	}
 
+	public static event EventHandler? HookError;
+
 	public static void Run()
 	{
+		if (hook.IsRunning) return;
+
+		UioHookProvider.Instance.PromptUserIfAxApiDisabled = false;
+
 		// グローバルフックのタイプをキーボード+マウスに設定し、バックグラウンドスレッドで実行する
-		var t = hook.RunAsync(GlobalHookType.All, useBackgroundThread: true);
+		Task task = hook.RunAsync(GlobalHookType.All, useBackgroundThread: true);
+		_ = task.ContinueWith(OnHookTaskFaulted, TaskContinuationOptions.OnlyOnFaulted);
+	}
+
+	private static void OnHookTaskFaulted(Task task)
+	{
+		Exception? exception = task.Exception?.Flatten().InnerException;
+		HookException? hookException = exception as HookException;
+
+		App.Logger.Error($"Global hook error: {hookException?.Result.ToString() ?? exception?.Message ?? "Unknown"}");
+
+		if (hookException?.Result is UioHookResult.ErrorAxApiDisabled or UioHookResult.ErrorAxApiRevoked)
+		{
+			Dispatcher.UIThread.Post(() => HookError?.Invoke(null, EventArgs.Empty));
+		}
+	}
+
+	public static bool IsAccessibilityApiEnabled()
+	{
+		return UioHookProvider.Instance.IsAxApiEnabled(false);
+	}
+
+	public static bool RequestAccessibilityApiAccess()
+	{
+		return UioHookProvider.Instance.IsAxApiEnabled(true);
+	}
+
+	public static void OpenAccessibilitySystemSettings()
+	{
+		if (!OperatingSystem.IsMacOS()) return;
+
+		Process.Start(new ProcessStartInfo("x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")
+		{
+			UseShellExecute = true
+		});
 	}
 
 	public static void Stop()
