@@ -32,6 +32,8 @@
 		<TextBlock Text="{x:Static lang:Resources.Accessibility_Dialog_HowTo}" TextWrapping="Wrap" TextAlignment="Center" IsVisible="{Binding !IsPermissionGranted}"/>
 		<!--権限の状態-->
 		<TextBlock Text="{Binding StatusText}" TextAlignment="Center" FontWeight="SemiBold"/>
+		<!--再起動の案内-->
+		<TextBlock Text="{x:Static lang:Resources.Accessibility_Dialog_RestartNote}" TextWrapping="Wrap" TextAlignment="Center" IsVisible="{Binding IsPermissionGranted}"/>
 		<!--権限の要求-->
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" IsVisible="{Binding !IsPermissionGranted}">
 			<Button Classes="accent" Content="{x:Static lang:Resources.Accessibility_Button_Grant}" Command="{Binding RequestPermissionCommand}"/>

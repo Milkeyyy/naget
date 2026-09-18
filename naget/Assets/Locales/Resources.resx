@@ -438,7 +438,10 @@ Latest Version: {1}</value>
     <value>naget needs access to the macOS Accessibility API to use shortcut keys.</value>
   </data>
   <data name="Accessibility.Dialog.HowTo" xml:space="preserve">
-    <value>Click "Grant Access" and allow naget in the dialog that appears. If shortcut keys still do not work after granting, restart the app.</value>
+    <value>Click "Grant Access". If no system dialog appears, allow naget in System Settings > Privacy and Security > Accessibility.</value>
+  </data>
+  <data name="Accessibility.Dialog.RestartNote" xml:space="preserve">
+    <value>If shortcut keys still do not work, restart the app.</value>
   </data>
   <data name="Accessibility.Button.Grant" xml:space="preserve">
     <value>Grant Access</value>

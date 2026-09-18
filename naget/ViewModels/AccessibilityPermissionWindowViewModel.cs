@@ -1,13 +1,17 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using Epoxy;
 using naget.Assets.Locales;
 using naget.Helpers;
+using System;
 
 namespace naget.ViewModels;
 
 [ViewModel]
 public class AccessibilityPermissionWindowViewModel
 {
+	private readonly DispatcherTimer permissionCheckTimer;
+
 	public Well<Window> WindowWell { get; } = Well.Factory.Create<Window>();
 
 	public static string WindowTitle => Resources.Accessibility_Window_Title + " - " + App.ProductName;
@@ -31,12 +35,29 @@ public class AccessibilityPermissionWindowViewModel
 			return default;
 		});
 
+		// 権限が許可されたかどうかを定期的に確認する (ウィンドウが表示されている間のみ)
+		permissionCheckTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+		permissionCheckTimer.Tick += (_, _) =>
+		{
+			if (IsPermissionGranted) return;
+			if (App.AccessibilityPermissionWindow?.IsVisible != true) return;
+			RefreshPermissionState();
+		};
+		if (OperatingSystem.IsMacOS()) permissionCheckTimer.Start();
+
 		// アクセシビリティ API へのアクセス許可を要求するコマンド
 		RequestPermissionCommand = Command.Factory.Create(() =>
 		{
 			App.Logger.Debug("Request Accessibility API access");
 			HotKeyHelper.RequestAccessibilityApiAccess();
 			RefreshPermissionState();
+
+			// macOS の許可ダイアログはアプリごとに一度しか表示されないため、表示されなかった場合はシステム設定を開いて手動での許可を促す
+			if (!IsPermissionGranted)
+			{
+				App.Logger.Debug("Accessibility prompt was not shown; opening System Settings");
+				HotKeyHelper.OpenAccessibilitySystemSettings();
+			}
 			return default;
 		});
 

@@ -106,11 +106,20 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
-        ///   Click &quot;Grant Access&quot; and allow naget in the dialog that appears. If shortcut keys still do not work after granting, restart the app. に類似しているローカライズされた文字列を検索します。
+        ///   Click &quot;Grant Access&quot;. If no system dialog appears, allow naget in System Settings &gt; Privacy and Security &gt; Accessibility. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Accessibility_Dialog_HowTo {
             get {
                 return ResourceManager.GetString("Accessibility.Dialog.HowTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   If shortcut keys still do not work, restart the app. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Dialog_RestartNote {
+            get {
+                return ResourceManager.GetString("Accessibility.Dialog.RestartNote", resourceCulture);
             }
         }
         

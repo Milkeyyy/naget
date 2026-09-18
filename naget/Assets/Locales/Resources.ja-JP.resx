@@ -438,7 +438,10 @@
     <value>naget のショートカットキーを利用するには、macOS のアクセシビリティ API へのアクセス許可が必要です。</value>
   </data>
   <data name="Accessibility.Dialog.HowTo" xml:space="preserve">
-    <value>「アクセスを許可」をクリックし、表示されるダイアログで naget を許可してください。許可後もショートカットキーが動作しない場合は、アプリを再起動してください。</value>
+    <value>「アクセスを許可」をクリックしてください。システムダイアログが表示されない場合は、システム設定の「プライバシーとセキュリティ」→「アクセシビリティ」で naget を許可してください。</value>
+  </data>
+  <data name="Accessibility.Dialog.RestartNote" xml:space="preserve">
+    <value>ショートカットキーが動作しない場合は、アプリを再起動してください。</value>
   </data>
   <data name="Accessibility.Button.Grant" xml:space="preserve">
     <value>アクセスを許可</value>
