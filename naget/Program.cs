@@ -24,13 +24,10 @@ namespace naget
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
 				// フォントの設定
-				// .With(new FontManagerOptions
-				// {
-				// 	DefaultFamilyName = "avares://naget/Assets/Fonts#Noto Sans JP",
-				// 	FontFallbacks = [
-				// 		new FontFallback { FontFamily = new FontFamily("avares://naget/Assets/Fonts#Noto Sans JP") }
-				// 	]
-				// })
+				.With(new FontManagerOptions
+				{
+					FontFallbacks = CreateCjkFontFallbacks()
+				})
 				.With(new MacOSPlatformOptions()
 				{
 					// (macOS) Dock に表示しない
@@ -40,5 +37,34 @@ namespace naget
 				.WithDeveloperTools()
 #endif
 				.LogToTrace();
+
+		private static FontFallback[] CreateCjkFontFallbacks()
+		{
+			UnicodeRange cjkRange = UnicodeRange.Parse("U+3000-30FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF");
+
+			if (OperatingSystem.IsWindows())
+			{
+				return [
+					new FontFallback
+					{
+						FontFamily = new FontFamily("Yu Gothic UI"),
+						UnicodeRange = cjkRange
+					}
+				];
+			}
+
+			if (OperatingSystem.IsMacOS())
+			{
+				return [
+					new FontFallback
+					{
+						FontFamily = new FontFamily("Hiragino Sans"),
+						UnicodeRange = cjkRange
+					}
+				];
+			}
+
+			return [];
+		}
 	}
 }
