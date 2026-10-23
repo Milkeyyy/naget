@@ -22,7 +22,7 @@
 		<cv:ThemeNameConverter x:Key="themeNameConverter"/>
 	</UserControl.Resources>
 
-	<Panel Margin="20">
+	<ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 		<StackPanel>
 			<TextBlock Text="{x:Static lang:Resources.Settings_Tab_AppSettings}" Margin="0 0 0 20" FontSize="20" FontWeight="Bold"/>
 
@@ -131,5 +131,5 @@
 				</ui:SettingsExpander.Header>
 			</ui:SettingsExpander>
 		</StackPanel>
-	</Panel>
+	</ScrollViewer>
 </UserControl>
