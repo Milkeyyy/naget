@@ -7,7 +7,9 @@
 - .NET **10.0** ターゲット (`global.json`: 10.0.104, csproj: `net10.0`)
 - 開発ビルド: `dotnet build naget/naget.csproj`
 - 製品ビルドは NUKE 経由: `./build.cmd --runtime win-x64 --releasechannel nightly --releasenumber <番号>`
-- NUKE のエントリポイントは `build/Build.cs`、既定ターゲットは `Compile` (Restore → `dotnet publish`、framework-dependent + PublishTrimmed)
+- NUKE のエントリポイントは `build/Build.cs`、既定ターゲットは `Compile` (Restore → `UpdateLibraryList` → `dotnet publish`、framework-dependent + PublishTrimmed)
+- `UpdateLibraryList` が `naget/library.json` を `nuget-license` で再生成する。ツールは `.config/dotnet-tools.json` (3.1.4) で固定し、`dotnet tool restore` もターゲット内で実行。初回はネットワークが必要で、失敗時は既存の一覧を残してビルドを継続する
+- ライセンス一覧の対象は `naget/naget.csproj`。`scripts/custom.json` で特定パッケージの除外・差し替えができる
 - ビルド出力は `_Pack/{runtime}/Build/`
 - リリース作業 (vpk パッキングと GitHub Releases アップロード) は `Build_win-x64_nightly.bat` / `Build_win-arm64_nightly.bat` / `Build_osx-arm64_nightly.sh` を使用。CI は `.github/workflows/build-nightly.yml`
 - **テストプロジェクトは存在しない**。テストコマンドを実行しないこと
@@ -18,7 +20,7 @@
 `sln` に `naget` と `build/_build.csproj` の2プロジェクトのみ。マルチパッケージ構成ではない。
 
 ### MVVM (Epoxy)
-- Avalonia **11.3.21** + `Epoxy.Avalonia11` 使用、`[ViewModel]` 属性でVMを宣言
+- Avalonia **11.3.22** + `Epoxy.Avalonia11` 使用、`[ViewModel]` 属性でVMを宣言
 - UI テーマは `FluentAvaloniaUI` (`FluentAvaloniaTheme`、アクセントカラーは `App.axaml` で定義)
 - Epoxy はソースジェネレーターでコード生成するため、未ビルド状態では生成ファイルが存在しない
 - **Compiled Bindings がデフォルト有効** (`AvaloniaUseCompiledBindingsByDefault=true`)
@@ -27,6 +29,11 @@
 ### WebView
 - CEF は廃止済み (CEF_Resources ディレクトリも削除済み)
 - `Avalonia.Controls.WebView` の `NativeWebView` を使用 (BrowserWindow / InAppBrowserView)
+
+### ライセンス一覧
+- `naget/library.json` はビルド時に生成され、埋め込みリソースとして同梱される
+- `App.Libraries` (`List<LibraryInfo>`) を `AboutWindow` のリンクから開く `LicenseWindow` で一覧表示する
+- 各行のライセンス名は `HyperlinkButton` (`NavigateUri`) で `LicenseUrl` を既定ブラウザーで開く
 
 ### グローバル状態
 `App.axaml.cs` が全ウィンドウ、Logger、Updater、WindowService を静的シングルトンで管理。全コンポーネントが `App.XXX` を直接参照する。BrowserWindow のみ初回アクセス時に遅延初期化される。
@@ -41,7 +48,7 @@
 |------|------|
 | `naget/Views/` | AXAML UI定義 (`Views/Settings/`、`Views/Dialog/` 含む) |
 | `naget/ViewModels/` | `[ViewModel]` 付きVMクラス |
-| `naget/Models/` | 設定 (`Config/`、`Config/HotKey/`)、検索エンジンモデル |
+| `naget/Models/` | 設定 (`Config/`、`Config/HotKey/`)、検索エンジン、`LibraryInfo` |
 | `naget/Helpers/` | ホットキー(SharpHook)、ロガー、Velopack更新 |
 | `naget/Services/` | WindowService (ウィンドウ表示制御) |
 | `naget/Common/` | Utils 等の共通ユーティリティ |
