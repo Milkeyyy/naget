@@ -31,13 +31,27 @@ public class Updater
 
 	public async void Start()
 	{
+		// Microsoft Store 版はストアが更新を管理するため、Velopack での確認は行わない
+		if (PackageHelper.IsPackaged())
+		{
+			App.Logger.Debug("Store build: update check is delegated to the Microsoft Store.");
+			return;
+		}
+
 		// バックグラウンドでアップデートを確認
 		await CheckAndUpdateAttempt(silent: true);
 	}
 
-	public async Task ManualCheck(bool showDialog = false)
+	public Task ManualCheck(bool showDialog = false)
 	{
-		await CheckAndUpdateAttempt(silent: !showDialog);
+		// Microsoft Store 版はアプリのストア ページを開く
+		if (PackageHelper.IsPackaged())
+		{
+			PackageHelper.OpenStorePage();
+			return Task.CompletedTask;
+		}
+
+		return CheckAndUpdateAttempt(silent: !showDialog);
 	}
 
 	private async Task CheckAndUpdateAttempt(bool silent)

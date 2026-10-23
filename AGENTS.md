@@ -12,12 +12,13 @@
 - ライセンス一覧の対象は `naget/naget.csproj`。`scripts/custom.json` で特定パッケージの除外・差し替えができる
 - ビルド出力は `_Pack/{runtime}/Build/`
 - リリース作業 (vpk パッキングと GitHub Releases アップロード) は `Build_win-x64_nightly.bat` / `Build_win-arm64_nightly.bat` / `Build_osx-arm64_nightly.sh` を使用。CI は `.github/workflows/build-nightly.yml`
+- Microsoft Store 用パッケージは `scripts/pack-msix.ps1` で作成する (`dotnet` CLI 不可、Visual Studio の MSBuild が必要)
 - **テストプロジェクトは存在しない**。テストコマンドを実行しないこと
 
 ## アーキテクチャ
 
 ### 単一プロジェクト
-`sln` に `naget` と `build/_build.csproj` の2プロジェクトのみ。マルチパッケージ構成ではない。
+`sln` に `naget`、`build/_build.csproj`、`naget.Package` (MSIX 用 wapproj) の3プロジェクト。マルチパッケージ構成ではない。
 
 ### MVVM (Epoxy)
 - Avalonia **11.3.22** + `Epoxy.Avalonia11` 使用、`[ViewModel]` 属性でVMを宣言
@@ -43,6 +44,14 @@
 → `App.Initialize()` (build.json / library.json 読み込み、Logger 初期化、Config/SearchEngine 読み込み、カルチャ適用)
 → `App.OnFrameworkInitializationCompleted()` (トレイ + 各Window作成、テーマ適用、HotKey開始、Updater開始)
 
+### Microsoft Store (MSIX)
+- `naget.Package` は `net10.0` のアプリを参照する Windows Application Packaging Project。パッケージ内は self-contained (約150MB/アーキテクチャ) で、x64 + arm64 の msixbundle を `.msixupload` にまとめる
+- `scripts/pack-msix.ps1` が `naget/build.json` の `version` を `Package.appxmanifest` に `x.y.z.0` で反映し、`UapAppxPackageBuildMode=StoreUpload` でビルドする。`build.json` はビルド中だけ `release_channel=store` になり、終了後に元へ戻る
+- Store 版は Velopack を使わない。`PackageHelper.IsPackaged()` (`GetCurrentPackageFullName`) で判定して更新確認をスキップし、トレイの「アップデートを確認」は `ms-windows-store://pdp/?PFN=...` を開く
+- 再起動は `shell:AppsFolder\<PFN>!App` 経由 (`naget.exe` の直接起動はパッケージ ID を失うため)
+- 提出手順・掲載文・画像は `Store/`。提出のたびに `naget/build.json` の `version` を上げる
+- パッケージ言語は en-US / ja-JP。`naget.Package` のダミー `.resw` 生成タスクで登録している
+
 ### 主要ディレクトリ
 | パス | 役割 |
 |------|------|
@@ -57,6 +66,9 @@
 | `naget/Assets/` | アイコン、ローカライズ resx (`Assets/Locales/`) |
 | `naget/Setup/` | Inno Setup インストーラースクリプト (nightly/alpha) |
 | `naget/Properties/PublishProfiles/` | 公開プロファイル |
+| `naget.Package/` | MSIX 用 WAP (wapproj、AppxManifest、タイル画像) |
+| `Store/` | Microsoft Store 提出用の画像・掲載文・CSV・プライバシーポリシー |
+| `scripts/pack-msix.ps1` | Store 用 `.msixupload` のビルドスクリプト |
 
 ### バージョン管理
 - `naget/build.json` がバージョン情報のマスタ

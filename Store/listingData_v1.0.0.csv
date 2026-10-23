@@ -1,0 +1,39 @@
+﻿"Field","ID","Type (種類)","default","ja-jp","en-us"
+"Description","2","テキスト","","naget は、キーボードショートカットからすぐに検索を始められる常駐型の検索ランチャーです。
+
+設定したショートカットキーを押すと検索ボックスが表示され、入力したキーワードを選択した検索エンジンで検索できます。検索エンジンは自由に追加・編集でき、用途ごとに別々のショートカットを割り当てられます。
+
+検索結果はアプリ内ブラウザーでそのまま閲覧でき、閲覧履歴の確認や削除も可能です。タスクトレイに常駐するため、必要なときだけ素早く呼び出せます。
+
+＜主な機能＞
+- グローバルショートカットで検索ボックスを即表示
+- 検索エンジンの追加・編集・削除
+- ショートカットごとに検索エンジンを割り当て
+- アプリ内ブラウザーと閲覧履歴
+- ライト/ダークテーマ・日本語/英語 UI","naget is a lightweight search launcher that lives in the notification area and opens with a keyboard shortcut.
+
+Press your shortcut to show the search box, then search with the search engine you assigned to it. You can add and edit search engines freely and bind a different shortcut to each one.
+
+Results open in the built-in browser, where you can review or clear your browsing history. Because naget stays in the notification area, it is there only when you need it.
+
+<Key Features>
+- Show the search box instantly with a global shortcut
+- Add, edit and remove search engines
+- Bind a search engine to each shortcut
+- Built-in browser with browsing history
+- Light and dark themes, Japanese and English UI"
+"ReleaseNotes","3","テキスト","","<v1.0.0>
+- 初回リリース","<v1.0.0>
+- Initial release"
+"Title","4","テキスト","","naget","naget"
+"ShortTitle","5","テキスト","","ショートカットひとつで、すぐ検索。","Search instantly with a shortcut."
+"SortTitle","6","テキスト","","",""
+"VoiceTitle","7","テキスト","","",""
+"ShortDescription","8","テキスト","","ショートカットひとつで、すぐ検索。","Search instantly with a shortcut."
+"DevStudio","9","テキスト","","Milkeyyy","Milkeyyy"
+"CopyrightTrademarkInformation","12","テキスト","","Copyright (C) 2026 Milkeyyy","Copyright (C) 2026 Milkeyyy"
+"AdditionalLicenseTerms","13","テキスト","","",""
+"DesktopScreenshot1","100","相対パス (またはパートナー センターにあるファイルへの URL)","","Screenshots\01-search.png","Screenshots\01-search.png"
+"DesktopScreenshot2","101","相対パス (またはパートナー センターにあるファイルへの URL)","","Screenshots\02-settings.png","Screenshots\02-settings.png"
+"DesktopScreenshotCaption1","150","テキスト","","ショートカットで検索ボックスを表示","Show the search box with a shortcut"
+"DesktopScreenshotCaption2","151","テキスト","","検索エンジンごとにショートカットを設定","Assign a search engine to each shortcut"

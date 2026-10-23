@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{78763C41-441D-4709-A7F1-B5518EC0FAD9}"
 EndProject
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "naget.Package", "naget.Package\naget.Package.wapproj", "{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -36,6 +38,14 @@ Global
 		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Release|ARM64.Build.0 = Release|Any CPU
 		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Release|x64.ActiveCfg = Release|Any CPU
 		{78763C41-441D-4709-A7F1-B5518EC0FAD9}.Release|x64.Build.0 = Release|Any CPU
+		{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}.Debug|ARM64.Build.0 = Debug|ARM64
+		{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}.Debug|x64.ActiveCfg = Debug|x64
+		{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}.Debug|x64.Build.0 = Debug|x64
+		{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}.Release|ARM64.ActiveCfg = Release|ARM64
+		{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}.Release|ARM64.Build.0 = Release|ARM64
+		{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}.Release|x64.ActiveCfg = Release|x64
+		{9C2B0E6A-3D5F-4C7B-9E21-7A4D8F0B6C13}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

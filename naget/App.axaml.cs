@@ -179,6 +179,19 @@ public class App : Application
 
 	public static void RestartApplication()
 	{
+		// MSIX パッケージ版は exe を直接起動するとパッケージ ID を失うため、シェル経由で起動する
+		string? packageFamilyName = PackageHelper.GetPackageFamilyName();
+		if (packageFamilyName != null)
+		{
+			App.Logger.Debug("アプリケーションを再起動します (MSIX)...");
+			Process.Start(new ProcessStartInfo("explorer.exe", $"shell:AppsFolder\\{packageFamilyName}!App")
+			{
+				UseShellExecute = true
+			});
+			Exit();
+			return;
+		}
+
 		// 1. 新しいプロセスを起動するための情報を設定する
 		var processPath = Environment.ProcessPath;
 
