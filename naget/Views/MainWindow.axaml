@@ -16,7 +16,8 @@
 		WindowStartupLocation="CenterScreen"
 		CanResize="False"
 		Topmost="True"
-		SizeToContent="WidthAndHeight"
+		SizeToContent="Height"
+		Width="800"
 		MinWidth="800"
 		MinHeight="20">
 
