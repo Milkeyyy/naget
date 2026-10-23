@@ -127,7 +127,16 @@ jobs:
           else
             RANGE="-1 ${{ github.sha }}"
           fi
-          CHANGES=$(git log $RANGE --no-merges --pretty=format:'### %s (`%h`)%n%n%b')
+          CHANGES=$(git log $RANGE --no-merges --pretty=format:'%s (`%h`)%n%b%nCOMMIT_END' | awk '
+            BEGIN { RS = "COMMIT_END" }
+            {
+              n = split($0, lines, "\n")
+              for (i = 1; i <= n; i++) {
+                if (lines[i] == "") continue
+                print (seen++ ? "  - " : "- ") lines[i]
+              }
+              seen = 0
+            }')
           [ -z "$CHANGES" ] && CHANGES="No changes"
           {
             echo 'changes<<CHANGES_EOF'
