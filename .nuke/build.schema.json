@@ -29,7 +29,8 @@
         "Clean",
         "Compile",
         "LoadAndSaveBuildInfoJson",
-        "Restore"
+        "Restore",
+        "UpdateLibraryList"
       ]
     },
     "Verbosity": {

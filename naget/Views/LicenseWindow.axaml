@@ -1,0 +1,70 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:models="using:naget.Models"
+		xmlns:vm="using:naget.ViewModels"
+		mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="520"
+		x:Class="naget.Views.LicenseWindow"
+		x:DataType="vm:LicenseWindowViewModel"
+		WindowStartupLocation="CenterOwner"
+		ShowActivated="True"
+		CanResize="True"
+		Width="640" Height="520"
+		MinWidth="480" MinHeight="320"
+		Icon="/Assets/Icon.ico"
+		Title="{Binding WindowTitle}"
+>
+
+	<Design.DataContext>
+		<vm:LicenseWindowViewModel />
+	</Design.DataContext>
+
+	<Grid RowDefinitions="Auto,*" Margin="24">
+		<StackPanel Grid.Row="0" Spacing="4">
+			<TextBlock Text="{Binding TitleText}" FontSize="20" FontWeight="Bold"/>
+			<TextBlock Text="{Binding DescriptionText}" FontSize="12" TextWrapping="Wrap" Opacity="0.7"/>
+		</StackPanel>
+		<ScrollViewer Grid.Row="1" Margin="0 16 0 0">
+			<ItemsControl ItemsSource="{Binding Libraries}" Margin="0 0 16 0">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate x:DataType="models:LibraryInfo">
+						<Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" Margin="0 0 0 14">
+							<TextBlock
+								Grid.Row="0" Grid.Column="0"
+								Text="{Binding PackageId}"
+								FontWeight="SemiBold"
+								TextTrimming="CharacterEllipsis"
+							/>
+							<TextBlock
+								Grid.Row="0" Grid.Column="1"
+								Text="{Binding PackageVersion}"
+								Opacity="0.7"
+								HorizontalAlignment="Right"
+								Margin="12 0 0 0"
+							/>
+							<TextBlock
+								Grid.Row="1" Grid.Column="0"
+								Text="{Binding Authors}"
+								FontSize="12"
+								Opacity="0.7"
+								TextTrimming="CharacterEllipsis"
+								Margin="0 2 0 0"
+							/>
+							<HyperlinkButton
+								Grid.Row="1" Grid.Column="1"
+								Content="{Binding License}"
+								NavigateUri="{Binding LicenseUrl}"
+								FontSize="12"
+								Padding="0"
+								HorizontalAlignment="Right"
+								VerticalAlignment="Center"
+								Margin="12 0 0 0"
+							/>
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+	</Grid>
+</Window>

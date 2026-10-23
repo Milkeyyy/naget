@@ -467,4 +467,13 @@
   <data name="Accessibility.InfoBar.Message" xml:space="preserve">
     <value>アクセシビリティ API が許可されていないため、ショートカットキーを利用できません。</value>
   </data>
+  <data name="About.Licenses.Title" xml:space="preserve">
+    <value>オープンソースライセンス</value>
+  </data>
+  <data name="About.Licenses.Description" xml:space="preserve">
+    <value>このアプリケーションは以下のオープンソースソフトウェアを使用しています。</value>
+  </data>
+  <data name="About.Licenses.Open" xml:space="preserve">
+    <value>オープンソースライセンス</value>
+  </data>
 </root>

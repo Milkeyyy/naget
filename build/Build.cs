@@ -5,7 +5,10 @@ using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -100,8 +103,81 @@ class Build : NukeBuild
 			);
 		});
 
+	private static string RunProcess(string fileName, string arguments)
+	{
+		using Process process = new()
+		{
+			StartInfo = new ProcessStartInfo(fileName, arguments)
+			{
+				WorkingDirectory = RootDirectory,
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				StandardOutputEncoding = Encoding.UTF8,
+				StandardErrorEncoding = Encoding.UTF8,
+				UseShellExecute = false,
+			}
+		};
+
+		process.Start();
+		string output = process.StandardOutput.ReadToEnd();
+		string error = process.StandardError.ReadToEnd();
+		process.WaitForExit();
+
+		if (process.ExitCode != 0 && string.IsNullOrWhiteSpace(output))
+		{
+			throw new InvalidOperationException(error.Trim());
+		}
+
+		return output;
+	}
+
+	private static void WriteLibraryList()
+	{
+		AbsolutePath libraryFile = ProjectFolder / "library.json";
+		AbsolutePath customFile = RootDirectory / "scripts" / "custom.json";
+
+		try
+		{
+			RunProcess("dotnet", "tool restore");
+			string output = RunProcess("dotnet", $"tool run nuget-license -i \"{ProjectFile}\" --output json");
+			List<LibraryInfo> libraries = JsonSerializer.Deserialize<List<LibraryInfo>>(output) ?? [];
+			Dictionary<string, LibraryInfo> custom = JsonSerializer.Deserialize<Dictionary<string, LibraryInfo>>(File.ReadAllText(customFile)) ?? [];
+
+			List<LibraryInfo> merged = [];
+			foreach (LibraryInfo library in libraries)
+			{
+				if (custom.Remove(library.PackageId, out LibraryInfo customLibrary))
+				{
+					if (customLibrary != null) merged.Add(customLibrary);
+				}
+				else
+				{
+					merged.Add(library);
+				}
+			}
+			merged.AddRange(custom.Values.OfType<LibraryInfo>());
+			merged.Sort((a, b) => string.Compare(a.PackageId, b.PackageId, StringComparison.Ordinal));
+
+			File.WriteAllText(libraryFile, JsonSerializer.Serialize(merged, new JsonSerializerOptions
+			{
+				Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+				WriteIndented = true,
+			}));
+			Serilog.Log.Information($"library.json updated ({merged.Count} libraries)");
+		}
+		catch (Exception ex)
+		{
+			Serilog.Log.Warning($"Failed to update library.json: {ex.Message}");
+		}
+	}
+
+	Target UpdateLibraryList => _ => _
+		.DependsOn(Restore)
+		.Executes(WriteLibraryList);
+
 	Target Compile => _ => _
 		.DependsOn(Restore)
+		.DependsOn(UpdateLibraryList)
 		.Executes(() =>
 		{
 			var buildInfo = LoadAndSaveBuildInfo();
@@ -159,4 +235,15 @@ class Build : NukeBuild
 		});
 
 
+}
+
+class LibraryInfo
+{
+	public string PackageId { get; set; }
+	public string PackageVersion { get; set; }
+	public string PackageProjectUrl { get; set; }
+	public string Copyright { get; set; }
+	public string Authors { get; set; }
+	public string License { get; set; }
+	public string LicenseUrl { get; set; }
 }

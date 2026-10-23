@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using naget.Common;
 using naget.Helpers;
+using naget.Models;
 using naget.Models.BrowserHistory;
 using naget.Models.Config;
 using naget.Models.SearchEngine;
@@ -47,7 +48,7 @@ public class App : Application
 	private static string _copyright = string.Empty;
 	public static string ProductCopyright => _copyright;
 
-	private static List<Dictionary<string, object>> Libraries = [];
+	public static List<LibraryInfo> Libraries { get; private set; } = [];
 
 	/// <summary>
 	/// コンフィグ等のファイルを保存するフォルダー
@@ -80,6 +81,7 @@ public class App : Application
 	public static Updater Updater { get; private set; } = null!;
 
 	public static Window? AboutWindow { get; private set; }
+	public static Window? LicenseWindow { get; private set; }
 	public static Window? UpdateCompleteWindow { get; private set; }
 	public static Window? MainWindow { get; private set; }
 	public static Window? SettingsWindow { get; private set; }
@@ -130,7 +132,7 @@ public class App : Application
 		{
 			using var reader = new StreamReader(libsStream);
 			libs = reader.ReadToEnd();
-			Libraries = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(libs) ?? [];
+			Libraries = JsonSerializer.Deserialize<List<LibraryInfo>>(libs) ?? [];
 		}
 
 		// ロガー
@@ -204,9 +206,9 @@ public class App : Application
 	/// </summary>
 	/// <param name="id"></param>
 	/// <returns></returns>
-	public static Dictionary<string, object>? GetLibraryInfo(string id)
+	public static LibraryInfo? GetLibraryInfo(string id)
 	{
-		return Libraries.FirstOrDefault(d => d.ContainsKey("PackageId") && d["PackageId"].ToString() == id);
+		return Libraries.FirstOrDefault(l => l.PackageId == id);
 	}
 
 	/// <summary>
@@ -252,6 +254,7 @@ public class App : Application
 
 			// 各ウィンドウ
 			AboutWindow = new AboutWindow();
+			LicenseWindow = new LicenseWindow();
 			UpdateCompleteWindow = new UpdateCompleteWindow();
 			MainWindow = new MainWindow();
 			SettingsWindow = new SettingsWindow();

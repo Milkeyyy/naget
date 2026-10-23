@@ -21,14 +21,22 @@ public class AboutWindowViewModel
 	public string AvaloniaVersion { get; set; } = "Unknown";
 	public string WebViewVersion { get; set; } = "Unknown";
 
+	public Command OpenLicensesCommand { get; }
+
 	public AboutWindowViewModel()
 	{
+		OpenLicensesCommand = Command.Factory.Create(() =>
+		{
+			App.LicenseWindow!.ShowDialog(App.AboutWindow!);
+			return default;
+		});
+
 		// ウィンドウがロードされた時の処理
 		WindowWell.Add(Window.LoadedEvent, () =>
 		{
 			App.Logger.Debug("AboutWindow Loaded");
-			AvaloniaVersion = App.GetLibraryInfo("Avalonia")?["PackageVersion"].ToString() ?? "Unknown";
-			WebViewVersion = App.GetLibraryInfo("Avalonia.Controls.WebView")?["PackageVersion"].ToString() ?? "Unknown";
+			AvaloniaVersion = App.GetLibraryInfo("Avalonia")?.PackageVersion ?? "Unknown";
+			WebViewVersion = App.GetLibraryInfo("Avalonia.Controls.WebView")?.PackageVersion ?? "Unknown";
 			return default;
 		});
 	}

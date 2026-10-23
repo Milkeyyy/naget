@@ -105,5 +105,11 @@
 			TextAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Center"
 			Margin="0 10 0 0"
 		/>
+		<HyperlinkButton
+			Content="{x:Static lang:Resources.About_Licenses_Open}"
+			Command="{Binding OpenLicensesCommand}"
+			HorizontalAlignment="Center"
+			Margin="0 6 0 0"
+		/>
 	</StackPanel>
 </Window>

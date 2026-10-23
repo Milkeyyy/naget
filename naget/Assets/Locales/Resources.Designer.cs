@@ -1105,5 +1105,32 @@ namespace naget.Assets.Locales {
                 return ResourceManager.GetString("Window.Settings", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Open Source Licenses に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string About_Licenses_Title {
+            get {
+                return ResourceManager.GetString("About.Licenses.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   This application uses the following open source software. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string About_Licenses_Description {
+            get {
+                return ResourceManager.GetString("About.Licenses.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Open Source Licenses に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string About_Licenses_Open {
+            get {
+                return ResourceManager.GetString("About.Licenses.Open", resourceCulture);
+            }
+        }
     }
 }

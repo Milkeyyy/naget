@@ -467,4 +467,13 @@ Latest Version: {1}</value>
   <data name="Accessibility.InfoBar.Message" xml:space="preserve">
     <value>Shortcut keys are unavailable because naget is not allowed to use the Accessibility API.</value>
   </data>
+  <data name="About.Licenses.Title" xml:space="preserve">
+    <value>Open Source Licenses</value>
+  </data>
+  <data name="About.Licenses.Description" xml:space="preserve">
+    <value>This application uses the following open source software.</value>
+  </data>
+  <data name="About.Licenses.Open" xml:space="preserve">
+    <value>Open Source Licenses</value>
+  </data>
 </root>
