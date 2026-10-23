@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using naget.ViewModels;
 
 namespace naget.Views;
@@ -28,6 +29,13 @@ public partial class MainWindow : Window
 		// テキスト入力のフォーカスが失われたらウィンドウを隠す
 		LostFocus += (s, e) =>
 		{
+			Hide();
+		};
+
+		KeyDown += (s, e) =>
+		{
+			if (e.Key != Key.Escape) return;
+			e.Handled = true;
 			Hide();
 		};
 	}
