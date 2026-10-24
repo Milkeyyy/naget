@@ -157,7 +157,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: v${{ needs.build.outputs.APP_FULL_VERSION }}
-        name: naget ${{ needs.build.outputs.APP_FULL_VERSION }}
+        name: v${{ needs.build.outputs.APP_FULL_VERSION }}
         commit: ${{ github.sha }}
         artifacts: "./*"
         removeArtifacts: true
