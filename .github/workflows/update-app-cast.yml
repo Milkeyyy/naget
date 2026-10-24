@@ -8,8 +8,8 @@ jobs:
   update-cast-file:
     name: Update Cast File
     runs-on: ubuntu-latest
-    # Nightly は除外
-    if: ${{ github.event.release.tag_name != 'nightly' }}
+    # Nightly と Alpha は appcast の対象外
+    if: ${{ github.event.release.tag_name != 'nightly' && !contains(github.event.release.tag_name, '-alpha.') }}
 
     steps:
       - name: Checkout (gh-pages)

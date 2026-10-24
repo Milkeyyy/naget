@@ -13,6 +13,8 @@
 - ビルド出力は `_Pack/{runtime}/Build/`
 - リリース作業 (vpk パッキングと GitHub Releases アップロード) は `Build_win-x64_nightly.bat` / `Build_win-arm64_nightly.bat` / `Build_osx-arm64_nightly.sh` を使用。CI は `.github/workflows/build-nightly.yml`
 - Microsoft Store 用パッケージは `scripts/pack-msix.ps1` で作成する (`dotnet` CLI 不可、Visual Studio の MSBuild が必要)
+- Alpha リリースは `alpha` ブランチで管理する。`dev` から `alpha` へ PR を作成してマージし、GitHub Actions の `Build Alpha` を手動実行 (`release_number` に `1` など) すると `v1.0.0-alpha.N` の draft release が作成される。公開は手動で行う
+- `dev -> alpha` の PR では `Build Check` (`dotnet build`) のみ実行される
 - **テストプロジェクトは存在しない**。テストコマンドを実行しないこと
 
 ## アーキテクチャ
