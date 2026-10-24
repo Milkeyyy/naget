@@ -294,6 +294,15 @@
   <data name="Settings.System.Language.RequiredRestart" xml:space="preserve">
     <value>設定を適用するにはアプリケーションの再起動が必要です。</value>
   </data>
+  <data name="Settings.Startup" xml:space="preserve">
+    <value>スタートアップに登録</value>
+  </data>
+  <data name="Settings.Startup.Description" xml:space="preserve">
+    <value>PC へのサインイン時に naget を自動で起動します</value>
+  </data>
+  <data name="Settings.Startup.Error" xml:space="preserve">
+    <value>スタートアップ設定を変更できませんでした</value>
+  </data>
   <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
     <value>アプリケーションを再起動して適用</value>
   </data>

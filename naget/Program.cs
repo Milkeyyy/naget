@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Media;
+using naget.Helpers;
 using System;
 using Velopack;
 
@@ -13,7 +14,11 @@ namespace naget
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			VelopackApp.Build().Run();
+			VelopackApp builder = VelopackApp.Build();
+#if WINDOWS
+			builder = builder.OnBeforeUninstallFastCallback(_ => StartupManager.RemoveWindowsStartupEntry());
+#endif
+			builder.Run();
 
 			BuildAvaloniaApp()
 				.StartWithClassicDesktopLifetime(args);

@@ -637,6 +637,33 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Launch at Startup に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Startup {
+            get {
+                return ResourceManager.GetString("Settings.Startup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Start naget automatically when you sign in. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Startup_Description {
+            get {
+                return ResourceManager.GetString("Settings.Startup.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Could not change the startup setting. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Startup_Error {
+            get {
+                return ResourceManager.GetString("Settings.Startup.Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Language に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_System_Language {

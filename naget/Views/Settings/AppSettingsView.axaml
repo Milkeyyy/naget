@@ -40,6 +40,9 @@
 				</ui:InfoBar.ActionButton>
 			</ui:InfoBar>
 
+			<!--スタートアップ設定の変更に失敗した場合のエラー表示-->
+			<ui:InfoBar Title="{x:Static lang:Resources.Settings_Startup_Error}" Severity="Error" IsOpen="{Binding StartupErrorIsVisible}" IsClosable="False" Margin="0 0 0 10"/>
+
 			<!--テーマ-->
 			<ui:SettingsExpander IsExpanded="True" Header="{x:Static lang:Resources.Settings_Design_Theme}" Foreground="{DynamicResource ThemeForegroundBrush}">
 				<ui:SettingsExpander.IconSource>
@@ -84,6 +87,22 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 					</StackPanel>
+				</ui:SettingsExpander.Footer>
+			</ui:SettingsExpander>
+
+			<!--スタートアップ-->
+			<ui:SettingsExpander IsExpanded="True">
+				<ui:SettingsExpander.IconSource>
+					<ui:SymbolIconSource Symbol="Play"/>
+				</ui:SettingsExpander.IconSource>
+				<ui:SettingsExpander.Header>
+					<StackPanel>
+						<TextBlock Text="{x:Static lang:Resources.Settings_Startup}" VerticalAlignment="Center"/>
+						<TextBlock Text="{x:Static lang:Resources.Settings_Startup_Description}" FontSize="12" Opacity="0.7" TextWrapping="Wrap"/>
+					</StackPanel>
+				</ui:SettingsExpander.Header>
+				<ui:SettingsExpander.Footer>
+					<ToggleSwitch IsChecked="{Binding StartupEnabled, Mode=TwoWay}" IsEnabled="{Binding !StartupBusy}"/>
 				</ui:SettingsExpander.Footer>
 			</ui:SettingsExpander>
 

@@ -294,6 +294,15 @@
   <data name="Settings.System.Language.RequiredRestart" xml:space="preserve">
     <value>You need to restart the application for the settings to take effect.</value>
   </data>
+  <data name="Settings.Startup" xml:space="preserve">
+    <value>Launch at Startup</value>
+  </data>
+  <data name="Settings.Startup.Description" xml:space="preserve">
+    <value>Start naget automatically when you sign in.</value>
+  </data>
+  <data name="Settings.Startup.Error" xml:space="preserve">
+    <value>Could not change the startup setting.</value>
+  </data>
   <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
     <value>Restart the Application to Apply</value>
   </data>

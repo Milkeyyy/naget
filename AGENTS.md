@@ -60,13 +60,12 @@
 | `naget/Views/` | AXAML UI定義 (`Views/Settings/`、`Views/Dialog/` 含む) |
 | `naget/ViewModels/` | `[ViewModel]` 付きVMクラス |
 | `naget/Models/` | 設定 (`Config/`、`Config/HotKey/`)、検索エンジン、`LibraryInfo` |
-| `naget/Helpers/` | ホットキー(SharpHook)、ロガー、Velopack更新 |
+| `naget/Helpers/` | ホットキー(SharpHook)、ロガー、Velopack更新、スタートアップ登録 |
 | `naget/Services/` | WindowService (ウィンドウ表示制御) |
 | `naget/Common/` | Utils 等の共通ユーティリティ |
 | `naget/Converter/` | 値コンバーター |
 | `naget/Styling/` | 共有スタイル (`Resources.axaml`) |
 | `naget/Assets/` | アイコン、ローカライズ resx (`Assets/Locales/`) |
-| `naget/Setup/` | Inno Setup インストーラースクリプト (nightly/alpha) |
 | `naget/Properties/PublishProfiles/` | 公開プロファイル |
 | `naget.Package/` | MSIX 用 WAP (wapproj、AppxManifest、タイル画像) |
 | `Store/` | Microsoft Store 提出用の画像・掲載文・CSV・プライバシーポリシー |
