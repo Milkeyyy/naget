@@ -303,6 +303,12 @@
   <data name="Settings.Startup.Error" xml:space="preserve">
     <value>Could not change the startup setting.</value>
   </data>
+  <data name="Common.On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Common.Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
   <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
     <value>Restart the Application to Apply</value>
   </data>

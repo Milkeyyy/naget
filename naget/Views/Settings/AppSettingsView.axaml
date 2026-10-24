@@ -102,7 +102,7 @@
 					</StackPanel>
 				</ui:SettingsExpander.Header>
 				<ui:SettingsExpander.Footer>
-					<ToggleSwitch IsChecked="{Binding StartupEnabled, Mode=TwoWay}" IsEnabled="{Binding !StartupBusy}"/>
+					<ToggleSwitch IsChecked="{Binding StartupEnabled, Mode=TwoWay}" IsEnabled="{Binding !StartupBusy}" OnContent="{x:Static lang:Resources.Common_On}" OffContent="{x:Static lang:Resources.Common_Off}"/>
 				</ui:SettingsExpander.Footer>
 			</ui:SettingsExpander>
 

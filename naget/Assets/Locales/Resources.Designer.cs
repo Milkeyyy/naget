@@ -187,6 +187,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   On に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Common_On {
+            get {
+                return ResourceManager.GetString("Common.On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Off に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Common_Off {
+            get {
+                return ResourceManager.GetString("Common.Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Default に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Default {

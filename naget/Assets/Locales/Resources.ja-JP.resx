@@ -303,6 +303,12 @@
   <data name="Settings.Startup.Error" xml:space="preserve">
     <value>スタートアップ設定を変更できませんでした</value>
   </data>
+  <data name="Common.On" xml:space="preserve">
+    <value>オン</value>
+  </data>
+  <data name="Common.Off" xml:space="preserve">
+    <value>オフ</value>
+  </data>
   <data name="Settings.System.Language.RestartApplication" xml:space="preserve">
     <value>アプリケーションを再起動して適用</value>
   </data>
