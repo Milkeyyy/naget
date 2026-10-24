@@ -206,8 +206,14 @@ public class Updater
 			}
 		}
 
-		// 2. 指定されていない場合はデフォルトの URL を返す
+		// 2. チャネル別のデフォルト URL を返す
 		// Velopack はディレクトリの URL を期待する
-		return $"https://nagetupd.milkeyyy.com/";
+		string baseUrl = App.ProductReleaseChannel switch
+		{
+			"alpha" => "https://nagetupd.milkeyyy.com/alpha/",
+			"release" => "https://nagetupd.milkeyyy.com/release/",
+			_ => "https://nagetupd.milkeyyy.com/nightly/"
+		};
+		return baseUrl;
 	}
 }
