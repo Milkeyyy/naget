@@ -88,15 +88,6 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
-        ///   Check Again に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string Accessibility_Button_Recheck {
-            get {
-                return ResourceManager.GetString("Accessibility.Button.Recheck", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   naget needs access to the macOS Accessibility API to use shortcut keys. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Accessibility_Dialog_Description {
@@ -106,29 +97,20 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
-        ///   Click &quot;Grant Access&quot;. If no system dialog appears, allow naget in System Settings &gt; Privacy and Security &gt; Accessibility. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string Accessibility_Dialog_HowTo {
-            get {
-                return ResourceManager.GetString("Accessibility.Dialog.HowTo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   If shortcut keys still do not work, restart the app. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string Accessibility_Dialog_RestartNote {
-            get {
-                return ResourceManager.GetString("Accessibility.Dialog.RestartNote", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Accessibility Permission Required に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Accessibility_Dialog_Title {
             get {
                 return ResourceManager.GetString("Accessibility.Dialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Allow に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_InfoBar_Action {
+            get {
+                return ResourceManager.GetString("Accessibility.InfoBar.Action", resourceCulture);
             }
         }
         
@@ -160,11 +142,56 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Restart naget to apply the permission. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Status_Granted_Description {
+            get {
+                return ResourceManager.GetString("Accessibility.Status.Granted.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Access is not granted. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Accessibility_Status_NotGranted {
             get {
                 return ResourceManager.GetString("Accessibility.Status.NotGranted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Allow naget in System Settings &gt; Privacy and Security &gt; Accessibility. The change is detected automatically. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Status_NotGranted_Description {
+            get {
+                return ResourceManager.GetString("Accessibility.Status.NotGranted.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Click &quot;Grant Access&quot; and allow naget in the system dialog. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Step_Grant {
+            get {
+                return ResourceManager.GetString("Accessibility.Step.Grant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   If no dialog appears, click &quot;Open System Settings&quot;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Step_Settings {
+            get {
+                return ResourceManager.GetString("Accessibility.Step.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Turn on naget under Privacy and Security &gt; Accessibility. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Step_Toggle {
+            get {
+                return ResourceManager.GetString("Accessibility.Step.Toggle", resourceCulture);
             }
         }
         

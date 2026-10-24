@@ -65,9 +65,22 @@ echo ""
 ./build.sh --runtime "${Runtime}" --releasechannel "${AppReleaseChannel}" --releasenumber "${AppReleaseNumber}"
 echo ""
 
+echo "Prepare Code Signing Certificate"
+echo ""
+
+SIGN_BIN_DIR="$(bash ./scripts/macos-self-signed-cert.sh)" || SIGN_BIN_DIR=""
+if [ -n "${SIGN_BIN_DIR}" ]; then
+    export PATH="${SIGN_BIN_DIR}:${PATH}"
+    export VPK_SIGN_APP_IDENTITY="naget Self Signed"
+    echo "Signing with: ${VPK_SIGN_APP_IDENTITY}"
+else
+    echo "Warning: Code signing certificate is unavailable; the Accessibility permission will be reset on every update."
+fi
+echo ""
+
 echo "Install Velopack CLI"
 echo ""
-dotnet tool install -g vpk || true
+dotnet tool update -g vpk --version 1.2.161 || dotnet tool install -g vpk --version 1.2.161
 echo ""
 
 echo "Processing Releases - Velopack"
@@ -79,7 +92,7 @@ echo "Download Previous Release - Velopack"
 vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel "${VelopackChannel}" --token "${GITHUB_TOKEN}" --pre -o ./Releases || echo "Warning: Failed to download previous release."
 
 echo "Build Installer - Velopack"
-vpk pack -xy -u naget -v "${AppFullVersion}" -p "./Build" -o "./Releases" -i "../../Logo/naget.icns" -e naget --channel "${VelopackChannel}" --packAuthors "Milkeyyy"
+vpk pack -xy -u naget -v "${AppFullVersion}" -p "./Build" -o "./Releases" -i "../../Logo/naget.icns" -e naget --channel "${VelopackChannel}" --packAuthors "Milkeyyy" --bundleId com.milkeyyy.naget
 
 if [ "$SKIP_UPLOAD" = "1" ]; then
     echo "Upload SKIPPED"

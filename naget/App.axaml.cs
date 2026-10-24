@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
 
 namespace naget;
 
@@ -179,6 +180,20 @@ public class App : Application
 
 	public static void RestartApplication()
 	{
+		// macOS は .app バンドルを open で起動する (実行ファイルを直接起動するとバンドルとして扱われない)
+		if (OperatingSystem.IsMacOS())
+		{
+			string? bundlePath = GetMacBundlePath(Environment.ProcessPath);
+			if (bundlePath != null)
+			{
+				App.Logger.Debug("アプリケーションを再起動します (macOS)...");
+				Process.Start(new ProcessStartInfo("/usr/bin/open") { ArgumentList = { "-n", bundlePath } });
+				Thread.Sleep(500);
+				Exit();
+				return;
+			}
+		}
+
 		// MSIX パッケージ版は exe を直接起動するとパッケージ ID を失うため、シェル経由で起動する
 		string? packageFamilyName = PackageHelper.GetPackageFamilyName();
 		if (packageFamilyName != null)
@@ -212,6 +227,14 @@ public class App : Application
 
 		// 3. 現在のプロセスを終了する
 		Exit();
+	}
+
+	private static string? GetMacBundlePath(string? processPath)
+	{
+		if (string.IsNullOrEmpty(processPath)) return null;
+
+		int index = processPath.IndexOf(".app/", StringComparison.Ordinal);
+		return index < 0 ? null : processPath[..(index + 4)];
 	}
 
 	/// <summary>

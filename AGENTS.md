@@ -70,6 +70,7 @@
 | `naget.Package/` | MSIX 用 WAP (wapproj、AppxManifest、タイル画像) |
 | `Store/` | Microsoft Store 提出用の画像・掲載文・CSV・プライバシーポリシー |
 | `scripts/pack-msix.ps1` | Store 用 `.msixupload` のビルドスクリプト |
+| `scripts/macos-self-signed-cert.sh` | macOS 用の自己署名証明書と codesign ラッパーの用意 |
 
 ### バージョン管理
 - `naget/build.json` がバージョン情報のマスタ
@@ -95,5 +96,7 @@
 - 更新は Velopack (`vpk` CLI) で管理、チャネル名は `{os}-{arch}-{channel}`、更新ベース URL は `https://nagetupd.milkeyyy.com/{alpha|release|nightly}/`
 - 更新先のパスは `update` ブランチの `_redirects` で GitHub Releases の Assets にリダイレクトしている。alpha のタグは `Build Alpha` が `_redirects` を書き換える
 - DEBUG ビルドのみ `AvaloniaUI.DiagnosticsSupport` (DevTools) を使用
+- macOS は自己署名証明書 (`naget Self Signed`) で署名する。`scripts/macos-self-signed-cert.sh` が証明書と `--timestamp` を外す codesign ラッパーを用意し、`Build_osx-arm64_nightly.sh` が `VPK_SIGN_APP_IDENTITY` を設定する。証明書が変わると TCC (アクセシビリティ) の許可が失効するため、CI では `MACOS_CERT_P12` / `MACOS_CERT_PASSWORD` に同じ証明書を登録する
+- アクセシビリティの判定は `CGPreflightPostEventAccess` がプロセス内でキャッシュされるため、`HotKeyHelper.IsAccessibilityApiEnabled()` がイベントタップの生成でも確認する。実行中に許可された場合は再起動が必要
 - `.mcp.json` に Avalonia ドキュメント MCP が定義済み
 - **`Build_env.txt` はシークレットを含むため絶対にコミット・操作しないこと**

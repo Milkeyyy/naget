@@ -21,7 +21,6 @@ public class AccessibilityPermissionWindowViewModel
 
 	public Command RequestPermissionCommand { get; }
 	public Command OpenSystemSettingsCommand { get; }
-	public Command RecheckCommand { get; }
 	public Command RestartCommand { get; }
 	public Command LaterCommand { get; }
 
@@ -69,14 +68,6 @@ public class AccessibilityPermissionWindowViewModel
 			return default;
 		});
 
-		// 権限の状態を再確認するコマンド
-		RecheckCommand = Command.Factory.Create(() =>
-		{
-			App.Logger.Debug("Recheck Accessibility API access");
-			RefreshPermissionState();
-			return default;
-		});
-
 		// アプリケーション再起動コマンド
 		RestartCommand = Command.Factory.Create(() =>
 		{
@@ -96,11 +87,13 @@ public class AccessibilityPermissionWindowViewModel
 	public void RefreshPermissionState()
 	{
 		bool isEnabled = HotKeyHelper.IsAccessibilityApiEnabled();
+		bool changed = IsPermissionGranted != isEnabled;
 
-		// 権限が許可された場合はホットキーの登録を開始する
-		if (isEnabled && !IsPermissionGranted) HotKeyHelper.Run();
-
+		// 実行中に許可されても libuiohook は以前の判定をキャッシュしているため、
+		// ここではホットキーを開始せず再起動を促す
 		IsPermissionGranted = isEnabled;
 		StatusText = IsPermissionGranted ? Resources.Accessibility_Status_Granted : Resources.Accessibility_Status_NotGranted;
+
+		if (changed) HotKeyHelper.NotifyAccessibilityApiStateChanged();
 	}
 }

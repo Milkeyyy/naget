@@ -69,7 +69,7 @@ jobs:
 
 
     - name: Install vpk
-      run: dotnet tool install -g vpk --version 1.2.0
+      run: dotnet tool install -g vpk --version 1.2.161
 
     - name: Add dotnet tools to PATH
       run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
@@ -77,6 +77,44 @@ jobs:
     - name: Create Releases Directory
       shell: pwsh
       run: New-Item -ItemType Directory -ErrorAction SilentlyContinue "${{ env.OUTPUT_DIR }}/${{ env.rid }}/Releases"
+
+    # 署名証明書 (自己署名) の取り込み
+    - if: ${{ startsWith(env.rid, 'osx') }}
+      name: Import Signing Certificate
+      env:
+        MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+        MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+      run: |
+        if [ -z "${MACOS_CERT_P12}" ]; then
+          echo "MACOS_CERT_P12 is not set; the app will be unsigned."
+          exit 0
+        fi
+        KEYCHAIN_PATH="${RUNNER_TEMP}/naget-signing.keychain-db"
+        echo -n "${MACOS_CERT_P12}" | base64 --decode > "${RUNNER_TEMP}/cert.p12"
+        security create-keychain -p naget "${KEYCHAIN_PATH}"
+        security set-keychain-settings -lut 21600 "${KEYCHAIN_PATH}"
+        security unlock-keychain -p naget "${KEYCHAIN_PATH}"
+        security import "${RUNNER_TEMP}/cert.p12" -k "${KEYCHAIN_PATH}" -P "${MACOS_CERT_PASSWORD}" -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k naget "${KEYCHAIN_PATH}"
+        security list-keychains -d user -s "${KEYCHAIN_PATH}" $(security list-keychains -d user | tr -d '"')
+        security find-certificate -c "naget Self Signed" -p "${KEYCHAIN_PATH}" > "${RUNNER_TEMP}/cert.pem"
+        sudo security add-trusted-cert -d -r trustRoot -p codeSign -k /Library/Keychains/System.keychain "${RUNNER_TEMP}/cert.pem"
+        # vpk が固定で付ける --timestamp を外す (自己署名では Apple の TSA を待って止まることがある)
+        mkdir -p "${RUNNER_TEMP}/naget-signing/bin"
+        cat > "${RUNNER_TEMP}/naget-signing/bin/codesign" <<'EOF'
+        #!/bin/bash
+        args=()
+        for arg in "$@"; do
+            if [ "${arg}" != "--timestamp" ]; then
+                args+=("${arg}")
+            fi
+        done
+        exec /usr/bin/codesign "${args[@]}"
+        EOF
+        chmod +x "${RUNNER_TEMP}/naget-signing/bin/codesign"
+        echo "${RUNNER_TEMP}/naget-signing/bin" >> "${GITHUB_PATH}"
+        echo "VPK_SIGN_APP_IDENTITY=naget Self Signed" >> "${GITHUB_ENV}"
+        echo "VPK_KEYCHAIN=${KEYCHAIN_PATH}" >> "${GITHUB_ENV}"
 
     - name: Download Previous Release
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
@@ -93,7 +131,8 @@ jobs:
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Pack
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
-      run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget --channel ${{ env.VELOPACK_CHANNEL }} --packAuthors Milkeyyy -i ../../Logo/naget.icns
+      run: |
+        vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget --channel ${{ env.VELOPACK_CHANNEL }} --packAuthors Milkeyyy -i ../../Logo/naget.icns --bundleId com.milkeyyy.naget
 
     # アップロード
     - name: Upload Artifacts

@@ -147,6 +147,9 @@ public class ShortcutKeyViewModel
 
 	public ShortcutKeyViewModel()
 	{
+		// アクセシビリティ権限の状態が変わったら注意書きを更新する
+		HotKeyHelper.AccessibilityApiStateChanged += OnAccessibilityApiStateChanged;
+
 		// ビューがロードされた時の処理
 		ShortcutKeyWell.Add(Control.LoadedEvent, () =>
 		{
@@ -277,6 +280,11 @@ public class ShortcutKeyViewModel
 			Environment.Exit(0);
 			return default;
 		});
+	}
+
+	private void OnAccessibilityApiStateChanged(object? sender, EventArgs e)
+	{
+		AccessibilityWarningIsVisible = !HotKeyHelper.IsAccessibilityApiEnabled();
 	}
 
 	private void LoadPresetList()

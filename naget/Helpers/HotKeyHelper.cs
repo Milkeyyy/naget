@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace naget.Helpers;
@@ -67,6 +68,13 @@ public static class HotKeyHelper
 
 	public static event EventHandler? HookError;
 
+	public static event EventHandler? AccessibilityApiStateChanged;
+
+	public static void NotifyAccessibilityApiStateChanged()
+	{
+		AccessibilityApiStateChanged?.Invoke(null, EventArgs.Empty);
+	}
+
 	public static void Run()
 	{
 		if (hook.IsRunning) return;
@@ -93,7 +101,41 @@ public static class HotKeyHelper
 
 	public static bool IsAccessibilityApiEnabled()
 	{
-		return UioHookProvider.Instance.IsAxApiEnabled(false);
+		if (!OperatingSystem.IsMacOS()) return true;
+
+		// CGPreflightPostEventAccess (SharpHook) はプロセス内で結果をキャッシュするため、
+		// 実行中に許可された場合はイベントタップの生成で判定する
+		return UioHookProvider.Instance.IsAxApiEnabled(false) || CanCreateEventTap();
+	}
+
+	private const uint CGSessionEventTap = 1;
+	private const uint CGHeadInsertEventTap = 0;
+	private const uint CGEventTapOptionDefault = 0;
+	private const ulong CGEventMaskKeyDown = 1UL << 10;
+
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	private delegate IntPtr CGEventTapCallback(IntPtr proxy, uint type, IntPtr eventRef, IntPtr userInfo);
+
+	private static readonly CGEventTapCallback eventTapCallback = (_, _, eventRef, _) => eventRef;
+
+	[DllImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics", CallingConvention = CallingConvention.Cdecl)]
+	private static extern IntPtr CGEventTapCreate(uint tap, uint place, uint options, ulong eventsOfInterest, CGEventTapCallback callback, IntPtr userInfo);
+
+	[DllImport("/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation", CallingConvention = CallingConvention.Cdecl)]
+	private static extern void CFMachPortInvalidate(IntPtr port);
+
+	[DllImport("/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation", CallingConvention = CallingConvention.Cdecl)]
+	private static extern void CFRelease(IntPtr cf);
+
+	private static bool CanCreateEventTap()
+	{
+		// libuiohook と同じ条件でタップを生成できるか確認する (生成のみでイベントは受け取らない)
+		IntPtr tap = CGEventTapCreate(CGSessionEventTap, CGHeadInsertEventTap, CGEventTapOptionDefault, CGEventMaskKeyDown, eventTapCallback, IntPtr.Zero);
+		if (tap == IntPtr.Zero) return false;
+
+		CFMachPortInvalidate(tap);
+		CFRelease(tap);
+		return true;
 	}
 
 	public static bool RequestAccessibilityApiAccess()

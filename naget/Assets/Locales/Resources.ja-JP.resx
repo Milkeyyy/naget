@@ -452,11 +452,20 @@
   <data name="Accessibility.Dialog.Description" xml:space="preserve">
     <value>naget のショートカットキーを利用するには、macOS のアクセシビリティ API へのアクセス許可が必要です。</value>
   </data>
-  <data name="Accessibility.Dialog.HowTo" xml:space="preserve">
-    <value>「アクセスを許可」をクリックしてください。システムダイアログが表示されない場合は、システム設定の「プライバシーとセキュリティ」→「アクセシビリティ」で naget を許可してください。</value>
+  <data name="Accessibility.Status.NotGranted.Description" xml:space="preserve">
+    <value>システム設定の「プライバシーとセキュリティ」→「アクセシビリティ」で naget を許可してください。許可は自動で検出されます。</value>
   </data>
-  <data name="Accessibility.Dialog.RestartNote" xml:space="preserve">
-    <value>ショートカットキーが動作しない場合は、アプリを再起動してください。</value>
+  <data name="Accessibility.Status.Granted.Description" xml:space="preserve">
+    <value>許可を反映するには naget を再起動してください。</value>
+  </data>
+  <data name="Accessibility.Step.Grant" xml:space="preserve">
+    <value>「アクセスを許可」を押し、システムのダイアログで許可します。</value>
+  </data>
+  <data name="Accessibility.Step.Settings" xml:space="preserve">
+    <value>ダイアログが表示されない場合は「システム設定を開く」を押します。</value>
+  </data>
+  <data name="Accessibility.Step.Toggle" xml:space="preserve">
+    <value>「プライバシーとセキュリティ」→「アクセシビリティ」で naget をオンにします。</value>
   </data>
   <data name="Accessibility.Button.Grant" xml:space="preserve">
     <value>アクセスを許可</value>
@@ -464,11 +473,11 @@
   <data name="Accessibility.Button.OpenSystemSettings" xml:space="preserve">
     <value>システム設定を開く</value>
   </data>
-  <data name="Accessibility.Button.Recheck" xml:space="preserve">
-    <value>再確認</value>
-  </data>
   <data name="Accessibility.Button.Later" xml:space="preserve">
     <value>後で</value>
+  </data>
+  <data name="Accessibility.InfoBar.Action" xml:space="preserve">
+    <value>許可する</value>
   </data>
   <data name="Accessibility.Status.Granted" xml:space="preserve">
     <value>許可されています。</value>

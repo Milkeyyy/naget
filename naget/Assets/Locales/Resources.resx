@@ -452,11 +452,20 @@ Latest Version: {1}</value>
   <data name="Accessibility.Dialog.Description" xml:space="preserve">
     <value>naget needs access to the macOS Accessibility API to use shortcut keys.</value>
   </data>
-  <data name="Accessibility.Dialog.HowTo" xml:space="preserve">
-    <value>Click "Grant Access". If no system dialog appears, allow naget in System Settings > Privacy and Security > Accessibility.</value>
+  <data name="Accessibility.Status.NotGranted.Description" xml:space="preserve">
+    <value>Allow naget in System Settings > Privacy and Security > Accessibility. The change is detected automatically.</value>
   </data>
-  <data name="Accessibility.Dialog.RestartNote" xml:space="preserve">
-    <value>If shortcut keys still do not work, restart the app.</value>
+  <data name="Accessibility.Status.Granted.Description" xml:space="preserve">
+    <value>Restart naget to apply the permission.</value>
+  </data>
+  <data name="Accessibility.Step.Grant" xml:space="preserve">
+    <value>Click "Grant Access" and allow naget in the system dialog.</value>
+  </data>
+  <data name="Accessibility.Step.Settings" xml:space="preserve">
+    <value>If no dialog appears, click "Open System Settings".</value>
+  </data>
+  <data name="Accessibility.Step.Toggle" xml:space="preserve">
+    <value>Turn on naget under Privacy and Security > Accessibility.</value>
   </data>
   <data name="Accessibility.Button.Grant" xml:space="preserve">
     <value>Grant Access</value>
@@ -464,11 +473,11 @@ Latest Version: {1}</value>
   <data name="Accessibility.Button.OpenSystemSettings" xml:space="preserve">
     <value>Open System Settings</value>
   </data>
-  <data name="Accessibility.Button.Recheck" xml:space="preserve">
-    <value>Check Again</value>
-  </data>
   <data name="Accessibility.Button.Later" xml:space="preserve">
     <value>Later</value>
+  </data>
+  <data name="Accessibility.InfoBar.Action" xml:space="preserve">
+    <value>Allow</value>
   </data>
   <data name="Accessibility.Status.Granted" xml:space="preserve">
     <value>Access is granted.</value>
