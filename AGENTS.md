@@ -93,7 +93,8 @@
 
 - 対応 RID: `win-x64`, `win-arm64`, `osx-arm64`
 - macOS では `ShowInDock = false` (トレイ常駐アプリ)
-- 更新は Velopack (`vpk` CLI) で管理、チャネル名は `{os}-{arch}-{channel}`、既定の更新 URL は `https://nagetupd.milkeyyy.com/`
+- 更新は Velopack (`vpk` CLI) で管理、チャネル名は `{os}-{arch}-{channel}`、更新ベース URL は `https://nagetupd.milkeyyy.com/{alpha|release|nightly}/`
+- 更新先のパスは `update` ブランチの `_redirects` で GitHub Releases の Assets にリダイレクトしている。alpha のタグは `Build Alpha` が `_redirects` を書き換える
 - DEBUG ビルドのみ `AvaloniaUI.DiagnosticsSupport` (DevTools) を使用
 - `.mcp.json` に Avalonia ドキュメント MCP が定義済み
 - **`Build_env.txt` はシークレットを含むため絶対にコミット・操作しないこと**
