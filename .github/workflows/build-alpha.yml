@@ -177,11 +177,19 @@ jobs:
       working-directory: update
       run: |
         TAG="v${{ needs.build.outputs.APP_FULL_VERSION }}"
-        LINE="/alpha/* https://github.com/Milkeyyy/naget/releases/download/${TAG}/:splat 307"
-        awk -v line="$LINE" '
-          /^\/alpha\/\*/ { print line; found=1; next }
+        LATEST="/alpha/latest https://github.com/Milkeyyy/naget/releases/tag/${TAG} 307"
+        ASSETS="/alpha/* https://github.com/Milkeyyy/naget/releases/download/${TAG}/:splat 307"
+        awk -v latest="$LATEST" -v assets="$ASSETS" '
+          /^\/alpha\/latest / { print latest; latestFound=1; next }
+          /^\/alpha\/\*/ {
+            if (!latestFound) { print latest; latestFound=1 }
+            print assets; assetsFound=1; next
+          }
           { print }
-          END { if (!found) print line }
+          END {
+            if (!latestFound) print latest
+            if (!assetsFound) print assets
+          }
         ' _redirects > _redirects.new
         mv _redirects.new _redirects
         if git diff --quiet -- _redirects; then
