@@ -99,6 +99,7 @@ public class BrowserWindowViewModel
 
 	private string beforeAddress = string.Empty;
 	private string lastPageUrl = string.Empty;
+	private Uri? pendingSource;
 	public bool WebViewCanGoBack { get; private set; }
 	public bool WebViewCanGoForward { get; private set; }
 
@@ -209,6 +210,10 @@ public class BrowserWindowViewModel
 				webView2.UserDataFolder = App.GetBrowserDataFolder();
 				webView2.Language = ConfigManager.Config.Language;
 			}
+			else if (e is Avalonia.Platform.AppleWKWebViewEnvironmentRequestedEventArgs apple)
+			{
+				apple.ApplicationNameForUserAgent = App.ProductName + "/" + App.ProductVersion + " Safari/605.1.15";
+			}
 		};
 
 #if DEBUG
@@ -218,6 +223,20 @@ public class BrowserWindowViewModel
 		};
 #endif
 
+		WebViewCtrl.AdapterCreated += (sender, e) =>
+		{
+			if (OperatingSystem.IsWindows() && WebViewCtrl.UserAgent is string userAgent)
+			{
+				WebViewCtrl.UserAgent = userAgent + " " + App.ProductName + "/" + App.ProductVersion;
+			}
+
+			if (pendingSource is Uri pending)
+			{
+				pendingSource = null;
+				CurrentSource = pending;
+			}
+		};
+
 		Address = CurrentSource?.ToString() ?? string.Empty;
 		lastPageUrl = Address;
 
@@ -225,7 +244,7 @@ public class BrowserWindowViewModel
 		{
 			if (Uri.TryCreate(Address, UriKind.Absolute, out var uri))
 			{
-				CurrentSource = uri;
+				Open(uri);
 			}
 			return default;
 		});
@@ -329,6 +348,12 @@ public class BrowserWindowViewModel
 			RefreshHistoryList();
 			return default;
 		});
+	}
+
+	public void Open(Uri uri)
+	{
+		if (WebViewCtrl.UserAgent is null) pendingSource = uri;
+		else CurrentSource = uri;
 	}
 
 	[PropertyChanged(nameof(CurrentSource))]

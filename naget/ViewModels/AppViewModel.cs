@@ -40,7 +40,7 @@ public class AppViewModel
 			{
 				if (Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out var uri))
 				{
-					bvm.CurrentSource = uri;
+					bvm.Open(uri);
 				}
 				bvm.Address = ConfigManager.Config.BrowserWindow.StartPage;
 			}

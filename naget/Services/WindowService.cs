@@ -59,7 +59,7 @@ public static class WindowService
 			{
 				if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
 				{
-					vm.CurrentSource = uri;
+					vm.Open(uri);
 				}
 				vm.Address = url;
 			}
