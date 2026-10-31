@@ -125,7 +125,7 @@ jobs:
     - if: ${{ startsWith(env.rid, 'osx') }}
       name: Pack
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
-      run: vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget --channel ${{ env.VELOPACK_CHANNEL }} --packAuthors Milkeyyy -i ../../Logo/naget.icns
+      run: bash ../../scripts/pack-macos.sh --version ${{ env.APP_FULL_VERSION }} --channel ${{ env.VELOPACK_CHANNEL }}
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v6

@@ -91,13 +91,8 @@ cd "${OutputDir}/${Runtime}"
 echo "Download Previous Release - Velopack"
 vpk download github --repoUrl https://github.com/Milkeyyy/naget --channel "${VelopackChannel}" --token "${GITHUB_TOKEN}" --pre -o ./Releases || echo "Warning: Failed to download previous release."
 
-echo "Bundle Application - Velopack"
-vpk bundle -u naget -v "${AppFullVersion}" -p "./Build" -o "./Bundle" -i "../../Logo/naget.icns" -e naget --bundleId com.milkeyyy.naget
-
-/usr/libexec/PlistBuddy -c "Add :CFBundleLocalizations array" -c "Add :CFBundleLocalizations:0 string en" -c "Add :CFBundleLocalizations:1 string ja" "./Bundle/naget.app/Contents/Info.plist"
-
-echo "Build Installer - Velopack"
-vpk pack -xy -u naget -v "${AppFullVersion}" -p "./Bundle/naget.app" -o "./Releases" -i "../../Logo/naget.icns" -e naget --channel "${VelopackChannel}" --packAuthors "Milkeyyy" --bundleId com.milkeyyy.naget
+echo "Bundle and Pack - Velopack"
+bash ../../scripts/pack-macos.sh --version "${AppFullVersion}" --channel "${VelopackChannel}" --yes --legacy-console
 
 if [ "$SKIP_UPLOAD" = "1" ]; then
     echo "Upload SKIPPED"

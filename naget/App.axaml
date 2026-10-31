@@ -31,6 +31,21 @@
 		<Style Selector="Button.accent ui|SymbolIcon">
 			<Setter Property="Foreground" Value="White" />
 		</Style>
+
+		<Style Selector="TextBox">
+			<Setter Property="ContextFlyout">
+				<MenuFlyout>
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Undo}" Command="{Binding $parent[TextBox].Undo}" IsEnabled="{Binding $parent[TextBox].CanUndo}" />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Redo}" Command="{Binding $parent[TextBox].Redo}" IsEnabled="{Binding $parent[TextBox].CanRedo}" />
+					<Separator />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Cut}" Command="{Binding $parent[TextBox].Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="{x:Static TextBox.CutGesture}" />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Copy}" Command="{Binding $parent[TextBox].Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="{x:Static TextBox.CopyGesture}" />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Paste}" Command="{Binding $parent[TextBox].Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="{x:Static TextBox.PasteGesture}" />
+					<Separator />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_SelectAll}" Command="{Binding $parent[TextBox].SelectAll}" />
+				</MenuFlyout>
+			</Setter>
+		</Style>
 	</Application.Styles>
 
 	<!--ネイティブメニュー (macOS/Linux)-->
