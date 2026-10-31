@@ -158,6 +158,10 @@ public class App : Application
 
 		// 初期化
 		AvaloniaXamlLoader.Load(this);
+
+		Resources["StringTextFlyoutCutText"] = Assets.Locales.Resources.WebBrowser_ContextMenu_Cut;
+		Resources["StringTextFlyoutCopyText"] = Assets.Locales.Resources.WebBrowser_ContextMenu_Copy;
+		Resources["StringTextFlyoutPasteText"] = Assets.Locales.Resources.WebBrowser_ContextMenu_Paste;
 	}
 
 	public static void Save()

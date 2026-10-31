@@ -203,6 +203,7 @@ public class BrowserWindowViewModel
 			if (e is Avalonia.Platform.WindowsWebView2EnvironmentRequestedEventArgs webView2)
 			{
 				webView2.UserDataFolder = App.GetBrowserDataFolder();
+				webView2.Language = ConfigManager.Config.Language;
 			}
 		};
 

@@ -133,7 +133,9 @@ jobs:
       name: Pack
       working-directory: ${{ env.OUTPUT_DIR }}/${{ env.rid }}
       run: |
-        vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Releases -e naget --channel ${{ env.VELOPACK_CHANNEL }} --packAuthors Milkeyyy -i ../../Logo/naget.icns --bundleId com.milkeyyy.naget
+        vpk bundle -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Build -o ./Bundle -e naget -i ../../Logo/naget.icns --bundleId com.milkeyyy.naget
+        /usr/libexec/PlistBuddy -c "Add :CFBundleLocalizations array" -c "Add :CFBundleLocalizations:0 string en" -c "Add :CFBundleLocalizations:1 string ja" ./Bundle/naget.app/Contents/Info.plist
+        vpk pack -u naget -v ${{ env.APP_FULL_VERSION }} -p ./Bundle/naget.app -o ./Releases -e naget --channel ${{ env.VELOPACK_CHANNEL }} --packAuthors Milkeyyy -i ../../Logo/naget.icns --bundleId com.milkeyyy.naget
 
     # アップロード
     - name: Upload Artifacts
