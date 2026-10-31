@@ -37,6 +37,7 @@ namespace naget
 				{
 					// (macOS) Dock に表示しない
 					ShowInDock = false,
+					DisableDefaultApplicationMenuItems = true,
 				})
 #if DEBUG
 				.WithDeveloperTools()
