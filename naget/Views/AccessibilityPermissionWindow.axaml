@@ -5,7 +5,7 @@
 		xmlns:ui="using:FluentAvalonia.UI.Controls"
 		xmlns:vm="using:naget.ViewModels"
 		xmlns:lang="clr-namespace:naget.Assets.Locales;assembly=naget"
-		mc:Ignorable="d" d:DesignWidth="460" d:DesignHeight="400"
+		mc:Ignorable="d" d:DesignWidth="460" d:DesignHeight="420"
 		x:Class="naget.Views.AccessibilityPermissionWindow"
 		x:DataType="vm:AccessibilityPermissionWindowViewModel"
 		WindowStartupLocation="CenterScreen"
@@ -23,19 +23,22 @@
 
 	<StackPanel Margin="28 24" Spacing="16">
 		<!--ヘッダー-->
-		<StackPanel Orientation="Horizontal" Spacing="12">
+		<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
 			<Image Source="/Assets/Logo/naget_Symbol_1-1.png" Width="40" Height="40" VerticalAlignment="Center"/>
-			<StackPanel VerticalAlignment="Center" Spacing="2">
+			<StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
 				<TextBlock Text="{x:Static lang:Resources.Accessibility_Dialog_Title}" FontSize="18" FontWeight="SemiBold"/>
 				<TextBlock Text="{x:Static lang:Resources.Accessibility_Dialog_Description}" TextWrapping="Wrap" Opacity="0.7"/>
 			</StackPanel>
-		</StackPanel>
+		</Grid>
 
 		<!--権限の状態-->
 		<ui:InfoBar Severity="Warning" IsOpen="{Binding !IsPermissionGranted}" IsClosable="False"
 					Title="{Binding StatusText}" Message="{x:Static lang:Resources.Accessibility_Status_NotGranted_Description}"/>
 		<ui:InfoBar Severity="Success" IsOpen="{Binding IsPermissionGranted}" IsClosable="False"
 					Title="{Binding StatusText}" Message="{x:Static lang:Resources.Accessibility_Status_Granted_Description}"/>
+
+		<!--ホットキーを開始できなかった場合-->
+		<TextBlock Text="{x:Static lang:Resources.Accessibility_HookError_Description}" TextWrapping="Wrap" IsVisible="{Binding IsHookError}"/>
 
 		<!--手順-->
 		<StackPanel Spacing="8" IsVisible="{Binding !IsPermissionGranted}">
@@ -51,7 +54,14 @@
 				<TextBlock Text="3." FontWeight="SemiBold" Opacity="0.7"/>
 				<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.Accessibility_Step_Toggle}" TextWrapping="Wrap"/>
 			</Grid>
+			<Grid ColumnDefinitions="20,*">
+				<TextBlock Text="4." FontWeight="SemiBold" Opacity="0.7"/>
+				<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.Accessibility_Step_Restart}" TextWrapping="Wrap"/>
+			</Grid>
 		</StackPanel>
+
+		<!--一覧に登録されない場合の復旧-->
+		<Button Content="{x:Static lang:Resources.Accessibility_Button_Reset}" Command="{Binding ResetPermissionCommand}" HorizontalAlignment="Left" IsVisible="{Binding !IsPermissionGranted}"/>
 
 		<!--操作-->
 		<Grid ColumnDefinitions="*,Auto">

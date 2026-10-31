@@ -453,19 +453,28 @@
     <value>naget のショートカットキーを利用するには、macOS のアクセシビリティ API へのアクセス許可が必要です。</value>
   </data>
   <data name="Accessibility.Status.NotGranted.Description" xml:space="preserve">
-    <value>システム設定の「プライバシーとセキュリティ」→「アクセシビリティ」で naget を許可してください。許可は自動で検出されます。</value>
+    <value>システム設定の「プライバシーとセキュリティ」→「アクセシビリティ」で naget を許可してください。許可したあとは再起動が必要です。</value>
   </data>
   <data name="Accessibility.Status.Granted.Description" xml:space="preserve">
     <value>許可を反映するには naget を再起動してください。</value>
   </data>
   <data name="Accessibility.Step.Grant" xml:space="preserve">
-    <value>「アクセスを許可」を押し、システムのダイアログで許可します。</value>
+    <value>「アクセスを許可」を押し、表示されたダイアログで許可します。</value>
   </data>
   <data name="Accessibility.Step.Settings" xml:space="preserve">
     <value>ダイアログが表示されない場合は「システム設定を開く」を押します。</value>
   </data>
   <data name="Accessibility.Step.Toggle" xml:space="preserve">
-    <value>「プライバシーとセキュリティ」→「アクセシビリティ」で naget をオンにします。</value>
+    <value>「プライバシーとセキュリティ」→「アクセシビリティ」で naget をオンにします。一覧にない場合は「+」から naget.app を追加します。</value>
+  </data>
+  <data name="Accessibility.Step.Restart" xml:space="preserve">
+    <value>naget を再起動します。</value>
+  </data>
+  <data name="Accessibility.HookError.Description" xml:space="preserve">
+    <value>アクセシビリティは許可されていますが、ホットキーを開始できませんでした。naget を再起動してください。改善しない場合は下の「一覧に表示されない場合」を実行してください。</value>
+  </data>
+  <data name="Accessibility.Button.Reset" xml:space="preserve">
+    <value>一覧に表示されない場合</value>
   </data>
   <data name="Accessibility.Button.Grant" xml:space="preserve">
     <value>アクセスを許可</value>

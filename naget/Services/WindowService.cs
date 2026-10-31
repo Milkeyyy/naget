@@ -34,11 +34,16 @@ public static class WindowService
 		}
 	}
 
-	public static void ShowAccessibilityPermissionWindow()
+	public static void ShowAccessibilityPermissionWindow(bool userInitiated = true, bool dueToHookError = false)
 	{
 		if (App.AccessibilityPermissionWindow == null) return;
 
-		if (App.AccessibilityPermissionWindow.DataContext is AccessibilityPermissionWindowViewModel vm) vm.RefreshPermissionState();
+		if (App.AccessibilityPermissionWindow.DataContext is AccessibilityPermissionWindowViewModel vm)
+		{
+			if (dueToHookError) vm.SetHookError();
+			if (userInitiated) vm.EnableLiveCheck();
+			else vm.RefreshPermissionState();
+		}
 
 		if (!App.AccessibilityPermissionWindow.IsVisible) App.AccessibilityPermissionWindow.Show();
 		ActivateWindow(App.AccessibilityPermissionWindow);

@@ -103,29 +103,69 @@ public static class HotKeyHelper
 	{
 		if (!OperatingSystem.IsMacOS()) return true;
 
-		// CGPreflightPostEventAccess (SharpHook) はプロセス内で結果をキャッシュするため、
-		// 実行中に許可された場合はイベントタップの生成で判定する
-		return UioHookProvider.Instance.IsAxApiEnabled(false) || CanCreateEventTap();
+		return AXIsProcessTrusted();
 	}
+
+	public static bool IsAccessibilityApiEnabledLive()
+	{
+		if (!OperatingSystem.IsMacOS()) return true;
+
+		bool axTrusted = AXIsProcessTrusted();
+		bool canCreateTap = CanCreateEventTap();
+		App.Logger.Debug($"Accessibility API: AXIsProcessTrusted={axTrusted}, CanCreateEventTap={canCreateTap}");
+
+		return axTrusted || canCreateTap;
+	}
+
+	private const string ApplicationServicesPath = "/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices";
+	private const string CoreFoundationPath = "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation";
 
 	private const uint CGSessionEventTap = 1;
 	private const uint CGHeadInsertEventTap = 0;
 	private const uint CGEventTapOptionDefault = 0;
 	private const ulong CGEventMaskKeyDown = 1UL << 10;
 
+	private static IntPtr axPromptOptionKey;
+	private static IntPtr cfBooleanTrue;
+	private static IntPtr cfTypeDictionaryKeyCallBacks;
+	private static IntPtr cfTypeDictionaryValueCallBacks;
+
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	private delegate IntPtr CGEventTapCallback(IntPtr proxy, uint type, IntPtr eventRef, IntPtr userInfo);
 
 	private static readonly CGEventTapCallback eventTapCallback = (_, _, eventRef, _) => eventRef;
 
+	[DllImport(ApplicationServicesPath, CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.U1)]
+	private static extern bool AXIsProcessTrusted();
+
+	[DllImport(ApplicationServicesPath, CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.U1)]
+	private static extern bool AXIsProcessTrustedWithOptions(IntPtr options);
+
+	[DllImport(CoreFoundationPath, CallingConvention = CallingConvention.Cdecl)]
+	private static extern IntPtr CFDictionaryCreate(IntPtr allocator, IntPtr[] keys, IntPtr[] values, nint numValues, IntPtr keyCallBacks, IntPtr valueCallBacks);
+
+	[DllImport(CoreFoundationPath, CallingConvention = CallingConvention.Cdecl)]
+	private static extern void CFRelease(IntPtr cf);
+
 	[DllImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics", CallingConvention = CallingConvention.Cdecl)]
 	private static extern IntPtr CGEventTapCreate(uint tap, uint place, uint options, ulong eventsOfInterest, CGEventTapCallback callback, IntPtr userInfo);
 
-	[DllImport("/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation", CallingConvention = CallingConvention.Cdecl)]
+	[DllImport(CoreFoundationPath, CallingConvention = CallingConvention.Cdecl)]
 	private static extern void CFMachPortInvalidate(IntPtr port);
 
-	[DllImport("/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation", CallingConvention = CallingConvention.Cdecl)]
-	private static extern void CFRelease(IntPtr cf);
+	private static void EnsureAccessibilitySymbols()
+	{
+		if (axPromptOptionKey != IntPtr.Zero) return;
+
+		IntPtr applicationServices = NativeLibrary.Load(ApplicationServicesPath);
+		IntPtr coreFoundation = NativeLibrary.Load(CoreFoundationPath);
+		axPromptOptionKey = Marshal.ReadIntPtr(NativeLibrary.GetExport(applicationServices, "kAXTrustedCheckOptionPrompt"));
+		cfBooleanTrue = Marshal.ReadIntPtr(NativeLibrary.GetExport(coreFoundation, "kCFBooleanTrue"));
+		cfTypeDictionaryKeyCallBacks = NativeLibrary.GetExport(coreFoundation, "kCFTypeDictionaryKeyCallBacks");
+		cfTypeDictionaryValueCallBacks = NativeLibrary.GetExport(coreFoundation, "kCFTypeDictionaryValueCallBacks");
+	}
 
 	private static bool CanCreateEventTap()
 	{
@@ -140,7 +180,44 @@ public static class HotKeyHelper
 
 	public static bool RequestAccessibilityApiAccess()
 	{
-		return UioHookProvider.Instance.IsAxApiEnabled(true);
+		if (!OperatingSystem.IsMacOS()) return true;
+
+		EnsureAccessibilitySymbols();
+
+		IntPtr options = CFDictionaryCreate(
+			IntPtr.Zero,
+			[axPromptOptionKey],
+			[cfBooleanTrue],
+			1,
+			cfTypeDictionaryKeyCallBacks,
+			cfTypeDictionaryValueCallBacks);
+
+		bool isTrusted = AXIsProcessTrustedWithOptions(options);
+		CFRelease(options);
+
+		App.Logger.Debug($"Requested Accessibility API access: {isTrusted}");
+
+		return isTrusted;
+	}
+
+	public static void ResetAccessibilityPermission()
+	{
+		if (!OperatingSystem.IsMacOS()) return;
+
+		string? bundleIdentifier = MacDockHelper.GetBundleIdentifier();
+		if (string.IsNullOrEmpty(bundleIdentifier))
+		{
+			App.Logger.Warn("Failed to reset Accessibility permission: bundle identifier is unknown.");
+			return;
+		}
+
+		App.Logger.Debug($"Reset Accessibility permission: {bundleIdentifier}");
+
+		Process? process = Process.Start(new ProcessStartInfo("/usr/bin/tccutil")
+		{
+			ArgumentList = { "reset", "Accessibility", bundleIdentifier }
+		});
+		process?.WaitForExit(3000);
 	}
 
 	public static void OpenAccessibilitySystemSettings()

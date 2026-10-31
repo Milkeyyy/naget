@@ -88,6 +88,15 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Not listed? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Button_Reset {
+            get {
+                return ResourceManager.GetString("Accessibility.Button.Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   naget needs access to the macOS Accessibility API to use shortcut keys. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Accessibility_Dialog_Description {
@@ -102,6 +111,15 @@ namespace naget.Assets.Locales {
         public static string Accessibility_Dialog_Title {
             get {
                 return ResourceManager.GetString("Accessibility.Dialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Access is granted, but the shortcut key hook could not start. Restart naget. If that does not help, use &quot;Not listed?&quot; below. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_HookError_Description {
+            get {
+                return ResourceManager.GetString("Accessibility.HookError.Description", resourceCulture);
             }
         }
         
@@ -183,6 +201,15 @@ namespace naget.Assets.Locales {
         public static string Accessibility_Step_Settings {
             get {
                 return ResourceManager.GetString("Accessibility.Step.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Restart naget. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Step_Restart {
+            get {
+                return ResourceManager.GetString("Accessibility.Step.Restart", resourceCulture);
             }
         }
         

@@ -306,7 +306,7 @@ public class App : Application
 			// ホットキーの登録
 			try
 			{
-				HotKeyHelper.HookError += (_, _) => WindowService.ShowAccessibilityPermissionWindow();
+				HotKeyHelper.HookError += (_, _) => WindowService.ShowAccessibilityPermissionWindow(dueToHookError: true);
 				if (HotKeyHelper.IsAccessibilityApiEnabled())
 				{
 					HotKeyHelper.Run();
@@ -314,7 +314,7 @@ public class App : Application
 				else
 				{
 					Logger.Warn("Accessibility API access is disabled.");
-					WindowService.ShowAccessibilityPermissionWindow();
+					WindowService.ShowAccessibilityPermissionWindow(userInitiated: false);
 				}
 			}
 			catch (Exception ex)

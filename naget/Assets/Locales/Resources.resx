@@ -453,7 +453,7 @@ Latest Version: {1}</value>
     <value>naget needs access to the macOS Accessibility API to use shortcut keys.</value>
   </data>
   <data name="Accessibility.Status.NotGranted.Description" xml:space="preserve">
-    <value>Allow naget in System Settings > Privacy and Security > Accessibility. The change is detected automatically.</value>
+    <value>Allow naget under System Settings > Privacy and Security > Accessibility. Restart naget after granting access.</value>
   </data>
   <data name="Accessibility.Status.Granted.Description" xml:space="preserve">
     <value>Restart naget to apply the permission.</value>
@@ -466,6 +466,15 @@ Latest Version: {1}</value>
   </data>
   <data name="Accessibility.Step.Toggle" xml:space="preserve">
     <value>Turn on naget under Privacy and Security > Accessibility.</value>
+  </data>
+  <data name="Accessibility.Step.Restart" xml:space="preserve">
+    <value>Restart naget.</value>
+  </data>
+  <data name="Accessibility.HookError.Description" xml:space="preserve">
+    <value>Access is granted, but the shortcut key hook could not start. Restart naget. If that does not help, use "Not listed?" below.</value>
+  </data>
+  <data name="Accessibility.Button.Reset" xml:space="preserve">
+    <value>Not listed?</value>
   </data>
   <data name="Accessibility.Button.Grant" xml:space="preserve">
     <value>Grant Access</value>

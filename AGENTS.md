@@ -97,6 +97,6 @@
 - 更新先のパスは `update` ブランチの `_redirects` で GitHub Releases の Assets にリダイレクトしている。alpha のタグは `Build Alpha` が `_redirects` を書き換える
 - DEBUG ビルドのみ `AvaloniaUI.DiagnosticsSupport` (DevTools) を使用
 - macOS は自己署名証明書 (`naget Self Signed`) で署名する。`scripts/macos-self-signed-cert.sh` が証明書と `--timestamp` を外す codesign ラッパーを用意し、`Build_osx-arm64_nightly.sh` が `VPK_SIGN_APP_IDENTITY` を設定する。証明書が変わると TCC (アクセシビリティ) の許可が失効するため、CI では `MACOS_CERT_P12` / `MACOS_CERT_PASSWORD` に同じ証明書を登録する
-- アクセシビリティの判定は `CGPreflightPostEventAccess` がプロセス内でキャッシュされるため、`HotKeyHelper.IsAccessibilityApiEnabled()` がイベントタップの生成でも確認する。実行中に許可された場合は再起動が必要
+- アクセシビリティの判定は `AXIsProcessTrusted` を基本にし、実行中の変化は `HotKeyHelper.IsAccessibilityApiEnabledLive()`（イベントタップ生成）で確認する。タップ生成は初回にシステムダイアログを出すため起動時には呼ばない。実行中に許可された場合は再起動が必要
 - `.mcp.json` に Avalonia ドキュメント MCP が定義済み
 - **`Build_env.txt` はシークレットを含むため絶対にコミット・操作しないこと**
