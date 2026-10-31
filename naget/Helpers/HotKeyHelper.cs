@@ -52,6 +52,8 @@ public static class HotKeyHelper
 	/// </summary>
 	public static System.Drawing.Point MousePointerCoordinates { get; private set; } = new(0, 0);
 
+	private static bool hasMousePointerCoordinates;
+
 	static HotKeyHelper()
 	{
 		hook = new SimpleGlobalHook();
@@ -354,6 +356,7 @@ public static class HotKeyHelper
 	{
 		// マウスポインターの座標を更新
 		MousePointerCoordinates = new(e.Data.X, e.Data.Y);
+		hasMousePointerCoordinates = true;
 	}
 
 	public static async Task<bool> StartKeyRegistrationAsync(string groupId, IProgress<string>? progress = null)
@@ -470,32 +473,36 @@ public static class HotKeyHelper
 	{
 		App.Logger.Debug($"GetCenterScreen ({window})");
 
-		// ウィンドウのサイズが設定されていない場合は null を返す
-		if (double.IsNaN(window.Width) || double.IsNaN(window.Height))
+		Size size = !double.IsNaN(window.Width) && !double.IsNaN(window.Height)
+			? new Size(window.Width, window.Height)
+			: window.FrameSize ?? window.ClientSize;
+		if (size.Width <= 0 || size.Height <= 0)
 		{
 			return null;
 		}
 
 		// マウスカーソルの座標からディスプレイを取得
-		Screen? screen = window.Screens.ScreenFromPoint(
-			new(
+		Screen? screen = null;
+		if (hasMousePointerCoordinates)
+		{
+			screen = window.Screens.ScreenFromPoint(new(
 				MousePointerCoordinates.X,
 				MousePointerCoordinates.Y
-			)
-		);
+			));
+		}
+		screen ??= window.Screens.ScreenFromWindow(window)
+			?? window.Screens.Primary;
 
 		App.Logger.Debug($"-  Pos: {window.Position}");
-		App.Logger.Debug($"- Size: {window.Width},{window.Height}");
+		App.Logger.Debug($"- Size: {size}");
 
 		// ディスプレイを取得できた場合は中央の位置を計算して返す
 		if (screen != null)
 		{
-			var screenCenterPos = screen.WorkingArea.Center;
-			App.Logger.Debug($"Center Pos: {screenCenterPos.X},{screenCenterPos.Y}");
-			return new(
-				(int)(screenCenterPos.X - (window.Width / 2)),
-				(int)(screenCenterPos.Y - (window.Height / 2))
-			);
+			PixelRect centered = screen.WorkingArea.CenterRect(
+				new PixelRect(PixelSize.FromSize(size, screen.Scaling)));
+			App.Logger.Debug($"Center Pos: {centered.Position.X},{centered.Position.Y}");
+			return centered.Position;
 		}
 		return null;
 	}

@@ -164,7 +164,11 @@ public class BrowserWindowViewModel
 			else WindowState = ConfigManager.Config.BrowserWindow.State;
 
 			// ウィンドウをマウスカーソルが存在するディスプレイの中央へ移動する
-			App.BrowserWindow.Position = HotKeyHelper.GetCenterScreen(App.BrowserWindow) ?? new(0,0);
+			PixelPoint? centerPos = HotKeyHelper.GetCenterScreen(App.BrowserWindow);
+			if (centerPos is PixelPoint pos)
+			{
+				App.BrowserWindow.Position = pos;
+			}
 
 			WindowOpened = true;
 

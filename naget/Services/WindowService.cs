@@ -27,10 +27,11 @@ public static class WindowService
 	{
 		if (App.MainWindow != null)
 		{
-			// マウスカーソルがあるディスプレイの中央位置を取得
-			var centerPos = HotKeyHelper.GetCenterScreen(App.MainWindow);
-			// 中央位置を取得できた場合はウィンドウの位置をその中央へ移動する
-			App.MainWindow.Position = centerPos ?? new(0, 0);
+			PixelPoint? centerPos = HotKeyHelper.GetCenterScreen(App.MainWindow);
+			if (centerPos is PixelPoint pos)
+			{
+				App.MainWindow.Position = pos;
+			}
 		}
 	}
 
