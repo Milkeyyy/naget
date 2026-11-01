@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
+using FluentAvalonia.UI.Media.Animation;
 using FluentAvalonia.UI.Windowing;
 using naget.ViewModels;
 using System;
@@ -10,6 +11,8 @@ namespace naget.Views;
 
 public partial class SettingsWindow : AppWindow
 {
+	private readonly Frame _contentFrame;
+
 	public SettingsWindow()
 	{
 		InitializeComponent();
@@ -25,6 +28,7 @@ public partial class SettingsWindow : AppWindow
 			e.Cancel = true;
 		};
 
+		_contentFrame = this.FindControl<Frame>("contentFrame")!;
 		NavigationView nv = this.FindControl<NavigationView>("navigationMenu")!;
 		nv.SelectionChanged += OnNavigationMenuSelectionChanged;
 		nv.SelectedItem = nv.MenuItems.ElementAt(0);
@@ -32,24 +36,20 @@ public partial class SettingsWindow : AppWindow
 
 	private void OnNavigationMenuSelectionChanged(object? sender, NavigationViewSelectionChangedEventArgs e)
 	{
-		string smpPage;
-		object? pg;
-
 		if (e.SelectedItem is NavigationViewItem nvi)
 		{
 			if (nvi.Tag == null) return; // タグがnullの場合は何もしない
 
 			App.Logger.Debug($"Navigation Selected: {nvi.Tag}");
 
-			smpPage = $"naget.Views.Settings.{nvi.Tag}";
+			string smpPage = $"naget.Views.Settings.{nvi.Tag}";
 
 			App.Logger.Debug($"- Page: {smpPage}");
 
 			Type? pageType = Type.GetType(smpPage);
 			if (pageType == null) return;
-			pg = Activator.CreateInstance(pageType);
-			if (pg == null) return;
-			if (sender is NavigationView navigationView) navigationView.Content = pg;
+
+			_contentFrame.Navigate(pageType, null, new EntranceNavigationTransitionInfo());
 		}
 	}
 }
