@@ -78,16 +78,16 @@ mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			<DockPanel Grid.Row="1">
 
 				<DockPanel DockPanel.Dock="Top" Margin="10 8 10 10">
-					<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding BackCommand}" IsEnabled="{Binding WebViewCanGoBack}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Back}">
+					<Button DockPanel.Dock="Left" Background="Transparent" Height="32" Command="{Binding BackCommand}" IsEnabled="{Binding WebViewCanGoBack}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Back}">
 						<ui:FontIcon Glyph="&#xE112;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 					</Button>
-					<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ForwardCommand}" IsEnabled="{Binding WebViewCanGoForward}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Forward}">
+					<Button DockPanel.Dock="Left" Background="Transparent" Height="32" Command="{Binding ForwardCommand}" IsEnabled="{Binding WebViewCanGoForward}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Forward}">
 						<ui:FontIcon Glyph="&#xE111;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 					</Button>
-					<Button DockPanel.Dock="Left" Background="Transparent" Command="{Binding ReloadCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Reload}">
+					<Button DockPanel.Dock="Left" Background="Transparent" Height="32" Command="{Binding ReloadCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_Reload}">
 						<ui:FontIcon Glyph="&#xE149;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 					</Button>
-					<Button DockPanel.Dock="Right" Background="Transparent" x:Name="HistoryButton" Margin="10 0 0 0" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_History}">
+					<Button DockPanel.Dock="Right" Background="Transparent" Height="32" x:Name="HistoryButton" Margin="10 0 0 0" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_History}">
 						<ui:FontIcon Glyph="&#xE121;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 						<Button.Flyout>
 							<Flyout Placement="BottomEdgeAlignedRight" Opened="HistoryFlyout_Opened">
@@ -119,10 +119,10 @@ mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 							</Flyout>
 						</Button.Flyout>
 					</Button>
-					<Button DockPanel.Dock="Right" Background="Transparent" Command="{Binding OpenInDefaultBrowserCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_OpenInDefaultBrowser}">
+					<Button DockPanel.Dock="Right" Background="Transparent" Height="32" Command="{Binding OpenInDefaultBrowserCommand}" ToolTip.Tip="{x:Static lang:Resources.WebBrowser_Navigation_OpenInDefaultBrowser}">
 						<ui:FontIcon Glyph="&#xE17C;" FontFamily="{DynamicResource SymbolThemeFontFamily}" FontWeight="Bold" FontSize="16"/>
 					</Button>
-					<TextBox x:Name="AddressBox" Margin="10 0 10 0 " Background="Transparent" TabIndex="0" Text="{Binding Address}">
+					<TextBox x:Name="AddressBox" Margin="10 0 10 0 " Background="Transparent" Height="32" TabIndex="0" Text="{Binding Address}">
 						<TextBox.KeyBindings>
 							<KeyBinding Gesture="Enter" Command="{Binding NavigateCommand}" />
 						</TextBox.KeyBindings>

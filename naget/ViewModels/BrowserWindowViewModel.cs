@@ -133,7 +133,8 @@ public class BrowserWindowViewModel
 		{
 			if (Uri.TryCreate(Address, UriKind.Absolute, out Uri? uri))
 			{
-				SelectedTab?.Navigate(uri);
+				if (SelectedTab is null) OpenNewTab(uri);
+				else SelectedTab.Navigate(uri);
 			}
 			return default;
 		});
@@ -222,10 +223,7 @@ public class BrowserWindowViewModel
 
 		NewTabCommand = Command.Factory.Create(() =>
 		{
-			if (Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out Uri? uri))
-			{
-				OpenNewTab(uri);
-			}
+			OpenNewTab();
 			return default;
 		});
 
@@ -252,7 +250,13 @@ public class BrowserWindowViewModel
 		});
 	}
 
-	public void OpenNewTab(Uri uri)
+	public void OpenNewTab()
+	{
+		Uri? uri = Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out Uri? startPage) ? startPage : null;
+		OpenNewTab(uri);
+	}
+
+	public void OpenNewTab(Uri? uri)
 	{
 		BrowserTabViewModel tab = new(uri, OpenNewTab);
 		tab.PropertyChanged += Tab_PropertyChanged;

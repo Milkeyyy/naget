@@ -60,6 +60,10 @@ public static class WindowService
 				{
 					vm.OpenNewTab(uri);
 				}
+				else
+				{
+					vm.OpenNewTab();
+				}
 			}
 			App.BrowserWindow.Show();
 		}

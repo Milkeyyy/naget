@@ -115,14 +115,14 @@ public class BrowserTabViewModel : INotifyPropertyChanged
 		})();
 		""";
 
-	public BrowserTabViewModel(Uri initialUri, Action<Uri> newTabRequested)
+	public BrowserTabViewModel(Uri? initialUri, Action<Uri> newTabRequested)
 	{
 		WebView = new NativeWebView
 		{
 			Focusable = true
 		};
 
-		Url = initialUri.ToString();
+		if (initialUri is not null) Url = initialUri.ToString();
 
 		WebView.NavigationCompleted += WebView_NavigationCompleted;
 		WebView.WebMessageReceived += WebView_WebMessageReceived;
@@ -165,7 +165,7 @@ public class BrowserTabViewModel : INotifyPropertyChanged
 			}
 		};
 
-		WebView.Navigate(initialUri);
+		if (initialUri is not null) WebView.Navigate(initialUri);
 	}
 
 	public void Navigate(Uri uri)

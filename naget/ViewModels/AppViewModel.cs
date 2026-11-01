@@ -1,7 +1,5 @@
 ﻿using Epoxy;
-using naget.Models.Config;
 using naget.Services;
-using System;
 
 namespace naget.ViewModels;
 
@@ -38,10 +36,7 @@ public class AppViewModel
 			// スタートページを開いてウィンドウを表示する
 			if (App.BrowserWindow.DataContext is BrowserWindowViewModel bvm && bvm.Tabs.Count == 0)
 			{
-				if (Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out Uri? uri))
-				{
-					bvm.OpenNewTab(uri);
-				}
+				bvm.OpenNewTab();
 			}
 			App.BrowserWindow.Show();
 			return default;
