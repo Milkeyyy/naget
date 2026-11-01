@@ -54,15 +54,14 @@ public static class WindowService
 	{
 		if (App.BrowserWindow != null)
 		{
-			App.BrowserWindow.Show();
 			if (App.BrowserWindow.DataContext is BrowserWindowViewModel vm)
 			{
 				if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
 				{
-					vm.Open(uri);
+					vm.OpenNewTab(uri);
 				}
-				vm.Address = url;
 			}
+			App.BrowserWindow.Show();
 		}
 	}
 

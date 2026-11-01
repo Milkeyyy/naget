@@ -153,6 +153,12 @@
   <data name="WebBrowser.Navigation.OpenInDefaultBrowser" xml:space="preserve">
     <value>既定のブラウザーで開く</value>
   </data>
+  <data name="WebBrowser.Tab.New" xml:space="preserve">
+    <value>新しいタブ</value>
+  </data>
+  <data name="WebBrowser.Tab.Close" xml:space="preserve">
+    <value>タブを閉じる</value>
+  </data>
   <data name="WebBrowser.ContextMenu.Copy" xml:space="preserve">
     <value>コピー</value>
   </data>

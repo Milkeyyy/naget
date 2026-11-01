@@ -8,9 +8,9 @@ using naget.Models.Config;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace naget.ViewModels;
@@ -20,94 +20,24 @@ public class BrowserWindowViewModel
 {
 	public Well<Window> BrowserWindowWell { get; } = Well.Factory.Create<Window>();
 
-	private const string SpaHookScript = """
-		(function() {
-			if (window.__nagetSpaHook) return;
-			window.__nagetSpaHook = true;
-			var lastTitle = document.title;
-			var lastUrl = location.href;
-			var lastSentTitle = lastTitle;
-			var titleCache = {};
-			titleCache[lastUrl] = lastTitle;
-			var send = function() {
-				var url = location.href;
-				var domTitle = document.title;
-				var title;
-				if (domTitle !== lastTitle) {
-					title = domTitle;
-					titleCache[url] = domTitle;
-				} else if (url === lastUrl) {
-					title = lastSentTitle;
-				} else if (titleCache[url]) {
-					title = titleCache[url];
-				} else {
-					title = domTitle;
-				}
-				lastTitle = domTitle;
-				lastUrl = url;
-				lastSentTitle = title;
-				try {
-					invokeCSharpAction(JSON.stringify({ url: url, title: title }));
-				} catch (e) {}
-			};
-			['pushState', 'replaceState'].forEach(function(name) {
-				var original = history[name];
-				history[name] = function() {
-					var result = original.apply(this, arguments);
-					send();
-					return result;
-				};
-			});
-			window.addEventListener('popstate', send);
-			window.addEventListener('hashchange', send);
-			var observer = new MutationObserver(function() {
-				if (document.title !== lastTitle) {
-					send();
-				}
-			});
-			observer.observe(document.head || document.documentElement, { childList: true, subtree: true, characterData: true });
-		})();
-		""";
-
 	public string WindowTitleText { get; private set; } = Resources.Window_InAppBrowser;
-	public string WindowTitle
-	{
-		get
-		{
-			if (string.IsNullOrWhiteSpace(WindowTitleText))
-			{
-				// 渡されたタイトルが空の場合はデフォルトのタイトルにする
-				return Resources.Window_InAppBrowser + " - " + App.ProductName;
-			}
-			else
-			{
-				return WindowTitleText;
-			}
-		}
-		set { WindowTitleText = value; }
-	}
 
 	public WindowState WindowState { get; set; } = WindowState.Normal;
 	public double Width { get; set; } = 1280;
 	public double Height { get; set; } = 720;
 
-	public bool WindowOpened { get; set; }
-
 	public bool AddressBoxFocused { get; set; }
 
-	private NativeWebView WebViewCtrl;
+	private readonly Panel webViewHost;
 
-	private string beforeAddress = string.Empty;
-	private string lastPageUrl = string.Empty;
-	private Uri? pendingSource;
+	public ObservableCollection<BrowserTabViewModel> Tabs { get; } = [];
+
+	public BrowserTabViewModel? SelectedTab { get; set; }
+
 	public bool WebViewCanGoBack { get; private set; }
 	public bool WebViewCanGoForward { get; private set; }
 
-	// アドレスバー用 (string)
-	public string Address { get; set; }
-
-	// NativeWebView の Source バインディング用 (Uri)
-	public Uri? CurrentSource { get; set; }
+	public string Address { get; set; } = string.Empty;
 
 	public ObservableCollection<BrowserHistoryEntry> HistoryEntries { get; } = [];
 
@@ -145,14 +75,18 @@ public class BrowserWindowViewModel
 
 	public Command OpenInDefaultBrowserCommand { get; }
 
+	public Command NewTabCommand { get; }
+
 	public Command ShowClearHistoryConfirmCommand { get; }
 
 	public Command CancelClearHistoryCommand { get; }
 
 	public Command ClearHistoryCommand { get; }
 
-	public BrowserWindowViewModel(NativeWebView wb)
+	public BrowserWindowViewModel(Panel host)
 	{
+		webViewHost = host;
+
 		// ウィンドウが開かれた時のイベント
 		BrowserWindowWell.Add(Window.WindowOpenedEvent, () =>
 		{
@@ -171,8 +105,6 @@ public class BrowserWindowViewModel
 				App.BrowserWindow.Position = pos;
 			}
 
-			WindowOpened = true;
-
 			return default;
 		});
 
@@ -189,129 +121,90 @@ public class BrowserWindowViewModel
 			}
 			ConfigManager.Config.BrowserWindow.State = WindowState;
 
-			// 開いているページのURLをリセット
-			CurrentSource = new Uri("about:blank");
+			foreach (BrowserTabViewModel tab in Tabs.ToArray())
+			{
+				CloseTab(tab);
+			}
 
 			return default;
 		});
 
-		WebViewCtrl = wb;
-
-		// NativeWebView のイベント購読
-		WebViewCtrl.NavigationCompleted += WebView_NavigationCompleted;
-		WebViewCtrl.WebMessageReceived += WebView_WebMessageReceived;
-		WebViewCtrl.PropertyChanged += WebViewOnPropertyChanged;
-
-		// 閲覧データの保存先を設定する (コンフィグの設定が空欄の場合はコンフィグフォルダー配下)
-		WebViewCtrl.EnvironmentRequested += (sender, e) =>
-		{
-			if (e is Avalonia.Platform.WindowsWebView2EnvironmentRequestedEventArgs webView2)
-			{
-				webView2.UserDataFolder = App.GetBrowserDataFolder();
-				webView2.Language = ConfigManager.Config.Language;
-			}
-			else if (e is Avalonia.Platform.AppleWKWebViewEnvironmentRequestedEventArgs apple)
-			{
-				apple.ApplicationNameForUserAgent = App.ProductName + "/" + App.ProductVersion + " Safari/605.1.15";
-			}
-		};
-
-#if DEBUG
-		WebViewCtrl.EnvironmentRequested += (sender, e) =>
-		{
-			e.EnableDevTools = true;
-		};
-#endif
-
-		WebViewCtrl.AdapterCreated += (sender, e) =>
-		{
-			if (OperatingSystem.IsWindows() && WebViewCtrl.UserAgent is string userAgent)
-			{
-				WebViewCtrl.UserAgent = userAgent + " " + App.ProductName + "/" + App.ProductVersion;
-			}
-
-			if (pendingSource is Uri pending)
-			{
-				pendingSource = null;
-				CurrentSource = pending;
-			}
-		};
-
-		Address = CurrentSource?.ToString() ?? string.Empty;
-		lastPageUrl = Address;
-
 		NavigateCommand = Command.Factory.Create(() =>
 		{
-			if (Uri.TryCreate(Address, UriKind.Absolute, out var uri))
+			if (Uri.TryCreate(Address, UriKind.Absolute, out Uri? uri))
 			{
-				Open(uri);
+				SelectedTab?.Navigate(uri);
 			}
 			return default;
 		});
 
 		CutCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.TryGetCommandManager()?.Cut();
+			SelectedTab?.WebView.TryGetCommandManager()?.Cut();
 			return default;
 		});
 
 		CopyCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.TryGetCommandManager()?.Copy();
+			SelectedTab?.WebView.TryGetCommandManager()?.Copy();
 			return default;
 		});
 
 		PasteCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.TryGetCommandManager()?.Paste();
+			SelectedTab?.WebView.TryGetCommandManager()?.Paste();
 			return default;
 		});
 
 		UndoCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.TryGetCommandManager()?.Undo();
+			SelectedTab?.WebView.TryGetCommandManager()?.Undo();
 			return default;
 		});
 
 		RedoCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.TryGetCommandManager()?.Redo();
+			SelectedTab?.WebView.TryGetCommandManager()?.Redo();
 			return default;
 		});
 
 		SelectAllCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.TryGetCommandManager()?.SelectAll();
+			SelectedTab?.WebView.TryGetCommandManager()?.SelectAll();
 			return default;
 		});
 
 		DeleteCommand = Command.Factory.Create(async () =>
 		{
-			await WebViewCtrl.InvokeScript("document.execCommand('delete')");
+			if (SelectedTab is not null)
+			{
+				await SelectedTab.WebView.InvokeScript("document.execCommand('delete')");
+			}
 		});
 
 		BackCommand = Command.Factory.Create(() =>
 		{
-			WebView_GoBack();
+			SelectedTab?.GoBack();
 			return default;
 		});
 
 		ForwardCommand = Command.Factory.Create(() =>
 		{
-			WebView_GoForward();
+			SelectedTab?.GoForward();
 			return default;
 		});
 
 		ReloadCommand = Command.Factory.Create(() =>
 		{
-			WebViewCtrl.Refresh();
+			SelectedTab?.Refresh();
 			return default;
 		});
 
 		// 既定のブラウザーで開く (信頼境界のため http/https のみ許可)
 		OpenInDefaultBrowserCommand = Command.Factory.Create(() =>
 		{
-			if (Uri.TryCreate(lastPageUrl, UriKind.Absolute, out Uri? uri) &&
+			string url = SelectedTab?.Url ?? string.Empty;
+			if (Uri.TryCreate(url, UriKind.Absolute, out Uri? uri) &&
 				(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
 			{
 				App.Logger.Debug("Open in default browser: " + uri);
@@ -322,7 +215,16 @@ public class BrowserWindowViewModel
 			}
 			else
 			{
-				App.Logger.Debug("Open in default browser: Invalid URL: " + lastPageUrl);
+				App.Logger.Debug("Open in default browser: Invalid URL: " + url);
+			}
+			return default;
+		});
+
+		NewTabCommand = Command.Factory.Create(() =>
+		{
+			if (Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out Uri? uri))
+			{
+				OpenNewTab(uri);
 			}
 			return default;
 		});
@@ -350,134 +252,79 @@ public class BrowserWindowViewModel
 		});
 	}
 
-	public void Open(Uri uri)
+	public void OpenNewTab(Uri uri)
 	{
-		if (WebViewCtrl.UserAgent is null) pendingSource = uri;
-		else CurrentSource = uri;
+		BrowserTabViewModel tab = new(uri, OpenNewTab);
+		tab.PropertyChanged += Tab_PropertyChanged;
+		tab.WebView.IsVisible = false;
+		webViewHost.Children.Add(tab.WebView);
+		Tabs.Add(tab);
+		SelectedTab = tab;
 	}
 
-	[PropertyChanged(nameof(CurrentSource))]
-	private ValueTask OnCurrentSourceChangedAsync(Uri? value)
+	public void CloseTab(BrowserTabViewModel tab)
 	{
-		App.Logger.Debug("CurrentSource Changed: " + value);
+		int index = Tabs.IndexOf(tab);
+		if (index < 0) return;
 
-		lastPageUrl = value?.ToString() ?? lastPageUrl;
-		if (!AddressBoxFocused) Address = value?.ToString() ?? string.Empty;
+		tab.PropertyChanged -= Tab_PropertyChanged;
+		tab.Unload();
+		Tabs.Remove(tab);
+		webViewHost.Children.Remove(tab.WebView);
 
-		WebViewCanGoBack = WebViewCtrl.CanGoBack;
-		WebViewCanGoForward = WebViewCtrl.CanGoForward;
-		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+		if (Tabs.Count == 0)
+		{
+			SelectedTab = null;
+			Address = string.Empty;
+			WindowTitleText = Resources.Window_InAppBrowser;
+			WebViewCanGoBack = false;
+			WebViewCanGoForward = false;
+			App.BrowserWindow.Hide();
+			return;
+		}
+
+		if (SelectedTab is null || !Tabs.Contains(SelectedTab))
+		{
+			SelectedTab = Tabs[Math.Min(index, Tabs.Count - 1)];
+		}
+	}
+
+	[PropertyChanged(nameof(SelectedTab))]
+	private ValueTask OnSelectedTabChangedAsync(BrowserTabViewModel? value)
+	{
+		foreach (BrowserTabViewModel tab in Tabs)
+		{
+			tab.WebView.IsVisible = ReferenceEquals(tab, value);
+		}
+
+		if (value is null) return default;
+
+		if (!AddressBoxFocused) Address = value.Url;
+		WindowTitleText = value.Title;
+		WebViewCanGoBack = value.CanGoBack;
+		WebViewCanGoForward = value.CanGoForward;
+		value.WebView.Focus();
 
 		return default;
 	}
 
-	private void WebViewOnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+	private void Tab_PropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		App.Logger.Debug("WebView PropertyChanged: " + e.Property.Name);
+		if (sender is not BrowserTabViewModel tab) return;
+		if (!ReferenceEquals(tab, SelectedTab)) return;
 
-		WebViewCanGoBack = WebViewCtrl.CanGoBack;
-		WebViewCanGoForward = WebViewCtrl.CanGoForward;
-		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
-	}
-
-	private async void WebView_NavigationCompleted(object? sender, WebViewNavigationCompletedEventArgs e)
-	{
-		App.Logger.Debug("WebView NavigationCompleted: " + WebViewCtrl.Source);
-
-		WebViewCanGoBack = WebViewCtrl.CanGoBack;
-		WebViewCanGoForward = WebViewCtrl.CanGoForward;
-
-		// SPA 遷移を検出するための JS フックを注入する
-		try
-		{
-			await WebViewCtrl.InvokeScript(SpaHookScript);
-		}
-		catch (Exception ex)
-		{
-			App.Logger.Debug("SPA hook injection failed: " + ex.Message);
-		}
-
-		// アドレスバーを更新
-		lastPageUrl = WebViewCtrl.Source?.ToString() ?? lastPageUrl;
-		if (!AddressBoxFocused) Address = WebViewCtrl.Source?.ToString() ?? string.Empty;
-		if (WebViewCtrl.Source != null) CurrentSource = WebViewCtrl.Source;
-
-		// ウィンドウタイトルを更新する (NativeWebView には Title プロパティがないため JS で取得)
-		try
-		{
-			string? title = await WebViewCtrl.InvokeScript("document.title");
-			// WebView2 の InvokeScript は JSON エンコードされた結果を返すためデコードする (macOS は生の文字列)
-			try
-			{
-				title = JsonSerializer.Deserialize<string>(title ?? string.Empty);
-			}
-			catch (JsonException)
-			{
-			}
-			WindowTitle = title ?? string.Empty;
-		}
-		catch
-		{
-			WindowTitle = string.Empty;
-		}
-
-		BrowserHistoryManager.Add(lastPageUrl, WindowTitleText);
-
-		App.Logger.Debug($" - {WebViewCanGoBack} {WebViewCanGoForward}");
+		if (!AddressBoxFocused) Address = tab.Url;
+		WindowTitleText = tab.Title;
+		WebViewCanGoBack = tab.CanGoBack;
+		WebViewCanGoForward = tab.CanGoForward;
 	}
 
 	// アドレスバーのフォーカスが外れたら、入力内容を正規のページURLに戻す
 	[PropertyChanged(nameof(AddressBoxFocused))]
 	private ValueTask OnAddressBoxFocusedChangedAsync(bool value)
 	{
-		if (!value) Address = lastPageUrl;
+		if (!value) Address = SelectedTab?.Url ?? string.Empty;
 		return default;
-	}
-
-	private void WebView_WebMessageReceived(object? sender, WebMessageReceivedEventArgs e)
-	{
-		if (string.IsNullOrEmpty(e.Body)) return;
-		try
-		{
-			using JsonDocument document = JsonDocument.Parse(e.Body);
-			JsonElement root = document.RootElement;
-			if (root.ValueKind != JsonValueKind.Object) return;
-			if (!root.TryGetProperty("url", out JsonElement urlElement) || urlElement.ValueKind != JsonValueKind.String) return;
-			if (!root.TryGetProperty("title", out JsonElement titleElement) || titleElement.ValueKind != JsonValueKind.String) return;
-
-			string url = urlElement.GetString() ?? string.Empty;
-			string title = titleElement.GetString() ?? string.Empty;
-
-			App.Logger.Debug("WebView WebMessage: " + url + " / " + title);
-
-			lastPageUrl = url;
-			if (!AddressBoxFocused) Address = url;
-			WindowTitle = title;
-
-			WebViewCanGoBack = WebViewCtrl.CanGoBack;
-			WebViewCanGoForward = WebViewCtrl.CanGoForward;
-
-			BrowserHistoryManager.Add(url, title);
-		}
-		catch (JsonException)
-		{
-		}
-	}
-
-	private void WebView_GoBack()
-	{
-		beforeAddress = WebViewCtrl.Source?.ToString() ?? string.Empty;
-		WebViewCtrl.GoBack();
-		WebViewCanGoBack = WebViewCtrl.CanGoBack;
-		WebViewCanGoForward = WebViewCtrl.CanGoForward;
-	}
-
-	private void WebView_GoForward()
-	{
-		beforeAddress = Address;
-		WebViewCtrl.GoForward();
-		WebViewCanGoBack = WebViewCtrl.CanGoBack;
-		WebViewCanGoForward = WebViewCtrl.CanGoForward;
 	}
 
 	public void RefreshHistoryList()
@@ -508,7 +355,7 @@ public class BrowserWindowViewModel
 		if (Uri.TryCreate(entry.Url, UriKind.Absolute, out Uri? uri))
 		{
 			App.Logger.Debug("Open History Entry: " + entry.Url);
-			WebViewCtrl.Navigate(uri);
+			SelectedTab?.Navigate(uri);
 		}
 	}
 

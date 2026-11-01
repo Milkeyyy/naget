@@ -1188,6 +1188,24 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   New Tab に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_Tab_New {
+            get {
+                return ResourceManager.GetString("WebBrowser.Tab.New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Close Tab に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_Tab_Close {
+            get {
+                return ResourceManager.GetString("WebBrowser.Tab.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Browser に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Window_InAppBrowser {

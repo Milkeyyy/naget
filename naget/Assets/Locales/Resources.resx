@@ -153,6 +153,12 @@
   <data name="WebBrowser.Navigation.OpenInDefaultBrowser" xml:space="preserve">
     <value>Open in Default Browser</value>
   </data>
+  <data name="WebBrowser.Tab.New" xml:space="preserve">
+    <value>New Tab</value>
+  </data>
+  <data name="WebBrowser.Tab.Close" xml:space="preserve">
+    <value>Close Tab</value>
+  </data>
   <data name="WebBrowser.ContextMenu.Copy" xml:space="preserve">
     <value>Copy</value>
   </data>

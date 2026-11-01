@@ -35,14 +35,12 @@ public class AppViewModel
 				return default;
 			}
 			// スタートページを開いてウィンドウを表示する
-			var bvm = App.BrowserWindow.DataContext as BrowserWindowViewModel;
-			if (bvm != null)
+			if (App.BrowserWindow.DataContext is BrowserWindowViewModel bvm && bvm.Tabs.Count == 0)
 			{
-				if (Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out var uri))
+				if (Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out Uri? uri))
 				{
-					bvm.Open(uri);
+					bvm.OpenNewTab(uri);
 				}
-				bvm.Address = ConfigManager.Config.BrowserWindow.StartPage;
 			}
 			App.BrowserWindow.Show();
 			return default;
