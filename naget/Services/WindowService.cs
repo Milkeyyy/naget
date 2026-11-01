@@ -84,6 +84,14 @@ public static class WindowService
 		}
 	}
 
+	public static void ShowSettingsWindow()
+	{
+		if (App.SettingsWindow == null) return;
+
+		if (!App.SettingsWindow.IsVisible) App.SettingsWindow.Show();
+		ActivateWindow(App.SettingsWindow);
+	}
+
 	public static Window? GetSettingsWindow()
 	{
 		return App.SettingsWindow;

@@ -172,6 +172,8 @@ public class App : Application
 
 	public static void Exit()
 	{
+		// 再起動時に新しいインスタンスが通知先を誤らないよう、受付を止める
+		SingleInstance.StopListening();
 		// ホットキーヘルパーの停止とコンフィグ等の保存
 		Save();
 		// 終了
@@ -297,6 +299,9 @@ public class App : Application
 			AccessibilityPermissionWindow = new AccessibilityPermissionWindow();
 			// BrowserWindow は遅延初期化するためここでは作成しない
 			// BrowserWindow = new BrowserWindow();
+
+			// 既存インスタンスからの設定画面の表示要求を受け付ける
+			SingleInstance.Listen();
 
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);

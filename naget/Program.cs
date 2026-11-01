@@ -20,6 +20,9 @@ namespace naget
 #endif
 			builder.Run();
 
+			// 既に起動している場合は設定画面を表示させて終了する
+			if (!SingleInstance.Acquire()) return;
+
 			BuildAvaloniaApp()
 				.StartWithClassicDesktopLifetime(args);
 		}

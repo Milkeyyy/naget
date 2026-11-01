@@ -1,5 +1,6 @@
 ﻿using Epoxy;
 using naget.Models.Config;
+using naget.Services;
 using System;
 
 namespace naget.ViewModels;
@@ -48,7 +49,7 @@ public class AppViewModel
 		// 設定画面
 		OpenSettingsWindowCommand = Command.Factory.Create(() =>
 		{
-			App.SettingsWindow!.Show();
+			WindowService.ShowSettingsWindow();
 			return default;
 		});
 		// アップデートチェック
