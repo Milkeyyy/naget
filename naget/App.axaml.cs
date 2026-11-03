@@ -189,6 +189,8 @@ public class App : Application
 			if (bundlePath != null)
 			{
 				App.Logger.Debug("アプリケーションを再起動します (macOS)...");
+				SingleInstance.StopListening();
+				SingleInstance.Release();
 				Process.Start(new ProcessStartInfo("/usr/bin/open") { ArgumentList = { "-n", bundlePath } });
 				Thread.Sleep(500);
 				Exit();
@@ -201,6 +203,8 @@ public class App : Application
 		if (packageFamilyName != null)
 		{
 			App.Logger.Debug("アプリケーションを再起動します (MSIX)...");
+			SingleInstance.StopListening();
+			SingleInstance.Release();
 			Process.Start(new ProcessStartInfo("explorer.exe", $"shell:AppsFolder\\{packageFamilyName}!App")
 			{
 				UseShellExecute = true
@@ -215,6 +219,9 @@ public class App : Application
 		if (processPath != null)
 		{
 			App.Logger.Debug("アプリケーションを再起動します...");
+
+			SingleInstance.StopListening();
+			SingleInstance.Release();
 
 			// 2. 新しいプロセスを開始する
 			Process.Start(new ProcessStartInfo(processPath)
@@ -302,6 +309,15 @@ public class App : Application
 
 			// 既存インスタンスからの設定画面の表示要求を受け付ける
 			SingleInstance.Listen();
+
+			// macOS は再度アプリを開いたときに新しいプロセスを起動せず、既存インスタンスへ reopen を送る
+			if (OperatingSystem.IsMacOS() && Application.Current?.TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime activatable)
+			{
+				activatable.Activated += (_, e) =>
+				{
+					if (e.Kind == ActivationKind.Reopen) WindowService.ShowSettingsWindow();
+				};
+			}
 
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);

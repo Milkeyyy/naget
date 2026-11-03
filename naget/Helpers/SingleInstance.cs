@@ -70,6 +70,15 @@ public static class SingleInstance
 	}
 
 	/// <summary>
+	/// インスタンスの保持を解放する (再起動時に新しいインスタンスへ譲る)
+	/// </summary>
+	public static void Release()
+	{
+		mutex?.Dispose();
+		mutex = null;
+	}
+
+	/// <summary>
 	/// 既存インスタンスへ設定画面の表示を要求する
 	/// </summary>
 	private static bool Notify()
@@ -106,6 +115,7 @@ public static class SingleInstance
 				string? command = await reader.ReadLineAsync(token);
 				if (command == ShowSettingsCommand)
 				{
+					App.Logger.Debug("Single instance: show settings requested.");
 					Dispatcher.UIThread.Post(WindowService.ShowSettingsWindow);
 				}
 			}
