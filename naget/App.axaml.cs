@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
 
 namespace naget;
 
@@ -171,6 +172,8 @@ public class App : Application
 
 	public static void Exit()
 	{
+		// 再起動時に新しいインスタンスが通知先を誤らないよう、受付を止める
+		SingleInstance.StopListening();
 		// ホットキーヘルパーの停止とコンフィグ等の保存
 		Save();
 		// 終了
@@ -179,11 +182,29 @@ public class App : Application
 
 	public static void RestartApplication()
 	{
+		// macOS は .app バンドルを open で起動する (実行ファイルを直接起動するとバンドルとして扱われない)
+		if (OperatingSystem.IsMacOS())
+		{
+			string? bundlePath = GetMacBundlePath(Environment.ProcessPath);
+			if (bundlePath != null)
+			{
+				App.Logger.Debug("アプリケーションを再起動します (macOS)...");
+				SingleInstance.StopListening();
+				SingleInstance.Release();
+				Process.Start(new ProcessStartInfo("/usr/bin/open") { ArgumentList = { "-n", bundlePath } });
+				Thread.Sleep(500);
+				Exit();
+				return;
+			}
+		}
+
 		// MSIX パッケージ版は exe を直接起動するとパッケージ ID を失うため、シェル経由で起動する
 		string? packageFamilyName = PackageHelper.GetPackageFamilyName();
 		if (packageFamilyName != null)
 		{
 			App.Logger.Debug("アプリケーションを再起動します (MSIX)...");
+			SingleInstance.StopListening();
+			SingleInstance.Release();
 			Process.Start(new ProcessStartInfo("explorer.exe", $"shell:AppsFolder\\{packageFamilyName}!App")
 			{
 				UseShellExecute = true
@@ -199,6 +220,9 @@ public class App : Application
 		{
 			App.Logger.Debug("アプリケーションを再起動します...");
 
+			SingleInstance.StopListening();
+			SingleInstance.Release();
+
 			// 2. 新しいプロセスを開始する
 			Process.Start(new ProcessStartInfo(processPath)
 			{
@@ -212,6 +236,14 @@ public class App : Application
 
 		// 3. 現在のプロセスを終了する
 		Exit();
+	}
+
+	private static string? GetMacBundlePath(string? processPath)
+	{
+		if (string.IsNullOrEmpty(processPath)) return null;
+
+		int index = processPath.IndexOf(".app/", StringComparison.Ordinal);
+		return index < 0 ? null : processPath[..(index + 4)];
 	}
 
 	/// <summary>
@@ -275,6 +307,18 @@ public class App : Application
 			// BrowserWindow は遅延初期化するためここでは作成しない
 			// BrowserWindow = new BrowserWindow();
 
+			// 既存インスタンスからの設定画面の表示要求を受け付ける
+			SingleInstance.Listen();
+
+			// macOS は再度アプリを開いたときに新しいプロセスを起動せず、既存インスタンスへ reopen を送る
+			if (OperatingSystem.IsMacOS() && Application.Current?.TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime activatable)
+			{
+				activatable.Activated += (_, e) =>
+				{
+					if (e.Kind == ActivationKind.Reopen) WindowService.ShowSettingsWindow();
+				};
+			}
+
 			// テーマを適用
 			ChangeTheme(ConfigManager.Config.Theme);
 
@@ -283,7 +327,7 @@ public class App : Application
 			// ホットキーの登録
 			try
 			{
-				HotKeyHelper.HookError += (_, _) => WindowService.ShowAccessibilityPermissionWindow();
+				HotKeyHelper.HookError += (_, _) => WindowService.ShowAccessibilityPermissionWindow(dueToHookError: true);
 				if (HotKeyHelper.IsAccessibilityApiEnabled())
 				{
 					HotKeyHelper.Run();
@@ -291,7 +335,7 @@ public class App : Application
 				else
 				{
 					Logger.Warn("Accessibility API access is disabled.");
-					WindowService.ShowAccessibilityPermissionWindow();
+					WindowService.ShowAccessibilityPermissionWindow(userInitiated: false);
 				}
 			}
 			catch (Exception ex)

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace naget.Helpers;
@@ -51,6 +52,8 @@ public static class HotKeyHelper
 	/// </summary>
 	public static System.Drawing.Point MousePointerCoordinates { get; private set; } = new(0, 0);
 
+	private static bool hasMousePointerCoordinates;
+
 	static HotKeyHelper()
 	{
 		hook = new SimpleGlobalHook();
@@ -66,6 +69,13 @@ public static class HotKeyHelper
 	}
 
 	public static event EventHandler? HookError;
+
+	public static event EventHandler? AccessibilityApiStateChanged;
+
+	public static void NotifyAccessibilityApiStateChanged()
+	{
+		AccessibilityApiStateChanged?.Invoke(null, EventArgs.Empty);
+	}
 
 	public static void Run()
 	{
@@ -93,12 +103,123 @@ public static class HotKeyHelper
 
 	public static bool IsAccessibilityApiEnabled()
 	{
-		return UioHookProvider.Instance.IsAxApiEnabled(false);
+		if (!OperatingSystem.IsMacOS()) return true;
+
+		return AXIsProcessTrusted();
+	}
+
+	public static bool IsAccessibilityApiEnabledLive()
+	{
+		if (!OperatingSystem.IsMacOS()) return true;
+
+		bool axTrusted = AXIsProcessTrusted();
+		bool canCreateTap = CanCreateEventTap();
+		App.Logger.Debug($"Accessibility API: AXIsProcessTrusted={axTrusted}, CanCreateEventTap={canCreateTap}");
+
+		return axTrusted || canCreateTap;
+	}
+
+	private const string ApplicationServicesPath = "/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices";
+	private const string CoreFoundationPath = "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation";
+
+	private const uint CGSessionEventTap = 1;
+	private const uint CGHeadInsertEventTap = 0;
+	private const uint CGEventTapOptionDefault = 0;
+	private const ulong CGEventMaskKeyDown = 1UL << 10;
+
+	private static IntPtr axPromptOptionKey;
+	private static IntPtr cfBooleanTrue;
+	private static IntPtr cfTypeDictionaryKeyCallBacks;
+	private static IntPtr cfTypeDictionaryValueCallBacks;
+
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	private delegate IntPtr CGEventTapCallback(IntPtr proxy, uint type, IntPtr eventRef, IntPtr userInfo);
+
+	private static readonly CGEventTapCallback eventTapCallback = (_, _, eventRef, _) => eventRef;
+
+	[DllImport(ApplicationServicesPath, CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.U1)]
+	private static extern bool AXIsProcessTrusted();
+
+	[DllImport(ApplicationServicesPath, CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.U1)]
+	private static extern bool AXIsProcessTrustedWithOptions(IntPtr options);
+
+	[DllImport(CoreFoundationPath, CallingConvention = CallingConvention.Cdecl)]
+	private static extern IntPtr CFDictionaryCreate(IntPtr allocator, IntPtr[] keys, IntPtr[] values, nint numValues, IntPtr keyCallBacks, IntPtr valueCallBacks);
+
+	[DllImport(CoreFoundationPath, CallingConvention = CallingConvention.Cdecl)]
+	private static extern void CFRelease(IntPtr cf);
+
+	[DllImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics", CallingConvention = CallingConvention.Cdecl)]
+	private static extern IntPtr CGEventTapCreate(uint tap, uint place, uint options, ulong eventsOfInterest, CGEventTapCallback callback, IntPtr userInfo);
+
+	[DllImport(CoreFoundationPath, CallingConvention = CallingConvention.Cdecl)]
+	private static extern void CFMachPortInvalidate(IntPtr port);
+
+	private static void EnsureAccessibilitySymbols()
+	{
+		if (axPromptOptionKey != IntPtr.Zero) return;
+
+		IntPtr applicationServices = NativeLibrary.Load(ApplicationServicesPath);
+		IntPtr coreFoundation = NativeLibrary.Load(CoreFoundationPath);
+		axPromptOptionKey = Marshal.ReadIntPtr(NativeLibrary.GetExport(applicationServices, "kAXTrustedCheckOptionPrompt"));
+		cfBooleanTrue = Marshal.ReadIntPtr(NativeLibrary.GetExport(coreFoundation, "kCFBooleanTrue"));
+		cfTypeDictionaryKeyCallBacks = NativeLibrary.GetExport(coreFoundation, "kCFTypeDictionaryKeyCallBacks");
+		cfTypeDictionaryValueCallBacks = NativeLibrary.GetExport(coreFoundation, "kCFTypeDictionaryValueCallBacks");
+	}
+
+	private static bool CanCreateEventTap()
+	{
+		// libuiohook と同じ条件でタップを生成できるか確認する (生成のみでイベントは受け取らない)
+		IntPtr tap = CGEventTapCreate(CGSessionEventTap, CGHeadInsertEventTap, CGEventTapOptionDefault, CGEventMaskKeyDown, eventTapCallback, IntPtr.Zero);
+		if (tap == IntPtr.Zero) return false;
+
+		CFMachPortInvalidate(tap);
+		CFRelease(tap);
+		return true;
 	}
 
 	public static bool RequestAccessibilityApiAccess()
 	{
-		return UioHookProvider.Instance.IsAxApiEnabled(true);
+		if (!OperatingSystem.IsMacOS()) return true;
+
+		EnsureAccessibilitySymbols();
+
+		IntPtr options = CFDictionaryCreate(
+			IntPtr.Zero,
+			[axPromptOptionKey],
+			[cfBooleanTrue],
+			1,
+			cfTypeDictionaryKeyCallBacks,
+			cfTypeDictionaryValueCallBacks);
+
+		bool isTrusted = AXIsProcessTrustedWithOptions(options);
+		CFRelease(options);
+
+		App.Logger.Debug($"Requested Accessibility API access: {isTrusted}");
+
+		return isTrusted;
+	}
+
+	public static void ResetAccessibilityPermission()
+	{
+		if (!OperatingSystem.IsMacOS()) return;
+
+		string? bundleIdentifier = MacDockHelper.GetBundleIdentifier();
+		if (string.IsNullOrEmpty(bundleIdentifier))
+		{
+			App.Logger.Warn("Failed to reset Accessibility permission: bundle identifier is unknown.");
+			return;
+		}
+
+		App.Logger.Debug($"Reset Accessibility permission: {bundleIdentifier}");
+
+		Process? process = Process.Start(new ProcessStartInfo("/usr/bin/tccutil")
+		{
+			ArgumentList = { "reset", "Accessibility", bundleIdentifier }
+		});
+		process?.WaitForExit(3000);
 	}
 
 	public static void OpenAccessibilitySystemSettings()
@@ -235,6 +356,7 @@ public static class HotKeyHelper
 	{
 		// マウスポインターの座標を更新
 		MousePointerCoordinates = new(e.Data.X, e.Data.Y);
+		hasMousePointerCoordinates = true;
 	}
 
 	public static async Task<bool> StartKeyRegistrationAsync(string groupId, IProgress<string>? progress = null)
@@ -351,32 +473,36 @@ public static class HotKeyHelper
 	{
 		App.Logger.Debug($"GetCenterScreen ({window})");
 
-		// ウィンドウのサイズが設定されていない場合は null を返す
-		if (double.IsNaN(window.Width) || double.IsNaN(window.Height))
+		Size size = !double.IsNaN(window.Width) && !double.IsNaN(window.Height)
+			? new Size(window.Width, window.Height)
+			: window.FrameSize ?? window.ClientSize;
+		if (size.Width <= 0 || size.Height <= 0)
 		{
 			return null;
 		}
 
 		// マウスカーソルの座標からディスプレイを取得
-		Screen? screen = window.Screens.ScreenFromPoint(
-			new(
+		Screen? screen = null;
+		if (hasMousePointerCoordinates)
+		{
+			screen = window.Screens.ScreenFromPoint(new(
 				MousePointerCoordinates.X,
 				MousePointerCoordinates.Y
-			)
-		);
+			));
+		}
+		screen ??= window.Screens.ScreenFromWindow(window)
+			?? window.Screens.Primary;
 
 		App.Logger.Debug($"-  Pos: {window.Position}");
-		App.Logger.Debug($"- Size: {window.Width},{window.Height}");
+		App.Logger.Debug($"- Size: {size}");
 
 		// ディスプレイを取得できた場合は中央の位置を計算して返す
 		if (screen != null)
 		{
-			var screenCenterPos = screen.WorkingArea.Center;
-			App.Logger.Debug($"Center Pos: {screenCenterPos.X},{screenCenterPos.Y}");
-			return new(
-				(int)(screenCenterPos.X - (window.Width / 2)),
-				(int)(screenCenterPos.Y - (window.Height / 2))
-			);
+			PixelRect centered = screen.WorkingArea.CenterRect(
+				new PixelRect(PixelSize.FromSize(size, screen.Scaling)));
+			App.Logger.Debug($"Center Pos: {centered.Position.X},{centered.Position.Y}");
+			return centered.Position;
 		}
 		return null;
 	}

@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using FluentAvalonia.UI.Controls;
 using naget.Models.BrowserHistory;
 using naget.ViewModels;
 using System;
@@ -14,8 +15,8 @@ public partial class BrowserWindow : Window
 	{
 		InitializeComponent();
 
-		NativeWebView webview = this.FindControl<NativeWebView>("webview")!;
-		var vm = new BrowserWindowViewModel(webview);
+		Panel webViewHost = this.FindControl<Panel>("WebViewHost")!;
+		BrowserWindowViewModel vm = new(webViewHost);
 		DataContext = vm;
 
 		var addressBox = this.FindControl<TextBox>("AddressBox");
@@ -32,6 +33,11 @@ public partial class BrowserWindow : Window
 			Hide();
 			e.Cancel = true;
 		};
+	}
+
+	private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs e)
+	{
+		if (DataContext is BrowserWindowViewModel vm && e.Item is BrowserTabViewModel tab) vm.CloseTab(tab);
 	}
 
 	private void HistoryFlyout_Opened(object? sender, EventArgs e)
@@ -63,7 +69,7 @@ public partial class BrowserWindow : Window
 		Dispatcher.UIThread.Post(() =>
 		{
 			this.FindControl<Button>("HistoryButton")?.Flyout?.Hide();
-			this.FindControl<NativeWebView>("webview")?.Focus();
+			if (DataContext is BrowserWindowViewModel vm) vm.SelectedTab?.WebView.Focus();
 		}, DispatcherPriority.Input);
 	}
 }

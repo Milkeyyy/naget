@@ -31,22 +31,35 @@
 		<Style Selector="Button.accent ui|SymbolIcon">
 			<Setter Property="Foreground" Value="White" />
 		</Style>
+
+		<Style Selector="TextBox">
+			<Setter Property="ContextFlyout">
+				<MenuFlyout>
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Undo}" Command="{Binding $parent[TextBox].Undo}" IsEnabled="{Binding $parent[TextBox].CanUndo}" />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Redo}" Command="{Binding $parent[TextBox].Redo}" IsEnabled="{Binding $parent[TextBox].CanRedo}" />
+					<Separator />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Cut}" Command="{Binding $parent[TextBox].Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="{x:Static TextBox.CutGesture}" />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Copy}" Command="{Binding $parent[TextBox].Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="{x:Static TextBox.CopyGesture}" />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_Paste}" Command="{Binding $parent[TextBox].Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="{x:Static TextBox.PasteGesture}" />
+					<Separator />
+					<MenuItem Header="{x:Static lang:Resources.WebBrowser_ContextMenu_SelectAll}" Command="{Binding $parent[TextBox].SelectAll}" />
+				</MenuFlyout>
+			</Setter>
+		</Style>
 	</Application.Styles>
 
 	<!--ネイティブメニュー (macOS/Linux)-->
-	<!--<NativeMenu.Menu>
+	<NativeMenu.Menu>
 		<NativeMenu>
-			<NativeMenuItem Icon="/Assets/Icon.ico" Header="{x:Static lang:Resources.App_Name}" />
+			<NativeMenuItem Header="{x:Static lang:Resources.Settings_About}" Command="{Binding OpenAboutCommand}" />
 			<NativeMenuItemSeparator />
 			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_InAppBrowser}" Command="{Binding OpenInAppBrowserWindowCommand}" />
-			<NativeMenuItemSeparator />
 			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Settings}" Command="{Binding OpenSettingsWindowCommand}" />
-			<NativeMenuItemSeparator />
 			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_CheckUpdate}" Command="{Binding CheckUpdateCommand}" />
 			<NativeMenuItemSeparator />
-			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Exit}" Command="{Binding ExitAppCommand}" />
+			<NativeMenuItem Header="{x:Static lang:Resources.TrayMenu_Exit}" Command="{Binding ExitAppCommand}" Gesture="CMD+Q" />
 		</NativeMenu>
-	</NativeMenu.Menu>-->
+	</NativeMenu.Menu>
 
 	<!--通知領域アイコン-->
 	<TrayIcon.Icons>

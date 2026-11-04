@@ -1,6 +1,5 @@
 ﻿using Epoxy;
-using naget.Models.Config;
-using System;
+using naget.Services;
 
 namespace naget.ViewModels;
 
@@ -35,14 +34,9 @@ public class AppViewModel
 				return default;
 			}
 			// スタートページを開いてウィンドウを表示する
-			var bvm = App.BrowserWindow.DataContext as BrowserWindowViewModel;
-			if (bvm != null)
+			if (App.BrowserWindow.DataContext is BrowserWindowViewModel bvm && bvm.Tabs.Count == 0)
 			{
-				if (Uri.TryCreate(ConfigManager.Config.BrowserWindow.StartPage, UriKind.Absolute, out var uri))
-				{
-					bvm.CurrentSource = uri;
-				}
-				bvm.Address = ConfigManager.Config.BrowserWindow.StartPage;
+				bvm.OpenNewTab();
 			}
 			App.BrowserWindow.Show();
 			return default;
@@ -50,7 +44,7 @@ public class AppViewModel
 		// 設定画面
 		OpenSettingsWindowCommand = Command.Factory.Create(() =>
 		{
-			App.SettingsWindow!.Show();
+			WindowService.ShowSettingsWindow();
 			return default;
 		});
 		// アップデートチェック

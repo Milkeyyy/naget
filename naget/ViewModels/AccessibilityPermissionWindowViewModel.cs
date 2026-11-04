@@ -11,19 +11,22 @@ namespace naget.ViewModels;
 public class AccessibilityPermissionWindowViewModel
 {
 	private readonly DispatcherTimer permissionCheckTimer;
+	private bool liveCheckEnabled;
+	private bool hookErrorDetected;
 
 	public Well<Window> WindowWell { get; } = Well.Factory.Create<Window>();
 
 	public static string WindowTitle => Resources.Accessibility_Window_Title + " - " + App.ProductName;
 
 	public bool IsPermissionGranted { get; private set; }
+	public bool IsHookError { get; private set; }
 	public string StatusText { get; private set; } = string.Empty;
 
 	public Command RequestPermissionCommand { get; }
 	public Command OpenSystemSettingsCommand { get; }
-	public Command RecheckCommand { get; }
 	public Command RestartCommand { get; }
 	public Command LaterCommand { get; }
+	public Command ResetPermissionCommand { get; }
 
 	public AccessibilityPermissionWindowViewModel()
 	{
@@ -35,11 +38,11 @@ public class AccessibilityPermissionWindowViewModel
 			return default;
 		});
 
-		// 権限が許可されたかどうかを定期的に確認する (ウィンドウが表示されている間のみ)
+		// 権限が許可されたかどうかを定期的に確認する (ライブ確認が有効な間のみ)
 		permissionCheckTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
 		permissionCheckTimer.Tick += (_, _) =>
 		{
-			if (IsPermissionGranted) return;
+			if (!liveCheckEnabled) return;
 			if (App.AccessibilityPermissionWindow?.IsVisible != true) return;
 			RefreshPermissionState();
 		};
@@ -50,14 +53,10 @@ public class AccessibilityPermissionWindowViewModel
 		{
 			App.Logger.Debug("Request Accessibility API access");
 			HotKeyHelper.RequestAccessibilityApiAccess();
-			RefreshPermissionState();
 
-			// macOS の許可ダイアログはアプリごとに一度しか表示されないため、表示されなかった場合はシステム設定を開いて手動での許可を促す
-			if (!IsPermissionGranted)
-			{
-				App.Logger.Debug("Accessibility prompt was not shown; opening System Settings");
-				HotKeyHelper.OpenAccessibilitySystemSettings();
-			}
+			// 直後にタップ生成の確認をするとプロンプトと競合するため、更新はタイマーに任せる
+			liveCheckEnabled = true;
+
 			return default;
 		});
 
@@ -66,14 +65,6 @@ public class AccessibilityPermissionWindowViewModel
 		{
 			App.Logger.Debug("Open Accessibility System Settings");
 			HotKeyHelper.OpenAccessibilitySystemSettings();
-			return default;
-		});
-
-		// 権限の状態を再確認するコマンド
-		RecheckCommand = Command.Factory.Create(() =>
-		{
-			App.Logger.Debug("Recheck Accessibility API access");
-			RefreshPermissionState();
 			return default;
 		});
 
@@ -91,16 +82,42 @@ public class AccessibilityPermissionWindowViewModel
 			App.AccessibilityPermissionWindow?.Hide();
 			return default;
 		});
+
+		// 一覧に登録されない場合に TCC の登録をリセットして再起動するコマンド
+		ResetPermissionCommand = Command.Factory.Create(() =>
+		{
+			App.Logger.Debug("Execute ResetPermissionCommand");
+			HotKeyHelper.ResetAccessibilityPermission();
+			App.RestartApplication();
+			return default;
+		});
+	}
+
+	public void EnableLiveCheck()
+	{
+		liveCheckEnabled = true;
+		RefreshPermissionState();
+	}
+
+	public void SetHookError()
+	{
+		hookErrorDetected = true;
+		liveCheckEnabled = true;
 	}
 
 	public void RefreshPermissionState()
 	{
 		bool isEnabled = HotKeyHelper.IsAccessibilityApiEnabled();
+		if (!isEnabled && liveCheckEnabled) isEnabled = HotKeyHelper.IsAccessibilityApiEnabledLive();
 
-		// 権限が許可された場合はホットキーの登録を開始する
-		if (isEnabled && !IsPermissionGranted) HotKeyHelper.Run();
+		bool changed = IsPermissionGranted != isEnabled;
 
+		// 実行中に許可されても libuiohook は以前の判定をキャッシュしているため、
+		// ここではホットキーを開始せず再起動を促す
 		IsPermissionGranted = isEnabled;
+		IsHookError = hookErrorDetected && isEnabled;
 		StatusText = IsPermissionGranted ? Resources.Accessibility_Status_Granted : Resources.Accessibility_Status_NotGranted;
+
+		if (changed) HotKeyHelper.NotifyAccessibilityApiStateChanged();
 	}
 }

@@ -27,18 +27,24 @@ public static class WindowService
 	{
 		if (App.MainWindow != null)
 		{
-			// マウスカーソルがあるディスプレイの中央位置を取得
-			var centerPos = HotKeyHelper.GetCenterScreen(App.MainWindow);
-			// 中央位置を取得できた場合はウィンドウの位置をその中央へ移動する
-			App.MainWindow.Position = centerPos ?? new(0, 0);
+			PixelPoint? centerPos = HotKeyHelper.GetCenterScreen(App.MainWindow);
+			if (centerPos is PixelPoint pos)
+			{
+				App.MainWindow.Position = pos;
+			}
 		}
 	}
 
-	public static void ShowAccessibilityPermissionWindow()
+	public static void ShowAccessibilityPermissionWindow(bool userInitiated = true, bool dueToHookError = false)
 	{
 		if (App.AccessibilityPermissionWindow == null) return;
 
-		if (App.AccessibilityPermissionWindow.DataContext is AccessibilityPermissionWindowViewModel vm) vm.RefreshPermissionState();
+		if (App.AccessibilityPermissionWindow.DataContext is AccessibilityPermissionWindowViewModel vm)
+		{
+			if (dueToHookError) vm.SetHookError();
+			if (userInitiated) vm.EnableLiveCheck();
+			else vm.RefreshPermissionState();
+		}
 
 		if (!App.AccessibilityPermissionWindow.IsVisible) App.AccessibilityPermissionWindow.Show();
 		ActivateWindow(App.AccessibilityPermissionWindow);
@@ -48,15 +54,18 @@ public static class WindowService
 	{
 		if (App.BrowserWindow != null)
 		{
-			App.BrowserWindow.Show();
 			if (App.BrowserWindow.DataContext is BrowserWindowViewModel vm)
 			{
 				if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
 				{
-					vm.CurrentSource = uri;
+					vm.OpenNewTab(uri);
 				}
-				vm.Address = url;
+				else
+				{
+					vm.OpenNewTab();
+				}
 			}
+			App.BrowserWindow.Show();
 		}
 	}
 
@@ -77,6 +86,14 @@ public static class WindowService
 		{
 			vm.Search(engineId);
 		}
+	}
+
+	public static void ShowSettingsWindow()
+	{
+		if (App.SettingsWindow == null) return;
+
+		if (!App.SettingsWindow.IsVisible) App.SettingsWindow.Show();
+		ActivateWindow(App.SettingsWindow);
 	}
 
 	public static Window? GetSettingsWindow()
