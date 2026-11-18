@@ -2,11 +2,13 @@
 using Avalonia.Controls;
 using Epoxy;
 using naget.Assets.Locales;
+using naget.Helpers;
 using naget.Models.BrowserHistory;
 using naget.Models.Config;
 using System;
 using System.ComponentModel;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace naget.ViewModels;
 
@@ -159,13 +161,18 @@ public class BrowserTabViewModel : INotifyPropertyChanged
 
 		WebView.AdapterCreated += (sender, e) =>
 		{
+			if (OperatingSystem.IsWindows())
+			{
+				WebView2Interop.DisableStatusBar(WebView);
+			}
+
 			if (OperatingSystem.IsWindows() && WebView.UserAgent is string userAgent)
 			{
 				WebView.UserAgent = userAgent + " " + App.ProductName + "/" + App.ProductVersion;
 			}
-		};
 
-		if (initialUri is not null) WebView.Navigate(initialUri);
+			if (initialUri is not null) WebView.Navigate(initialUri);
+		};
 	}
 
 	public void Navigate(Uri uri)
@@ -192,10 +199,37 @@ public class BrowserTabViewModel : INotifyPropertyChanged
 		WebView.Refresh();
 	}
 
-	public void Unload()
+	public async Task UnloadAsync()
 	{
 		isUnloading = true;
-		WebView.NavigateToString(string.Empty);
+
+		try
+		{
+			WebView.NavigateToString("<html><body></body></html>");
+		}
+		catch (Exception ex)
+		{
+			App.Logger.Debug("Failed to unload tab: " + ex.Message);
+			return;
+		}
+
+		TaskCompletionSource<bool> navigationCompleted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		EventHandler<WebViewNavigationCompletedEventArgs>? handler = null;
+		handler = (sender, e) =>
+		{
+			WebView.NavigationCompleted -= handler;
+			navigationCompleted.TrySetResult(true);
+		};
+		WebView.NavigationCompleted += handler;
+
+		try
+		{
+			await Task.WhenAny(navigationCompleted.Task, Task.Delay(TimeSpan.FromSeconds(2)));
+		}
+		finally
+		{
+			WebView.NavigationCompleted -= handler;
+		}
 	}
 
 	private void WebViewOnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)

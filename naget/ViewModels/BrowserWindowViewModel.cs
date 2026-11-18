@@ -272,9 +272,9 @@ public class BrowserWindowViewModel
 		if (index < 0) return;
 
 		tab.PropertyChanged -= Tab_PropertyChanged;
-		tab.Unload();
+		tab.WebView.IsVisible = false;
 		Tabs.Remove(tab);
-		webViewHost.Children.Remove(tab.WebView);
+		_ = UnloadTabAsync(tab);
 
 		if (Tabs.Count == 0)
 		{
@@ -290,6 +290,22 @@ public class BrowserWindowViewModel
 		if (SelectedTab is null || !Tabs.Contains(SelectedTab))
 		{
 			SelectedTab = Tabs[Math.Min(index, Tabs.Count - 1)];
+		}
+	}
+
+	private async Task UnloadTabAsync(BrowserTabViewModel tab)
+	{
+		try
+		{
+			await tab.UnloadAsync();
+		}
+		catch (Exception ex)
+		{
+			App.Logger.Debug("Failed to unload tab: " + ex.Message);
+		}
+		finally
+		{
+			webViewHost.Children.Remove(tab.WebView);
 		}
 	}
 
