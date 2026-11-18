@@ -43,6 +43,28 @@ public static class MacDockHelper
 		});
 	}
 
+	public static string? GetBundleIdentifier()
+	{
+		if (!OperatingSystem.IsMacOS()) return null;
+
+		try
+		{
+			IntPtr nsBundle = objc_msgSend_IntPtr(objc_getClass("NSBundle"), sel_registerName("mainBundle"));
+			if (nsBundle == IntPtr.Zero) return null;
+
+			IntPtr identifier = objc_msgSend_IntPtr(nsBundle, sel_registerName("bundleIdentifier"));
+			if (identifier == IntPtr.Zero) return null;
+
+			IntPtr utf8 = objc_msgSend_IntPtr(identifier, sel_registerName("UTF8String"));
+			return utf8 == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(utf8);
+		}
+		catch (Exception ex)
+		{
+			App.Logger.Warn("Failed to get the bundle identifier: " + ex.Message);
+			return null;
+		}
+	}
+
 	private static void Track(Window window)
 	{
 		if (!trackedWindows.Add(window)) return;

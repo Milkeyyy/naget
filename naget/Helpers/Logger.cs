@@ -69,7 +69,17 @@ namespace naget.Helpers
 			logFilePath = Path.Join(LogDirName, LogFileName + ".log");
 
 			// ログファイルを生成する
-			stream = CreateLogfile(new FileInfo(logFilePath));
+			try
+			{
+				stream = CreateLogfile(new FileInfo(logFilePath));
+			}
+			catch (Exception ex)
+			{
+				// ログファイルが使用できなくてもアプリを起動させる
+				IsLogFileEnabled = false;
+				stream = StreamWriter.Null;
+				System.Diagnostics.Debug.WriteLine(ex.Message);
+			}
 		}
 
 		public void Dispose()
@@ -153,19 +163,28 @@ namespace naget.Helpers
 			// ログファイルへ出力する
 			if (IsLogFileEnabled)
 			{
-				lock (lockObj)
+				try
 				{
-					stream.WriteLine(fullMsg);
-
-					FileInfo logFile = new FileInfo(logFilePath);
-					if (LogFileMaxSize < logFile.Length)
+					lock (lockObj)
 					{
-						// ログファイルを圧縮する
-						CompressLogFile();
+						stream.WriteLine(fullMsg);
 
-						// 古いログファイルを削除する
-						DeleteOldLogFile();
+						FileInfo logFile = new FileInfo(logFilePath);
+						if (LogFileMaxSize < logFile.Length)
+						{
+							// ログファイルを圧縮する
+							CompressLogFile();
+
+							// 古いログファイルを削除する
+							DeleteOldLogFile();
+						}
 					}
+				}
+				catch (Exception ex)
+				{
+					// ログ出力の失敗でアプリを停止させない
+					IsLogFileEnabled = false;
+					System.Diagnostics.Debug.WriteLine(ex.Message);
 				}
 			}
 		}
@@ -183,7 +202,9 @@ namespace naget.Helpers
 				Directory.CreateDirectory(logFile.DirectoryName!);
 			}
 
-			return new StreamWriter(logFile.FullName, true, Encoding.UTF8)
+			// 他のインスタンスが開いていても書き込めるように共有モードで開く
+			FileStream fileStream = new(logFile.FullName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+			return new StreamWriter(fileStream, Encoding.UTF8)
 			{
 				AutoFlush = true
 			};

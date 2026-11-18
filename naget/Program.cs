@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Media;
+using naget.Helpers;
 using System;
 using Velopack;
 
@@ -13,7 +14,14 @@ namespace naget
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			VelopackApp.Build().Run();
+			VelopackApp builder = VelopackApp.Build();
+#if WINDOWS
+			builder = builder.OnBeforeUninstallFastCallback(_ => StartupManager.RemoveWindowsStartupEntry());
+#endif
+			builder.Run();
+
+			// 既に起動している場合は設定画面を表示させて終了する
+			if (!SingleInstance.Acquire()) return;
 
 			BuildAvaloniaApp()
 				.StartWithClassicDesktopLifetime(args);
@@ -32,6 +40,7 @@ namespace naget
 				{
 					// (macOS) Dock に表示しない
 					ShowInDock = false,
+					DisableDefaultApplicationMenuItems = true,
 				})
 #if DEBUG
 				.WithDeveloperTools()
