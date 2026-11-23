@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Epoxy;
+using naget.Helpers;
 using naget.Models.Config;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -28,6 +29,12 @@ public class AppSettingsViewModel
 	public Language SelectedLanguage { get; set; } = LanguageList[0];
 	#endregion
 
+	#region スタートアップ関連
+	public bool StartupEnabled { get; set; }
+	public bool StartupBusy { get; set; } = true;
+	public bool StartupErrorIsVisible { get; set; }
+	#endregion
+
 	#region アップデート関連
 	public Command CheckUpdateCommand { get; }
 	#endregion
@@ -37,9 +44,11 @@ public class AppSettingsViewModel
 	public AppSettingsViewModel()
 	{
 		// ビューがロードされた時の処理
-		ViewWell.Add(Control.LoadedEvent, () =>
+		ViewWell.Add(Control.LoadedEvent, async () =>
 		{
 			App.Logger.Debug("AppSettingsView Loaded");
+
+			ViewIsLoaded = false;
 
 			// テーマ
 			// コンフィグのテーマ設定から該当するテーマを取得して選択中テーマに設定する
@@ -51,8 +60,12 @@ public class AppSettingsViewModel
 			// ローカライズ設定の言語と選択リストの言語が異なる場合は注意書きテキストを表示する
 			LanguageNoteTextIsVisible = SelectedLanguage.Code != Assets.Locales.Resources.Culture.Name;
 
+			// スタートアップ
+			StartupBusy = true;
+			StartupEnabled = await StartupManager.GetEnabledAsync();
+			StartupBusy = false;
+
 			ViewIsLoaded = true;
-			return default;
 		});
 
 		// アプリケーション再起動コマンド
@@ -110,5 +123,34 @@ public class AppSettingsViewModel
 		// コンフィグの言語設定を更新
 		ConfigManager.Config.Language = value.Code;
 		return default;
+	}
+
+	/// <summary>
+	/// スタートアップ設定が変更された時の処理
+	/// </summary>
+	/// <param name="value"></param>
+	/// <returns></returns>
+	[PropertyChanged(nameof(StartupEnabled))]
+	private async ValueTask StartupEnabledChanged(bool value)
+	{
+		if (!ViewIsLoaded || StartupBusy) return;
+		App.Logger.Debug($"Selected Startup Changed: {value}");
+		StartupBusy = true;
+		try
+		{
+			if (!await StartupManager.SetEnabledAsync(value))
+			{
+				StartupErrorIsVisible = true;
+				StartupEnabled = !value;
+			}
+			else
+			{
+				StartupErrorIsVisible = false;
+			}
+		}
+		finally
+		{
+			StartupBusy = false;
+		}
 	}
 }

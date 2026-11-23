@@ -10,6 +10,8 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="naget.Views.Settings.ShortcutKeyView"
 			 x:DataType="vm:ShortcutKeyViewModel"
+			 Focusable="True"
+			 IsTabStop="False"
 			 epoxy:Fountain.Well="{Binding ShortcutKeyWell}"
 >
 
@@ -29,14 +31,8 @@
 			<!--アクセシビリティ権限の注意書き-->
 			<ui:InfoBar Title="{x:Static lang:Resources.Accessibility_InfoBar_Title}" Message="{x:Static lang:Resources.Accessibility_InfoBar_Message}" Severity="Warning" IsOpen="{Binding AccessibilityWarningIsVisible}" IsClosable="False" Margin="0 0 0 10">
 				<ui:InfoBar.ActionButton>
-					<!--アクセシビリティ権限の設定画面を開くボタン-->
-					<Button Classes="accent" HorizontalAlignment="Right" Margin="0 0 0 0" Command="{Binding OpenAccessibilityPermissionDialogCommand}">
-						<Button.Content>
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Foreground="WhiteSmoke" Text="{x:Static lang:Resources.Accessibility_Button_Grant}" Margin="0 0 0 0"/>
-							</StackPanel>
-						</Button.Content>
-					</Button>
+					<!--アクセシビリティ権限のダイアログを開くボタン-->
+					<Button Content="{x:Static lang:Resources.Accessibility_InfoBar_Action}" Command="{Binding OpenAccessibilityPermissionDialogCommand}"/>
 				</ui:InfoBar.ActionButton>
 			</ui:InfoBar>
 
@@ -94,7 +90,7 @@
 							<!--登録キーテキスト-->
 							<TextBlock Text="{Binding RegisteredKeysText}" VerticalAlignment="Center"/>
 							<!--キー登録ボタン-->
-							<Button Classes="accent" IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}">
+							<Button Classes="accent" IsEnabled="{Binding SelectedPresetItem, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="10 0 0 0" Command="{Binding KeyRegisterCommand}" Click="OnKeyRegisterButtonClick">
 								<Button.Content>
 									<StackPanel Orientation="Horizontal">
 										<ui:SymbolIcon Symbol="{Binding KeyRegisterButtonIcon}" FontSize="15"/>

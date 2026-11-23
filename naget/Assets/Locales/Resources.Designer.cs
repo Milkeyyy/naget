@@ -88,11 +88,11 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
-        ///   Check Again に類似しているローカライズされた文字列を検索します。
+        ///   Not listed? に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string Accessibility_Button_Recheck {
+        public static string Accessibility_Button_Reset {
             get {
-                return ResourceManager.GetString("Accessibility.Button.Recheck", resourceCulture);
+                return ResourceManager.GetString("Accessibility.Button.Reset", resourceCulture);
             }
         }
         
@@ -106,29 +106,29 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
-        ///   Click &quot;Grant Access&quot;. If no system dialog appears, allow naget in System Settings &gt; Privacy and Security &gt; Accessibility. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string Accessibility_Dialog_HowTo {
-            get {
-                return ResourceManager.GetString("Accessibility.Dialog.HowTo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   If shortcut keys still do not work, restart the app. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string Accessibility_Dialog_RestartNote {
-            get {
-                return ResourceManager.GetString("Accessibility.Dialog.RestartNote", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Accessibility Permission Required に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Accessibility_Dialog_Title {
             get {
                 return ResourceManager.GetString("Accessibility.Dialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Access is granted, but the shortcut key hook could not start. Restart naget. If that does not help, use &quot;Not listed?&quot; below. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_HookError_Description {
+            get {
+                return ResourceManager.GetString("Accessibility.HookError.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Allow に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_InfoBar_Action {
+            get {
+                return ResourceManager.GetString("Accessibility.InfoBar.Action", resourceCulture);
             }
         }
         
@@ -160,11 +160,65 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Restart naget to apply the permission. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Status_Granted_Description {
+            get {
+                return ResourceManager.GetString("Accessibility.Status.Granted.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Access is not granted. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Accessibility_Status_NotGranted {
             get {
                 return ResourceManager.GetString("Accessibility.Status.NotGranted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Allow naget in System Settings &gt; Privacy and Security &gt; Accessibility. The change is detected automatically. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Status_NotGranted_Description {
+            get {
+                return ResourceManager.GetString("Accessibility.Status.NotGranted.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Click &quot;Grant Access&quot; and allow naget in the system dialog. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Step_Grant {
+            get {
+                return ResourceManager.GetString("Accessibility.Step.Grant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   If no dialog appears, click &quot;Open System Settings&quot;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Step_Settings {
+            get {
+                return ResourceManager.GetString("Accessibility.Step.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Restart naget. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Step_Restart {
+            get {
+                return ResourceManager.GetString("Accessibility.Step.Restart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Turn on naget under Privacy and Security &gt; Accessibility. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Accessibility_Step_Toggle {
+            get {
+                return ResourceManager.GetString("Accessibility.Step.Toggle", resourceCulture);
             }
         }
         
@@ -183,6 +237,24 @@ namespace naget.Assets.Locales {
         public static string App_Name {
             get {
                 return ResourceManager.GetString("App.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   On に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Common_On {
+            get {
+                return ResourceManager.GetString("Common.On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Off に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Common_Off {
+            get {
+                return ResourceManager.GetString("Common.Off", resourceCulture);
             }
         }
         
@@ -637,6 +709,33 @@ namespace naget.Assets.Locales {
         }
         
         /// <summary>
+        ///   Launch at Startup に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Startup {
+            get {
+                return ResourceManager.GetString("Settings.Startup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Start naget automatically when you sign in. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Startup_Description {
+            get {
+                return ResourceManager.GetString("Settings.Startup.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Could not change the startup setting. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Settings_Startup_Error {
+            get {
+                return ResourceManager.GetString("Settings.Startup.Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Language に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Settings_System_Language {
@@ -1085,6 +1184,24 @@ namespace naget.Assets.Locales {
         public static string WebBrowser_Navigation_OpenInDefaultBrowser {
             get {
                 return ResourceManager.GetString("WebBrowser.Navigation.OpenInDefaultBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   New Tab に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_Tab_New {
+            get {
+                return ResourceManager.GetString("WebBrowser.Tab.New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Close Tab に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string WebBrowser_Tab_Close {
+            get {
+                return ResourceManager.GetString("WebBrowser.Tab.Close", resourceCulture);
             }
         }
         

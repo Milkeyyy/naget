@@ -21,6 +21,7 @@
 
 	<Panel Margin="0 48 0 0">
 		<ui:NavigationView x:Name="navigationMenu" Height="NaN" PaneDisplayMode="Auto" IsSettingsVisible="False">
+			<ui:Frame x:Name="contentFrame" ClipToBounds="True" IsNavigationStackEnabled="False" />
 			<ui:NavigationView.MenuItems>
 				<!--検索-->
 				<ui:NavigationViewItem Content="{x:Static lang:Resources.Settings_Tab_Search}" Tag="SearchView" IconSource="Zoom" />
